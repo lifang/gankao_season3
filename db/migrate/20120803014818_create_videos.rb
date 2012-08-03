@@ -8,8 +8,4 @@ class CreateVideos < ActiveRecord::Migration
     end
     add_index :videos,:schedule_id
   end
-
-  def self.down
-    drop_table :videos
-  end
 end

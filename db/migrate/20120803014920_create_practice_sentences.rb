@@ -14,8 +14,4 @@ class CreatePracticeSentences < ActiveRecord::Migration
     add_index :practice_sentences,:category_id
     add_index :practice_sentences,:types
   end
-
-  def self.down
-    drop_table :practice_sentences
-  end
 end
