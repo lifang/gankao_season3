@@ -1,4 +1,14 @@
 GankaoSeason3::Application.routes.draw do
+  get "similarities/index"
+
+  get "questions/index"
+
+  get "plans/index"
+
+  get "skills/index"
+
+  get "videos/index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
