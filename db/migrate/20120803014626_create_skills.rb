@@ -9,8 +9,4 @@ class CreateSkills < ActiveRecord::Migration
     end
     add_index :skills,:category_id
   end
-
-  def self.down
-    drop_table :skills
-  end
 end

@@ -563,6 +563,15 @@ ActiveRecord::Schema.define(:version => 20120803014920) do
     t.integer "num",  :default => 0
   end
 
+  create_table "tractates", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "types"
+    t.integer  "level"
+    t.string   "tractate_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_action_logs", :force => true do |t|
     t.integer  "user_id"
     t.string   "total_num"
@@ -613,6 +622,16 @@ ActiveRecord::Schema.define(:version => 20120803014920) do
   add_index "user_plan_relations", ["study_plan_id"], :name => "index_user_plan_relations_on_study_plan_id"
   add_index "user_plan_relations", ["user_id"], :name => "index_user_plan_relations_on_user_id"
 
+  create_table "user_plans", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.date     "started_at"
+    t.date     "ended_at"
+    t.string   "plan_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_role_relations", :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
@@ -620,6 +639,16 @@ ActiveRecord::Schema.define(:version => 20120803014920) do
 
   add_index "user_role_relations", ["role_id"], :name => "index_user_role_relations_on_role_id"
   add_index "user_role_relations", ["user_id"], :name => "index_user_role_relations_on_user_id"
+
+  create_table "user_score_infos", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.integer  "start_score"
+    t.integer  "target_score"
+    t.string   "all_start_level"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "user_word_relations", :force => true do |t|
     t.datetime "created_at"

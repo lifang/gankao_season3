@@ -14,9 +14,9 @@ development:
   reconnect: false
   database: exam_app
   pool: 5
-  username: root
-  password: xuya
-  host: localhost
+  username: exam_season3
+  password: comdo2012
+  host: 192.168.0.250
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -25,19 +25,19 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: exam_app_test
+  database: exam_app
   pool: 5
-  username: root
-  password: qianjun
-  host: localhost
+  username: exam_season3
+  password: comdo2012
+  host: 192.168.0.250
 
 production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: exam_app_production
+  database: exam_app
   pool: 5
-  username: root
-  password: qianjun
-  host: localhost
+  username: exam_season3
+  password: comdo2012
+  host: 192.168.0.250
 
