@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>赶考--答疑--等待回答</title>
-    <link href="stylesheets/style.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="javascripts/main.js"></script>
+    <%= stylesheet_link_tag    "style" %>
+    <%= javascript_include_tag "jquery-1.7.2.min" %>
+    <%= javascript_include_tag "main" %>
     <!--[if lt IE 9]>
     <script src="js/html5.js"></script>
     <![endif]-->
@@ -24,7 +24,7 @@
         <h1 class="logo"><a href="#">赶考网</a></h1>
         <div class="login_info bb_radius">
           <div class="info_left">
-            <div class="user_pic"><img src="images/u01.jpg" /></div>
+            <div class="user_pic"><img src="/assets/u01.jpg" /></div>
             <p>我的名字好长啊好长不是一般的长</p>
             <p>对外经济贸易大学</p>
             <p><span class="s_sun">8</span><a href="#">获得小太阳</a></p>
@@ -44,11 +44,11 @@
       <div class="main">
         <div class="left">
           <div class="checkIn_box">
-            <div class="checkIn_img"><a href="#"><img src="images/checkIn.png" /></a></div>
-            <span class="checkIn_sun"><img src="images/sun.png" /></span>
+            <div class="checkIn_img"><a href="#"><img src="/assets/checkIn.png" /></a></div>
+            <span class="checkIn_sun"><img src="/assets/sun.png" /></span>
             <p>*每天签到奖励1个小太阳</p>
           </div>
-          <div class="path_box"><img src="images/path.jpg" /></div>
+          <div class="path_box"><img src="/assets/path.jpg" /></div>
         </div>
         <div class="middle">
           <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
@@ -73,8 +73,8 @@
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
 
-    <div class="u_tab_div" id="u_set_div" >
-      <span class="s_triangle"><img src="images/s_triangle.png" /></span>
+    <div class="u_tab_div" id="u_set_div" style="display: none;">
+      <span class="s_triangle"><img src="/assets/s_triangle.png" /></span>
       <span class="x">关闭</span>
       <h2>个人资料</h2>
       <p><label>姓名（昵称）：</label><input type="text" value="我的名字好长啊好长不是一般的长" /></p>
@@ -84,7 +84,7 @@
     </div>
 
     <div class="u_tab_div" id="u_subject_div" style="display: none;">
-      <span class="s_triangle"><img src="images/s_triangle.png" /></span>
+      <span class="s_triangle"><img src="/assets/s_triangle.png" /></span>
       <span class="x">关闭</span>
       <h2>更换科目</h2>
       <ul>
