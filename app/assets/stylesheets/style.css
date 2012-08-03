@@ -58,8 +58,8 @@ img { border: none;}
 	right: 5px; 
 	cursor: pointer;
 }
-.close { background: url(../images/close.png) no-repeat; }
-.x { background: url(../images/x.png) no-repeat; }
+.close { background: url(/assets/close.png) no-repeat; }
+.x { background: url(/assets/x.png) no-repeat; }
 
 
 .wraper { width: 940px; margin: 0 auto; overflow: hidden;}
@@ -70,7 +70,7 @@ img { border: none;}
     width: 160px; 
     height: 80px; 
 	display: block; 
-	background: url(../images/logo.png) no-repeat; 
+	background: url(/assets/logo.png) no-repeat;
 	text-indent: -999px; 
 	overflow: hidden;
 }
@@ -84,9 +84,9 @@ img { border: none;}
 	padding: 22px 0 0 55px;
 	color: #397580; 
 }
-.login_area a.renren { background: url(../images/login_bg.png) no-repeat 0 center;}
-.login_area a.sina { background: url(../images/login_bg.png) no-repeat -95px center;}
-.login_area a.qq { background: url(../images/login_bg.png) no-repeat -192px center;}
+.login_area a.renren { background: url(/assets/login_bg.png) no-repeat 0 center;}
+.login_area a.sina { background: url(/assets/login_bg.png) no-repeat -95px center;}
+.login_area a.qq { background: url(/assets/login_bg.png) no-repeat -192px center;}
 
 
 /*顶部用户登录信息-----------------*/
@@ -99,16 +99,16 @@ img { border: none;}
 .info_left a { text-decoration: underline;}
 .info_left p { float: left; width: 130px; line-height: 18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .user_pic { float: left; margin: 7px 15px 0; _margin: 7px 7px 0;}
-.s_sun { height: 17px; background: url(../images/s_sun.png) no-repeat 0 center; padding-left: 20px; margin-right: 10px;}
+.s_sun { height: 17px; background: url(/assets/s_sun.png) no-repeat 0 center; padding-left: 20px; margin-right: 10px;}
 
 .user_fun { float: left; width: 140px; display: block;}
 .user_fun li { float: left; width: 55px; height: 20px; background: #525161; margin: 7px 7px 0; _margin: 7px 3px 0;}
 .user_fun li a {width: 35px; padding-left: 20px; line-height: 20px; color: #FFF; height: 20px; display: block;}
 
-.u_set { background: url(../images/funIcon_bg.png) no-repeat 5px 5px;}
-.u_exit { background: url(../images/funIcon_bg.png) no-repeat 5px -18px;}
-.u_bbs { background: url(../images/funIcon_bg.png) no-repeat 5px -41px;}
-.u_subject { background: url(../images/funIcon_bg.png) no-repeat 5px -63px;}
+.u_set { background: url(/assets/funIcon_bg.png) no-repeat 5px 5px;}
+.u_exit { background: url(/assets/funIcon_bg.png) no-repeat 5px -18px;}
+.u_bbs { background: url(/assets/funIcon_bg.png) no-repeat 5px -41px;}
+.u_subject { background: url(/assets/funIcon_bg.png) no-repeat 5px -63px;}
 
 /*用户tab*/
 .u_tab_div { 
@@ -147,7 +147,7 @@ img { border: none;}
     width: 84px; 
 	height: 32px; 
 	line-height: 32px; 
-	background: url(../images/affirm_btn.png) no-repeat;
+	background: url(/assets/affirm_btn.png) no-repeat;
 	text-align: center;
 	text-shadow: 1px 1px #965435;
 	color: #FFF;
@@ -165,7 +165,7 @@ nav li { float: left; margin: 0 20px;}
 
 /*main------------------------*/
 .main { padding: 10px 0; overflow: hidden;}
-.main_bg { padding: 0px 0 225px 310px; background: url(../images/m_bg.jpg) no-repeat;}
+.main_bg { padding: 0px 0 225px 310px; background: url(/assets/m_bg.jpg) no-repeat;}
 .m_video { width: 620px; height: 320px; background: #333;}
 
 .left, .middle, .right { float: left;}
@@ -260,7 +260,7 @@ nav li { float: left; margin: 0 20px;}
 .pl_img { width: 35px; height: 35px; display: block; margin: 5px auto 0 auto;}
 .pl_text { 
     height: 50px; 
-	background: #c2b19f url(../images/pl_text_bg.jpg) no-repeat right center; 
+	background: #c2b19f url(/assets/pl_text_bg.jpg) no-repeat right center;
 	padding: 0 10px 0 90px; 
 	line-height: 16px;
 }
@@ -301,7 +301,7 @@ nav li { float: left; margin: 0 20px;}
 	padding-right: 13px; 
 	margin: 13px 0 0 120px; 
 	float: left; 
-	background: url(../images/time_bg.png) no-repeat;
+	background: url(/assets/time_bg.png) no-repeat;
 	color: #e1dfc8;
 }
 
@@ -324,17 +324,17 @@ nav li { float: left; margin: 0 20px;}
 	position: absolute;
 	top: 5px;
 	right: 10px;
-	background: url(../images/icon.png) no-repeat;
+	background: url(/assets/icon.png) no-repeat;
 }
 .reset {
 	position: absolute;
 	top: 5px;
 	right: 10px;
-	background: url(../images/icon.png) no-repeat 0 -114px;
+	background: url(/assets/icon.png) no-repeat 0 -114px;
 }
 
-.sign {background: url(../images/icon.png) no-repeat 0 -75px; float: left;}
-.next {background: url(../images/icon.png) no-repeat 0 -37px; float: right;}
+.sign {background: url(/assets/icon.png) no-repeat 0 -75px; float: left;}
+.next {background: url(/assets/icon.png) no-repeat 0 -37px; float: right;}
 
 
 .hedui { 
@@ -343,7 +343,7 @@ nav li { float: left; margin: 0 20px;}
 	display: block;
 	overflow: hidden; 
 	text-indent: -999px; 
-	background: url(../images/hedui.png) no-repeat;
+	background: url(/assets/hedui.png) no-repeat;
 	float: left;
 }
 
@@ -356,8 +356,8 @@ nav li { float: left; margin: 0 20px;}
 	color: #387580;
 	float: left;
 }
-.lookText { background: url(../images/icon02.png) no-repeat; }
-.heduiText { background: url(../images/icon02.png) no-repeat 0 -32px; margin-left: 50px;}
+.lookText { background: url(/assets/icon02.png) no-repeat; }
+.heduiText { background: url(/assets/icon02.png) no-repeat 0 -32px; margin-left: 50px;}
 
 .trueFalse { width: 34px; height: 34px; margin: 5px;}
 
@@ -498,7 +498,7 @@ nav li { float: left; margin: 0 20px;}
 	overflow: hidden; 
 	text-indent: -999px; 
 	float: left;
-	background: url(../images/search.jpg) no-repeat;
+	background: url(/assets/search.jpg) no-repeat;
 }
 
 
@@ -530,9 +530,9 @@ nav li { float: left; margin: 0 20px;}
 	display: block; 
 	float: left; 
 	overflow: hidden; 
-	background: url(../images/pageTurn.png) no-repeat 0 -18px;
+	background: url(/assets/pageTurn.png) no-repeat 0 -18px;
 }
-.p_circle.hover {background: url(../images/pageTurn.png) no-repeat 0 0;}
+.p_circle.hover {background: url(/assets/pageTurn.png) no-repeat 0 0;}
 .more { text-align: right; padding: 5px 10px; color: #387580;}
 
 
@@ -565,8 +565,8 @@ nav li { float: left; margin: 0 20px;}
 	cursor: pointer;
 	margin-top: 42px;
 }
-.video_prev { background: url(../images/video_f.png) no-repeat 0 0;}
-.video_next { background: url(../images/video_f.png) no-repeat -12px 0;}
+.video_prev { background: url(/assets/video_f.png) no-repeat 0 0;}
+.video_next { background: url(/assets/video_f.png) no-repeat -12px 0;}
 .video_box { 
     width: 490px; 
 	height: 100px;
@@ -599,10 +599,10 @@ nav li { float: left; margin: 0 20px;}
 .problem_box.an_bgNo { background: #62a89c;}/*没有正确答案背景*/
 
 .an_icon01, .an_icon02, .an_icon03, .an_icon04 { width: 12px; height: 30px; display: block; position: absolute;}
-.an_icon01 { background: url(../images/icon01.png) no-repeat; top: 10px; right: -11px;}
-.an_icon02 { background: url(../images/icon01.png) no-repeat 0 -30px; top: 10px; left: -11px;}
-.an_icon03 { background: url(../images/icon01.png) no-repeat 0 -60px; top: 10px; left: -11px;}
-.an_icon04 { background: url(../images/icon01.png) no-repeat 0 -90px; top: 10px; left: -11px;}
+.an_icon01 { background: url(/assets/icon01.png) no-repeat; top: 10px; right: -11px;}
+.an_icon02 { background: url(/assets/icon01.png) no-repeat 0 -30px; top: 10px; left: -11px;}
+.an_icon03 { background: url(/assets/icon01.png) no-repeat 0 -60px; top: 10px; left: -11px;}
+.an_icon04 { background: url(/assets/icon01.png) no-repeat 0 -90px; top: 10px; left: -11px;}
 
 .userProblem_box { float: left; width: 80px; padding-left: 20px; position: relative;}
 .us_pic { width: 45px; height: 45px; overflow: hidden; margin: 0 auto;}
@@ -627,13 +627,13 @@ nav li { float: left; margin: 0 20px;}
 	display: block;
 	text-indent: -999px;
 	overflow: hidden; 
-	background: url(../images/flag.png) no-repeat; 
+	background: url(/assets/flag.png) no-repeat;
 	position: absolute; 
 	top: 5px; 
 	left: 5px;
 }
-.flag { background: url(../images/flag.png) no-repeat; }
-.in_true { background: url(../images/in_true.png) no-repeat;}
+.flag { background: url(/assets/flag.png) no-repeat; }
+.in_true { background: url(/assets/in_true.png) no-repeat;}
 
 .pro_textarea { width: 300px; height: 150px; padding: 10px; margin-left: 100px;}
 .pro_btn { display: block; margin: 20px 0 10px 330px; padding: 2px 10px; background: #e4411e; color: #e4e3ce;}
