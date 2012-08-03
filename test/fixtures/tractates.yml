@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  category_id: 1
+  types: 1
+  level: 1
+  tractate_url: MyString
+
+two:
+  category_id: 1
+  types: 1
+  level: 1
+  tractate_url: MyString
