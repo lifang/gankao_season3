@@ -6,26 +6,15 @@ GankaoSeason3::Application.routes.draw do
    end
 
   resources :logins
-
-
-   get "welcome/welcome/index"
-
-  get "similarities/index"
-
-  get "questions/index"
-
-  get "plans/index"
-
-  get "skills/index"
-
-
+  resources :similarities
+  resources :plans
+  resources :skills
 
   match "questions/answered" =>'questions#answered'
   match "questions/unanswered" =>'questions#unanswered'
   match "questions/ask" =>'questions#ask'
   match "questions/answers" =>'questions#answers'
 
-  get "welcome/index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
