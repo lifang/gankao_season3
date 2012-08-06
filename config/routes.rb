@@ -1,5 +1,5 @@
 GankaoSeason3::Application.routes.draw do
-  get "welcome/welcome/index"
+   get "welcome/welcome/index"
 
   get "similarities/index"
 
@@ -10,6 +10,12 @@ GankaoSeason3::Application.routes.draw do
   get "skills/index"
 
   get "videos/index"
+
+
+  match "questions/answered" =>'questions#answered'
+  match "questions/unanswered" =>'questions#unanswered'
+  match "questions/ask" =>'questions#ask'
+  match "questions/answers" =>'questions#answers'
 
   get "welcome/index"
 
@@ -38,7 +44,11 @@ GankaoSeason3::Application.routes.draw do
   #       get 'sold'
   #     end
   #   end
-
+  resources :questions do
+     member do
+       get :answered,:unanswered,:ask,:answers
+     end
+   end
   # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
