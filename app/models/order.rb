@@ -1,4 +1,6 @@
 # encoding: utf-8
-class UserScoreInfo < ActiveRecord::Base
+class Order< ActiveRecord::Base
   belongs_to :user
+  
+
 end
