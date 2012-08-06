@@ -1,4 +1,4 @@
 # encoding: utf-8
-class UserScoreInfo < ActiveRecord::Base
+class UserActionLog < ActiveRecord::Base
   belongs_to :user
 end
