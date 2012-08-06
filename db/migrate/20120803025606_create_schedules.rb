@@ -6,5 +6,6 @@ class CreateSchedules < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :schedules,:category_id
   end
 end

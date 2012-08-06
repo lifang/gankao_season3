@@ -1,4 +1,6 @@
+<% if user_score_info.nil? %>
 <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
+
 <div class="m_nav">
   <ul>
     <li><a href="#" class="hover">我的复习</a></li>
@@ -12,7 +14,7 @@
   <h1 class="mc_title">基础阶段</h1>
   <div class="mc_box">
     <div class="plan_list">
-      <h1 class="pl_fk pl_m_bg"><span class="pl_img"><img src="/assets/dui.png"></span>任务一</h1>
+      <h1 class="pl_fk pl_m_bg"><span class="pl_img"><img src="/assets/dui.png"/></span>任务一</h1>
       <div class="pl_text">
         <span>单词(20)&nbsp;&nbsp;&nbsp;词组(10)&nbsp;&nbsp;&nbsp;短语(10)</span>
         <p>估计耗时：20分钟</p>

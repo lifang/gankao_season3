@@ -13,5 +13,6 @@ class CreatePracticeSentences < ActiveRecord::Migration
     end
     add_index :practice_sentences,:category_id
     add_index :practice_sentences,:types
+    add_index :practice_sentences,:level
   end
 end

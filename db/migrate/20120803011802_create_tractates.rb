@@ -8,5 +8,8 @@ class CreateTractates < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :tractates,:category_id
+    add_index :tractates,:types
+    add_index :tractates,:level
   end
 end
