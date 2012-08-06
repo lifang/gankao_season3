@@ -1,25 +1,12 @@
-<div class="m_nav">
-  <ul>
-    <li><a href="#">我的复习</a></li>
-    <li><a href="#">真题</a></li>
-    <li><a href="#">技巧</a></li>
-    <li><a href="#" class="hover">名师视频</a></li>
-    <li><a href="#">答疑</a></li>
-  </ul>
-</div>
+<%= javascript_include_tag "video_skill"  %>
+<%= javascript_include_tag "jplayer/jquery.jplayer.min"  %>
 <div class="m_content">
   <div class="mc_box">
     <div class="mc_menu">
       <ul>
-        <li class="hover">王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
-        <li>王老师系列讲座</li>
+        <% @sched_vis.each_with_index do |schedule,index| %>
+          <li onclick="video_show(<%=  index %>)"><%= @sched_vis[index+1][1] %></li>
+        <%end%>
       </ul>
 
       <div class="clear"></div>
@@ -27,33 +14,47 @@
 
     <div class="mc_menu_box">
       <div class="video_area">
-        <div class="xz_video">↑<br>选择讲师<br>开始学习</div>
+        <div class="xz_video" id="jquery_jplayer_1">↑<br/>选择讲师<br/>开始学习</div>
+        <%#*<div id="jp_interface_1">%>
+          <%#*<a href="#" class="jp-play">Play</a>%>
+          <%#*<a href="#" class="jp-pause">Pause</a>%>
+        <%#*</div>%>
       </div>
       <div class="other_video">
-        <h1>王刚老师开设以下课程</h1>
-        <div class="video_more">
-          <div class="video_prev">上翻</div>
-          <div class="video_box">
-            <ul class="video_ul">
-              <li>1</li>
-              <li>2</li>
-              <li>3</li>
-              <li>4</li>
-              <li>5</li>
-              <li>6</li>
-              <li>7</li>
-              <li>8</li>
-              <li>9</li>
-              <li>10</li>
-              <li>11</li>
-            </ul>
+        <% @sched_vis.each_with_index do |schedule,index| %>
+          <h1 style="display:none"><%= @sched_vis[index+1][1] %>课程包含以下视频</h1>
+          <div class="video_more" style="display:none">
+            <div class="video_prev" style="visibility: hidden;">上翻</div>
+            <div class="video_box">
+              <ul class="video_ul">
+                <%@sched_vis[index+1][0].each do |video|%>
+                  <li onclick="load_video('<%= Constant::SERVER_URL+video.video_url %>')"><%= video.title %></li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="video_next"
+                 <% if @sched_vis[index+1][0].size<=5 %> style="visibility: hidden;" <% end %> >下翻</div>
           </div>
-          <div class="video_next">下翻</div>
-        </div>
+        <% end %>
       </div>
     </div>
-
+    <script type="text/javascript">
+      $( $(".mc_menu li")[0]).trigger("onclick");
+      <%#*$(document).ready(function(){%>
+        <%#*$("#jquery_jplayer_1").jPlayer({%>
+          <%#*ready: function () {%>
+            <%#*$(this).jPlayer("setMedia", {%>
+              <%#*m4a: "/videos/2/1.mp4",%>
+              <%#*oga: "/videos/2/1.oga"%>
+            <%#*});%>
+          <%#*},%>
+          <%#*swfPath: "/js",%>
+          <%#*supplied: "m4a, oga"%>
+        <%#*});%>
+        <%#*$("#jquery_jplayer_1").jPlayer("play");%>
+      <%#*});%>
+    </script>
   </div>
-  <div class="clear"></div>
+
 
 </div>
