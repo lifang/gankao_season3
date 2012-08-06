@@ -9,5 +9,7 @@ class CreateUserPlans < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :user_plans,:user_id
+    add_index :user_plans,:category_id
   end
 end

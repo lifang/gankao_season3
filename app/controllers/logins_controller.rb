@@ -1,6 +1,6 @@
 class LoginsController < ApplicationController
 
   def index
-    p Skill.all
+    p User.all
   end
 end
