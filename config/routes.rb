@@ -1,4 +1,11 @@
 GankaoSeason3::Application.routes.draw do
+
+   resources :videos do
+     member do
+     end
+   end
+
+
    get "welcome/welcome/index"
 
   get "similarities/index"
@@ -9,7 +16,6 @@ GankaoSeason3::Application.routes.draw do
 
   get "skills/index"
 
-  get "videos/index"
 
 
   match "questions/answered" =>'questions#answered'
