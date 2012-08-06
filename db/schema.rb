@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120803014920) do
+ActiveRecord::Schema.define(:version => 20120803030512) do
 
   create_table "action_logs", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -449,6 +449,14 @@ ActiveRecord::Schema.define(:version => 20120803014920) do
     t.boolean "checked"
   end
 
+  create_table "question_answers", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "quer_question_id"
+    t.string   "answer"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "question_tag_relations", :force => true do |t|
     t.integer "tag_id"
     t.integer "question_id"
@@ -518,6 +526,13 @@ ActiveRecord::Schema.define(:version => 20120803014920) do
 
   create_table "roles", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "schedules", :force => true do |t|
+    t.string   "name"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "score_levels", :force => true do |t|
@@ -630,6 +645,16 @@ ActiveRecord::Schema.define(:version => 20120803014920) do
     t.string   "plan_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_questions", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "description"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_answer"
   end
 
   create_table "user_role_relations", :force => true do |t|

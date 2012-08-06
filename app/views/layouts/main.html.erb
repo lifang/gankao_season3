@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>赶考--答疑--等待回答</title>
+    <%= stylesheet_link_tag    "style" %>
+    <%= javascript_include_tag "jquery-1.7.2.min" %>
+    <%= javascript_include_tag "main" %>
+    <!--[if lt IE 9]>
+    <script src="js/html5.js"></script>
+    <![endif]-->
+
+    <!--[if IE 6]>
+    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+  </head>
+  <body>
+    <div class="wraper">
+      <div class="header">
+        <h1 class="logo"><a href="#">赶考网</a></h1>
+        <div class="login_info bb_radius">
+          <div class="info_left">
+            <div class="user_pic"><img src="/assets/u01.jpg" /></div>
+            <p>我的名字好长啊好长不是一般的长</p>
+            <p>对外经济贸易大学</p>
+            <p><span class="s_sun">8</span><a href="#">获得小太阳</a></p>
+          </div>
+          <ul class="user_fun">
+            <li><a href="#" class="u_set">设置</a></li>
+            <li><a href="#" class="u_exit">退出</a></li>
+            <li><a href="#" class="u_bbs">论坛</a></li>
+            <li><a href="#" class="u_subject">科目</a></li>
+          </ul>
+        </div>
+        <div class="clear"></div>
+        <nav class="border_radius">
+          <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#">了解更多</a></span>
+        </nav>
+      </div>
+      <div class="main">
+        <div class="left">
+          <div class="checkIn_box">
+            <div class="checkIn_img"><a href="#"><img src="/assets/checkIn.png" /></a></div>
+            <span class="checkIn_sun"><img src="/assets/sun.png" /></span>
+            <p>*每天签到奖励1个小太阳</p>
+          </div>
+          <div class="path_box"><img src="/assets/path.jpg" /></div>
+        </div>
+        <div class="middle">
+          <div class="m_nav">
+            <ul>
+              <li><a href="#" class="hover">我的复习</a></li>
+              <li><a href="#">真题</a></li>
+              <li><a href="#">技巧</a></li>
+              <li><a href="#">名师视频</a></li>
+              <li><a href="#">答疑</a></li>
+            </ul>
+          </div>
+          <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
+        </div>
+
+        <div class="right">广告</div>
+        <div class="clear"></div>
+      </div>
+
+    </div>
+    <div class="footer">
+      <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
+    </div>
+
+    <div class="u_tab_div" id="u_set_div" style="display: none;">
+      <span class="s_triangle"><img src="/assets/s_triangle.png" /></span>
+      <span class="x">关闭</span>
+      <h2>个人资料</h2>
+      <p><label>姓名（昵称）：</label><input type="text" value="我的名字好长啊好长不是一般的长" /></p>
+      <p><label>学校：</label><input name="" type="text" value="对外经济贸易大学" /></p>
+      <p><label>邮箱：</label><input name="" type="text" value="还没有输入邮箱信息" /></p>
+      <div class="u_btn"><button class="affirm_btn">确认提交</button></div>
+    </div>
+
+    <div class="u_tab_div" id="u_subject_div" style="display: none;">
+      <span class="s_triangle"><img src="/assets/s_triangle.png" /></span>
+      <span class="x">关闭</span>
+      <h2>更换科目</h2>
+      <ul>
+        <li><a href="#">CET-4</a></li>
+        <li><a href="#">CET-6</a></li>
+        <li><a href="#">考研英语</a></li>
+        <li><a href="#">高考英语</a></li>
+        <li><a href="#">雅思英语</a></li>
+        <li><a href="#">托福英语</a></li>
+      </ul>
+    </div>
+  </body>
+</html>
