@@ -4,4 +4,6 @@ class UserQuestion < ActiveRecord::Base
   has_many :question_answers,:dependent=>:destroy
 
   default_scope order: 'user_questions.created_at DESC'
+
+ 
 end

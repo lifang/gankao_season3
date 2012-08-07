@@ -10,11 +10,14 @@ GankaoSeason3::Application.routes.draw do
   resources :plans
   resources :skills
 
+  resources :questions,:only=>[:index]
   match "questions/answered" =>'questions#answered'
   match "questions/unanswered" =>'questions#unanswered'
   match "questions/ask" =>'questions#ask'
   match "questions/answers" =>'questions#answers'
-
+  match "questions/search" =>'questions#show_result'
+  match "questions/saveanswer"=>'questions#save_answer'
+  match "questions/askquestion"=>'questions#ask_question'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -41,11 +44,9 @@ GankaoSeason3::Application.routes.draw do
   #       get 'sold'
   #     end
   #   end
-  resources :questions do
-     member do
-       get :answered,:unanswered,:ask,:answers
-     end
-   end
+ 
+
+
   # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales

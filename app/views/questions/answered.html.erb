@@ -9,7 +9,7 @@
         <li><%=link_to "我的回答","answers?category="  %></li>
       </ul>
       <div class="search">
-        <div class="search_box"><input name="" type="text"/><button>search</button></div>
+         <div class="search_box"><input id="keywords" name="" type="text"/><button id="btnSearch">search</button></div>
       </div>
       <div class="clear"></div>
     </div>
@@ -25,7 +25,7 @@
               <p><span class="orange">补充：</span><%=aq.description%></p><!--问题的详细内容-->
             </div>
             <div class="userProblem_box">
-              <div class="us_pic"><img src="/assets/u01.jpg"></div>
+              <div class="us_pic"><img src="/assets/u01.jpg"/></div>
               <h3><%=aq.user.name%></h3><!--提问的问题的用户名-->
               <p><%=aq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
               <p><%=aq.created_at.strftime("%H:%M")%></p><!--时间-->
@@ -35,7 +35,7 @@
 
           <!--正确的答案-->
           <%if aq.question_answers.where("is_right=true").count>0%>
-            <%aq.question_answers.each do |qa|%>
+            <%aq.question_answers.where("is_right=true").each do |qa|%>
               <div class="problem_list">
                 <div class="userProblem_box">
                   <span class="flag tooltip" title="最佳答案">最佳答案</span>
@@ -53,10 +53,11 @@
             <%end%>
           <%end%>
 
-          <%if aq.question_answers.where("is_right=false").count>0%>
-            <div class="problem_list"><h2 class="other_h">其他答案</h2></div>
+          <%if aq.question_answers.where("is_right=true").count>0%>
+            <div class="problem_list"><h2 class="other_h">其他回答</h2></div>
+           <%end%>
             <!--其他答案-->
-            <%aq.question_answers.each do |qa|%>
+            <%aq.question_answers.where("is_right=false").each do |qa|%>
               <div class="problem_list">
                 <div class="userProblem_box">
                   <div class="us_pic"><img src="/assets/u01.jpg"/></div>
@@ -71,7 +72,7 @@
                 <div class="clear"></div>
               </div>
             <%end%>
-          <%end%>
+  
         </div>
 
       <%end%>

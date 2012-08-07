@@ -1,0 +1,88 @@
+<%=render 'nav'%>
+<div class="m_content">
+  <div class="mc_box">
+    <div class="mc_menu">
+      <ul>
+        <li><%=link_to "已经回答","answered?category=" %></li>
+        <li><%=link_to "等待回答","unanswered?category="  %></li>
+        <li><%=link_to "我的提问","ask?category="  %></li>
+        <li><%=link_to "我的回答","answers?category="  %></li>
+      </ul>
+      <div class="search">
+        <div class="search_box"><input id="keywords" name="" value="<%=@keyword%>" type="text"/><button id="btnSearch">search</button></div>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <div class="mc_menu_box">
+
+      <%if @query_questions.any? %>
+        <%@query_questions.each do |aq|%>
+          <!--单个问题-->
+          <div class="b_bottom">
+            <div class="problem_list">
+              <div class="problem_box">
+                <span class="an_icon01"></span>
+                <p><%=aq.title%></p><!--问题的题目-->
+                <p><span class="orange">补充：</span><%=aq.description%></p><!--问题的详细内容-->
+              </div>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+                <h3><%=aq.user.name%></h3><!--提问的问题的用户名-->
+                <p><%=aq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
+                <p><%=aq.created_at.strftime("%H:%M")%></p><!--时间-->
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!--正确的答案-->
+            <%if aq.question_answers.where("is_right=true").count>0%>
+              <%aq.question_answers.where("is_right=true").each do |qa|%>
+                <div class="problem_list">
+                  <div class="userProblem_box">
+                    <span class="flag tooltip" title="最佳答案">最佳答案</span>
+                    <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+                    <h3><%=qa.user.name%></h3><!--回答问题的用户名-->
+                    <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
+                    <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
+                  </div>
+                  <div class="answer_box an_bgTrue">
+                    <span class="an_icon03"></span>
+                    <p><%=qa.answer%></p>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              <%end%>
+            <%end%>
+
+            <%if aq.question_answers.where("is_right=true").count>0%>
+              <div class="problem_list"><h2 class="other_h">其他回答</h2></div>
+            <%end%>
+            <!--其他答案-->
+            <%aq.question_answers.where("is_right=false").each do |qa|%>
+              <div class="problem_list">
+                <div class="userProblem_box">
+                  <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+                  <h3><%=qa.user.name%></h3><!--回答问题的用户名-->
+                  <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
+                  <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
+                </div>
+                <div class="answer_box an_bgFalse">
+                  <span class="an_icon02"></span>
+                  <p><%=qa.answer%></p>
+                </div>
+                <div class="clear"></div>
+              </div>
+            <%end%>
+
+          </div>
+        <%end%>
+        <!--分页插件-->
+        <%=will_paginate @query_questions,:prev_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
+      <%else %>
+        <span style="font-size:30px;color:red;text-align: center;">没有找到相关问题!</span>
+      <%end%>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
