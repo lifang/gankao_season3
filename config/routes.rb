@@ -1,9 +1,13 @@
 GankaoSeason3::Application.routes.draw do
 
-   resources :videos do
-     member do
-     end
-   end
+  resources :videos do
+    member do
+    end
+  end
+  resources :skills do
+    member do
+    end
+  end
 
   resources :logins
   resources :similarities
@@ -46,10 +50,10 @@ GankaoSeason3::Application.routes.draw do
   #     end
   #   end
   resources :questions do
-     member do
-       get :answered,:unanswered,:ask,:answers
-     end
-   end
+    member do
+      get :answered,:unanswered,:ask,:answers
+    end
+  end
   # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
