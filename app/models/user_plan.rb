@@ -94,9 +94,19 @@ class UserPlan < ActiveRecord::Base
     return times/60
   end
 
-  #确定 计划包的 天数
+  #确定计划的天数
   def self.package_level(category)
-
+    today = Time.now.strftime("%Y-%m-%d")
+    day = (Constant::DEAD_LINE[:"#{category}"].to_time - today.to_time)/86400
+    if category == ("CET4" || "CET6")
+      CET46_PLANS.each { |k,v|
+        return v if v > day
+      }
+    elsif category == "GRADUATE"
+      GRADUATE_PLANS.each { |k,v|
+        return v if v > day
+      }
+    end
   end
   
   def plan_list
