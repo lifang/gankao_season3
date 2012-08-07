@@ -87,7 +87,6 @@ $(function(){
 	var page = 1;
 	var i = 5;	
 	$('div.video_next').click(function(){
-		//alert(0)
 		var $parent = $(this).parents('div.video_more');
 		var $video_show = $parent.find('.video_ul')
 		var $videoImg = $parent.find('.video_box');
@@ -96,25 +95,21 @@ $(function(){
 		var page_count = Math.ceil(len/i);
 		
 		if(!$video_show.is(':animated')){
-			$('div.video_prev').css('visibility','visible');
-			
+			$parent.find('div.video_prev').css('visibility','visible');
 			if(page == page_count){
-				$(this).css('visibility','hidden');
-				
-				//$video_show.animate({marginLeft:'0'},'slow');
-				//page = 1;
-				
+				$(this).css('visibility','hidden');	
 			}else{
 				$video_show.animate({marginLeft:'-='+video_width},'slow');
-				page++;	
-				
+				page++;
+                                if(page == page_count){
+				$(this).css('visibility','hidden');
+			}	
 			}
 		}
 	})
 	
 	
 	$('div.video_prev').click(function(){
-		//alert(0)
 		var $parent = $(this).parents('div.video_more');
 		var $video_show = $parent.find('.video_ul')
 		var $videoImg = $parent.find('.video_box');
@@ -123,18 +118,16 @@ $(function(){
 		var page_count = Math.ceil(len/i);
 		
 		if(!$video_show.is(':animated')){
-			$('div.video_next').css('visibility','visible');
-			
+			$parent.find('div.video_next').css('visibility','visible');
 			if(page == 1){
-				$(this).css('visibility','hidden');
-				
-				
-				//$video_show.animate({marginLeft:'-='+video_width*(page_count-1)},'slow');
-				//page = page_count;
-				
+				$(this).css('visibility','hidden');	
 			}else{	
 				$video_show.animate({marginLeft:'+='+video_width},'slow');
 				page--;
+                                if(page == 1){
+				$(this).css('visibility','hidden');
+
+			}
 				
 			}
 		}
