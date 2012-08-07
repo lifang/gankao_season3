@@ -7,11 +7,11 @@
     <%= javascript_include_tag "jquery-1.7.2.min" %>
     <%= javascript_include_tag "main" %>
     <!--[if lt IE 9]>
-    <script src="js/html5.js"></script>
+    <script src="/assets/html5.js"></script>
     <![endif]-->
 
     <!--[if IE 6]>
-    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>
       DD_belatedPNG.fix('*');
     </script>
@@ -51,6 +51,15 @@
           <div class="path_box"><img src="/assets/path.jpg" /></div>
         </div>
         <div class="middle">
+          <div class="m_nav">
+      <ul>
+      <li><a href="#">我的复习</a></li>
+      <li><a href="#">真题</a></li>
+      <li><a href="#">技巧</a></li>
+      <li><a href="#" class="hover">名师视频</a></li>
+      <li><a href="#">答疑</a></li>
+     </ul>
+     </div>
           <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
         </div>
 

@@ -9,5 +9,7 @@ class CreateUserScoreInfos < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :user_score_infos,:category_id
+    add_index :user_score_infos,:user_id
   end
 end

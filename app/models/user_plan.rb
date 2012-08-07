@@ -3,6 +3,9 @@ class UserPlan < ActiveRecord::Base
   belongs_to :category
   belongs_to :user
 
+  require 'rexml/document'
+  include REXML
+
   CET46_PLANS = {1 => 30, 2 => 45, 3 => 60}
   GRADUATE_PLANS = {1 => 45, 2 => 60, 3 => 75, 4 => 90}
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
@@ -93,6 +96,14 @@ class UserPlan < ActiveRecord::Base
 
   #确定 计划包的 天数
   def self.package_level(category)
-    
+
+  end
+  
+  def plan_list
+    plan_list = self.plan_url
+    file=File.open "#{Constant::PUBLIC_PATH}#{self.paper_url}"
+    doc = Document.new(file)
+    file.close
+
   end
 end

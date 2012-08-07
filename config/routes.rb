@@ -1,23 +1,24 @@
 GankaoSeason3::Application.routes.draw do
-   get "welcome/welcome/index"
 
-  get "similarities/index"
+  resources :videos do
+    member do
+    end
+  end
+  resources :skills do
+    member do
+    end
+  end
 
-  get "questions/index"
-
-  get "plans/index"
-
-  get "skills/index"
-
-  get "videos/index"
-
+  resources :logins
+  resources :similarities
+  resources :plans
+  resources :skills
 
   match "questions/answered" =>'questions#answered'
   match "questions/unanswered" =>'questions#unanswered'
   match "questions/ask" =>'questions#ask'
   match "questions/answers" =>'questions#answers'
 
-  get "welcome/index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -45,10 +46,10 @@ GankaoSeason3::Application.routes.draw do
   #     end
   #   end
   resources :questions do
-     member do
-       get :answered,:unanswered,:ask,:answers
-     end
-   end
+    member do
+      get :answered,:unanswered,:ask,:answers
+    end
+  end
   # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
@@ -72,7 +73,7 @@ GankaoSeason3::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-    root :to => 'welcome#index'
+   root :to => 'welcome#index'
 
   # See how all your routes lay out with "rake routes"
 

@@ -8,5 +8,7 @@ class CreateUserQuestions < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :user_questions,:category_id
+    add_index :user_questions,:user_id
   end
 end
