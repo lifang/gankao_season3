@@ -7,7 +7,11 @@ GankaoSeason3::Application.routes.draw do
 
   resources :logins
   resources :similarities
-  resources :plans
+  resources :plans do
+    collection do
+      post :show_chapter
+    end
+  end
   resources :skills
 
   match "questions/answered" =>'questions#answered'

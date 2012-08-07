@@ -1,0 +1,32 @@
+<h1 class="mc_title"><%= UserPlan::CHAPTER[:cha2] %>阶段</h1>
+<div class="mc_box">
+  <% total_time = @plan_list[:read]* 50 + @plan_list[:translate] + @plan_list[:dictation].to_i
+  current_practice = @plan_list[:current] - @plan_list[:cha1_days]
+  current_page = (current_practice%10 > 0) ? (current_practice/10 + 1) : current_practice/10
+  (1..@plan_list[:cha2_days]).each do |i| %>
+    <div class="plan_list" <% if (i > (current_page -1) * 10) and (i < current_page * 10 + 1) %>style="display: block;"
+         <% else %>style="display: none;"<% end %>>
+      <h1 class="pl_fk pl_m_bg">
+        <span class="pl_img">
+          <% if current_practice > i %>
+            <img src="/assets/dui.png"/>
+          <% elsif current_practice == i %>
+            <img src="/assets/kai.png"/>
+          <% else %>
+            <img src="/assets/suo.png"/>
+          <% end %>
+        </span>任务<%= i + @plan_list[:cha1_days] %>
+      </h1>
+      <div class="pl_text">
+        <span>阅读(<%= @plan_list[:read] %>)&nbsp;&nbsp;&nbsp;
+          翻译(<%= @plan_list[:translate] %>)&nbsp;&nbsp;&nbsp;听写(<%= @plan_list[:dictation] %>)</span>
+        <p>估计耗时：<%= total_time %>分钟</p>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="clear"></div>
+<div class="pn_btn">
+  <button onclick="javascript:pre_page(<%= @user_plan.id %>, 2);">上一页</button>
+  <button onclick="javascript:next_page(<%= @user_plan.id %>, 2);">下一页</button>
+</div>
