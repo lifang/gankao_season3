@@ -1,0 +1,30 @@
+<% if @chapter_num == 1 %>
+  $('.m_content').html("<%= escape_javascript(render :partial => '/plans/colligation_practice') %>");
+<% elsif @chapter_num == 2 %>
+  <% if @direction == "next" %>
+    $('.m_content').html("<%= escape_javascript(render :partial => '/plans/sprint_practice') %>");
+  <% else  %>
+    $('.m_content').html("<%= escape_javascript(render :partial => '/plans/base_practice') %>");
+  <% end %>
+<% else %>
+  $('.m_content').html("<%= escape_javascript(render :partial => '/plans/colligation_practice') %>");
+<% end %>
+$(".plan_list").hide();
+var all_len = $(".mc_box > div").length;
+var all_page = (all_len%10 > 0) ? (parseInt(all_len/10) + 1) : parseInt(all_len/10);
+<% if @direction == "next" %>
+for (var i=0; i<10 && i<$(".plan_list").length; i++) {
+  if ($(".plan_list")[i] != null && $(".plan_list")[i] != undefined) {
+    $(".plan_list")[i].style.display = "block";
+  }
+}
+<% else %>
+for (var i=(all_page-1)*10; i<$(".plan_list").length; i++) {
+  if ($(".plan_list")[i] != null && $(".plan_list")[i] != undefined) {
+    $(".plan_list")[i].style.display = "block";
+  }
+}
+<% end %>
+if (all_page > 1) {
+  $(".m_content .pn_btn button").show();
+}
