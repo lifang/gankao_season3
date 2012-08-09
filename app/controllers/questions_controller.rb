@@ -16,7 +16,7 @@ class QuestionsController < ApplicationController
     category=params[:category]
     category=2
 
-    @user=User.find(22)
+    @user=User.find(24)
     @result=[]
 
      #获取问题--没有正确答案的题目并且当前用户没有答过的

@@ -17,8 +17,24 @@
               <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
               <p><%=uaq.created_at.strftime("%H:%M")%></p><!--时间-->
             </div>
+            <div class="clear"></div>
           </div>
-          <div class="clear"></div>
+          <%uaq.question_answers.each do |qa|%>
+            <div class="problem_list">
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="/assets/u01.jpg"></div>
+                <h3><%=qa.user.name%></h3>
+                <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
+                <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
+              </div>
+              <div class="answer_box an_bgFalse">
+                <span class="an_icon02"></span>
+                <p><%=qa.answer%></p>
+              </div>
+              <div class="clear"></div>
+            </div>
+          <%end%>
+
           <%=form_for uaq.question_answers.build, :url => { :action => :save_answer } do |f| %>
             <div class="problem_list">
               <%=f.hidden_field :user_question_id,:value=>uaq.id%>
