@@ -98,7 +98,11 @@ PLATFORMS
 
 DEPENDENCIES
   jquery-rails
+<<<<<<< HEAD
   mysql2 (= 0.3.10)
+=======
+  mysql2 (= 0.3.11)
+>>>>>>> 4c0e913b4049531ed97f0f96b8360e7f4dd3c34c
   rails (= 3.1.2)
   turn (= 0.8.2)
   uglifier (>= 1.0.3)
