@@ -1,31 +1,19 @@
 <%=render 'nav'%>
 <div class="m_content">
   <div class="mc_box">
-    <div class="mc_menu">
-      <ul>
-        <li><%=link_to "已经回答","answered?category="  %></li>
-        <li><%=link_to "等待回答","unanswered?category="  %></li>
-        <li class="hover"><%=link_to "我的提问","ask?category="  %></li>
-        <li><%=link_to "我的回答","answers?category="  %></li>
-      </ul>
-      <div class="search">
-         <div class="search_box"><input id="keywords" name="" type="text"/><button id="btnSearch">search</button></div>
-      </div>
-      <div class="clear"></div>
-    </div>
+    <%=render 'menu'%>
     <div class="mc_menu_box">
       <%=form_for :user_question,:url=>{ :action => :ask_question} do |f|%>
-      <div class="my_question">
-        <h2>问题</h2>
-        <%=f.text_field :title,:class=>"my_q_input"%>
-        <h2>补充</h2>
-        <%=f.text_area :description,:class=>"my_q_textarea"%>
-        <%=f.submit "我要提问",:class=>"pro_btn"%>
-      </div>
+        <div class="my_question">
+          <h2>问题</h2>
+          <%=f.text_field :title,:class=>"my_q_input"%>
+          <h2>补充</h2>
+          <%=f.text_area :description,:class=>"my_q_textarea"%>
+          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
+        </div>
       <%end%>
       <%@myasks.each do |myask|%>
         <div class="b_bottom">
-
           <!-- 所有问题 -->
           <div class="problem_list">
             <div class="problem_box">
@@ -66,7 +54,7 @@
           <%if myask.question_answers.where("is_right=true").count>0%>
             <div class="problem_list"><h2 class="other_h">其他答案</h2></div>
           <%end%>
-            
+
           <%myask.question_answers.where("is_right=false").each do |mqa|%>
             <div class="problem_list">
               <div class="userProblem_box">
@@ -86,7 +74,7 @@
       <%end%>
 
 
-  <%=will_paginate @myasks,:prev_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
+      <%=will_paginate @myasks,:prev_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
     </div>
 
   </div>
