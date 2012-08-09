@@ -1,187 +1,82 @@
 <%=render 'nav'%>
 <div class="m_content">
   <div class="mc_box">
-    <div class="mc_menu">
-      <ul>
-        <li><%=link_to "已经回答","answered?category="  %></li>
-        <li><%=link_to "等待回答","unanswered?category="  %></li>
-        <li class="hover"><%=link_to "我的提问","ask?category="  %></li>
-        <li><%=link_to "我的回答","answers?category="  %></li>
-      </ul>
-      <div class="search">
-        <div class="search_box"><input name="" type="text"/><button>search</button></div>
-      </div>
-      <div class="clear"></div>
-    </div>
+    <%=render 'menu'%>
     <div class="mc_menu_box">
-
-      <div class="my_question">
-        <h2>问题</h2>
-        <input name="" type="text" class="my_q_input"/>
-        <h2>补充</h2>
-        <textarea name="" cols="" rows="" class="my_q_textarea">测试:<%=@user.id%><%=@user.name%>
-        日期:<%=@user.created_at.strftime("%Y-%m-%d")%>
-        时间:<%=@user.created_at.strftime("%H:%M")%>
-        问题：<%=@myask%></textarea>
-        <button class="pro_btn">我要提问</button>
-      </div>
-
-      <div class="b_bottom">
-
-        <div class="problem_list">
-          <div class="problem_box">
-            <span class="in_true tooltip" title="已确认答案">已确认答案</span>
-            <span class="an_icon01"></span>
-            <p>which在定语从句中的用法？</p>
-            <p><span class="orange">补充：</span>请各大神简洁明了的回答啊，因为偶的脑袋比较笨，咩哈…</p>
-          </div>
-          <div class="userProblem_box">
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="clear"></div>
+      <%=form_for :user_question,:url=>{ :action => :ask_question} do |f|%>
+        <div class="my_question">
+          <h2>问题</h2>
+          <%=f.text_field :title,:class=>"my_q_input"%>
+          <h2>补充</h2>
+          <%=f.text_area :description,:class=>"my_q_textarea"%>
+          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
         </div>
+      <%end%>
+      <%@myasks.each do |myask|%>
+        <div class="b_bottom">
+          <!-- 所有问题 -->
+          <div class="problem_list">
+            <div class="problem_box">
+              <%if myask.question_answers.where("is_right=true").count>0%>
+                <span class="in_true tooltip" title="已确认答案">已确认答案</span>
+              <%end%>
+              <span class="an_icon01"></span>
+              <p><%=myask.title%></p>
+              <p><span class="orange">补充：</span><%=myask.description%></p>
+            </div>
+            <div class="userProblem_box">
+              <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+              <h3><%=myask.user.name%></h3>
+              <p><%=myask.created_at.strftime("%Y-%m-%d")%></p>
+              <p><%=myask.created_at.strftime("%H:%M")%></p>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <!--答案-->
 
-        <div class="problem_list">
-          <div class="userProblem_box">
-            <span class="flag tooltip" title="最佳答案">最佳答案</span>
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="answer_box an_bgTrue">
-            <span class="an_icon03"></span>
-            <p>which在定语从在定语从句中的用法在定语从句中的用法在定语从句中的用法句中的用法？</p>
-          </div>
-          <div class="clear"></div>
+          <%myask.question_answers.where("is_right=true").each do |mqa|%><!--最佳答案-->
+            <div class="problem_list">
+              <div class="userProblem_box">
+                <span class="flag tooltip" title="最佳答案">最佳答案</span>
+                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+                <h3><%=mqa.user.name%></h3>
+                <p><%=mqa.created_at.strftime("%Y-%m-%d")%></p>
+                <p><%=mqa.created_at.strftime("%H:%M")%></p>
+              </div>
+              <div class="answer_box an_bgTrue">
+                <span class="an_icon03"></span>
+                <p><%=mqa.answer%></p>
+              </div>
+              <div class="clear"></div>
+            </div>
+          <%end%>
+
+          <%if myask.question_answers.where("is_right=true").count>0%>
+            <div class="problem_list"><h2 class="other_h">其他答案</h2></div>
+          <%end%>
+
+          <%myask.question_answers.where("is_right=false").each do |mqa|%>
+            <div class="problem_list">
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+                <h3><%=mqa.user.name%></h3>
+                <p><%=mqa.created_at.strftime("%Y-%m-%d")%></p>
+                <p><%=mqa.created_at.strftime("%H:%M")%></p>
+              </div>
+              <div class="answer_box an_bgFalse">
+                <span class="an_icon02"></span>
+                <p><%=mqa.answer%></p>
+              </div>
+              <div class="clear"></div>
+            </div>
+          <%end%>
         </div>
-        <div class="problem_list"><h2 class="other_h">其他答案</h2></div>
-        <div class="problem_list">
-          <div class="userProblem_box">
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="answer_box an_bgFalse">
-            <span class="an_icon02"></span>
-            <p>which在定语从在定语从句中的用法在定语从句中的用法在定语从句中的用法句中的用法？</p>
-          </div>
-          <div class="clear"></div>
-        </div>
+      <%end%>
 
-      </div>
 
-      <div class="b_bottom">
-
-        <div class="problem_list">
-          <div class="problem_box">
-            <span class="an_icon01"></span>
-            <p>which在定语从句中的用法？</p>
-            <p><span class="orange">补充：</span>请各大神简洁明了的回答啊，因为偶的脑袋比较笨，咩哈…</p>
-          </div>
-          <div class="userProblem_box">
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="clear"></div>
-        </div>
-
-        <div class="problem_list" style="display:none;">
-          <div class="userProblem_box">
-            <span class="flag tooltip" title="最佳答案">最佳答案</span>
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="answer_box an_bgTrue">
-            <span class="an_icon03"></span>
-            <p>which在定语从在定语从句中的用法在定语从句中的用法在定语从句中的用法句中的用法？</p>
-          </div>
-          <div class="clear"></div>
-        </div>
-        <div class="problem_list" style="display:none;"><h2 class="other_h">其他答案</h2></div>
-        <div class="problem_list" style="display:none;">
-          <div class="userProblem_box">
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="answer_box an_bgFalse">
-            <span class="an_icon02"></span>
-            <p>which在定语从在定语从句中的用法在定语从句中的用法在定语从句中的用法句中的用法？</p>
-          </div>
-          <div class="clear"></div>
-        </div>
-
-      </div>
-
-      <div class="b_bottom">
-
-        <div class="problem_list">
-          <div class="problem_box">
-            <span class="an_icon01"></span>
-            <p>which在定语从句中的用法？</p>
-            <p><span class="orange">补充：</span>请各大神简洁明了的回答啊，因为偶的脑袋比较笨，咩哈…</p>
-          </div>
-          <div class="userProblem_box">
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="clear"></div>
-        </div>
-
-        <div class="problem_list" style="display:none;">
-          <div class="userProblem_box">
-            <span class="flag tooltip" title="最佳答案">最佳答案</span>
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="answer_box an_bgTrue">
-            <span class="an_icon03"></span>
-            <p>which在定语从在定语从句中的用法在定语从句中的用法在定语从句中的用法句中的用法？</p>
-          </div>
-          <div class="clear"></div>
-        </div>
-        <div class="problem_list" style="display:none;"><h2 class="other_h">其他答案</h2></div>
-        <div class="problem_list" style="display:none;">
-          <div class="userProblem_box">
-            <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-            <h3>张晓强</h3>
-            <p>2012-08-01</p>
-            <p>13:12</p>
-          </div>
-          <div class="answer_box an_bgFalse">
-            <span class="an_icon02"></span>
-            <p>which在定语从在定语从句中的用法在定语从句中的用法在定语从句中的用法句中的用法？</p>
-          </div>
-          <div class="clear"></div>
-        </div>
-
-      </div>
-
-      <div class="pageTurn_box">
-        <a href="#">上一页</a>
-        <a href="#" class="current">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">下一页</a>
-      </div>
+      <%=will_paginate @myasks,:prev_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
     </div>
 
   </div>
   <div class="clear"></div>
-
 </div>
-

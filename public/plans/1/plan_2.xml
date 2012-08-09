@@ -1,0 +1,50 @@
+
+<root>
+    <plan>
+        <current>18</current>
+        <info>
+            <chapter1 word='20' sentence='6' linsten='5' days='22' />
+            <chapter2 read='5' translate='5' dictation='3' days='24' />
+            <chapter3 write='1' days='23' />
+        </info>
+        <_2 status='0'><!--正在进行或即将要做的任务包-->
+            <part type='0' status='0' >  <!-- 单词-->
+                <item id='1' is_pass='true' repeat_time='0' step='0' />
+                <item id='2' is_pass='true' repeat_time='0' step='0' />
+            </part>
+            <part type='1' status='0'>  <!-- 句子 -->
+                <item id='43' is_pass='false' repeat_time='0' step='2' />
+                <item id='3' is_pass='false' repeat_time='0' step='2' />
+            </part>
+            <part type='2' status='0' num='20' > <!--听力、听写、翻译、写作、阅读-->
+                <item id='66' is_pass='false' repeat_time='0' step='1' />
+                <item id='22' is_pass='false' repeat_time='0' step='1' />
+            </part>
+        </_2>
+        <_3 status='0'><!--未解锁任务包-->
+            <part type='0' status='0' num='20' />
+            <part type='1' status='0' num='20' />
+            <part type='2' status='0' num='20' />
+        </_3>
+    </plan>
+    <review> <!--复习的任务包-->
+        <_02 status='1' >
+            <part type='0' status='0' repeat_time="1">
+                <item id='1' is_pass='false' repeat_time='0' step='3' />
+                <item id='2' is_pass='false' repeat_time='0' step='3' />
+            </part>
+            <part type='1' status='0' num='10' repeat_time="2">
+                <item id='43' is_pass='false' repeat_time='0' step='2' />
+                <item id='3' is_pass='false' repeat_time='0' step='2' />
+            </part>
+            <part type='2' status='0' num='20'  repeat_time="1">
+                <item id='66' is_pass='false' repeat_time='0' step='1' />
+                <item id='22' is_pass='false' repeat_time='0' step='1' />
+            </part>
+        </_02>
+    </review>
+    <tiku> <!--题库-->
+        <part type='1' lv='11' item='542, 2, 14'/>
+        <part type='2' lv='13' item='542, 2, 14'/>
+    </tiku>
+</root>
