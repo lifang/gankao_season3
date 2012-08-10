@@ -8,7 +8,10 @@ class UserPlan < ActiveRecord::Base
   
   CHAPTER_TYPE = {:WORD => "word", :SENTENCE => "sentence", :LINSTEN => "linsten", :READ => "read",
     :TRANSLATE => "translate", :DICTATION => "dictation", :WRITE => "write"}#单词、句子、听力、阅读、翻译、听写、写作
-  CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"}
+  CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
+  CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
+    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6}#单词、句子、听力、阅读、翻译、听写、写作
+
   CET46_PLANS = {1 => 30, 2 => 45, 3 => 60}
   GRADUATE_PLANS = {1 => 45, 2 => 60, 3 => 75, 4 => 90}
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
@@ -113,10 +116,10 @@ class UserPlan < ActiveRecord::Base
   end
 
   def plan_list
-    plan_list = self.plan_url
     file=File.open "#{Constant::PUBLIC_PATH}#{self.paper_url}"
     doc = Document.new(file)
     file.close
+    return doc
   end
 
   #返回复习计划的列表结构为：[[可开启的任务包]， [单词，句子，听力，时间段]， [阅读，翻译，听写，时间段]， [写作，时间段]]
@@ -154,13 +157,27 @@ class UserPlan < ActiveRecord::Base
     all_start_level =  user_score_info.all_start_level.split(",")
     words = Word.find(:select => "id", :conditions => ["category_id = ? and level = ?",
         user_score_info.category_id, all_start_level[0]])
+    word_list = words.collect { |w| w.id }
     practice_sentences = PracticeSentence.find(:select => "id",
       :conditions => ["category_id = ? and types = ? and level = ?",
         user_score_info.category_id, PracticeSentence::TYPES[:SENTENCE], all_start_level[1]])
+    sentence_list = practice_sentences.collect { |s| s.id }
     listens = PracticeSentence.find(:select => "id",
       :conditions => ["category_id = ? and types = ? and level = ?",
         user_score_info.category_id, PracticeSentence::TYPES[:LINSTEN], all_start_level[2]])
-    return {:word => words, :practice_sentences => practice_sentences, :listens => listens}
+    listen_list = listens.collect { |l| l.id }
+    return {:word => word_list, :practice_sentences => sentence_list, :listens => listen_list, :levels => all_start_level}
+  end
+
+  #返回各个部分的时间
+  def return_chapter_data(data_info)
+    first_chapter = ((data_info[:ONE].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil
+    second_chapter = ((data_info[:TWO].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil
+    third_chapter = data_info[:DAYS] - first_chapter - second_chapter
+    word_avg = data_info[:WORD]/first_chapter
+    sentence_avg = data_info[:SENTENCE]/first_chapter
+    listen_avg = data_info[:LISTEN]/first_chapter
+    
   end
 
   #写文件
@@ -180,14 +197,15 @@ class UserPlan < ActiveRecord::Base
   end
 
   #创建xml文件
-  def xml_content(tiku_hash)
+  def xml_content(tiku_hash, data_info)
+    
     content = "<?xml version='1.0' encoding='UTF-8'?>"
     content += <<-XML
       <root>
         <plan>
             <current>1</current>
             <info>
-                <chapter1 word='20' sentence='6' linsten='5' days='22' />
+                <chapter1 word='#{sd}' sentence='6' linsten='5' days='22' />
                 <chapter2 read='5' translate='5' dictation='3' days='24' />
                 <chapter3 write='1' days='23' />
             </info>
@@ -196,13 +214,12 @@ class UserPlan < ActiveRecord::Base
 
     content += <<-XML
         <tiku>
-    XML
-    
-    content += <<-XML
+          <part type='#{CHAPTER_TYPE_NUM[:WORD]}' lv='#{tiku_hash[:levels][0]}' item='#{tiku_hash[:word].join(",")}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' lv='#{tiku_hash[:levels][1]}' item='#{tiku_hash[:practice_sentences].join(",")}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' lv='#{tiku_hash[:levels][2]}' item='#{tiku_hash[:listens].join(",")}'/>
         </tiku>
       </root>
     XML
-
     return content
   end
   
