@@ -505,11 +505,76 @@ nav li { float: left; margin: 0 20px;}
 
 
 /*知识库文章---*/
-.article_area { margin: 10px 0; overflow: hidden;}
-.article_h { height: 32px; line-height: 32px; cursor: pointer; font-size: 16px; background: #387580; color: #e4e3ce;}
-.article_h:hover { background: #3f8490;}
-.article_p { height: 500px; line-height: 24px; text-indent: 24px; padding: 10px;}
-.article_p p { margin: 10px 0;}
+.publishArticles { padding: 0 10px; overflow: hidden;}
+.publishArticles button {
+    width: 130px;
+	height: 32px;
+	line-height: 32px;
+	background: #387580;
+	text-align: center;
+	color: #e4e3ce;
+	border-radius: 0.2em;
+	float: right;
+}
+.publishArticles button:hover { background: #3f8490;}
+.article_area { margin: 10px 0; overflow: hidden; border-bottom: 1px #CCCCCC dotted;}
+.readNumber {
+    height: 46px;
+	padding-top: 10px;
+	width: 56px;
+	background: url(/assets/read_bg.png) no-repeat;
+	float: left;
+	margin-top: 8px;
+	text-align: center;
+	color: #fff;
+}
+.articleIntro { float: left; width: 448px; margin-left: 20px;}
+.article_h a { height: 32px; line-height: 32px; font-size: 16px; color: #387580;}
+.article_h a:hover { text-decoration: underline;}
+.article_text { line-height: 24px; text-align: left; height: 80px; overflow: hidden;}
+.article_p { border-top: 1px #CCCCCC solid;}
+.article_p p { margin: 10px 0; text-indent: 24px; line-height: 24px;}
+.singlemeta { padding: 3px 0; color: #999;}
+.singlemeta span { padding-right: 20px;}
+.article_page { margin: 10px 0; overflow: hidden;}
+.article_page h1 { font-size: 24px; line-height: 48px; color: #387580; text-align: center;}
+
+.share { padding: 5px 0; overflow: hidden;}
+.share li { float: left; margin: 0 5px; line-height: 20px;}
+.share li a { width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden;}
+.share_qq { background: url(/assets/share_bg.png) no-repeat 0 bottom;}
+.share_sina { background: url(/assets/share_bg.png) no-repeat 0 top;}
+.share_rr { background: url(/assets/share_bg.png) no-repeat 0 -20px;}
+
+.like {
+	width: 60px;
+	height: 20px;
+	display: inline-block;
+	background: url(/assets/like_bg.png) no-repeat;
+	cursor: pointer;
+}
+.like em { width: 30px; height: 14px; display: inline-block; text-align: center;}
+
+
+.blog_title input {
+    height: 30px;
+	line-height: 30px;
+	width: 522px;
+	text-align: center;
+	padding: 5px 0;
+	font-size: 20px;
+	color: #999;
+	display: block;
+	border: 1px #CCCCCC dashed;
+}
+.blog_title input:hover, .blog_title input.focus {
+	border: 1px #e4411e solid;
+	box-shadow: 0 2px 3px rgba(200,200,200,0.6) inset;
+	outline: 0 none;
+}
+
+.blog_text { margin: 10px 0;}
+.blog_text textarea { width: 512px; height: 350px; border: 1px #FFF solid; padding: 5px; color: #333;}
 
 /*page翻页----*/
 .pageTurn_btn { margin: 10px 0; padding: 10px; overflow: hidden; float: right;}
@@ -523,14 +588,16 @@ nav li { float: left; margin: 0 20px;}
 	line-height: 18px; 
 	margin: 0 10px;
 }
-.p_circle { 
-    width: 17px; 
+.p_circle {
+    width: 17px;
 	height: 18px;
-	margin: 3px 10px; 
-	display: block; 
-	float: left; 
-	overflow: hidden; 
+	margin: 3px 10px;
+	display: block;
+	float: left;
+	overflow: hidden;
 	background: url(/assets/pageTurn.png) no-repeat 0 -18px;
+	text-indent: -999px;
+	overflow: hidden;
 }
 .p_circle.hover {background: url(/assets/pageTurn.png) no-repeat 0 0;}
 .more { text-align: right; padding: 5px 10px; color: #387580;}

@@ -37,7 +37,7 @@ production:
   reconnect: false
   database: exam_app_production
   pool: 5
-  username: root
-  password: qianjun
-  host: localhost
+  username: gankao_season3
+  password: comdo2012
+  host: 192.168.0.250
 
