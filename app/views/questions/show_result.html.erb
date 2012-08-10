@@ -66,7 +66,7 @@
           </div>
         <%end%>
         <!--分页插件-->
-        <%=will_paginate @query_questions,:prev_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
+        <%=will_paginate @query_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
       <%else %>
         <span style="font-size:30px;color:red;text-align: center;">没有找到相关问题!</span>
       <%end%>
