@@ -6,9 +6,11 @@ class UserPlan < ActiveRecord::Base
   require 'rexml/document'
   include REXML
 
+  PER_PACKAGE_TIME = 120 #单位分钟
+  TRUE_PAPER_TIME = 375 #单位分钟
+  
   CET46_PLANS = {1 => 60, 2 => 45, 3 => 30}
   GRADUATE_PLANS = {1 => 90, 2 => 75, 3 => 60, 4 => 45}
-  
   CHAPTER_TYPE = {:WORD => "word", :SENTENCE => "sentence", :LINSTEN => "linsten", :READ => "read",
     :TRANSLATE => "translate", :DICTATION => "dictation", :WRITE => "write"}#单词、句子、听力、阅读、翻译、听写、写作
   CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
@@ -17,8 +19,7 @@ class UserPlan < ActiveRecord::Base
 
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
   PER_ITEMS = {:WORD => 100, :SENTENCE => 100, :LISTEN => 10, :READ => 6, :WRITE => 6, :TRANSLATE => 10,:DICTATION => 10}  #单位 秒
-  PER_PACKAGE_TIME = 120 #单位分钟
-  TRUE_PAPER_TIME = 375 #单位分钟
+
   
   #根据前测与用户期望 计算需要达到的等级
   def self.calculate_target_level(target_score, max_score, max_level)
@@ -110,7 +111,6 @@ class UserPlan < ActiveRecord::Base
         :WORD => word_num, :SENTENCE => sentence_num, :READ => read_num, :WRITE => write_num
       }
     end
-
     #判断是否 可行，否则系统计算可达到的情况
     left_mis = package_sys_time(package_level(category_id))
     p "user time-#{result[:ALL]}  sys left time-#{left_mis}"
@@ -124,9 +124,15 @@ class UserPlan < ActiveRecord::Base
     end
   end
 
+  #根据给定时间 计算可达目标
+  def sys_provide_plan(user_plan, sys_provide_time)
+    
+  end
+  
+
   #确定计划的天数(即：包的数量)
   #根据不同科目 下给定的区间值选择最优值
-  def self.package_level(category_id)
+  def UserPlan.package_level(category_id)
     today = Time.now.strftime("%Y-%m-%d")
     day = (Constant::DEAD_LINE[:"#{Category::FLAG[category_id]}"].to_time - today.to_time)/86400
     p "left day #{day}"
@@ -139,11 +145,12 @@ class UserPlan < ActiveRecord::Base
         return v if v <= day
       }
     end
+    return day
   end
 
   #计算任务包的系统时间(返回 单位值：分钟)
-  def self.package_sys_time(package_num)
-    return package_num*UserPlan::PER_PACKAGE_TIME
+  def UserPlan.package_sys_time(package_num)
+    return package_num*PER_PACKAGE_TIME
   end
 
   def plan_list
