@@ -27,3 +27,13 @@ function deliver_blog(){
     }
     $("#blog").submit();
 }
+
+function create_blog(){
+    $("#my_blog").css("display","none");
+    $(".blog_content").css("display","none");
+    $("#new_blog").css("display","");
+}
+
+function show_blog(index){
+   window.location.href="/skills?category_id="+$("#category_id").val() +"&con_t="+index;
+}
