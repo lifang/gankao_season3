@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120803030512) do
+ActiveRecord::Schema.define(:version => 20120809032510) do
 
   create_table "action_logs", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -451,11 +451,15 @@ ActiveRecord::Schema.define(:version => 20120803030512) do
 
   create_table "question_answers", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "quer_question_id"
     t.string   "answer"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_question_id"
+    t.boolean  "is_right",         :default => false
   end
+
+  add_index "question_answers", ["user_id"], :name => "index_question_answers_on_user_id"
+  add_index "question_answers", ["user_question_id"], :name => "index_question_answers_on_user_question_id"
 
   create_table "question_tag_relations", :force => true do |t|
     t.integer "tag_id"
@@ -535,6 +539,8 @@ ActiveRecord::Schema.define(:version => 20120803030512) do
     t.datetime "updated_at"
   end
 
+  add_index "schedules", ["category_id"], :name => "index_schedules_on_category_id"
+
   create_table "score_levels", :force => true do |t|
     t.integer "examination_id"
     t.string  "key"
@@ -551,6 +557,9 @@ ActiveRecord::Schema.define(:version => 20120803030512) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "readed_num",   :default => 0, :null => false
+    t.integer  "user_id",      :default => 0, :null => false
+    t.string   "simplify_con"
   end
 
   add_index "skills", ["category_id"], :name => "index_skills_on_category_id"
@@ -572,6 +581,18 @@ ActiveRecord::Schema.define(:version => 20120803030512) do
   end
 
   add_index "study_plans", ["category_id"], :name => "index_study_plans_on_category_id"
+
+  create_table "suns", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "types"
+    t.integer  "user_id"
+    t.integer  "num"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "suns", ["category_id"], :name => "index_suns_on_category_id"
+  add_index "suns", ["user_id"], :name => "index_suns_on_user_id"
 
   create_table "tags", :force => true do |t|
     t.string  "name"
@@ -640,11 +661,10 @@ ActiveRecord::Schema.define(:version => 20120803030512) do
   create_table "user_plans", :force => true do |t|
     t.integer  "category_id"
     t.integer  "user_id"
-    t.date     "started_at"
-    t.date     "ended_at"
     t.string   "plan_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "days"
   end
 
   create_table "user_questions", :force => true do |t|
@@ -654,8 +674,12 @@ ActiveRecord::Schema.define(:version => 20120803030512) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_answer"
+    t.boolean  "is_answer",   :default => false
   end
+
+  add_index "user_questions", ["category_id"], :name => "index_user_questions_on_category_id"
+  add_index "user_questions", ["is_answer"], :name => "index_user_questions_on_is_answer"
+  add_index "user_questions", ["user_id"], :name => "index_user_questions_on_user_id"
 
   create_table "user_role_relations", :force => true do |t|
     t.integer "role_id"
