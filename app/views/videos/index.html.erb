@@ -1,5 +1,5 @@
 <%= javascript_include_tag "video_skill"  %>
-<%= javascript_include_tag "jplayer/jquery.jplayer.min"  %>
+<%= javascript_include_tag "/assets/flowplayer/flowplayer"  %>
 <div class="m_content">
   <div class="mc_box">
     <div class="mc_menu">
@@ -8,17 +8,11 @@
           <li onclick="video_show(<%=  index %>)"><%= @sched_vis[index+1][1] %></li>
         <%end%>
       </ul>
-
       <div class="clear"></div>
     </div>
-
     <div class="mc_menu_box">
       <div class="video_area">
-        <div class="xz_video" id="jquery_jplayer_1">↑<br/>选择讲师<br/>开始学习</div>
-        <%#*<div id="jp_interface_1">%>
-          <%#*<a href="#" class="jp-play">Play</a>%>
-          <%#*<a href="#" class="jp-pause">Pause</a>%>
-        <%#*</div>%>
+        <div class="xz_video">↑<br/>选择讲师<br/>开始学习</div>
       </div>
       <div class="other_video">
         <% @sched_vis.each_with_index do |schedule,index| %>
@@ -28,7 +22,7 @@
             <div class="video_box">
               <ul class="video_ul">
                 <%@sched_vis[index+1][0].each do |video|%>
-                  <li onclick="load_video('<%= Constant::SERVER_URL+video.video_url %>')"><%= video.title %></li>
+                  <li onclick="load_video('<%= "http://localhost:3000"+video.video_url %>')"><%= video.title %></li>
                 <% end %>
               </ul>
             </div>
@@ -40,19 +34,6 @@
     </div>
     <script type="text/javascript">
       $( $(".mc_menu li")[0]).trigger("onclick");
-      <%#*$(document).ready(function(){%>
-        <%#*$("#jquery_jplayer_1").jPlayer({%>
-          <%#*ready: function () {%>
-            <%#*$(this).jPlayer("setMedia", {%>
-              <%#*m4a: "/videos/2/1.mp4",%>
-              <%#*oga: "/videos/2/1.oga"%>
-            <%#*});%>
-          <%#*},%>
-          <%#*swfPath: "/js",%>
-          <%#*supplied: "m4a, oga"%>
-        <%#*});%>
-        <%#*$("#jquery_jplayer_1").jPlayer("play");%>
-      <%#*});%>
     </script>
   </div>
 

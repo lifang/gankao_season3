@@ -1,18 +1,7 @@
 <%=render 'nav'%>
 <div class="m_content">
   <div class="mc_box">
-    <div class="mc_menu">
-      <ul>
-        <li><%=link_to "已经回答","answered?category="  %></li>
-        <li class="hover"><%=link_to "等待回答","unanswered"  %></li>
-        <li><%=link_to "我的提问","ask?category="  %></li>
-        <li><%=link_to "我的回答","answers?category="  %></li>
-      </ul>
-      <div class="search">
-        <div class="search_box"><input name="" type="text"><button>search</button></div>
-      </div>
-      <div class="clear"></div>
-    </div>
+    <%=render 'menu'%>
     <div class="mc_menu_box">
       <%@unanswered_questions.each do |uaq|%>
         <div class="b_bottom">
@@ -28,23 +17,34 @@
               <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
               <p><%=uaq.created_at.strftime("%H:%M")%></p><!--时间-->
             </div>
+            <div class="clear"></div>
           </div>
-          <div class="clear"></div>
+          <%uaq.question_answers.each do |qa|%>
+            <div class="problem_list">
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="/assets/u01.jpg"></div>
+                <h3><%=qa.user.name%></h3>
+                <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
+                <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
+              </div>
+              <div class="answer_box an_bgFalse">
+                <span class="an_icon02"></span>
+                <p><%=qa.answer%></p>
+              </div>
+              <div class="clear"></div>
+            </div>
+          <%end%>
 
-          <div class="problem_list">
-            <textarea name="" cols="" rows="" class="pro_textarea"></textarea>
-            <button class="pro_btn">我要回答</button>
-          </div>
+          <%=form_for uaq.question_answers.build, :url => { :action => :save_answer } do |f| %>
+            <div class="problem_list">
+              <%=f.hidden_field :user_question_id,:value=>uaq.id%>
+              <%= f.text_area  :answer,:class=>"pro_textarea" %>
+              <%=f.submit "我要回答",:class=>"pro_btn"%>
+            </div>
+          <%end%>
         </div>
       <%end%>
-      <%=will_paginate @unanswered_questions,:prev_label => '<<上一页', :next_label => '下一页>>'%>
-      <div class="pageTurn_box">
-        <a href="#">上一页</a>
-        <a href="#" class="current">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">下一页</a>
-      </div>
+      <%=will_paginate @unanswered_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
     </div>
   </div>
   <div class="clear"></div>

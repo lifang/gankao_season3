@@ -1,10 +1,12 @@
 <%=render 'nav'%>
 <div class="m_content">
   <div class="mc_box">
-    <%=render 'menu'%>
-    <%if @answered_questions.any?%>
-      <div class="mc_menu_box">
-        <%@answered_questions.each do |aq|%>
+     <%=render 'menu'%>
+
+    <div class="mc_menu_box">
+
+      <%if @query_questions.any? %>
+        <%@query_questions.each do |aq|%>
           <!--单个问题-->
           <div class="b_bottom">
             <div class="problem_list">
@@ -61,15 +63,14 @@
                 <div class="clear"></div>
               </div>
             <%end%>
-
           </div>
         <%end%>
         <!--分页插件-->
-        <%=will_paginate @answered_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
-      </div>
-    <%else%>
-      <span style="font-size:30px;color:red;text-align: center;">-_-。sorry!还有人回答问题!</span>
-    <%end%>
+        <%=will_paginate @query_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
+      <%else %>
+        <span style="font-size:30px;color:red;text-align: center;">没有找到相关问题!</span>
+      <%end%>
+    </div>
   </div>
   <div class="clear"></div>
 </div>
