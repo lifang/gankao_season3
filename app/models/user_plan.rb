@@ -8,13 +8,16 @@ class UserPlan < ActiveRecord::Base
 
   PER_PACKAGE_TIME = 120 #单位分钟
   TRUE_PAPER_TIME = 375 #单位分钟
+  PAPER_NUM = 276 #三套试卷共276题
+
   
   CET46_PLANS = {1 => 60, 2 => 45, 3 => 30}
   GRADUATE_PLANS = {1 => 90, 2 => 75, 3 => 60, 4 => 45}
-
   CHAPTER_TYPE = {:WORD => "word", :SENTENCE => "sentence", :LINSTEN => "linsten", :READ => "read",
     :TRANSLATE => "translate", :DICTATION => "dictation", :WRITE => "write"}#单词、句子、听力、阅读、翻译、听写、写作
-  CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"}
+  CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
+  CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
+    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6}#单词、句子、听力、阅读、翻译、听写、写作
 
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
   PER_ITEMS = {:WORD => 100, :SENTENCE => 100, :LISTEN => 10, :READ => 6, :WRITE => 6, :TRANSLATE => 10,:DICTATION => 10}  #单位 秒
@@ -216,10 +219,10 @@ class UserPlan < ActiveRecord::Base
   end
 
   def plan_list
-    plan_list = self.plan_url
     file=File.open "#{Constant::PUBLIC_PATH}#{self.paper_url}"
     doc = Document.new(file)
     file.close
+    return doc
   end
 
   #返回复习计划的列表结构为：[[可开启的任务包]， [单词，句子，听力，时间段]， [阅读，翻译，听写，时间段]， [写作，时间段]]
@@ -239,12 +242,14 @@ class UserPlan < ActiveRecord::Base
   end
 
   #生成初始计划
-  def self.init_plan(task_hash, time_hash, user_id, category_id)
-    user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category_id, user_id)
-
-    user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id)
-    
+  def self.init_plan(user_score_info, data_info, user_id, category_id)
+    user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
+    #chapter = self.return_chapter_data(data_info)
+    user_plan.create_plan_url(self.xml_content(user_score_info.get_start_level, return_chapter_data(data_info)),
+      category_id.to_s + "_" + user_plan.id.to_s)
+    return user_plan
   end
+
 
   def create_plan_url(str, path, super_path = "plan_xmls")
     file_name = self.write_file(str, path, super_path)
@@ -252,20 +257,96 @@ class UserPlan < ActiveRecord::Base
     self.save
   end
 
-  #取到默认开始的词库、句子跟听力
-  def get_start_level(user_score_info)
-    all_start_level =  user_score_info.all_start_level.split(",")
-    words = Word.find(:select => "id", :conditions => ["category_id = ? and level = ?",
-        user_score_info.category_id, all_start_level[0]])
-    practice_sentences = PracticeSentence.find(:select => "id",
-      :conditions => ["category_id = ? and types = ? and level = ?",
-        user_score_info.category_id, PracticeSentence::TYPES[:SENTENCE], all_start_level[1]])
-    listens = PracticeSentence.find(:select => "id",
-      :conditions => ["category_id = ? and types = ? and level = ?",
-        user_score_info.category_id, PracticeSentence::TYPES[:LINSTEN], all_start_level[2]])
-    return {:word => words, :practice_sentences => practice_sentences, :listens => listens}
+  #返回各个部分的时间
+  def return_chapter_data(data_info)
+    first_chapter = ((data_info[:ONE].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil
+    second_chapter = ((data_info[:TWO].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil
+    third_chapter = data_info[:DAYS] - first_chapter - second_chapter
+    word_avg = (data_info[:WORD].to_f/first_chapter).ceil
+    sentence_avg = (data_info[:SENTENCE].to_f/first_chapter).ceil
+    listen_avg = (data_info[:LISTEN].to_f/first_chapter).ceil
+    read_avg = (data_info[:READ].to_f/second_chapter).ceil
+    translate_avg = (data_info[:TRANSLATE].to_f/second_chapter).ceil
+    dictation_avg = (data_info[:DICTATION].to_f/second_chapter).ceil
+    write_avg = (data_info[:WRITE].to_f/third_chapter).ceil
+    similarity_avg = PAPER_NUM/third_chapter
+    return { :first_chapter => first_chapter, :second_chapter => second_chapter, :third_chapter => third_chapter,
+      :word_avg => word_avg, :sentence_avg => sentence_avg, :listen_avg => listen_avg, :read_avg => read_avg,
+      :translate_avg => translate_avg, :dictation_avg => dictation_avg, :write_avg => write_avg,
+      :similarity_avg => similarity_avg }
   end
 
+  #创建xml文件 tiku_hash = get_start_level, chapter_info = return_chapter_data
+  def xml_content(tiku_hash, chapter_info)
+    task_info = self.return_task(tiku_hash, chapter_info)
+    content = "<?xml version='1.0' encoding='UTF-8'?>"
+    content += <<-XML
+      <root>
+        <plan>
+            <current>1</current>
+            <info>
+                <chapter1 word='#{chapter_info[:word_avg]}' sentence='#{chapter_info[:sentence_avg]}' linsten='#{chapter_info[:listen_avg]}' days='#{chapter_info[:first_chapter]}' />
+                <chapter2 read='#{chapter_info[:read_avg]}' translate='#{chapter_info[:translate_avg]}' dictation='#{chapter_info[:dictation_avg]}' days='#{chapter_info[:second_chapter]}' />
+                <chapter3 write='#{chapter_info[:write_avg]}' similarity='#{chapter_info[:similarity_avg]}'  days='#{chapter_info[:third_chapter]}' />
+            </info>
+            <_1 status='0'>
+              <part type='#{CHAPTER_TYPE_NUM[:WORD]}' status='0'>#{task_info[:word_info]}</part>
+              <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' status='0'>#{task_info[:sentence_info]}</part>
+              <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' status='0'>#{task_info[:listen_info]}</part>
+            </_1>
+    XML
+    (2..chapter_info[:first_chapter].to_i).each {|i|
+      content += <<-XML
+        <_#{i} stauts='0'>
+          <part type='#{CHAPTER_TYPE_NUM[:WORD]}' num='#{chapter_info[:word_avg]}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' num='#{chapter_info[:sentence_avg]}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>
+        </_#{i}>
+      XML
+    }
+    ((chapter_info[:first_chapter].to_i+1)..(chapter_info[:second_chapter].to_i)).each{|i|
+      content += <<-XML
+        <_#{i} stauts='0'>
+          <part type='#{CHAPTER_TYPE_NUM[:READ]}' num='#{chapter_info[:read_avg]}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:DICTATION]}' num='#{chapter_info[:dictation_avg]}'/>
+        </_#{i}>
+      XML
+    }
+    ((chapter_info[:second_chapter].to_i+1)..(chapter_info[:third_chapter].to_i)).each{|i|
+      content += <<-XML
+        <_#{i} stauts='0'>
+          <part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:write_avg]}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:similarity_avg]}'/>
+        </_#{i}>
+      XML
+    }
+    content += <<-XML
+        </plan>
+        <tiku>
+          <part type='#{CHAPTER_TYPE_NUM[:WORD]}' lv='#{tiku_hash[:levels][0]}' item='#{task_info[:leave_word].join(",")}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' lv='#{tiku_hash[:levels][1]}' item='#{task_info[:leave_sentence].join(",")}'/>
+          <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' lv='#{tiku_hash[:levels][2]}' item='#{task_info[:leave_listen].join(",")}'/>
+        </tiku>
+      </root>
+    XML
+    return content
+  end
+  
+  #返回默认第一个任务，以及剩下的题库的单词 tiku_hash = get_start_level, chapter_info = return_chapter_data
+  def return_task(tiku_hash, chapter_info)
+    word_list = proof_code(tiku_hash[:word], chapter_info[:word_avg])
+    sentence_list = proof_code(tiku_hash[:practice_sentences], chapter_info[:sentence_avg])
+    listen_list = proof_code(tiku_hash[:listens], chapter_info[:listen_avg])
+    word_info, sentence_info, listen_info = ""
+    word_list.each { |w| word_info += "<item id='#{w}' is_pass='false' repeat_time='0' step='0' />" }
+    sentence_list.each { |s| sentence_info += "<item id='#{s}' is_pass='false' repeat_time='0' step='0' />" }
+    listen_list.each { |l| listen_info += "<item id='#{l}' is_pass='false' repeat_time='0' step='0' />" }
+    return {:word_info => word_info, :sentence_info => sentence_info, :listen_info => listen_info,
+      :leave_word => tiku_hash[:word] - word_list, :leave_sentence  => tiku_hash[:practice_sentences] - sentence_list,
+      :leave_listen => tiku_hash[:listens] - listen_list}
+  end
+  
   #写文件
   def write_file(str, path, super_path)
     dir = "#{Rails.root}/public/#{super_path}"
@@ -274,44 +355,12 @@ class UserPlan < ActiveRecord::Base
       Dir.mkdir(dir + "/" + Time.now.strftime("%Y-%m"))
     end
     file_name = "/" + Time.now.strftime("%Y-%m") + path
-
     url = dir + file_name
     f=File.new(url,"w+")
     f.write("#{str.force_encoding('UTF-8')}")
     f.close
     return "/#{super_path}" + file_name
   end
-
-  #创建xml文件
-  def xml_content(tiku_hash)
-    content = "<?xml version='1.0' encoding='UTF-8'?>"
-    content += <<-XML
-      <root>
-        <plan>
-            <current>1</current>
-            <info>
-                <chapter1 word='20' sentence='6' linsten='5' days='22' />
-                <chapter2 read='5' translate='5' dictation='3' days='24' />
-                <chapter3 write='1' days='23' />
-            </info>
-        </plan>
-    XML
-
-    content += <<-XML
-        <tiku>
-    XML
-    
-    content += <<-XML
-        </tiku>
-      </root>
-    XML
-
-    return content
-  end
-  
-  
-  
-
 
 
 end
