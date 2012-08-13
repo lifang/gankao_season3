@@ -1,7 +1,7 @@
 @charset "utf-8";
 * { padding: 0; margin: 0;}
 article,aside,dialog,footer,header,section,footer,nav,figure,menu{display:block}
-body { background: #c2b19f; font-family: "微软雅黑", "宋体", Arial; font-size: 12px; color: #333;}
+body { background: #c2b19f; font-family: "微软雅黑", "宋体", Arial; font-size: 12px; color: #525161;}
 .body_bg { background: #e9ddc9;}
 li { list-style: none;}
 a { text-decoration: none;}
@@ -541,10 +541,7 @@ nav li { float: left; margin: 0 20px;}
 
 .share { padding: 5px 0; overflow: hidden;}
 .share li { float: left; margin: 0 5px; line-height: 20px;}
-.share li a { width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden;}
-.share_qq { background: url(/assets/share_bg.png) no-repeat 0 bottom;}
-.share_sina { background: url(/assets/share_bg.png) no-repeat 0 top;}
-.share_rr { background: url(/assets/share_bg.png) no-repeat 0 -20px;}
+.share li span{ width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden;}
 
 .like {
 	width: 60px;

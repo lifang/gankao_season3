@@ -13,7 +13,7 @@
             <div class="article_area">
               <div class="readNumber"><%= skill.readed_num %></div>
               <div class="articleIntro">
-                <h1 class="article_h"><a href="skills/<%=skill.id  %>"  target="_blank"><%= skill.skill_title %></a></h1>
+                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category_id=<%=category_id  %>&con_t=<%= types %>"  target="_blank"><%= skill.skill_title %></a></h1>
                 <div class="article_text">
                   <p><%= skill.simplify_con %></p>
                 </div>

@@ -5,8 +5,14 @@
     <li onclick="show_blog(3)" <% if nav_types==3 %> class="hover" <% end%>>阅读技巧</li>
     <li onclick="show_blog(4)" <% if nav_types==4 %> class="hover" <% end%>>口语技巧</li>
   </ul>
+
   <div class="search">
-    <div class="search_box"><input name="" type="text" /><button>search</button></div>
+    <div class="search_box">
+      <%= form_for :search,:url=>"/skills/search_blog",:html=>{:id=>"search_blog"} do %>
+      <input  type="text" name="search_con" value="<%=session[:pras]%>" id="search_con" />
+      <% end %>
+      <button onclick="search_blog()">search</button></div>
   </div>
+
   <div class="clear"></div>
 </div>
