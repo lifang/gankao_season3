@@ -21,12 +21,26 @@
               <li><a class="jiathis_button_tsina"></a></li>
               <li><a class="jiathis_button_renren"></a></li>
             </div>
+            <script type="text/javascript" >
+              var jiathis_config={
+                url:"www.gankao.co",
+                summary:"",
+                title:"我的技巧我做主 英语技巧",
+                pic:"<%= Constant::SERVER_PATH %>/skill.png",
+                ralateuid:{
+                  "tsina":"gankao2011"
+                },
+                appkey:{
+                  "tsina":"3987186573",
+                  "tqq":"223448"
+                }
+              }
+            </script>
             <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1340246517443536" charset="utf-8"></script>
             <!-- JiaThis Button END -->
             <li class="like"><em onclick="like_one('<%= @skill.id %>')"><%= @skill.like_num %></em></li>
           </ul>
         </div>
-
         <div class="article_p">
           <%=@skill_infos[cur_page-1].text.html_safe%>
         </div>
