@@ -19,6 +19,11 @@ GankaoSeason3::Application.routes.draw do
     end
   end
   resources :skills
+  resources :learn do
+    collection do
+      get :word_step_one
+    end
+  end
 
   resources :questions,:only=>[:index]
   match "questions/answered" =>'questions#answered'
@@ -78,7 +83,7 @@ GankaoSeason3::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-   root :to => 'welcome#index'
+  root :to => 'welcome#index'
 
   # See how all your routes lay out with "rake routes"
 

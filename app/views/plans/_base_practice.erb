@@ -1,4 +1,5 @@
 <h1 class="mc_title"><%= UserPlan::CHAPTER[:cha1] %>阶段</h1>
+<%= javascript_include_tag "base" %>
 <div class="mc_box">
   <% total_time = @plan_list[:word] + @plan_list[:sentence] + (@plan_list[:linsten] * 0.5).to_i
   current_page = (@plan_list[:current]%10 > 0) ? (@plan_list[:current]/10 + 1) : @plan_list[:current]/10
@@ -10,7 +11,7 @@
           <% if @plan_list[:current] > i %>
             <img src="/assets/dui.png"/>
           <% elsif @plan_list[:current] == i %>
-            <img src="/assets/kai.png"/>
+            <img id="unlock" style="cursor: pointer;" src="/assets/kai.png"/>
           <% else %>
             <img src="/assets/suo.png"/>
           <% end %>
@@ -24,6 +25,7 @@
     </div>
   <% end %>
 </div>
+<%= render :partial => "plans/word" %>
 <div class="clear"></div>
 <div class="pn_btn">  
   <button onclick="javascript:pre_page(<%= @user_plan.id %>, 1);" <% if current_page == 1 %>style="display: none;"<% end %>>上一页</button>

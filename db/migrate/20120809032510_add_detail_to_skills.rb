@@ -1,8 +1,9 @@
 class AddDetailToSkills < ActiveRecord::Migration
-  change_table(:skills) do |t|
-    #    t.remove :company_id
-    t.integer :readed_num,:like_num, :null => false, :default => 0
-    t.integer :user_id, :null => false
-    t.string  :simplify_con
+  def change
+    add_column :skills, :readed_num, :integer, :default => 0
+    add_column :skills, :like_num, :integer, :default => 0
+    add_column :skills, :user_id, :integer
+    add_column :skills, :simplify_con, :string
+    add_index :skills, :readed_num
   end
 end
