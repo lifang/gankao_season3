@@ -7,7 +7,6 @@ class CreatePracticeSentences < ActiveRecord::Migration
       t.integer :level
       t.string :enunciate_url
       t.string :error_mean
-      t.text :title
       t.integer :types, :default => 0
       t.timestamps
     end
