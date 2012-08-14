@@ -1,7 +1,7 @@
 @charset "utf-8";
 * { padding: 0; margin: 0;}
 article,aside,dialog,footer,header,section,footer,nav,figure,menu{display:block}
-body { background: #c2b19f; font-family: "微软雅黑", "宋体", Arial; font-size: 12px; color: #333;}
+body { background: #c2b19f; font-family: "微软雅黑", "宋体", Arial; font-size: 12px; color: #525161;}
 .body_bg { background: #e9ddc9;}
 li { list-style: none;}
 a { text-decoration: none;}
@@ -541,10 +541,7 @@ nav li { float: left; margin: 0 20px;}
 
 .share { padding: 5px 0; overflow: hidden;}
 .share li { float: left; margin: 0 5px; line-height: 20px;}
-.share li a { width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden;}
-.share_qq { background: url(/assets/share_bg.png) no-repeat 0 bottom;}
-.share_sina { background: url(/assets/share_bg.png) no-repeat 0 top;}
-.share_rr { background: url(/assets/share_bg.png) no-repeat 0 -20px;}
+.share li span{ width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden;}
 
 .like {
 	width: 60px;
@@ -577,35 +574,13 @@ nav li { float: left; margin: 0 20px;}
 .blog_text textarea { width: 512px; height: 350px; border: 1px #FFF solid; padding: 5px; color: #333;}
 
 /*page翻页----*/
-.pageTurn_btn { margin: 10px 0; padding: 10px; overflow: hidden; float: right;}
-.page_prev, .page_next { 
-    text-indent: 0; 
-	padding: 2px 10px; 
-	border: 1px #387580 solid; 
-	color: #387580; 
-	float: left; 
-	text-align: center; 
-	line-height: 18px; 
-	margin: 0 10px;
-}
-.p_circle {
-    width: 17px;
-	height: 18px;
-	margin: 3px 10px;
-	display: block;
-	float: left;
-	overflow: hidden;
-	background: url(/assets/pageTurn.png) no-repeat 0 -18px;
-	text-indent: -999px;
-	overflow: hidden;
-}
-.p_circle.hover {background: url(/assets/pageTurn.png) no-repeat 0 0;}
-.more { text-align: right; padding: 5px 10px; color: #387580;}
 
+.pageTurn { padding: 10px 0; text-align: center; font-size: 13px; color: #48b9ef;}
+.pageTurn a { border: 2px #f0f0f0 solid; padding: 2px 5px; margin: 0px 2px; color: #387580;}
+.pageTurn a:hover, .pageTurn a:active { border: 2px #ff5a00 solid; color: #ff5a00;}
 
-.pageTurn_box { padding: 5px 10px; background: #e4411e; margin-top: 20px;}
-.pageTurn_box a { padding: 2px 5px; color: #e4e3ce; font-size: 14px;}
-.pageTurn_box .current { font-size: 18px;}
+.pageTurn a.current {border: 2px #ff5a00 solid; padding: 2px 5px; font-weight: bold; color: #fff; background: #ff6c16;}
+.pageTurn a.disabled {display: none;}
 
 /*-----------视频---------------*/
 .video_area { width: 520px; height: 390px; background: #73b2bd; margin: 0 auto; overflow: hidden;}

@@ -27,3 +27,45 @@ function deliver_blog(){
     }
     $("#blog").submit();
 }
+
+function create_blog(){
+    $("#my_blog").css("display","none");
+    $(".blog_content").css("display","none");
+    $("#new_blog").css("display","");
+    var types=$("#blog_types").val();
+    if (parseInt(types)>4 || parseInt(types)<1){
+        $("#blog_types").val(1);
+    }
+}
+
+function show_blog(index){
+    window.location.href="/skills?category_id="+$("#category_id").val() +"&con_t="+index;
+}
+
+function like_one(id){
+    var like_num=parseInt($(".like em").html())+1;
+    $(".like em").html(like_num);
+    $(".like em").attr("onclick",'');
+    $.ajax({
+        async:true,
+        type: "POST",
+        url: "/skills/like_blog.json",
+        data:{
+            blog_id : id,
+            like_num :like_num
+        },
+        dataType: "json",
+        success : function(data) {
+
+        }
+    })
+}
+
+function search_blog(){
+    var search_con = $("#search_con").val();
+    if (search_con==""&&search_con.length==0){
+        alert("请输入查询条件");
+        return false;
+    }
+    $("#search_blog").submit();
+}

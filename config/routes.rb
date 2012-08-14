@@ -5,7 +5,9 @@ GankaoSeason3::Application.routes.draw do
     end
   end
   resources :skills do
-    member do
+    collection do
+      post :like_blog,:search_blog
+      get :search_result
     end
   end
 
