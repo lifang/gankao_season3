@@ -1,18 +1,22 @@
 # encoding: utf-8
 class Skill < ActiveRecord::Base
-  belongs_to :user
+   require 'rexml/document'
+  include REXML
 
+  belongs_to :user
+  SKILL_NAME={1=>"听力技巧",2=>"单词技巧",3=>"阅读技巧",4=>"口语技巧"}
   #创建xml文件
   def self.xml_content(total_text)
     content = "<?xml version='1.0' encoding='UTF-8'?><skill>"
+    p total_text.length
     while(total_text.length>0)
       total_con=""
       total_num=450
-      total_text[0..total_num].split("/r/n").each do |sent|
+      total_text[0..total_num].split("\r\n").each do |sent|
         total_num -=2+((sent.length/45+1)*45-sent.length)
       end
-      total_text.slice!(0..total_num).split("/r/n").each do |str|
-        total_con +="<p>"+ str+"</p>"
+      total_text.slice!(0..total_num).split("\r\n").each do |str|
+        total_con +="&lt;p&gt;"+ str+"&lt;/p&gt;"
       end
       content+="<next>"+total_con +"</next>"
     end
@@ -32,5 +36,12 @@ class Skill < ActiveRecord::Base
     f.close
   end
 
+  def self.open_xml(url)
+    dir = "#{Rails.root}/public"
+    file=File.open(dir+url)
+    doc=Document.new(file)
+    file.close
+    return doc
+  end
   
 end

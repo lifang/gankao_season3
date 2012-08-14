@@ -19,6 +19,7 @@ class UserPlan < ActiveRecord::Base
   CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
     :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6}#单词、句子、听力、阅读、翻译、听写、写作
   REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次数
+  PLAN_STATUS = {:FINISHED => 1, :UNFINISHED => 0}
 
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
   PER_ITEMS = {:WORD => 100, :SENTENCE => 100, :LISTEN => 10, :READ => 6, :WRITE => 6, :TRANSLATE => 10,:DICTATION => 10}  #单位 秒
@@ -78,17 +79,19 @@ class UserPlan < ActiveRecord::Base
   end
 
   #累计用户设定目标需要的时长/每项的题目数量（返回 单位值：分钟）
-  def self.calculate_user_plan_info(uid, category_id, target_score, flag)
+  def self.calculate_user_plan_info(uid, category_id, target_score)
     user = UserScoreInfo.where(["user_id = ? and category_id = ?", uid, category_id]).first
     return if user.nil?
     return nil unless target_level_hash = target_level_report(target_score, category_id)
-    p "-->#{target_level_hash}"
-    word_num = (target_level_hash[:WORD] - user.all_start_level.split(",")[0].to_i)*PER_ITEMS[:WORD]
-    sentence_num = (target_level_hash[:SENTENCE] - user.all_start_level.split(",")[1].to_i)*PER_ITEMS[:SENTENCE]
+    s_word = user.all_start_level.split(",")[0].to_i*PER_ITEMS[:WORD]
+    s_sentence = user.all_start_level.split(",")[1].to_i*PER_ITEMS[:SENTENCE]
+    s_listen = user.all_start_level.split(",")[2].to_i*PER_ITEMS[:LISTEN]
+    word_num = target_level_hash[:WORD]*PER_ITEMS[:WORD] - s_word
+    sentence_num = target_level_hash[:SENTENCE]*PER_ITEMS[:SENTENCE] - s_sentence
     read_num = target_level_hash[:READ]*PER_ITEMS[:READ]
     write_num = target_level_hash[:WRITE]*PER_ITEMS[:WRITE]
     if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
-      listen_num = (target_level_hash[:LISTEN] - user.all_start_level.split(",")[2].to_i)*PER_ITEMS[:LISTEN]
+      listen_num = target_level_hash[:LISTEN]*PER_ITEMS[:LISTEN] - s_listen
       translate_num = target_level_hash[:TRANSLATE]*PER_ITEMS[:TRANSLATE]
       dictation_num = target_level_hash[:DICTATION]*PER_ITEMS[:DICTATION]
       part1  = word_num*PER_TIME[:WORD]
@@ -116,29 +119,90 @@ class UserPlan < ActiveRecord::Base
     end
     #判断是否 可行，否则系统计算可达到的情况
     left_mis = package_sys_time(package_level(category_id))
-    p "user time-#{result[:ALL]}  sys left time-#{left_mis}"
-    if result[:ALL] <= left_mis || flag == 1
+    if result[:ALL] <= left_mis
       return result
     else
-      p left_mis.to_f/result[:ALL]
-      sys_provide_score = (target_score*left_mis/result[:ALL]).to_i
-      p "sys provider-->#{sys_provide_score}"
-      calculate_user_plan_info(uid, category_id, sys_provide_score, 1)
+      sys_provide_plan(s_word, s_sentence, s_listen, result, left_mis, category_id)
     end
   end
 
   #根据给定时间 计算可达目标
-  def sys_provide_plan(user_plan, sys_provide_time)
-    
+  def UserPlan.sys_provide_plan(s_word, s_sentence, s_listen, user_plan, sys_provide_time, category_id)
+    precent = (sys_provide_time-TRUE_PAPER_TIME).to_f/(user_plan[:ALL]-TRUE_PAPER_TIME)
+    word_num = (user_plan[:WORD] * precent).to_i
+    sentence_num = (user_plan[:SENTENCE] * precent).to_i
+    read_num = (user_plan[:READ] * precent).to_i
+    write_num = (user_plan[:WRITE] * precent).to_i
+    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+      listen_num = (user_plan[:LISTEN] * precent).to_i
+      translate_num = (user_plan[:TRANSLATE] * precent).to_i
+      dictation_num = (user_plan[:DICTATION] * precent).to_i
+      part1  = word_num*PER_TIME[:WORD]
+      part1 += sentence_num*PER_TIME[:SENTENCE]
+      part1 += listen_num*PER_TIME[:LISTEN]
+      part2  = read_num*PER_TIME[:READ]
+      part2 += write_num*PER_TIME[:WRITE]
+      part2 += translate_num*PER_TIME[:TRANSLATE]
+      part3  = dictation_num*PER_TIME[:DICTATION]
+      result = {:ONE => part1/60, :TWO => part2/60, :THREE => part3/60 + TRUE_PAPER_TIME,
+        :ALL => (part1 + part2 + part3)/60 +TRUE_PAPER_TIME,
+        :WORD => word_num, :SENTENCE => sentence_num, :READ => read_num, :WRITE => write_num,
+        :LISTEN => listen_num, :TRANSLATE => translate_num, :DICTATION => dictation_num
+      }
+    else
+      part1  = word_num*PER_TIME[:WORD]
+      part1 += sentence_num*PER_TIME[:SENTENCE]
+      part2  = read_num*PER_TIME[:READ]
+      part2 += write_num*PER_ITEMS[:WRITE]*PER_TIME[:WRITE]
+      result = {:ONE => part1/60, :TWO => part2/60, :THREE => TRUE_PAPER_TIME,
+        :ALL => (part1 + part2)/60 +TRUE_PAPER_TIME,
+        :WORD => word_num, :SENTENCE => sentence_num, :READ => read_num, :WRITE => write_num
+      }
+    end
+    sys_provide_score_report(s_word, s_sentence, s_listen, result,category_id)
+    return result
+  end
+
+  #根据计划计算 预计分数
+  def UserPlan.sys_provide_score_report(s_word, s_sentence, s_listen, user_plan,category_id)
+    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+      score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD], Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
+      score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE], PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
+      score += sys_provide_score((user_plan[:LISTEN] + s_listen).to_f/PER_ITEMS[:LISTEN], PracticeSentence::LISTEN_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
+      score += sys_provide_score(user_plan[:TRANSLATE].to_f/PER_ITEMS[:TRANSLATE], PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
+      score += sys_provide_score(user_plan[:DICTATION].to_f/PER_ITEMS[:DICTATION], PracticeSentence::DICTATION_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
+      score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ], Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.05)
+      score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE], Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
+      score += Examination::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.05
+    else
+      score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD], Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
+      score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE], PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.25)
+      score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ], Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.3)
+      score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE], Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
+      score += Examination::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.1
+    end
+  end
+
+  #根据计划计算 每一项所占的预计分数
+  def UserPlan.sys_provide_score(target_level, max_level, category_id, score_precent)
+    category = Category::FLAG[category_id]
+    max_score = Examination::MAX_SCORE[:"#{category}"]
+    y = max_level%2 == 0 ? max_level + 1 : max_level # 41
+    x = (y-1)*0.5  # 20
+    total_area = max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    if target_level*2 > max_level
+      #在正轴
+      return max_score*score_precent*(total_area - ((0.5*total_area*(max_level-target_level))/x))/total_area
+    else
+      return max_score*score_precent*((0.5*total_area*target_level)/x)/total_area
+    end
   end
   
-
   #确定计划的天数(即：包的数量)
   #根据不同科目 下给定的区间值选择最优值
   def UserPlan.package_level(category_id)
     today = Time.now.strftime("%Y-%m-%d")
     day = (Constant::DEAD_LINE[:"#{Category::FLAG[category_id]}"].to_time - today.to_time)/86400
-    p "left day #{day}"
     if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
       CET46_PLANS.each { |k,v|
         return v if v <= day
