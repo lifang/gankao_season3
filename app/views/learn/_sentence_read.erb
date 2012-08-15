@@ -1,0 +1,31 @@
+  <div class="pt_title">
+    <h1>短语学习</h1>
+    <div class="pt_time">00:00:00</div>
+    <span class="t_number">2/20</span>
+    <span class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+
+    <div class="words_con">
+      <div class="w_question"><%= @result[:sentence].en_mean %></div>
+      <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+    </div>
+    <div class="words_func">
+      <a href="#" title="我记住了" class="sign tooltip">标记</a>
+      <a href="#" title="下一步" class="next tooltip">Next</a>
+    </div>
+  </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".words_con").fadeTo(<%= @result[:time]*1000 %>, 0.1);
+  })
+
+  function callback(){
+    $.ajax({
+      async:true,
+      dataType:'script',
+      url:"/learn/task_dispatch?type=<%= UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>&step=2&id<%= @result[:sentence].id %>",
+      type:'get'
+    })
+  }
+</script>

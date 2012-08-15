@@ -1,0 +1,55 @@
+<div class="pt_title">
+  <h1>单词学习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number">2/20</span>
+  <span class="close">关闭</span>
+</div>
+<div class="mc_box">
+  <%= render :partial => "learn/time_up" %>
+  <%= render :partial => "learn/wrong" %>
+  <div class="words_func">
+    <% if @result[:step] == 1 %>
+      <h1><%= @result[:word].name %></h1>
+      <span class="fyin">[ <%= @result[:word].phonetic %> ]</span>
+      <a href="<%= @result[:word].enunciate_url %>" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <input id="SID" type="hidden" value="<%= @result[:word].ch_mean %>" />
+    <% else %>
+      <h1><%= @result[:word].ch_mean %></h1>
+      <input id="SID" type="hidden" value="<%= @result[:word].name %>" />
+    <% end %>
+  </div>
+  <div class="words_con">
+    <ul class="words_ul">
+      <% if @result[:step] == 1 %>
+        <li id="A"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][0].types] %><span id="IA"><%= @result[:options][0].ch_mean %></span></a></li>
+        <li id="B"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][1].types] %><span id="IB"><%= @result[:options][1].ch_mean %></span></a></li>
+        <li id="C"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][2].types] %><span id="IC"><%= @result[:options][2].ch_mean %></span></a></li>
+        <li id="D"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][3].types] %><span id="ID"><%= @result[:options][3].ch_mean %></span></a></li>
+      <% else %>
+        <li id="A"><a href="javascript:void(0);"><span id="IA"><%= @result[:options][0].name %></span></a></li>
+        <li id="B"><a href="javascript:void(0);"><span id="IB"><%= @result[:options][1].name %></span></a></li>
+        <li id="C"><a href="javascript:void(0);"><span id="IC"><%= @result[:options][2].name %></span></a></li>
+        <li id="D"><a href="javascript:void(0);"><span id="ID"><%= @result[:options][3].name %></span></a></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="words_func">
+    <a href="javascript:remember()"  title="我记住了" class="sign tooltip">标记</a>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".words_ul li").click(function(){
+      if($("#SID").attr("value") == $("#I"+this.id).html()){
+        send_message("/learn/jude_word?type=<%= UserPlan::CHAPTER_TYPE_NUM[:WORD] %>&id=<%= @result[:word].id %>&step=<%= @result[:step] %>&repeat=<%= @result[:repeat] %>&flag=true");
+      }else{
+        $("#wrong").show();
+        clearInterval(myTime.timeId);
+        send_message("/learn/jude_word?type=<%= UserPlan::CHAPTER_TYPE_NUM[:WORD] %>&id=<%= @result[:word].id %>&step=<%= @result[:step] %>&repeat=<%= @result[:repeat] %>&flag=false");
+      }
+    })
+  })
+  function callback(){
+    $("#timeup").show();
+  }
+</script>

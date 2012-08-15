@@ -19,7 +19,7 @@ GankaoSeason3::Application.routes.draw do
   resources :skills
   resources :learn do
     collection do
-      get :word_step_one
+      get :task_dispatch, :jude_word
     end
   end
 

@@ -412,7 +412,7 @@ nav li { float: left; margin: 0 20px;}
 	background:  #FFF;
 }
 .drag_ul { overflow: hidden; clear: both;}
-.drag_ul li { cursor: move; padding: 2px 10px; background: #FFF; float: left; margin: 5px; box-shadow:0px 1px 1px #a2c2c3;}
+.drag_ul li { cursor: pointer; padding: 2px 10px; background: #FFF; float: left; margin: 5px; box-shadow:0px 1px 1px #a2c2c3;}
 .drag_ul li:hover { background: #f8f8f8;}
 
 .drag_dl { padding: 5px; color: #387580;}
