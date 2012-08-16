@@ -8,10 +8,11 @@
             <chapter3 days='14' similarity='19' write='7'/>
         </info>
         <_10 status='0'>
-            <part status='0' type='0'>
-                <item id='11' is_pass='false' repeat_time='0' step='1'/>
-                <item id='13' is_pass='false' repeat_time='0' step='1'/>
-            </part>   
+            <part status='1' type='0'>
+                <item id='11' is_pass='true' repeat_time='0' step='1'/>
+                <item id='12' is_pass='true' repeat_time='0' step='1'/>
+                <item id='13' is_pass='true' repeat_time='0' step='1'/>
+            </part>
         </_10>
         <_11 status='0'>
             <part num='2' type='0'/>
@@ -478,9 +479,9 @@
             </part>
         </_11>
         <_10 status='0'>
-            <part repeat_time='0' status='0' type='0'>
-                <item id='18' is_pass='0' repeat_time='0' step='0'/>
-                <item id='12' is_pass='0' repeat_time='0' step='0'/>
+            <part repeat_time='0' status='1' type='0'>
+                <item id='18' is_pass='true' repeat_time='0' step='1'/>
+                <item id='12' is_pass='true' repeat_time='0' step='1'/>
             </part>
         </_10>
     </review>
