@@ -5,7 +5,9 @@ GankaoSeason3::Application.routes.draw do
     end
   end
   resources :skills do
-    member do
+    collection do
+      post :like_blog,:search_blog
+      get :search_result
     end
   end
 
@@ -19,7 +21,7 @@ GankaoSeason3::Application.routes.draw do
   resources :skills
   resources :learn do
     collection do
-      get :task_dispatch, :jude_word
+      get :task_dispatch, :jude_word,:listen,:i_have_remember,:pass_status,:jude_sentence
     end
   end
 

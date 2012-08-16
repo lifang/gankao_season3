@@ -18,6 +18,7 @@ myTime.start = function(sec)
 }
 
 myTime.takeCount = function(){
+    alert(myTime.seconds);
     if(myTime.seconds == 0){
         myTime._isEnd = true;
         clearInterval(myTime.timeId);
@@ -31,6 +32,7 @@ myTime.takeCount = function(){
 }
 
 myTime.showFormat = function(){
+    
     hours = parseInt(myTime.seconds/60/60);
     hours >= 10 ? housrs = hours : hours ="0"+hours ;
     minutes = parseInt(myTime.seconds/60);

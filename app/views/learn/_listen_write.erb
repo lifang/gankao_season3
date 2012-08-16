@@ -1,0 +1,45 @@
+<%
+@listen_sentence=listen_write[:listen_sentence]
+@web_type=listen_write[:web_type]
+@step=listen_write[:step]
+@num=listen_write[:num]
+%>
+
+<%=javascript_include_tag "jquery.jplayer.min"%>
+<%=javascript_include_tag "listen_write"%>
+<input type="hidden" id="global_sentence_en_mean" value="<%= @listen_sentence.en_mean.gsub("\"","").strip%>"></input>
+<script type="text/javascript">
+  var listen_sentence=$("#global_sentence_en_mean").val();
+  var id= "<%=@listen_sentence.id%>";
+  var web_type = "<%= @web_type %>";
+  var step = "<%= @step %>";
+  var url="<%=Constant::PUBLIC_PATH.concat(@listen_sentence.enunciate_url.to_s)%>";
+  var count = 1;//答题次数-最大为3
+  var answer_mark = false; //记录题目是否做对
+</script>
+
+<div class="plan_tab">
+  <div class="pt_title">
+    <h1>听力练习</h1>
+    <div class="pt_time">00:00:00</div>
+    <span class="t_number">2/<%=@num%></span>
+    <span class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="words_func">
+      <h2>听录音，在下面写入你听到的内容。</h2>
+      <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; ">
+      </div>
+      <a id="playAudio" href="#" title="播放音频"  class="play_audio tooltip">播放音频</a>
+    </div>
+    <div class="words_con">
+      <textarea id="ls_answer" name="" cols="" rows="" class="answer_textarea"></textarea>
+      <div class="trueFalse"><img src="/assets/true.png" /></div>
+    </div>
+
+    <div class="words_func">
+      <a id="checkAnswer" href="#"  title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a id="nextQuestion" href="#"   title="下一步"  class="next tooltip">Next</a>
+    </div>
+  </div>
+</div>

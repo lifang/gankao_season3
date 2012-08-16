@@ -15,7 +15,7 @@
     %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence_read") %>");
     <% else %>
-      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence_combin") %>");
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence_translate") %>");
     <%
     end
   when UserPlan::CHAPTER_TYPE_NUM[:LISTEN]

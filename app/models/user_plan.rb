@@ -18,6 +18,7 @@ class UserPlan < ActiveRecord::Base
   CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
   CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
     :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6}#单词、句子、听力、阅读、翻译、听写、写作
+  REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次数
   PLAN_STATUS = {:FINISHED => 1, :UNFINISHED => 0}
 
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
@@ -219,8 +220,8 @@ class UserPlan < ActiveRecord::Base
     return package_num*PER_PACKAGE_TIME
   end
 
-  def plan_list
-    file=File.open "#{Constant::PUBLIC_PATH}#{self.paper_url}"
+  def plan_list_xml
+    file=File.open "#{Constant::PUBLIC_PATH}#{self.plan_url}"
     doc = Document.new(file)
     file.close
     return doc
@@ -228,9 +229,7 @@ class UserPlan < ActiveRecord::Base
 
   #返回复习计划的列表结构为：[[可开启的任务包]， [单词，句子，听力，时间段]， [阅读，翻译，听写，时间段]， [写作，时间段]]
   def get_plan_list
-    file=File.open "#{Constant::PUBLIC_PATH}#{self.plan_url}"
-    doc = Document.new(file)
-    file.close
+    doc = self.plan_list_xml
     chapter1 = doc.root.elements["plan"].elements["info"].elements["chapter1"]
     chapter2 = doc.root.elements["plan"].elements["info"].elements["chapter2"]
     chapter3 = doc.root.elements["plan"].elements["info"].elements["chapter3"]
@@ -245,16 +244,15 @@ class UserPlan < ActiveRecord::Base
   #生成初始计划
   def self.init_plan(user_score_info, data_info, user_id, category_id)
     user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
-    #chapter = self.return_chapter_data(data_info)
-    user_plan.create_plan_url(self.xml_content(user_score_info.get_start_level, return_chapter_data(data_info)),
-      category_id.to_s + "_" + user_plan.id.to_s)
+    user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
+      "/" + category_id.to_s + "_" + user_plan.id.to_s)
     return user_plan
   end
 
 
   def create_plan_url(str, path, super_path = "plan_xmls")
     file_name = self.write_file(str, path, super_path)
-    self.plan_url = "/"+super_path + file_name
+    self.plan_url = file_name
     self.save
   end
 
@@ -298,25 +296,25 @@ class UserPlan < ActiveRecord::Base
     XML
     (2..chapter_info[:first_chapter].to_i).each {|i|
       content += <<-XML
-        <_#{i} stauts='0'>
+        <_#{i} status='0'>
           <part type='#{CHAPTER_TYPE_NUM[:WORD]}' num='#{chapter_info[:word_avg]}'/>
           <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' num='#{chapter_info[:sentence_avg]}'/>
           <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>
         </_#{i}>
       XML
     }
-    ((chapter_info[:first_chapter].to_i+1)..(chapter_info[:second_chapter].to_i)).each{|i|
+    ((chapter_info[:first_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:second_chapter].to_i)).each{|i|
       content += <<-XML
-        <_#{i} stauts='0'>
+        <_#{i} status='0'>
           <part type='#{CHAPTER_TYPE_NUM[:READ]}' num='#{chapter_info[:read_avg]}'/>
           <part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>
           <part type='#{CHAPTER_TYPE_NUM[:DICTATION]}' num='#{chapter_info[:dictation_avg]}'/>
         </_#{i}>
       XML
     }
-    ((chapter_info[:second_chapter].to_i+1)..(chapter_info[:third_chapter].to_i)).each{|i|
+    ((chapter_info[:second_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:third_chapter].to_i)).each{|i|
       content += <<-XML
-        <_#{i} stauts='0'>
+        <_#{i} status='0'>
           <part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:write_avg]}'/>
           <part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:similarity_avg]}'/>
         </_#{i}>
@@ -324,6 +322,7 @@ class UserPlan < ActiveRecord::Base
     }
     content += <<-XML
         </plan>
+        <review></review>
         <tiku>
           <part type='#{CHAPTER_TYPE_NUM[:WORD]}' lv='#{tiku_hash[:levels][0]}' item='#{task_info[:leave_word].join(",")}'/>
           <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' lv='#{tiku_hash[:levels][1]}' item='#{task_info[:leave_sentence].join(",")}'/>
@@ -339,7 +338,7 @@ class UserPlan < ActiveRecord::Base
     word_list = proof_code(tiku_hash[:word], chapter_info[:word_avg])
     sentence_list = proof_code(tiku_hash[:practice_sentences], chapter_info[:sentence_avg])
     listen_list = proof_code(tiku_hash[:listens], chapter_info[:listen_avg])
-    word_info, sentence_info, listen_info = ""
+    word_info, sentence_info, listen_info = "", "", ""
     word_list.each { |w| word_info += "<item id='#{w}' is_pass='false' repeat_time='0' step='0' />" }
     sentence_list.each { |s| sentence_info += "<item id='#{s}' is_pass='false' repeat_time='0' step='0' />" }
     listen_list.each { |l| listen_info += "<item id='#{l}' is_pass='false' repeat_time='0' step='0' />" }
@@ -355,7 +354,7 @@ class UserPlan < ActiveRecord::Base
     unless File.directory?(dir + "/" + Time.now.strftime("%Y-%m"))
       Dir.mkdir(dir + "/" + Time.now.strftime("%Y-%m"))
     end
-    file_name = "/" + Time.now.strftime("%Y-%m") + path
+    file_name = "/" + Time.now.strftime("%Y-%m") + path + ".xml"
     url = dir + file_name
     f=File.new(url,"w+")
     f.write("#{str.force_encoding('UTF-8')}")
@@ -363,5 +362,159 @@ class UserPlan < ActiveRecord::Base
     return "/#{super_path}" + file_name
   end
 
+  #随机取练习
+  def proof_code(chars, len)
+    code_array = []
+    if len < chars.length
+      1.upto(len) {code_array << (chars - code_array)[rand(chars.length - code_array.length)]}
+    else
+      code_array = chars
+    end
+    return code_array
+  end
 
+  #根据用户完成的任务，更新用户xml
+  def update_plan
+    doc = self.plan_list_xml
+    current_day = doc.root.elements["plan"].elements["current"].text.to_i
+    update_review_task(doc, current_day, self.category_id)
+    doc.root.elements["plan"].elements["current"].text = current_day + 1
+    f = File.new("#{Rails.root}/public" + self.plan_url,"w+")
+    f.write("#{doc.to_s.force_encoding('UTF-8')}")
+    f.close
+  end
+
+  #将需要复习的内容放到review中
+  def update_review_task(plan_xml, current_day, category_id)
+    current_review = plan_xml.root.elements["review"].elements["_#{current_day}"]
+    if !current_review.nil? and current_review.has_elements?
+      current_review.each_element { |part|
+        if part.attributes["type"].to_i == CHAPTER_TYPE_NUM[:WORD] and part.attributes["repeat_time"] == "0"
+          self.create_review_task(plan_xml, current_day, REPEAT_TIME[:WORD][2], part, REPEAT_TIME[:WORD][3])
+        else
+          plan_xml.delete_element(part.xpath)
+        end if part.attributes["status"] == "1"
+      }
+      plan_xml.root.elements["review"].delete_element(current_review) unless current_review.has_elements?
+    end    
+    current_task = plan_xml.root.elements["plan"].elements["_#{current_day}"]
+    if current_task.attributes["status"] == "1"
+      current_task.each_element { |p|
+        if current_task.attributes["type"].to_i == CHAPTER_TYPE_NUM[:WORD] #单词
+          self.create_review_task(plan_xml, current_day, REPEAT_TIME[:WORD][0], p, REPEAT_TIME[:WORD][1])
+        elsif current_task.attributes["type"].to_i != CHAPTER_TYPE_NUM[:READ]
+          self.create_review_task(plan_xml, current_day, REPEAT_TIME[:OTHER][0], p, REPEAT_TIME[:OTHER][1])
+        end
+      }
+      plan_xml.delete_element(current_task.xpath)
+      update_new_task(plan_xml, current_day, category_id)
+    end
+  end
+  
+  #将需要新学的内容提到包中
+  def update_new_task(plan_xml, current_day, category_id)
+    next_plan = plan_xml.root.elements["plan"].elements["_#{current_day+1}"]
+    unless next_plan.nil?
+      tomorrow_task_plan = {}
+      tomorrow_task = {}
+      next_plan.each_element { |part|
+        tomorrow_task_plan[part.attributes["type"].to_i] = part.attributes["num"].to_i
+      }
+      tiku_hash = {}
+      plan_xml.root.elements["tiku"].each_element { |p|
+        tiku_hash[p.attributes["type"].to_i] = p
+      }
+      tomorrow_task_plan.each { |k, v|
+        unless tiku_hash[k].nil? #当题库中存在今天要学的内容
+          tomorrow_task[k] = []
+          already_items = tiku_hash[k].attributes["item"].split(",")
+          if already_items.any? and already_items.length >= v
+            proof_code(already_items, v).each {|i|
+              tomorrow_task[k] << i
+            }
+            tiku_hash[k].attributes["item"] = (already_items - tomorrow_task[k]).join(",")
+          else
+            tomorrow_task[k] = already_items
+            tiku_hash[k].attributes["lv"] = tiku_hash[k].attributes["lv"].to_i + 1
+            new_tiku = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i, category_id)
+            proof_code(new_tiku, (v - already_items.length)).each {|i|
+              tomorrow_task[k] << i
+            }
+            tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
+          end
+        else #当今天需要学习的内容题库中没有，特别是阶段转换时
+          new_tiku = get_new_tiku(k, 1, category_id)
+          proof_code(new_tiku, v).each {|i|
+            tomorrow_task[k] << i
+          }
+          plan_xml.root.elements["tiku"].add_element("part", {"type" => k, "lv" => "1",
+              "item" => (new_tiku - tomorrow_task[k]).join(",")})          
+        end       
+      }
+      update_new_package(next_plan, tomorrow_task)
+    end
+  end
+
+  #修改即将要学的包
+  def update_new_package(next_plan, tomorrow_task)
+    next_plan.each_element { |part|
+      part.delete_attribute("num")
+      part.add_attribute("status", "0")
+      if tomorrow_task[part.attributes["type"].to_i].any?
+        tomorrow_task[part.attributes["type"].to_i].each {|i|
+          part.add_element("item", {"id" => i, "is_pass" => "false", "repeat_time" => "0", "step" => "1"})
+        }
+      else
+        next_plan.delete_element(part)
+      end      
+    }
+  end
+
+  #取新的题库
+  def get_new_tiku(type, level, category_id)
+    items = []
+    if type == CHAPTER_TYPE_NUM[:WORD]
+      infos = Word.find(:all, :select => "id", :conditions => ["category_id = ? and level = ?",
+          category_id, level])
+    elsif type == CHAPTER_TYPE_NUM[:READ]
+      infos = Tractate.find(:all, :select => "id", :conditions => ["category_id = ? and level = ?",
+          category_id, level])
+    else
+      sql_type = case type
+      when CHAPTER_TYPE_NUM[:SENTENCE]
+        PracticeSentence::TYPES[:SENTENCE]
+      when CHAPTER_TYPE_NUM[:LINSTEN]
+        PracticeSentence::TYPES[:LINSTEN]
+      when CHAPTER_TYPE_NUM[:TRANSLATE]
+        PracticeSentence::TYPES[:TRANSLATE]
+      else
+        PracticeSentence::TYPES[:DICTATION]
+      end
+      infos = PracticeSentence.find(:all, :select => "id", :conditions => ["category_id = ? and types = ? and level = ?",
+          category_id, sql_type, level])
+    end
+    items = infos.collect { |i| i.id }
+    return items
+  end
+
+  #新建复习节点
+  def create_review_task(plan_xml, current_day, days, part, repeat_time)
+    next_review = plan_xml.root.elements["review"].elements["_#{current_day.to_i + days}"]
+    if next_review.nil?
+      next_review = plan_xml.root.elements["review"].add_element("_#{current_day.to_i + days}", {"status" => "0"})
+    end
+    self.reset_task_item(part, repeat_time)
+    next_review.add_element(part)
+  end
+  
+  #初始化节点的属性值
+  def reset_task_item(part, repeat_time)
+    part.attributes["repeat_time"] = "#{repeat_time}"
+    part.attributes["status"] = "0"
+    part.each_element {|item|
+      item.attributes["is_pass"] = "0"
+      item.attributes["repeat_time"] = "0"
+      item.attributes["step"] = "0"
+    }
+  end
 end

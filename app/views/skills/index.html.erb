@@ -1,62 +1,49 @@
 <%= javascript_include_tag "video_skill"  %>
 <%= render :partial=>"/layouts/nav" %>
-<% types=params[:con_t].nil? or params[:con_t].to_i>4 ? 1 : params[:con_t].to_i %>
-<% types=params[:category_id].nil? ? 2 : params[:category_id].to_i %>
+<% types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 1 : params[:con_t].to_i %>
+<% category_id=params[:category_id].nil? ? 2 : params[:category_id].to_i %>
 <div class="m_content">
   <div class="mc_box">
-    <div class="mc_menu">
-      <ul>
-        <li class="hover">听力技巧</li>
-        <li>单词技巧</li>
-        <li>阅读技巧</li>
-        <li>口语技巧</li>
-      </ul>
-      <div class="search">
-        <div class="search_box"><input name="" type="text" /><button>search</button></div>
-      </div>
-      <div class="clear"></div>
-    </div>
-    <div id="blog_content">
-      <div class="publishArticles"><button>我要发表</button></div>
-      <div class="mc_menu_box">
-        <%@skills[types].each do |skill|%>
-          <div class="article_area">
-            <div class="readNumber"><%= skill.readed_num %></div>
-            <div class="articleIntro">
-              <h1 class="article_h"><a href="#"><%= skill.skill_title %></a></h1>
-              <div class="article_text">
-                <p><%= skill.simplify_con %></p>
-              </div>
-              <div class="singlemeta">
-                <span>分类：XXX</span><span><%= skill.created_at.strftime("%Y-%M-%d %h:%m") %>时间：2012-08-03 13:18</span><span><%= skill.name %></span>
+    <%= render :partial=>"/skills/nav_types",:object=>types %>
+    <div class="publishArticles" id="my_blog"><button onclick="create_blog()">我要发表</button></div>
+    <div class="blog_content">
+      <div class="mc_menu_box" id="menu_">
+        <% unless @skills.blank? %>
+          <%@skills.each do |skill|%>
+            <div class="article_area">
+              <div class="readNumber"><%= skill.readed_num %></div>
+              <div class="articleIntro">
+                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category_id=<%=category_id  %>&con_t=<%= types %>"  target="_blank"><%= skill.skill_title %></a></h1>
+                <div class="article_text">
+                  <p><%= skill.simplify_con %></p>
+                </div>
+                <div class="singlemeta">
+                  <span>分类：<%= Skill::SKILL_NAME[skill.types] %></span><span>时间：<%= skill.created_at.strftime("%Y-%m-%d %H:%M") %></span><span>作者: <%= skill.name %></span>
+                </div>
               </div>
             </div>
-          </div>
+          <% end%>
+          <%= will_paginate @skills, :class=> 'pageTurn',:container=>"a",:previous_label=>"<  Prev",:next_label=>"Next  > ",:inner_window=>1 %>
+        <% else %>
+          <h1 style="margin: 50px 60px;">暂无文章，欢迎分享您的宝贵见解。</h1>
         <% end %>
       </div>
-      <div class="pageTurn_btn">
-        <a href="#" class="page_prev">上一页</a>
-        <a href="#" class="p_circle hover">1</a>
-        <a href="#" class="p_circle">2</a>
-        <a href="#" class="p_circle">3</a>
-        <a href="#" class="page_next">下一页</a>
-      </div>
     </div>
-    <div class="mc_menu_box" style="display:none">
+    <div class="mc_menu_box" style="display:none" id="new_blog">
       <div class="article_page">
         <%= form_for :blog,:html=>{:id=>"blog",:method=>:post} do %>
           <div class="blog_title"><input type="text" name="title" id="title" value="请在这里输入标题" onfocus="$(this).val('');$(this).attr('onfocus','')" /></div>
           <div class="blog_text">
             <textarea cols="" rows="" name="text_con" id="text_con"></textarea>
           </div>
-          <input type="hidden" value="<%= types %>" name="blog_types" />
-          <input type="hidden" value="<%= types %>" name="category_id" />
+          <input type="hidden" value="<%= types %>" name="blog_types" id="blog_types"/>
+          <input type="hidden" value="<%= category_id %>" name="category_id" id="category_id" />
         <% end %>
         <div class="publishArticles"><button onclick="deliver_blog()">我要发表</button></div>
       </div>
     </div>
   </div>
   <div class="clear"></div>
-  <script type="text/javscript">
+  <script type="text/javascript">
   </script>
 </div>

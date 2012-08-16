@@ -5,13 +5,12 @@
   <span class="close">关闭</span>
 </div>
 <div class="mc_box">
-  <%= render :partial => "learn/time_up" %>
-  <%= render :partial => "learn/wrong" %>
+  <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <% if @result[:step] == 1 %>
       <h1><%= @result[:word].name %></h1>
       <span class="fyin">[ <%= @result[:word].phonetic %> ]</span>
-      <a href="<%= @result[:word].enunciate_url %>" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <a id="playAudio" href="#" title="播放音频" class="play_audio tooltip">播放音频</a>
       <input id="SID" type="hidden" value="<%= @result[:word].ch_mean %>" />
     <% else %>
       <h1><%= @result[:word].ch_mean %></h1>
@@ -41,15 +40,23 @@
   $(document).ready(function(){
     $(".words_ul li").click(function(){
       if($("#SID").attr("value") == $("#I"+this.id).html()){
-        send_message("/learn/jude_word?type=<%= UserPlan::CHAPTER_TYPE_NUM[:WORD] %>&id=<%= @result[:word].id %>&step=<%= @result[:step] %>&repeat=<%= @result[:repeat] %>&flag=true");
+        $("#right").show();
+        clearInterval(myTime.timeId);
+        send_message("/learn/jude_word?flag=true");
       }else{
         $("#wrong").show();
         clearInterval(myTime.timeId);
-        send_message("/learn/jude_word?type=<%= UserPlan::CHAPTER_TYPE_NUM[:WORD] %>&id=<%= @result[:word].id %>&step=<%= @result[:step] %>&repeat=<%= @result[:repeat] %>&flag=false");
+        send_message("/learn/jude_word?flag=false");
       }
-    })
+    });
   })
+
+  function remember(){
+    send_message("/learn/i_have_remember");
+  }
+
   function callback(){
     $("#timeup").show();
+    send_message("/learn/jude_word?flag=false");
   }
 </script>

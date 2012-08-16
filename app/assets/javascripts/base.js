@@ -9,7 +9,7 @@ function part_one_start (){
     $.ajax({
         async:true,
         dataType:'script',
-        url:"/learn/task_dispatch",
+        url:"/learn/task_dispatch?category=2",
         type:'get'
     })
 }
@@ -21,10 +21,4 @@ function send_message (url){
         type:'get'
     })
 }
-function hedui(){
-    if($("#SID").attr("value").toLowerCase() == $(".answer_input").attr("value").trim().toLowerCase()){
-        $(".trueFalse").html("<img src='assets/true.png' />");
-    }else{
-        $(".trueFalse").html("<img src='assets/false.png' />");
-    }
-}
+
