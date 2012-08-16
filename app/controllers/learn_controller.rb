@@ -25,48 +25,53 @@ class LearnController < ApplicationController
   
   def listen
     #获取用户信息和xml路径和类别
+    x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
+    xml =Document.new(File.open(x_url))
     #  获取听写数据
-    #    @source=listen_write_source(xml)
-    #
-    #    if @source.nil?
-    #      redirect_to ''
-    #    end
-    #    @listen_sentence=@source[:listen_sentence]
-    #    @web_type=@source[:web_type]
-    #    @step=@source[:step]
-    ids=[2,4,5,7,8,9,12,18,20,22,24]
-    @index=0
-    @listen_sentence=PracticeSentence.find(ids[index])
-    @web_type="review"
-    @step=2
-    @num=ids.length
-    @source={:listen_sentence=>@listen_sentence,:web_type=>@web_type,:step=>@step,:num=>@num}
+    @source=listen_write_source(xml)
+    if @source.nil?
+      render :text=>"今天题目已经答完"
+    end
   end
   def next_sentence
     type = params[:type]
-    sentence_id = params[:id]
+    id = params[:id]
     is_correct=params[:is_correct]
-    #    #获取用户xml路径
-    #    x_url = "#{Rails.root}/public/2.xml"
-    #    xml =Document.new(File.open(x_url))
-    #
-    #    if type="plan"
-    #      #处理新学的句子
-    #    elsif type="review"
-    #      #处理复习的句子
-    #    end
-    #
-    #    #写入xml
-    #    #获取新数据
-    #    source=listen_write_source(xml)
-    sentence_id=sentence_id.to_i+1
-    @listen_sentence=PracticeSentence.find(sentence_id)
+    is_answer=params[:is_answer]
+    index=params[:index].to_i
+    #题目类型 0 为单词，5为听写
+    part_type='0'
+    #获取用户xml路径
+    x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
+    xml =Document.new(File.open(x_url))
+    current=xml.elements["root/plan/current"].text.to_i
+    #处理句子更改状态,根据类型不同进行不同的操作
+    if is_answer=='true'
+      xml_and_index=handle_sentences(xml,current,type,id,is_correct,index,part_type)
+      xml=xml_and_index[:xml]
+      #写入xml
+      write_xml(xml,x_url)
+      index=xml_and_index[:index]
+    end
  
-    @web_type="review"
-    @step=2
-    @num=30
-    source={:listen_sentence=>@listen_sentence,:web_type=>@web_type,:step=>@step,:num=>@num}
-    render :partial=>'/learn/listen_write',:object=>source
-
+    if !($ids.empty?)
+      index=index<$ids.length-1?index+1:0
+      next_id=$ids[index]
+      #获取新数据
+      source=listen_write_by_id(xml,type,current,next_id,part_type)
+      source[:index]=index
+      render :partial=>'/learn/listen_write',:object=>source
+    else
+      #更改当前句子部分的status的值 type为plan或review current为当前包
+      change_part_status(xml,type,current,part_type)
+      write_xml(xml,x_url)
+      #继续查找句子数据,如果没有 表示今天句子任务已经完成
+      listen_source=listen_write_source(xml)
+      if !(listen_source.nil?)
+        render :partial=>'/learn/listen_write',:object=>listen_source
+      else
+        render :text=>"答题完成"
+      end
+    end
   end
 end

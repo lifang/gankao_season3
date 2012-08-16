@@ -1,28 +1,26 @@
 <%
 @listen_sentence=listen_write[:listen_sentence]
 @web_type=listen_write[:web_type]
-@step=listen_write[:step]
-@num=listen_write[:num]
+@index=listen_write[:index]
 %>
-
 <%=javascript_include_tag "jquery.jplayer.min"%>
 <%=javascript_include_tag "listen_write"%>
 <input type="hidden" id="global_sentence_en_mean" value="<%= @listen_sentence.en_mean.gsub("\"","").strip%>"></input>
 <script type="text/javascript">
   var listen_sentence=$("#global_sentence_en_mean").val();
   var id= "<%=@listen_sentence.id%>";
+  var index="<%=@index%>";
   var web_type = "<%= @web_type %>";
-  var step = "<%= @step %>";
-  var url="<%=Constant::PUBLIC_PATH.concat(@listen_sentence.enunciate_url.to_s)%>";
+  var url="<%="http://localhost:3000".concat(@listen_sentence.enunciate_url.to_s)%>";
   var count = 1;//答题次数-最大为3
   var answer_mark = false; //记录题目是否做对
+  var is_answer=false;
 </script>
-
 <div class="plan_tab">
   <div class="pt_title">
     <h1>听力练习</h1>
-    <div class="pt_time">00:00:00</div>
-    <span class="t_number">2/<%=@num%></span>
+    <div class="pt_time">无限制&nbsp;&nbsp;</div>
+    <span class="t_number"><%=@index+1%>/<%=$ids.length%></span>
     <span class="close">关闭</span>
   </div>
   <div class="mc_box">
