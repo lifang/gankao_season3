@@ -158,8 +158,8 @@ class UserPlan < ActiveRecord::Base
         :ALL => (part1 + part2)/60 +TRUE_PAPER_TIME,
         :WORD => word_num, :SENTENCE => sentence_num, :READ => read_num, :WRITE => write_num
       }
-    end
-    sys_provide_score_report(s_word, s_sentence, s_listen, result,category_id)
+    end    
+    result[:TARGET_SCORE] = sys_provide_score_report(s_word, s_sentence, s_listen, result,category_id)
     return result
   end
 
@@ -393,12 +393,12 @@ class UserPlan < ActiveRecord::Base
           self.create_review_task(plan_xml, current_day, REPEAT_TIME[:WORD][2], part, REPEAT_TIME[:WORD][3])
         else
           plan_xml.delete_element(part.xpath)
-        end if part.attributes["status"] == "1"
+        end if part.attributes["status"] == "#{PLAN_STATUS[:FINISHED]}"
       }
       plan_xml.root.elements["review"].delete_element(current_review) unless current_review.has_elements?
     end    
     current_task = plan_xml.root.elements["plan"].elements["_#{current_day}"]
-    if current_task.attributes["status"] == "1"
+    if current_task.attributes["status"] == "#{PLAN_STATUS[:FINISHED]}"
       current_task.each_element { |p|
         if current_task.attributes["type"].to_i == CHAPTER_TYPE_NUM[:WORD] #单词
           self.create_review_task(plan_xml, current_day, REPEAT_TIME[:WORD][0], p, REPEAT_TIME[:WORD][1])
@@ -459,10 +459,10 @@ class UserPlan < ActiveRecord::Base
   def update_new_package(next_plan, tomorrow_task)
     next_plan.each_element { |part|
       part.delete_attribute("num")
-      part.add_attribute("status", "0")
+      part.add_attribute("status", "#{PLAN_STATUS[:UNFINISHED]}")
       if tomorrow_task[part.attributes["type"].to_i].any?
         tomorrow_task[part.attributes["type"].to_i].each {|i|
-          part.add_element("item", {"id" => i, "is_pass" => "false", "repeat_time" => "0", "step" => "1"})
+          part.add_element("item", {"id" => i, "is_pass" => "false", "repeat_time" => "0", "step" => "0"})
         }
       else
         next_plan.delete_element(part)
@@ -501,7 +501,7 @@ class UserPlan < ActiveRecord::Base
   def create_review_task(plan_xml, current_day, days, part, repeat_time)
     next_review = plan_xml.root.elements["review"].elements["_#{current_day.to_i + days}"]
     if next_review.nil?
-      next_review = plan_xml.root.elements["review"].add_element("_#{current_day.to_i + days}", {"status" => "0"})
+      next_review = plan_xml.root.elements["review"].add_element("_#{current_day.to_i + days}", {"status" => "#{PLAN_STATUS[:UNFINISHED]}"})
     end
     self.reset_task_item(part, repeat_time)
     next_review.add_element(part)
@@ -510,9 +510,9 @@ class UserPlan < ActiveRecord::Base
   #初始化节点的属性值
   def reset_task_item(part, repeat_time)
     part.attributes["repeat_time"] = "#{repeat_time}"
-    part.attributes["status"] = "0"
+    part.attributes["status"] = "#{PLAN_STATUS[:UNFINISHED]}"
     part.each_element {|item|
-      item.attributes["is_pass"] = "0"
+      item.attributes["is_pass"] = "false"
       item.attributes["repeat_time"] = "0"
       item.attributes["step"] = "0"
     }
