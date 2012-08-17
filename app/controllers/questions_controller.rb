@@ -65,8 +65,6 @@ class QuestionsController < ApplicationController
     @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @user_question.id])
-    puts "----------------------------"
-    puts @question_answers.length
   end
 
   def ask

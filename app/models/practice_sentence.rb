@@ -5,4 +5,10 @@ class PracticeSentence < ActiveRecord::Base
   LISTEN_MAX_LEVEL = {:CET4 => 50, :CET6 => 80}
   TRANSLATE_MAX_LEVEL = {:CET4 => 50, :CET6 => 80}
   DICTATION_MAX_LEVEL = {:CET4 => 50, :CET6 => 80}
+
+  def self.get_listen_by_level(level, category, types, limit, except)
+    return Word.find_by_sql([
+        "select t.* from practice_sentences t where t.id != ? and t.level = ? and t.category_id = ? and t.types = ? order by rand() limit ?",
+        except, level, category, types, limit])
+  end
 end

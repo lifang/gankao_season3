@@ -1,0 +1,112 @@
+<div class="pt_title">
+  <h1>短语学习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number">1/2</span>
+  <span onclick="close_pop()" class="close">关闭</span>
+</div>
+<% if @result[:step].to_i == 1 %>
+  <div id="read" class="mc_box">
+    <div class="words_con">
+      <div class="w_question"><%= @result[:sentence].en_mean %></div>
+      <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+    </div>
+    <div class="words_func">
+      <a onclick="next_step()" title="下一步" class="next tooltip">Next</a>
+    </div>
+  </div>
+  <div id="combin" class="mc_box" style="display:none">
+    <%= render :partial => "learn/tip" %>
+    <div class="words_func">
+      <h2>请点击单词组成完整句子。</h2>
+      <input type="hidden" id="SID" value="<%= @result[:sentence].en_mean %>" />
+      <a onclick="redo()" title="点击撤销" class="reset tooltip">撤销</a>
+    </div>
+    <div class="words_con">
+      <div class="w_question">
+        <div id="current" class="wq_drag"></div>
+        <ul id="select" class="drag_ul">
+          <% @result[:words].each_with_index do |it, index| %>
+            <li id="_w_<%= index %>" onclick="click_word(<%= index %>)"><%= it %></li>
+          <% end %>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <div class="trueFalse"></div>
+    </div>
+    <div class="words_func">
+      <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a onclick="send_message('/learn/jude_sentence?redirct=true&flag=false')" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% elsif @result[:step].to_i == 2 %>
+  <div id="combin2" class="mc_box">
+    <%= render :partial => "learn/tip" %>
+    <div class="words_func">
+      <h2>请点击单词组成完整句子。</h2>
+      <input type="hidden" id="SID" value="<%= @result[:sentence].en_mean %>" />
+      <a onclick="redo()" title="点击撤销" class="reset tooltip">撤销</a>
+    </div>
+    <div class="words_con">
+      <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+      <div class="w_question">
+        <div id="current" class="wq_drag"></div>
+        <ul id="select" class="drag_ul">
+          <% @result[:words].each_with_index do |it, index| %>
+            <li id="_w_<%= index %>" onclick="click_word(<%= index %>)"><%= it %></li>
+          <% end %>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <div class="trueFalse"></div>
+    </div>
+    <div class="words_func">
+      <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a onclick="send_message('/learn/jude_sentence?redirct=true&flag=false')" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#read").fadeTo(<%= @result[:time]*1000 %>, 0.3);
+  })
+
+  function click_word(id){
+    $("#current").html($("#current").html() +" "+ $("#_w_"+id).html() );
+    $("#_w_"+id).hide();
+  }
+
+  function redo(){
+    $("#current").html("");
+    $("#select li").show();
+    $(".trueFalse").html("");
+  }
+
+  function hedui(){
+    var right = $("#SID").attr("value").replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ");
+    if(right.trim() == $("#current").html().trim()){
+      $(".trueFalse").html("<img src='assets/true.png' />");
+      clearInterval(myTime.timeId);
+      send_message("/learn/jude_sentence?redirct=true&flag=true");
+    }else{
+      $(".trueFalse").html("<img src='assets/false.png' />");
+      clearInterval(myTime.timeId);
+      send_message("/learn/jude_sentence?redirct=true&flag=false");
+    }
+  }
+
+  function next_step(){
+    clearInterval(myTime.timeId);
+    $("#read").hide();
+    $("#combin").fadeIn(1000);
+    myTime.start(<%= @result[:combin_time] %>)
+  }
+
+  function callback(){
+    if($("#read").css("display") == "block"){
+      next_step();
+    }else{
+      $("#timeup").show();
+      send_message("/learn/jude_sentence?flag=false");
+    }
+  }
+</script>

@@ -20,7 +20,7 @@ GankaoSeason3::Application.routes.draw do
   end
   resources :learn do
     collection do
-      get :word_step_one,:next_sentence,:listen
+      get :task_dispatch, :jude_word, :listen, :i_have_remember, :pass_status, :jude_sentence, :jude_hearing
     end
   end
 
@@ -30,7 +30,7 @@ GankaoSeason3::Application.routes.draw do
       post :get_answers
     end
     collection do
-      get :answered, :unanswered
+      get :answered, :unanswered, :ask, :answers, :search, :save_answer, :ask_question
     end
   end
   match "questions/ask" =>'questions#ask'
