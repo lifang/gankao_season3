@@ -1,6 +1,11 @@
-<%#
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
-%>
-
-<%= "jude_sentence.js" %>
+<% if @redirct == "true" && !$items.blank? %>
+  $.ajax({
+  async:true,
+  dataType:'script',
+  url:"/learn/task_dispatch?category=<%= $type %>",
+  type:'get'
+  })
+<% elsif $items.blank? %>
+  clearInterval(myTime.timeId);
+  $("#pass").show();
+<% end %>

@@ -1,8 +1,8 @@
 <div class="pt_title">
   <h1>单词学习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">2/20</span>
-  <span class="close">关闭</span>
+  <span class="t_number">1/2</span>
+  <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <div class="mc_box">
   <%= render :partial => "learn/tip" %>
@@ -16,7 +16,8 @@
     <div class="trueFalse"></div>
   </div>
   <div class="words_func">
-    <a href="javascript:hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
+    <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
+    <a onclick="send_message('/learn/jude_word?redirct=true&flag=false')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
 <script type="text/javascript">

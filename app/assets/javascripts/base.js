@@ -4,7 +4,6 @@ $(document).ready(function(){
     })
 })
 
-
 function part_one_start (){
     $.ajax({
         async:true,
@@ -20,5 +19,9 @@ function send_message (url){
         url:url,
         type:'get'
     })
+}
+
+function close_pop(){
+    $(".plan_tab").html("");
 }
 

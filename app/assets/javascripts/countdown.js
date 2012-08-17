@@ -18,7 +18,6 @@ myTime.start = function(sec)
 }
 
 myTime.takeCount = function(){
-    alert(myTime.seconds);
     if(myTime.seconds == 0){
         myTime._isEnd = true;
         clearInterval(myTime.timeId);

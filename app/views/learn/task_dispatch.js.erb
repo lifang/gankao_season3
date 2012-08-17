@@ -11,18 +11,14 @@
     <%
     end
   when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
-    if step == 1
-    %>
-      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence_read") %>");
-    <% else %>
-      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence_translate") %>");
-    <%
-    end
-  when UserPlan::CHAPTER_TYPE_NUM[:LISTEN]
   %>
-    alert("listen");
+    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence") %>");
+  <%
+  when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
+  %>
+    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
   <% end %>
+  myTime.start(<%= @result[:time] %>);
 <% else %>
   alert("finish");
 <% end %>
-myTime.start(<%= @result[:time] %>);
