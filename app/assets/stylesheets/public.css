@@ -1,0 +1,7 @@
+/*page翻页----*/
+.pageTurn { padding: 10px 0; text-align: center; font-size: 13px; color: #48b9ef;}
+.pageTurn a { border: 2px #f0f0f0 solid; padding: 2px 5px; margin: 0px 2px; color: #387580;}
+.pageTurn a:hover, .pageTurn a:active { border: 2px #ff5a00 solid; color: #ff5a00;}
+
+.pageTurn em {border: 2px #ff5a00 solid; padding: 2px 5px; font-weight: bold; color: #fff; background: #ff6c16;}
+.pageTurn span.disabled {display: none;}

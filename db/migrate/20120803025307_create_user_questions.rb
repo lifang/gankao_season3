@@ -10,5 +10,6 @@ class CreateUserQuestions < ActiveRecord::Migration
     end
     add_index :user_questions,:category_id
     add_index :user_questions,:user_id
+    add_index :user_questions,:created_at
   end
 end

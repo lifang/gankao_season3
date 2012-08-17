@@ -1,4 +1,4 @@
-<%=render 'nav'%>
+<%=render '/layouts/nav'%>
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
@@ -15,7 +15,7 @@
               <p><span class="orange">补充：</span><%=myanswer.user_question.description%></p>
             </div>
             <div class="userProblem_box">
-              <div class="us_pic"><img src="/assets/u01.jpg"></div>
+              <div class="us_pic"><img src="/assets/u01.jpg"/></div>
               <h3><%=myanswer.user_question.user.name%></h3>
               <p><%=myanswer.user_question.user.created_at.strftime("%Y-%m-%d")%></p>
               <p><%=myanswer.user_question.user.created_at.strftime("%H:%M")%></p>

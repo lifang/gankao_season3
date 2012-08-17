@@ -1,0 +1,48 @@
+<%=render '/layouts/nav'%>
+<div class="m_content">
+  <div class="mc_box">
+    <%=render 'menu'%>
+    <div class="mc_menu_box">
+      <div class="b_bottom">
+        <div class="problem_list">
+          <div class="problem_box">
+            <span class="an_icon01"></span>
+            <p><%= @user_question.title %></p>
+            <p><span class="orange">补充：</span><%= @user_question.description %></p>
+          </div>
+          <div class="userProblem_box">
+            <div class="us_pic">
+              <img src="<%= (@user_question.user.nil? or @user_question.user.cover_url.nil?) ? User::DEFAULT_COVER : @user_question.user.cover_url %>"/>
+            </div>
+            <h3><%= @user_question.user.name if @user_question.user %></h3>
+            <p><%= @user_question.created_at.strftime("%Y-%m-%d") %></p>
+            <p><%= @user_question.created_at.strftime("%H:%M") %></p>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <% @question_answers.each_with_index do | answer, i | %>
+            <div class="problem_list">
+              <div class="userProblem_box">
+                <% if answer.is_right %><span class="flag tooltip" title="最佳答案">最佳答案</span><% end %>
+                <div class="us_pic"><img src="<%= answer.cover_url.nil? ? User::DEFAULT_COVER : answer.cover_url %>"/></div>
+                <h3><%= answer.user_name %></h3>
+                <p><%= answer.created_at.strftime("%Y-%m-%d") %></p>
+                <p><%= answer.created_at.strftime("%H:%M") %></p>
+              </div>
+              <div class="answer_box an_bgTrue">
+                <span class="an_icon03"></span>
+                <p><%= answer.answer %></p>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <%if @question_answers.length > 1 and i == 0 %>
+              <div class="problem_list"><h2 class="other_h">其他回答</h2></div>
+            <%end
+          end %>
+        </div>
+        <%=will_paginate @question_answers,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+      </div>
+    </div>
+    <div class="clear"></div>
+
+  </div>

@@ -1,9 +1,10 @@
+<% category_id = params[:category].nil? ? 2 : params[:category] %>
 <div class="m_nav">
   <ul>
-    <li><a href="#" <% if controller.controller_name=="plans" %> class="hover" <% end %>>复习计划</a></li>
+    <li><a href="/plans?category=<%= category_id %>" <% if controller.controller_name=="plans" %> class="hover" <% end %>>复习计划</a></li>
     <li><a href="#" <% if controller.controller_name=="similarities" %> class="hover" <% end %>>真题</a></li>
-    <li><a href="#" <% if controller.controller_name=="skills" %> class="hover" <% end %>>知识库</a></li>
-    <li><a href="#" <% if controller.controller_name=="videos" %> class="hover" <% end %>>视频</a></li>
-    <li><a href="#" <% if controller.controller_name=="questions" %> class="hover" <% end %>>答疑</a></li>
+    <li><a href="/skills?category=<%= category_id %>" <% if controller.controller_name=="skills" %> class="hover" <% end %>>知识库</a></li>
+    <li><a href="/videos?category=<%= category_id %>" <% if controller.controller_name=="videos" %> class="hover" <% end %>>视频</a></li>
+    <li><a href="/questions?category=<%= category_id %>" <% if controller.controller_name=="questions" %> class="hover" <% end %>>答疑</a></li>
   </ul>
 </div>

@@ -5,38 +5,51 @@ class QuestionsController < ApplicationController
   end
   
   def answered
-    category=params[:category]
-    category=2
+    category = params[:category].empty? ? 2 : params[:category].to_i
     #获取已经回答的问题
-    @answered_questions=UserQuestion.where("is_answer=true and category_id=#{category}").find(:all)
-    .paginate(:page=>params[:page],:per_page=>2)
+    @answered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+          from user_questions uq left join users u on u.id = uq.user_id
+          where uq.is_answer = #{UserQuestion::IS_ANSWERED[:YES]} and uq.category_id = ? order by created_at desc",
+        category], :page => params[:page], :per_page => 3)
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at desc limit 3", @answered_questions[0].id]) if @answered_questions.any?
+  end
+
+  def answered_more
+    @user_question = UserQuestion.find(params[:id].to_i)
+    @question_answers = QuestionAnswer.paginate_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at asc", @user_question.id], :page => params[:page], :per_page => 5)
   end
 
   def unanswered
-    category=params[:category]
-    category=2
-
-    @user=User.find(24)
-    @result=[]
-
-     #获取问题--没有正确答案的题目并且当前用户没有答过的
-    UserQuestion.find_all_by_category_id(category).each do |question|
-      current_user_answered=false #当前是否答过
-      n=0;#是否已经有正确答案
-      question.question_answers.each do|answer|
-        if answer.user_id==@user.id  #答案里有用户id 表示当前用户已经答过了
-          current_user_answered=true
-        end
-        if answer.is_right==true #有正确答案
-          n=n+1;
-        end
-      end
-      if n==0 && current_user_answered==false
-        @result<<question  #将符合条件的题目添加到数组中
-      end
-    end
-    
-    @unanswered_questions=@result.paginate(:page=>params[:page],:per_page=>2)
+    category = params[:category].empty? ? 2 : params[:category].to_i
+    @unanswered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+          from user_questions uq left join users u on u.id = uq.user_id
+          where uq.is_answer = #{UserQuestion::IS_ANSWERED[:NO]} and uq.category_id = ? order by created_at desc",
+        category], :page => params[:page], :per_page => 3)
+#    @user=User.find(24)
+#    @result=[]
+#
+#     #获取问题--没有正确答案的题目并且当前用户没有答过的
+#    UserQuestion.find_all_by_category_id(category).each do |question|
+#      current_user_answered=false #当前是否答过
+#      n=0;#是否已经有正确答案
+#      question.question_answers.each do|answer|
+#        if answer.user_id==@user.id  #答案里有用户id 表示当前用户已经答过了
+#          current_user_answered=true
+#        end
+#        if answer.is_right==true #有正确答案
+#          n=n+1;
+#        end
+#      end
+#      if n==0 && current_user_answered==false
+#        @result<<question  #将符合条件的题目添加到数组中
+#      end
+#    end
+#
+#    @unanswered_questions=@result.paginate(:page=>params[:page],:per_page=>2)
     
    
 #    sql="SELECT * FROM exam_app.user_questions where category_id=#{category} and id not in
@@ -44,6 +57,16 @@ class QuestionsController < ApplicationController
 #         order by created_at desc"
 #    @unanswered_questions=UserQuestion.paginate_by_sql(sql,
 #     :page => params[:page],:per_page=>2)
+  end
+
+  #ajax获取问题的答案
+  def get_answers
+    @user_question = UserQuestion.find(params[:id].to_i)
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at desc limit 3", @user_question.id])
+    puts "----------------------------"
+    puts @question_answers.length
   end
 
   def ask
@@ -58,6 +81,7 @@ class QuestionsController < ApplicationController
   end
 
   def answers
+
 
     #获取当前用户
     @user=User.find(22)
