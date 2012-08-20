@@ -1,0 +1,11 @@
+<% if !$items.blank? %>
+  $.ajax({
+  async:true,
+  dataType:'script',
+  url:"/learn/task_dispatch?category=2",
+  type:'get'
+  })
+<% elsif $items.blank? %>
+  clearInterval(myTime.timeId);
+  $("#pass").show();
+<% end %>

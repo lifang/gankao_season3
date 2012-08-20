@@ -18,16 +18,21 @@ GankaoSeason3::Application.routes.draw do
       post :show_chapter
     end
   end
-  resources :skills
   resources :learn do
     collection do
-      get :word_step_one,:next_sentence,:listen
+      get :task_dispatch, :jude_word, :listen, :i_have_remember, :pass_status, :jude_sentence, :jude_hearing
     end
   end
 
-  resources :questions,:only=>[:index]
-  match "questions/answered" =>'questions#answered'
-  match "questions/unanswered" =>'questions#unanswered'
+  resources :questions do
+    member do
+      get :answered_more
+      post :get_answers
+    end
+    collection do
+      get :answered, :unanswered, :ask, :answers, :search, :save_answer, :ask_question
+    end
+  end
   match "questions/ask" =>'questions#ask'
   match "questions/answers" =>'questions#answers'
   match "questions/search" =>'questions#show_result'

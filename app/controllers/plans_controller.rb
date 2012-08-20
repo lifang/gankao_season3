@@ -14,7 +14,7 @@ class PlansController < ApplicationController
       else
         #生成初始的计划
         data_info = {:ONE=>2800, :TWO=>1460, :THREE=>875, :ALL=>5135, :WORD=>94,
-          :SENTENCE=>47, :READ=>96, :WRITE=>96, :LISTEN=>47, :TRANSLATE=>500, :DICTATION=>500, :DAYS => 86}
+          :SENTENCE=>47, :READ=>96, :WRITE=>96, :LISTEN=>47, :TRANSLATE=>500, :DICTATION=>500, :DAYS => 86, :TARGET_SCORE => 400}
         @user_plan = UserPlan.init_plan(@user_score_info, data_info, cookies[:user_id].to_i, params[:category_id].to_i)
         @plan_list = @user_plan.get_plan_list
 
