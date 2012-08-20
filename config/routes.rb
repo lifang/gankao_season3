@@ -1,5 +1,7 @@
 GankaoSeason3::Application.routes.draw do
 
+  get "users/index"
+
   resources :videos do
     member do
     end
@@ -23,21 +25,23 @@ GankaoSeason3::Application.routes.draw do
       get :task_dispatch, :jude_word, :listen, :i_have_remember, :pass_status, :jude_sentence, :jude_hearing
     end
   end
-
+  resources :questions ,:only=>[:index]
   resources :questions do
     member do
       get :answered_more
       post :get_answers
     end
     collection do
-      get :answered, :unanswered, :ask, :answers, :search, :save_answer, :ask_question
+      post :save_answer,:ask_question
+      get :answered, :unanswered, :ask, :answers, :show_result
     end
   end
-  match "questions/ask" =>'questions#ask'
-  match "questions/answers" =>'questions#answers'
-  match "questions/search" =>'questions#show_result'
-  match "questions/saveanswer"=>'questions#save_answer'
-  match "questions/askquestion"=>'questions#ask_question'
+
+  resources :users do
+    collection do
+      post :update_users,:check_in
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

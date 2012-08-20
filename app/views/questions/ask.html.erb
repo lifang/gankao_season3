@@ -2,81 +2,46 @@
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
-    <div class="mc_menu_box">
-      <%=form_for :user_question,:url=>{ :action => :ask_question} do |f|%>
-        <div class="my_question">
-          <h2>问题</h2>
-          <%=f.text_field :title,:class=>"my_q_input"%>
-          <h2>补充</h2>
-          <%=f.text_area :description,:class=>"my_q_textarea"%>
-          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
-        </div>
-      <%end%>
-      <%@myasks.each do |myask|%>
-        <div class="b_bottom">
-          <!-- 所有问题 -->
-          <div class="problem_list">
-            <div class="problem_box">
-              <%if myask.question_answers.where("is_right=true").count>0%>
-                <span class="in_true tooltip" title="已确认答案">已确认答案</span>
-              <%end%>
-              <span class="an_icon01"></span>
-              <p><%=myask.title%></p>
-              <p><span class="orange">补充：</span><%=myask.description%></p>
-            </div>
-            <div class="userProblem_box">
-              <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-              <h3><%=myask.user.name%></h3>
-              <p><%=myask.created_at.strftime("%Y-%m-%d")%></p>
-              <p><%=myask.created_at.strftime("%H:%M")%></p>
-            </div>
-            <div class="clear"></div>
+    <%if @myasks.any?%>
+      <div class="mc_menu_box">
+        <%=form_for :user_question,:url=>{ :action => :ask_question} do |f|%>
+          <div class="my_question">
+            <h2>问题</h2>
+            <%=f.text_field :title,:class=>"my_q_input"%>
+            <h2>补充</h2>
+            <%=f.text_area :description,:class=>"my_q_textarea"%>
+            <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
           </div>
-          <!--答案-->
-
-          <%myask.question_answers.where("is_right=true").each do |mqa|%><!--最佳答案-->
+        <%end%>
+        <% @myasks.each_with_index do |aq, index| %>
+          <div class="b_bottom">
             <div class="problem_list">
-              <div class="userProblem_box">
-                <span class="flag tooltip" title="最佳答案">最佳答案</span>
-                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-                <h3><%=mqa.user.name%></h3>
-                <p><%=mqa.created_at.strftime("%Y-%m-%d")%></p>
-                <p><%=mqa.created_at.strftime("%H:%M")%></p>
+              <div class="problem_box" id="problem_<%= aq.id %>">
+                <span class="an_icon01"></span>
+                <p><%= aq.title %></p>
+                <p><span class="orange">补充：</span><%= aq.description %></p>
               </div>
-              <div class="answer_box an_bgTrue">
-                <span class="an_icon03"></span>
-                <p><%=mqa.answer%></p>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="<%= aq.cover_url.nil? ? User::DEFAULT_COVER : aq.cover_url %>"/></div>
+                <h3><%= aq.user_name %></h3>
+                <p><%= aq.created_at.strftime("%Y-%m-%d") %></p>
+                <p><%= aq.created_at.strftime("%H:%M") %></p>
               </div>
               <div class="clear"></div>
             </div>
-          <%end%>
-
-          <%if myask.question_answers.where("is_right=true").count>0%>
-            <div class="problem_list"><h2 class="other_h">其他答案</h2></div>
-          <%end%>
-
-          <%myask.question_answers.where("is_right=false").each do |mqa|%>
-            <div class="problem_list">
-              <div class="userProblem_box">
-                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-                <h3><%=mqa.user.name%></h3>
-                <p><%=mqa.created_at.strftime("%Y-%m-%d")%></p>
-                <p><%=mqa.created_at.strftime("%H:%M")%></p>
-              </div>
-              <div class="answer_box an_bgFalse">
-                <span class="an_icon02"></span>
-                <p><%=mqa.answer%></p>
-              </div>
-              <div class="clear"></div>
+            <div id="answer_<%= aq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
+              <% if index == 0 %>
+                <%= render :partial => "/questions/answers", :object => [aq, @question_answers] %>
+              <% end %>
             </div>
-          <%end%>
-        </div>
-      <%end%>
+          </div>
+        <%end%>
 
-
-      <%=will_paginate @myasks,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
-    </div>
-
+        <%=will_paginate @myasks,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
+      </div>
+    <%else%>
+      <span style="font-size:30px;color:red;text-align: center;">你还没有提问哦!</span>
+    <%end%>
   </div>
   <div class="clear"></div>
 </div>

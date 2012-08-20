@@ -2,73 +2,37 @@
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
-    <div class="mc_menu_box">
-      <%@myanswers.each do |myanswer|%>
-        <div class="b_bottom">
-          <div class="problem_list">
-            <div class="problem_box">
-              <%if myanswer.is_right==true%>
-                <span class="flag tooltip" title="你的答案已被采用">你的答案已被采用</span>
-              <%end%>
-              <span class="an_icon01"></span>
-              <p><%=myanswer.user_question.title%></p>
-              <p><span class="orange">补充：</span><%=myanswer.user_question.description%></p>
-            </div>
-            <div class="userProblem_box">
-              <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-              <h3><%=myanswer.user_question.user.name%></h3>
-              <p><%=myanswer.user_question.user.created_at.strftime("%Y-%m-%d")%></p>
-              <p><%=myanswer.user_question.user.created_at.strftime("%H:%M")%></p>
-            </div>
-            <div class="clear"></div>
-          </div>
-
-          <%if myanswer.user_question.question_answers.where("is_right=true").count>0%>
-            <%myanswer.user_question.question_answers.where("is_right=true").each do |qa|%>
-              <div class="problem_list">
-                <div class="userProblem_box">
-                  <span class="flag tooltip" title="最佳答案">最佳答案</span>
-                  <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-                  <h3><%=qa.user.name%></h3><!--回答问题的用户名-->
-                  <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
-                  <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
-                </div>
-                <div class="answer_box an_bgTrue">
-                  <span class="an_icon03"></span>
-                  <p><%=qa.answer%></p>
-                </div>
-                <div class="clear"></div>
-              </div>
-            <%end%>
-          <%end%>
-
-          <%if myanswer.user_question.question_answers.where("is_right=true").count>0%>
-            <div class="problem_list"><h2 class="other_h">其他回答</h2></div>
-          <%end%>
-          <!--其他答案-->
-          <%myanswer.user_question.question_answers.where("is_right=false").each do |qa|%>
+    <%if @myanswers.any?%>
+      <div class="mc_menu_box">
+        <% @myanswers.each_with_index do |aq, index| %>
+          <div class="b_bottom">
             <div class="problem_list">
-              <div class="userProblem_box">
-                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-                <h3><%=qa.user.name%></h3><!--回答问题的用户名-->
-                <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
-                <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
+              <div class="problem_box" id="problem_<%= aq.id %>">
+                <span class="an_icon01"></span>
+                <p><%= aq.title %></p>
+                <p><span class="orange">补充：</span><%= aq.description %></p>
               </div>
-              <div class="answer_box an_bgFalse">
-                <span class="an_icon02"></span>
-                <p><%=qa.answer%></p>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="<%= aq.cover_url.nil? ? User::DEFAULT_COVER : aq.cover_url %>"/></div>
+                <h3><%= aq.user_name %></h3>
+                <p><%= aq.created_at.strftime("%Y-%m-%d") %></p>
+                <p><%= aq.created_at.strftime("%H:%M") %></p>
               </div>
               <div class="clear"></div>
             </div>
-          <%end%>
-        </div>
-      <%end%>
-
-      <%=will_paginate @myanswers,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
-
-    </div>
-
+            <div id="answer_<%= aq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
+              <% if index == 0 %>
+                <%= render :partial => "/questions/answers", :object => [aq, @question_answers] %>
+              <% end %>
+            </div>
+          </div>
+        <%end%>
+        <!--分页插件-->
+        <%=will_paginate @myanswers,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
+      </div>
+    <%else%>
+      <span style="font-size:30px;color:red;text-align: center;">你还没有回答过问题!</span>
+    <%end%>
   </div>
   <div class="clear"></div>
-
 </div>
