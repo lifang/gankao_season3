@@ -25,7 +25,7 @@
                 <%= render :partial => "/questions/answers", :object => [uaq, @question_answers] %>
               <% end %>
             </div>
-            <%=form_for uaq.question_answers.build, :url => { :action => :save_answer } do |f| %>
+            <%=form_for uaq.question_answers.build, :url =>"/questions/save_answer?category="+params[:category]  do |f| %>
               <div class="problem_list">
                 <%=f.hidden_field :user_question_id,:value=>uaq.id%>
                 <%= f.text_area  :answer,:class=>"pro_textarea" %>

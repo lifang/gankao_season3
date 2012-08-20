@@ -4,7 +4,7 @@
     <%=render 'menu'%>
     <%if @myasks.any?%>
       <div class="mc_menu_box">
-        <%=form_for :user_question,:url=>{ :action => :ask_question} do |f|%>
+        <%=form_for :user_question,:url=>"/questions/ask_question?category="+params[:category] do |f|%>
           <div class="my_question">
             <h2>问题</h2>
             <%=f.text_field :title,:class=>"my_q_input"%>
