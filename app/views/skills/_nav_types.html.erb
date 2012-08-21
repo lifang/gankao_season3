@@ -9,7 +9,8 @@
   <div class="search">
     <div class="search_box">
       <%= form_for :search,:url=>"/skills/search_blog",:html=>{:id=>"search_blog"} do %>
-      <input  type="text" name="search_con" value="<%=session[:pras]%>" id="search_con" />
+        <input  type="text" name="search_con" value="<%=session[:pras]%>" id="search_con" />
+        <input  type="hidden" name="category" value="<%=params[:category]  %>" id="search_con" />
       <% end %>
       <button onclick="search_blog()">search</button></div>
   </div>

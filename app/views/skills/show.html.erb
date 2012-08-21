@@ -1,18 +1,17 @@
 <%= javascript_include_tag "video_skill"  %>
-<% types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 1 : params[:con_t].to_i %>
 <% cur_page=params[:page].nil? ? 1: params[:page].to_i %>
 <% category_id=params[:category_id].nil? ? 2 : params[:category_id].to_i %>
 <%= render :partial=>"/layouts/nav" %>
 <div class="m_content">
   <div class="mc_box">
-    <%= render :partial=>"/skills/nav_types",:object=>types %>
+    <%= render :partial=>"/skills/nav_types",:object=>@skill.types %>
     <div class="mc_menu_box">
       <div class="article_page">
         <h1><%= @skill.skill_title %></h1>
         <div class="singlemeta center"><span>分类：<%= Skill::SKILL_NAME[@skill.types] %></span>
           <span>时间：<%= @skill.created_at.strftime("%Y-%m-%d %H:%M") %></span><span>作者: <%= @skill.user.name %></span></div>
         <input type="hidden" value="<%= category_id %>" id="category_id" />
-        <input type="hidden" value="<%= types %>" id="con_t" />
+        <input type="hidden" value="<%= @skill.types %>" id="con_t" />
         <div class="share">
           <ul>
             <li>分享到：</li>
@@ -39,7 +38,7 @@
             </script>
             <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1340246517443536" charset="utf-8"></script>
             <!-- JiaThis Button END -->
-            <li class="like"><em onclick="like_one('<%= @skill.id %>')"><%= @skill.like_num %></em></li>
+            <li class="like" onclick="like_one('<%= @skill.id %>')"><em ><%= @skill.like_num %></em></li>
           </ul>
         </div>
         <div class="article_p">
@@ -47,14 +46,8 @@
         </div>
 
       </div>
-      <div class="pageTurn">
-        <a href="?page=<%=params[:page].to_i-1 %>&con_t=<%= types %>&category_id=<%= category_id %>" <% if cur_page==1 %> class="disabled" <%end%>> <  Prev</a>
-        <% @skill_infos.each_with_index do |skill_info,index|%>
-          <a href="?page=<%= index+1 %>&con_t=<%= types %>&category_id=<%= category_id %>" <%  if cur_page==index+1%> class="current" <%end%>><%= index+1 %></a>
-        <% end %>
-        <a href="?page=<%=params[:page].to_i+1 %>&con_t=<%= types %>&category_id=<%= category_id %>" <% if cur_page==@skill_infos.length %> class="disabled" <%end%>>Next  > </a>
-      </div>
-
+      
+      <%= handle_paginate(params[:page], @skill_infos.length) %>
     </div>
     <div class="clear"></div>
   </div>
