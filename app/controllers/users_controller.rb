@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
  
     if user_sun.nil?
-      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>TYPES[:CHECKIN],:num=>1)
+      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>Sun::TYPES[:CHECKIN],:num=>1)
       data="签到成功，获得一个小太阳。"
       num=1
     else

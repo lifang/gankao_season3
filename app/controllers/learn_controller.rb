@@ -236,8 +236,8 @@ class LearnController < ApplicationController
     is_correct=params[:is_correct]
     is_answer=params[:is_answer]
     index=params[:index].to_i
-    #题目类型 0 为单词，5为听写
-    part_type='0'
+    #题目类型  5为听写
+    part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s
     #获取用户xml路径
     x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
     xml =Document.new(File.open(x_url))

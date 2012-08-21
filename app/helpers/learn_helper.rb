@@ -13,7 +13,7 @@ module LearnHelper
   
   #获取听写句子的数据，复习或计划
   def listen_write_source(xml)
-    part_type='0' #听写为5
+    part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s #听写为5
     #获取当前正在做的计划包
     current=xml.root.elements["plan"].elements["current"].text.to_i
     p ("root/review/_#{current}/part[@type='#{part_type}']/item[@is_pass='false']")
@@ -91,7 +91,7 @@ module LearnHelper
   end
   #获取句子的ids,type为review或plan current为当前包数 part_type为题目类型
   def get_ids(xml,type,current,part_type)
-    items=xml.get_elements("root/#{type}/_#{current}/part[@type=#{part_type}]/item[@is_pass='false']")
+    items=xml.get_elements("root/#{type}/_#{current}/part[@type='#{part_type}']/item[@is_pass='false']")
     ids=[]
     items.each do |i|
       ids<<i.attributes["id"].to_i
@@ -100,7 +100,7 @@ module LearnHelper
   end
   #更改part的status  part_type为xml部分的类型 --听写 5
   def change_part_status(xml,type,current,part_type)
-    part=xml.elements["root/#{type}/_#{current}/part[@type=#{part_type}]"]
+    part=xml.elements["root/#{type}/_#{current}/part[@type='#{part_type}']"]
     part.add_attribute("status",'1')
     return xml
   end
