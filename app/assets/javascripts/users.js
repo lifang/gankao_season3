@@ -31,12 +31,12 @@ function updateUserInfo(){
 function checkIn(){
     $.ajax({
         async:true,
-        url:"/users/check_in",
+        url:"/users/check_in?category="+category,
         type:'post',
         success:function(data){
             alert(data.message);
             $(".s_sun").html(data.num);
-            $(".checkIn_box").hide();
+            //$(".checkIn_box").hide();
         }
     });
 }

@@ -36,7 +36,7 @@ GankaoSeason3::Application.routes.draw do
       get :answered, :unanswered, :ask, :answers, :show_result
     end
   end
-
+  resources :users ,:only=>[:index]
   resources :users do
     collection do
       post :update_users,:check_in

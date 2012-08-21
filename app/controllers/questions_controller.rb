@@ -2,10 +2,12 @@
 class QuestionsController < ApplicationController
   layout 'main'
   def index
-    redirect_to :action => 'ask'
+    params[:category]='2' if params[:category].nil?
+    redirect_to '/questions/ask?category='+params[:category]
   end
   
   def answered
+    params[:category]='2' if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
    
     #获取已经回答的问题
@@ -26,6 +28,7 @@ class QuestionsController < ApplicationController
   end
 
   def unanswered
+    params[:category]="2" if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
     @unanswered_questions = UserQuestion.paginate_by_sql(["SELECT user_questions.*,users.name user_name,users.cover_url FROM
     user_questions,users where category_id=? and users.id=user_questions.user_id and user_questions.id not in
@@ -48,7 +51,7 @@ class QuestionsController < ApplicationController
     #获取当前用户和类别
     cookies[:user_id]=24
     user_id=cookies[:user_id]
-    params[:category]="" if params[:category].nil?
+    params[:category]="2" if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
     #获取我提问的问题
 
@@ -67,6 +70,7 @@ class QuestionsController < ApplicationController
     #获取当前用户
     cookies[:user_id]=24
     user_id=cookies[:user_id]
+    params[:category]="2" if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
     
     #获取我回答问题的
@@ -81,14 +85,15 @@ group by user_question_id) and category_id=? and users.id=user_questions.user_id
   end
 
   def show_result
+    params[:category]="2" if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
     
     @keyword=params[:keywords]
    
     @query_questions=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
           from user_questions uq left join users u on u.id = uq.user_id
-          where uq.category_id = ? and title like concat_ws('#{@keyword}','%','%')
-      or description like concat_ws('#{@keyword}','%','%') order by created_at desc",
+          where uq.category_id = ? and (title like concat_ws('#{@keyword}','%','%')
+      or description like concat_ws('#{@keyword}','%','%')) order by created_at desc",
         category], :page => params[:page], :per_page => 3)
 
     @question_answers=QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
@@ -114,12 +119,14 @@ group by user_question_id) and category_id=? and users.id=user_questions.user_id
       end
       @question.save #更新保存
     end
-    category = params[:category].nil? ? 2 : params[:category].to_i
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty?? 2 : params[:category].to_i
     redirect_to '/questions/answered?category='+category.to_s
   end
 
   def ask_question
-    category = params[:category].nil? ? 2 : params[:category].to_i
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty?? 2 : params[:category].to_i
     cookies[:user_id]=24
     user_id=cookies[:user_id]
     @uq=UserQuestion.new(params[:user_question])

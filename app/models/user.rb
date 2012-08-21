@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :user_questions,:dependent=>:destroy
   has_many :question_answers,:dependent=>:destroy
   has_many :categories, :through=>:user_category_relations,:source => :category
-
+  has_many :suns,:dependent=>:destroy
   DEFAULT_COVER = "/assets/u01.jpg"
 
 end

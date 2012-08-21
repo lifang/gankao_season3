@@ -25,7 +25,7 @@
     <div class="wraper">
       <div class="header">
         <h1 class="logo"><a href="#">赶考网</a></h1>
-        <%=render :partial=>'users/info',:object=>User.find(1)%>
+        <%=render :partial=>'users/info',:object=>user_info%>
         <div class="clear"></div>
         <nav class="border_radius">
           <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#">了解更多</a></span>
@@ -53,6 +53,6 @@
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
 
-    <%=render :partial=>'users/details',:object=>User.find(1)%>
+   <%=render :partial=>'users/details',:object=>user_info%>
   </body>
 </html>
