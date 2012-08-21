@@ -13,25 +13,18 @@
                 <p><span class="orange">补充：</span><%=uaq.description%></p>
               </div>
               <div class="userProblem_box">
-                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-                <h3><%=uaq.user_name%></h3><!--提问的问题的用户名-->
-                <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
-                <p><%=uaq.created_at.strftime("%H:%M")%></p><!--时间-->
+                <div class="us_pic"><img src="<%= uaq.cover_url.nil? ? User::DEFAULT_COVER : uaq.cover_url %>"/></div>
+                <h3><%=uaq.user_name%></h3>
+                <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p>
+                <p><%=uaq.created_at.strftime("%H:%M")%></p>
               </div>
               <div class="clear"></div>
             </div>
             <div id="answer_<%= uaq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
               <% if index == 0 %>
-                <%= render :partial => "/questions/answers", :object => [uaq, @question_answers] %>
+                <%= render :partial => "/questions/unanswers", :object => [uaq, @question_answers] %>
               <% end %>
             </div>
-            <%=form_for uaq.question_answers.build, :url =>"/questions/save_answer?category="+params[:category]  do |f| %>
-              <div class="problem_list">
-                <%=f.hidden_field :user_question_id,:value=>uaq.id%>
-                <%= f.text_area  :answer,:class=>"pro_textarea" %>
-                <%=f.submit "我要回答",:class=>"pro_btn"%>
-              </div>
-            <%end%>
           </div>
         <%end%>
       </div>

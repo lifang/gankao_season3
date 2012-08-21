@@ -1,0 +1,8 @@
+<%= render :partial => "/questions/answers", :object => unanswers %>
+<%= form_for "question_answer", :remote => "true", :url =>"/questions/save_answer?category=#{unanswers[0].category_id}"  do |f| %>
+  <div class="problem_list">
+    <%= f.hidden_field :user_question_id, :value => unanswers[0].id %>
+    <%= f.text_area  :answer, :class => "pro_textarea" %>
+    <%= f.submit "我要回答", :class => "pro_btn"%>
+  </div>
+<% end %>

@@ -3,12 +3,11 @@ class QuestionsController < ApplicationController
   layout 'main'
   def index
     params[:category]='2' if params[:category].nil?
-    redirect_to '/questions/ask?category='+params[:category]
+    redirect_to '/questions/ask?category='+params[:category] if cookies[:user_id]
   end
   
   def answered
-    params[:category]='2' if params[:category].nil?
-    category = params[:category].empty? ? 2 : params[:category].to_i
+    category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
    
     #获取已经回答的问题
     @answered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
@@ -28,8 +27,7 @@ class QuestionsController < ApplicationController
   end
 
   def unanswered
-    params[:category]="2" if params[:category].nil?
-    category = params[:category].empty? ? 2 : params[:category].to_i
+    category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @unanswered_questions = UserQuestion.paginate_by_sql(["SELECT user_questions.*,users.name user_name,users.cover_url FROM
     user_questions,users where category_id=? and users.id=user_questions.user_id and user_questions.id not in
     (select user_question_id from question_answers where is_right=true group by user_question_id )
@@ -102,12 +100,13 @@ group by user_question_id) and category_id=? and users.id=user_questions.user_id
   end
 
   def save_answer
-    #获取参数
-    @answer=params[:question_answer][:answer]
-    @user_question_id=params[:question_answer][:user_question_id]
     #获取当前用户
     cookies[:user_id]=24
     user_id=cookies[:user_id]
+    #获取参数
+    @answer=params[:question_answer][:answer]
+    @user_question_id=params[:question_answer][:user_question_id]
+    
     #创建
     QuestionAnswer.create(:user_id=>user_id,:answer=>@answer,:user_question_id=>@user_question_id)
     #更新题目的is_answer字段
