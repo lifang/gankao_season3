@@ -74,7 +74,7 @@ img { border: none;}
 	overflow: hidden;
 }
 /*登录区域*/
-.login_area { width: 400px; height: 80px; float: right;}
+.login_area { width: 500px; height: 80px; float: right;}
 .login_area li { width: 120px; height: 80px; float: left;}
 .login_area a.renren, .login_area a.sina, .login_area a.qq {
 	width:55px;

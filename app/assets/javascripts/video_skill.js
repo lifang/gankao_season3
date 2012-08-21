@@ -45,7 +45,7 @@ function show_blog(index){
 function like_one(id){
     var like_num=parseInt($(".like em").html())+1;
     $(".like em").html(like_num);
-    $(".like em").attr("onclick",'');
+    $(".like").attr("onclick",'');
     $.ajax({
         async:true,
         type: "POST",

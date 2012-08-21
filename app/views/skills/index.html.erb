@@ -1,10 +1,9 @@
 <%= javascript_include_tag "video_skill"  %>
 <%= render :partial=>"/layouts/nav" %>
-<% types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 1 : params[:con_t].to_i %>
-<% category_id=params[:category_id].nil? ? 2 : params[:category_id].to_i %>
+<% category_id=params[:category].nil? ? 2 : params[:category].to_i %>
 <div class="m_content">
   <div class="mc_box">
-    <%= render :partial=>"/skills/nav_types",:object=>types %>
+    <%= render :partial=>"/skills/nav_types",:object=>@types %>
     <div class="publishArticles" id="my_blog"><button onclick="create_blog()">我要发表</button></div>
     <div class="blog_content">
       <div class="mc_menu_box" id="menu_">
@@ -13,7 +12,7 @@
             <div class="article_area">
               <div class="readNumber"><%= skill.readed_num %></div>
               <div class="articleIntro">
-                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category_id=<%=category_id  %>&con_t=<%= types %>"  target="_blank"><%= skill.skill_title %></a></h1>
+                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category_id=<%=category_id  %>&con_t=<%= @types %>"  target="_blank"><%= skill.skill_title %></a></h1>
                 <div class="article_text">
                   <p><%= skill.simplify_con %></p>
                 </div>
@@ -23,7 +22,8 @@
               </div>
             </div>
           <% end%>
-          <%= will_paginate @skills, :class=> 'pageTurn',:container=>"a",:previous_label=>"<  Prev",:next_label=>"Next  > ",:inner_window=>1 %>
+        <%#= handle_paginate(params[:page], @skills.length) %>
+          <%= will_paginate @skills, :class=> 'pageTurn', :previous_label=>"<  Prev",:next_label=>"Next  > " %>
         <% else %>
           <h1 style="margin: 50px 60px;">暂无文章，欢迎分享您的宝贵见解。</h1>
         <% end %>
@@ -36,7 +36,7 @@
           <div class="blog_text">
             <textarea cols="" rows="" name="text_con" id="text_con"></textarea>
           </div>
-          <input type="hidden" value="<%= types %>" name="blog_types" id="blog_types"/>
+          <input type="hidden" value="<%= @types %>" name="blog_types" id="blog_types"/>
           <input type="hidden" value="<%= category_id %>" name="category_id" id="category_id" />
         <% end %>
         <div class="publishArticles"><button onclick="deliver_blog()">我要发表</button></div>
