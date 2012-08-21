@@ -60,6 +60,7 @@ class UsersController < ApplicationController
       }
     end
   end
+  
   def is_check?(user_sun)
     #获取上一次更新时间-日期
     update_date=user_sun.updated_at.strftime("%Y%m%d").to_i
