@@ -30,10 +30,10 @@ class QuestionsController < ApplicationController
   def unanswered
     params[:category]="2" if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
-    @unanswered_questions = UserQuestion.paginate_by_sql(["SELECT user_questions.*,users.name user_name,users.cover_url FROM
-    user_questions,users where category_id=? and users.id=user_questions.user_id and user_questions.id not in
-    (select user_question_id from question_answers where is_right=true group by user_question_id )
-      order by created_at desc", category], :page => params[:page], :per_page => 3)
+    @unanswered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+          from user_questions uq left join users u on u.id = uq.user_id
+          where uq.is_answer = #{UserQuestion::IS_ANSWERED[:NO]} and uq.category_id = ? order by created_at desc",
+        category], :page => params[:page], :per_page => 3)
     @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @unanswered_questions[0].id]) if @unanswered_questions.any?
@@ -110,15 +110,6 @@ group by user_question_id) and category_id=? and users.id=user_questions.user_id
     user_id=cookies[:user_id]
     #创建
     QuestionAnswer.create(:user_id=>user_id,:answer=>@answer,:user_question_id=>@user_question_id)
-    #更新题目的is_answer字段
-    @question=UserQuestion.find(@user_question_id)
-    #如果提问问题的用户是当前用户就不改变is_answer的值
-    if user_id!=@question.user_id
-      if(@question.is_answer==false)
-        @question.is_answer=true
-      end
-      @question.save #更新保存
-    end
     params[:category]="2" if params[:category].nil?
     category = params[:category].empty?? 2 : params[:category].to_i
     redirect_to '/questions/answered?category='+category.to_s
