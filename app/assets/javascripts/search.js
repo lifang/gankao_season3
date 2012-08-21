@@ -5,7 +5,7 @@ $(function(){
             alert('请输入关键字!');
         }
         else{
-            window.location="search?keywords="+$("#keywords").val();
+            window.location="/questions/show_result?keywords="+$("#keywords").val()+"&category="+category;
         }
     });
 

@@ -2,50 +2,44 @@
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
-    <div class="mc_menu_box">
-      <%@unanswered_questions.each do |uaq|%>
-        <div class="b_bottom">
-          <div class="problem_list">
-            <div class="problem_box">
-              <span class="an_icon01"></span>
-              <p><%=uaq.title%></p>
-              <p><span class="orange">补充：</span><%=uaq.description%></p>
-            </div>
-            <div class="userProblem_box">
-              <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-              <h3><%=uaq.user.name%></h3><!--提问的问题的用户名-->
-              <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
-              <p><%=uaq.created_at.strftime("%H:%M")%></p><!--时间-->
-            </div>
-            <div class="clear"></div>
-          </div>
-          <%uaq.question_answers.each do |qa|%>
+    <%if @unanswered_questions.any?%>
+      <div class="mc_menu_box">
+        <%@unanswered_questions.each_with_index do |uaq,index|%>
+          <div class="b_bottom">
             <div class="problem_list">
-              <div class="userProblem_box">
-                <div class="us_pic"><img src="/assets/u01.jpg"></div>
-                <h3><%=qa.user.name%></h3>
-                <p><%=qa.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
-                <p><%=qa.created_at.strftime("%H:%M")%></p><!--时间-->
+              <div class="problem_box" id="problem_<%= uaq.id %>">
+                <span class="an_icon01"></span>
+                <p><%=uaq.title%></p>
+                <p><span class="orange">补充：</span><%=uaq.description%></p>
               </div>
-              <div class="answer_box an_bgFalse">
-                <span class="an_icon02"></span>
-                <p><%=qa.answer%></p>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
+                <h3><%=uaq.user_name%></h3><!--提问的问题的用户名-->
+                <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
+                <p><%=uaq.created_at.strftime("%H:%M")%></p><!--时间-->
               </div>
               <div class="clear"></div>
             </div>
-          <%end%>
-
-          <%=form_for uaq.question_answers.build, :url => { :action => :save_answer } do |f| %>
-            <div class="problem_list">
-              <%=f.hidden_field :user_question_id,:value=>uaq.id%>
-              <%= f.text_area  :answer,:class=>"pro_textarea" %>
-              <%=f.submit "我要回答",:class=>"pro_btn"%>
+            <div id="answer_<%= uaq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
+              <% if index == 0 %>
+                <%= render :partial => "/questions/answers", :object => [uaq, @question_answers] %>
+              <% end %>
             </div>
-          <%end%>
-        </div>
-      <%end%>
-      <%=will_paginate @unanswered_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn_box'%>
-    </div>
+            <%=form_for uaq.question_answers.build, :url =>"/questions/save_answer?category="+params[:category]  do |f| %>
+              <div class="problem_list">
+                <%=f.hidden_field :user_question_id,:value=>uaq.id%>
+                <%= f.text_area  :answer,:class=>"pro_textarea" %>
+                <%=f.submit "我要回答",:class=>"pro_btn"%>
+              </div>
+            <%end%>
+          </div>
+        <%end%>
+      </div>
+      <%=will_paginate @unanswered_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
+
+    <%else%>
+      <span style="font-size:30px;color:red;text-align: center;">暂无未回答的问题!</span>
+    <%end%>
   </div>
   <div class="clear"></div>
 </div>

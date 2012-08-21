@@ -1,9 +1,9 @@
 <div class="mc_menu">
   <ul>
-    <li onclick="show_blog(<%=Skill::TYPES[:listen]  %>)" <% if nav_types==Skill::TYPES[:listen] %> class="hover" <% end%> >听力技巧</li>
-    <li onclick="show_blog(<%= Skill::TYPES[:word] %>)" <% if nav_types==Skill::TYPES[:word] %> class="hover" <% end%>>单词技巧</li>
-    <li onclick="show_blog(<%= Skill::TYPES[:read] %>)" <% if nav_types==Skill::TYPES[:read] %> class="hover" <% end%>>阅读技巧</li>
-    <li onclick="show_blog(<%= Skill::TYPES[:pronuc] %>)" <% if nav_types==Skill::TYPES[:pronuc] %> class="hover" <% end%>>口语技巧</li>
+    <li onclick="show_blog(<%= Skill::TYPES[:LINSTEN] %>)" <% if nav_types==Skill::TYPES[:LINSTEN] %>class="hover"<% end%> >听力技巧</li>
+    <li onclick="show_blog(<%= Skill::TYPES[:WORD] %>)" <% if nav_types==Skill::TYPES[:WORD] %> class="hover" <% end%>>单词技巧</li>
+    <li onclick="show_blog(<%= Skill::TYPES[:READ] %>)" <% if nav_types==Skill::TYPES[:READ] %> class="hover" <% end%>>阅读技巧</li>
+    <li onclick="show_blog(<%= Skill::TYPES[:SPEAK] %>)" <% if nav_types==Skill::TYPES[:SPEAK] %> class="hover" <% end%>>口语技巧</li>
   </ul>
 
   <div class="search">

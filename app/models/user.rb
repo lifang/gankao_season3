@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :user_questions,:dependent=>:destroy
   has_many :question_answers,:dependent=>:destroy
   has_many :categories, :through=>:user_category_relations,:source => :category
-
+  has_many :suns,:dependent=>:destroy
   DEFAULT_COVER = "/assets/u01.jpg"
   FROM = {"sina" => "新浪微博", "renren" => "人人网", "qq" => "腾讯网", "kaixin" => "开心网", "baidu" => "百度"}
   TIME_SORT = {:ASC => 0, :DESC => 1}   #用户列表按创建时间正序倒序排列

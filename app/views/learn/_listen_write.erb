@@ -11,7 +11,7 @@
   var id= "<%=@listen_sentence.id%>";
   var index="<%=@index%>";
   var web_type = "<%= @web_type %>";
-  var url="<%="http://localhost:3000".concat(@listen_sentence.enunciate_url.to_s)%>";
+  var url="<%=Constant::SERVER_PATH.concat(@listen_sentence.enunciate_url.to_s)%>";
   var count = 1;//答题次数-最大为3
   var answer_mark = false; //记录题目是否做对
   var is_answer=false;

@@ -1,6 +1,7 @@
 <%= javascript_include_tag "video_skill"  %>
 <% cur_page=params[:page].nil? ? 1: params[:page].to_i %>
 <% category_id=params[:category_id].nil? ? 2 : params[:category_id].to_i %>
+<%= render :partial=>"/layouts/nav" %>
 <div class="m_content">
   <div class="mc_box">
     <%= render :partial=>"/skills/nav_types",:object=>@skill.types %>

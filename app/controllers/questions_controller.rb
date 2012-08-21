@@ -1,11 +1,15 @@
+#encoding: utf-8
 class QuestionsController < ApplicationController
   layout 'main'
   def index
-    redirect_to :action => 'ask'
+    params[:category]='2' if params[:category].nil?
+    redirect_to '/questions/ask?category='+params[:category]
   end
   
   def answered
+    params[:category]='2' if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
+   
     #获取已经回答的问题
     @answered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
           from user_questions uq left join users u on u.id = uq.user_id
@@ -24,39 +28,15 @@ class QuestionsController < ApplicationController
   end
 
   def unanswered
+    params[:category]="2" if params[:category].nil?
     category = params[:category].empty? ? 2 : params[:category].to_i
     @unanswered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
           from user_questions uq left join users u on u.id = uq.user_id
           where uq.is_answer = #{UserQuestion::IS_ANSWERED[:NO]} and uq.category_id = ? order by created_at desc",
         category], :page => params[:page], :per_page => 3)
-#    @user=User.find(24)
-#    @result=[]
-#
-#     #获取问题--没有正确答案的题目并且当前用户没有答过的
-#    UserQuestion.find_all_by_category_id(category).each do |question|
-#      current_user_answered=false #当前是否答过
-#      n=0;#是否已经有正确答案
-#      question.question_answers.each do|answer|
-#        if answer.user_id==@user.id  #答案里有用户id 表示当前用户已经答过了
-#          current_user_answered=true
-#        end
-#        if answer.is_right==true #有正确答案
-#          n=n+1;
-#        end
-#      end
-#      if n==0 && current_user_answered==false
-#        @result<<question  #将符合条件的题目添加到数组中
-#      end
-#    end
-#
-#    @unanswered_questions=@result.paginate(:page=>params[:page],:per_page=>2)
-    
-   
-#    sql="SELECT * FROM exam_app.user_questions where category_id=#{category} and id not in
-#        (select user_question_id from exam_app.question_answers where is_right=true group by user_question_id )
-#         order by created_at desc"
-#    @unanswered_questions=UserQuestion.paginate_by_sql(sql,
-#     :page => params[:page],:per_page=>2)
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at desc limit 3", @unanswered_questions[0].id]) if @unanswered_questions.any?
   end
 
   #ajax获取问题的答案
@@ -69,43 +49,56 @@ class QuestionsController < ApplicationController
 
   def ask
     #获取当前用户和类别
-    @user=User.find(22)
-    category=params[:category]
-    category=2
-    
+    cookies[:user_id]=24
+    user_id=cookies[:user_id]
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty? ? 2 : params[:category].to_i
     #获取我提问的问题
-    @myasks=@user.user_questions.where("category_id=#{category}").find(:all)
-    .paginate(:page=>params[:page],:per_page=>2)
+
+    @myasks=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+          from user_questions uq left join users u on u.id = uq.user_id
+          where uq.user_id=? and uq.category_id = ? order by created_at desc",
+        user_id,category], :page => params[:page], :per_page => 3)
+
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at desc limit 3", @myasks[0].id]) if @myasks.any?
+    
   end
 
   def answers
-
-
     #获取当前用户
-    @user=User.find(22)
-    category=params[:category]
-    category=2
-    @result=[]
+    cookies[:user_id]=24
+    user_id=cookies[:user_id]
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty? ? 2 : params[:category].to_i
     
-    #获取我回答的
-    @user.question_answers.each do |answer|
-      # 获取当前类别的回答
-      if answer.user_question.category_id==category
-        @result<<answer
-      end
-    end
-    @myanswers=@result.paginate(:page=>params[:page],:per_page=>2)
+    #获取我回答问题的
+    @myanswers=UserQuestion.paginate_by_sql(["select user_questions.*,users.name user_name,users.cover_url from
+user_questions,users where user_questions.id in (SELECT user_question_id from question_answers where user_id=?
+group by user_question_id) and category_id=? and users.id=user_questions.user_id",user_id,category],
+      :page=>params[:page],:per_page=>3)
+
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at desc limit 3", @myanswers[0].id]) if @myanswers.any?
   end
 
   def show_result
-    category=params[:category]
-    category=2
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty? ? 2 : params[:category].to_i
     
     @keyword=params[:keywords]
-    sql="SELECT * FROM exam_app.user_questions where category_id=#{category} and title like concat_ws('#{@keyword}','%','%')
-      or description like concat_ws('#{@keyword}','%','%') order by created_at desc"
-    @query_questions=UserQuestion.paginate_by_sql(sql,
-      :page => params[:page],:per_page=>2)
+   
+    @query_questions=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+          from user_questions uq left join users u on u.id = uq.user_id
+          where uq.category_id = ? and (title like concat_ws('#{@keyword}','%','%')
+      or description like concat_ws('#{@keyword}','%','%')) order by created_at desc",
+        category], :page => params[:page], :per_page => 3)
+
+    @question_answers=QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+        from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
+        order by is_right desc, created_at desc limit 3", @query_questions[0].id]) if @query_questions.any?
   end
 
   def save_answer
@@ -113,29 +106,24 @@ class QuestionsController < ApplicationController
     @answer=params[:question_answer][:answer]
     @user_question_id=params[:question_answer][:user_question_id]
     #获取当前用户
-    @user=User.find(22)
+    cookies[:user_id]=24
+    user_id=cookies[:user_id]
     #创建
-    QuestionAnswer.create(:user_id=>@user.id,:answer=>@answer,:user_question_id=>@user_question_id)
-    #更新题目的is_answer字段
-    @question=UserQuestion.find(@user_question_id)
-    #如果提问问题的用户是当前用户就不改变is_answer的值
-    if @user.id!=@question.user_id
-      if(@question.is_answer==false)
-        @question.is_answer=true
-      end
-      @question.save #更新保存
-    end
-    redirect_to '/questions/answered'
+    QuestionAnswer.create(:user_id=>user_id,:answer=>@answer,:user_question_id=>@user_question_id)
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty?? 2 : params[:category].to_i
+    redirect_to '/questions/answered?category='+category.to_s
   end
 
   def ask_question
-    category=params[:category]
-    category=2
-    
+    params[:category]="2" if params[:category].nil?
+    category = params[:category].empty?? 2 : params[:category].to_i
+    cookies[:user_id]=24
+    user_id=cookies[:user_id]
     @uq=UserQuestion.new(params[:user_question])
-    @uq.user_id=22 #获取当前用户
+    @uq.user_id=user_id #获取当前用户
     @uq.category_id=category #获取类别id
     @uq.save
-    redirect_to '/questions/ask'
+    redirect_to '/questions/ask?category='+category.to_s
   end
 end
