@@ -3,8 +3,14 @@ class UsersController < ApplicationController
     cookies[:user_id]=1
     user_id=cookies[:user_id]
     category=params[:category].nil?? "2":params[:category]
-    @user=Sun.find_by_sql("select users.name,users.school,users.email,suns.num from users,suns where
-      users.id=suns.user_id and users.id=#{user_id} and suns.category_id=#{category}")[0]
+    user=User.find(user_id)
+    user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
+    if user_sun.nil?
+      num=0
+    else
+      num=user_sun.num.to_i
+    end
+    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
   end
   #更新用户信息
   def update_users
@@ -35,14 +41,14 @@ class UsersController < ApplicationController
     user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
  
     if user_sun.nil?
-      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>1,:num=>1)
+      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>TYPES[:CHECKIN],:num=>1)
       data="签到成功，获得一个小太阳。"
       num=1
     else
       if is_check?(user_sun)
         data="你已经签过到了！！！"
       else
-        user_sun.num.to_i+=1
+        user_sun.num=user_sun.num.to_i+1
         user_sun.save
         data="签到成功，获得一个小太阳。"
       end
