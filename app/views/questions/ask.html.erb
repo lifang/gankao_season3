@@ -1,18 +1,20 @@
 <%=render '/layouts/nav'%>
+<input type="hidden" id="current_page" value="ask" />
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
-    <%if @myasks.any?%>
-      <div class="mc_menu_box">
-        <%=form_for :user_question,:url=>"/questions/ask_question?category="+params[:category] do |f|%>
-          <div class="my_question">
-            <h2>问题</h2>
-            <%=f.text_field :title,:class=>"my_q_input"%>
-            <h2>补充</h2>
-            <%=f.text_area :description,:class=>"my_q_textarea"%>
-            <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
-          </div>
-        <%end%>
+    <div class="mc_menu_box">
+      <%=form_for :user_question, :url=>"/questions/ask_question?category="+params[:category],
+        :html => {:onsumbit => "javascript:check_user_question()"} do |f|%>
+        <div class="my_question">
+          <h2>问题</h2>
+          <%=f.text_field :title,:class=>"my_q_input"%>
+          <h2>补充</h2>
+          <%=f.text_area :description,:class=>"my_q_textarea"%>
+          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
+        </div>
+      <%end%>
+      <%if @myasks.any?%>
         <% @myasks.each_with_index do |aq, index| %>
           <div class="b_bottom">
             <div class="problem_list">
@@ -31,17 +33,16 @@
             </div>
             <div id="answer_<%= aq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
               <% if index == 0 %>
-                <%= render :partial => "/questions/answers", :object => [aq, @question_answers] %>
+                <%= render :partial => "/questions/answers", :object => [aq, @question_answers, "ask"] %>
               <% end %>
             </div>
           </div>
         <%end%>
-
-        <%=will_paginate @myasks,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
-      </div>
-    <%else%>
-      <span style="font-size:30px;color:red;text-align: center;">你还没有提问哦!</span>
-    <%end%>
+        <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+      <%else%>
+        <span style="font-size:30px;color:red;text-align: center;">你还没有提问哦!</span>
+      <%end%>
+    </div>
   </div>
   <div class="clear"></div>
 </div>
