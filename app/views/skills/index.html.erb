@@ -1,6 +1,6 @@
 <%= javascript_include_tag "video_skill"  %>
 <%= render :partial=>"/layouts/nav" %>
-<% types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 1 : params[:con_t].to_i %>
+<% types=(params[:con_t].nil? or params[:con_t].to_i > Skill::TYPES[:SPEAK]) ? Skill::TYPES[:LINSTEN] : params[:con_t].to_i %>
 <% category_id=params[:category_id].nil? ? 2 : params[:category_id].to_i %>
 <div class="m_content">
   <div class="mc_box">
