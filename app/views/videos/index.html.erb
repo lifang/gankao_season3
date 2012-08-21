@@ -23,7 +23,7 @@
             <div class="video_box">
               <ul class="video_ul">
                 <%@sched_vis[index+1][0].each do |video|%>
-                <li onclick="load_video('<%= "http://localhost:3000"+video.video_url %>')"><img src="<%= video.img_url %>"><%= video.title %></img></li>
+                <li onclick="load_video('<%= Constant::SERVER_PATH +video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
                 <% end %>
               </ul>
             </div>
