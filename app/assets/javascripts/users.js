@@ -47,16 +47,4 @@ function checkIn(){
         }
     });
 }
-
-//分享
-function send(web,message){
-    $.ajax({
-        async:true,
-        dataType:'json',
-        data:{
-            message:message
-        },
-        url:"/users/send_message?category="+category+"&web="+web,
-        type:'post' 
-    });
-}
+ 
