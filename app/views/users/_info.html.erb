@@ -6,6 +6,7 @@
 @sun_num=info[:num]
 %>
 <script type="text/javascript">
+  <%params[:category]=2 if params[:category].nil? or params[:category].empty?%>
   var category=<%=params[:category]%>
 </script>
 <div  class="login_info bb_radius">

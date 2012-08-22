@@ -250,7 +250,7 @@ class LearnController < ApplicationController
       write_xml(xml,x_url)
       index=xml_and_index[:index]
     end
- 
+
     if !($ids.empty?)
       index=index<$ids.length-1?index+1:0
       next_id=$ids[index]
