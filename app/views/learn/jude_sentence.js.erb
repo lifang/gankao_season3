@@ -2,7 +2,7 @@
   $.ajax({
   async:true,
   dataType:'script',
-  url:"/learn/task_dispatch?category=<%= $type %>",
+  url:"/learn/task_dispatch?category=<%= $category %>",
   type:'get'
   })
 <% elsif $items.blank? %>

@@ -2,18 +2,18 @@
   <div id="right" class="tishi_box" style="display: none">
     <div class="ts_img"><img src="assets/s_face.png" /></div>
     <div class="ts_text">答对了！</div>
-    <div class="ts_btn_box"><button onclick="study()" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
+    <div class="ts_btn_box"><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
   </div>
   <div id="wrong" class="tishi_box" style="display: none">
     <div class="ts_img"><img src="assets/c_face.png" /></div>
     <div class="ts_text">答错了！</div>
-    <div class="ts_btn_box"><button onclick="study()" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
+    <div class="ts_btn_box"><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
   </div>
 <% end %>
 <div id="timeup" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/c_face.png" /></div>
   <div class="ts_text">没时间了！</div>
-  <div class="ts_btn_box"><button onclick="study()" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
+  <div class="ts_btn_box"><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
 </div>
 <div id="pass" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/s_face.png" /></div>
@@ -29,6 +29,6 @@
 <% end %>
 <script type="text/javascript">
   function next (){
-    send_message("/learn/task_dispatch?category=<%= params[:category] %>");
+    send_message("/learn/task_dispatch?category=<%= $category %>");
   }
 </script>

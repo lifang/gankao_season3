@@ -1,7 +1,8 @@
+<%=javascript_include_tag "jquery.jplayer.min"%>
 <div class="pt_title">
   <h1>听力练习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">1/2</span>
+  <span class="t_number"><%= $ids.index($items[0].split("-")[0]) + 1 %>/<%= $ids.length %></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <div class="mc_box">
@@ -9,7 +10,8 @@
   <div class="words_func">
     <h2>选择你听到的语句。</h2>
     <input type="hidden" id="SID" value="<%= @result[:listen].en_mean %>" />
-    <a href="#" title="播放音频" class="play_audio tooltip">播放音频</a>
+    <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+    <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
   </div>
   <div class="words_con">
     <div class="question_list"><a><%= @result[:options][0].en_mean %></a></div>
@@ -23,6 +25,28 @@
   </div>
 </div>
 <script type="text/javascript">
+  $(function(){
+    $("#jquery_jplayer_1").jPlayer({
+      ready: function (event) {
+        $(this).jPlayer("setMedia",{
+          mp3: "<%= @result[:listen].enunciate_url %>"
+        }
+      );
+      },
+      swfPath: "../assets/Jplayer.swf",
+      supplied: 'mp3',
+      vmode:"window",
+      solution:"flash, html",
+      errorAlerts: false,
+      warningAlerts: false
+    });
+
+    $("#playAudio").click(function(){
+      $("#jquery_jplayer_1").jPlayer("play");
+
+    });
+  });
+  
   $(".words_con div").click(function(){
     $(this).addClass("hover_on").siblings().removeClass("hover_on");
   })
@@ -45,3 +69,4 @@
   }
   
 </script>
+

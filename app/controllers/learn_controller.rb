@@ -7,50 +7,51 @@ class LearnController < ApplicationController
 
   def task_dispatch
     $category = params[:category] if $category.nil?
-    $modulus = UserScoreInfo.where(["user_id = ? and category_id = ?", cookies[:user_id], $category]).first if $modulus.nil?
+    $modulus = UserScoreInfo.where(["user_id = ? and category_id = ?", cookies[:user_id], $category]).first.modulus || 1 if $modulus.nil?
     if $items.nil? or $items.blank?
-      return if (info = willdo_part_infos).nil?
+      return if (info = willdo_part_infos($category)).nil?
       $type = info[:type].to_i
       $items = info[:ids]
+      $ids = $items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }
     end
-    p $items
-    p $items[0]
+    
+    $current_id = $items[0].split("-")[0] if $items[0]
     case $type
     when UserPlan::CHAPTER_TYPE_NUM[:WORD]
       @result = operate_word($items)
     when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
       @result = operate_sentence($items)
     when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
-      @result = operate_hearing($items)
+      @result = operate_hearing
     end
   end
   
   #取出当前part的items 并组装 [id-repeat_time-step]
-  def willdo_part_infos
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], $category]).first
+  def willdo_part_infos(category)
+    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], category]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
+     p node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}
     return nil unless !node.nil?
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
   def operate_word(items)
     result = nil
-    wid = items[0].split("-")[0]
     repeat = items[0].split("-")[1]
     step = items[0].split("-")[2].to_i + 1
     step = 3 if step > 3
     type = UserPlan::CHAPTER_TYPE_NUM[:WORD]
-    word = Word.find(wid)
+    word = Word.find($current_id)
     if (step != 3)
-      options = Word.get_words_by_level(word.level, word.category_id, 3, wid) << word
+      options = Word.get_words_by_level(word.level, word.category_id, 3, $current_id) << word
       result = {
         :type => type,
         :step => step,
         :repeat => repeat,
         :items => items,
-        :time => Constant::WORD_TIME[step],
+        :time => (Constant::WORD_TIME[step] * $modulus).to_i,
         :word => word,
         :options => options.sort_by { rand }
       }
@@ -60,9 +61,9 @@ class LearnController < ApplicationController
         :step => step,
         :repeat => repeat,
         :items => items,
-        :time => Constant::WORD_TIME[step],
+        :time => (Constant::WORD_TIME[step] * $modulus).to_i,
         :word => word,
-        :sentence => WordSentence.find_all_by_word_id(wid).first.description.gsub(word.name,"_______")
+        :sentence => WordSentence.find_all_by_word_id($current_id).first.description.gsub(word.name,"_______")
       }
     end
    
@@ -71,39 +72,33 @@ class LearnController < ApplicationController
 
   def operate_sentence(items)
     result = nil
-    id = items[0].split("-")[0]
-    sentence = PracticeSentence.find(id)
+    sentence = PracticeSentence.find($current_id)
     step = items[0].split("-")[2].to_i + 1
     step = 2 if step > 2
     words = sentence_words(sentence.en_mean)
-    rtime = Constant::SENTENCE_TIME[:READ] * words.length
-    rtime < Constant::SENTENCE_TIME[:RMIN] ? rtime = Constant::SENTENCE_TIME[:RMIN] : nil
-    ctime = Constant::SENTENCE_TIME[:COMBIN] * words.length
-    ctime < Constant::SENTENCE_TIME[:CMIN] ? ctime = Constant::SENTENCE_TIME[:CMIN] : nil
+    rtime = Constant::SENTENCE_TIME[:READ] * words.length  * $modulus
+    ctime = Constant::SENTENCE_TIME[:COMBIN] * words.length  * $modulus
     rtime = ctime  if step == 2
     result = {
       :type => $type,
       :step => step,
       :words => words.sort_by { rand },
-      :time => rtime,
-      :combin_time =>ctime,
+      :time => rtime.to_i,
+      :combin_time =>ctime.to_i,
       :sentence => sentence
     }
     return result
   end
 
-  def operate_hearing(items)
+  def operate_hearing
     result = nil
-    id = items[0].split("-")[0]
-    listen = PracticeSentence.find(id)
+    listen = PracticeSentence.find($current_id)
     words = sentence_words(listen.en_mean)
-    time = words.length * Constant::LISTEN_TIME[:PER]
-    time > Constant::LISTEN_TIME[:MAX] ? time = Constant::LISTEN_TIME[:MAX] : nil
-    time < Constant::LISTEN_TIME[:MIN] ? time = Constant::LISTEN_TIME[:MIN] : nil
-    options = PracticeSentence.get_listen_by_level(listen.level, listen.category_id, listen.types, 1, id) << listen
+    time = words.length * Constant::LISTEN_TIME[:PER] * $modulus
+    options = PracticeSentence.get_listen_by_level(listen.level, listen.category_id, listen.types, 1, $current_id) << listen
     result = {
       :type => $type,
-      :time => time,
+      :time => time.to_i,
       :listen => listen,
       :options => options.sort_by { rand }
     }
@@ -111,31 +106,31 @@ class LearnController < ApplicationController
   end
 
   def jude_word
-    id = $items[0].split("-")[0].to_i
     repeat = $items[0].split("-")[1].to_i
     step = $items[0].split("-")[2].to_i  #当前要进行的步骤 1、2、3
-    xpath = "//part[@type='#{$type}']//item[@id='#{id}']"
+    xpath = "//part[@type='#{$type}']//item[@id='#{$current_id}']"
     elem = nil
     if params[:flag] == "true"
       if repeat == 0 or repeat == 1
         if step == 0 or step == 1
-          elem = "#{id}-0-#{step+1}"
+          elem = "#{$current_id}-0-#{step+1}"
           rewrite_xml_item(xpath, nil, 0, step + 1)
         elsif step == 2
-          elem = "#{id}-0-#{step+1}"
+          elem = "#{$current_id}-0-#{step+1}"
           rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], 0, step + 1)
         end
       elsif repeat == 2
-        elem = "#{id}-1-#{step}"
+        elem = "#{$current_id}-1-#{step}"
         rewrite_xml_item(xpath, nil, 1, step)
       end
     end
     if params[:flag] == "false"
-      elem = "#{id}-2-#{step}"
+      elem = "#{$current_id}-2-#{step}"
       rewrite_xml_item(xpath, nil, 2, nil)
     end
     if (step == 2 && repeat <= 1 && params[:flag] == "true")
-      $items = ($items - [$items[0]])
+      $ids = $ids - [$items[0].split("-")[0]]
+      $items = $items - [$items[0]]
     else
       $items = ($items - [$items[0]]).push(elem)
     end
@@ -144,15 +139,15 @@ class LearnController < ApplicationController
   end
 
   def jude_sentence
-    id = $items[0].split("-")[0].to_i
     step = $items[0].split("-")[2].to_i  #当前要进行的步骤 1、2
-    xpath = "//part[@type='#{$type}']//item[@id='#{id}']"
+    xpath = "//part[@type='#{$type}']//item[@id='#{$current_id}']"
     if params[:flag] == "true"
-      if step == 2
-        $items = ($items - [$items[0]])
+      if step == 1
+        $ids = $ids - [$items[0].split("-")[0]]
+        $items = $items - [$items[0]]
         rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
       else
-        $items = ($items - [$items[0]]).push("#{id}-0-#{step+1}")
+        $items = ($items - [$items[0]]).push("#{$current_id}-0-#{step+1}")
         rewrite_xml_item(xpath, nil, nil, step + 1)
       end
     else
@@ -165,11 +160,11 @@ class LearnController < ApplicationController
   end
 
   def jude_hearing
-    id = $items[0].split("-")[0].to_i
-    xpath = "//part[@type='#{$type}']//item[@id='#{id}']"
+    xpath = "//part[@type='#{$type}']//item[@id='#{$current_id}']"
     if params[:flag] == "true"
       rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
-      $items = ($items - [$items[0]])
+      $ids = $ids - [$items[0].split("-")[0]]
+      $items = $items - [$items[0]]
     else
       $items = ($items - [$items[0]]).push($items[0])
     end
@@ -182,11 +177,13 @@ class LearnController < ApplicationController
   end
 
   def i_have_remember
-    id = $items[0].split("-")[0].to_i
     type = UserPlan::CHAPTER_TYPE_NUM[:WORD]
-    xpath = "//part[@type='#{type}']//item[@id='#{id}']"
+    xpath = "//part[@type='#{type}']//item[@id='#{$current_id}']"
     rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
-    $items = ($items - [$items[0]])
+    $ids = $ids - [$current_id]
+    $items = $items - [$items[0]]
+    pass_status("part") if $items.blank?
+    p $items
     @redirct = "true"
   end
   
@@ -215,6 +212,25 @@ class LearnController < ApplicationController
     f.write("#{xml.to_s.force_encoding('UTF-8')}")
     f.close
   end
+
+  def study_it
+    @result = nil
+    if $type == UserPlan::CHAPTER_TYPE_NUM[:WORD]
+      @result = {
+        :word => Word.find($current_id),
+        :sentences => WordSentence.find_all_by_word_id($current_id)
+      }
+    elsif $type == UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
+      @result = {
+        :sentence => WordSentence.find($current_id)
+      }
+    elsif $type == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
+      @result = {
+        :sentence => PracticeSentence.find($current_id)
+      }
+    end
+  end
+
  
   def sentence_words(str)
     return str.gsub(/"/," ").gsub(/:/," ").gsub(/;/," ").gsub(/\?/," ").gsub(/!/," ").gsub(/,/," ").gsub(/\./," ").gsub(/  /," ").split(" ")

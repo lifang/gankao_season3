@@ -13,10 +13,10 @@
   when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
   %>
     $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence") %>");
-  <%
-  when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
-  %>
+  <% when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
     $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
+  <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
+    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
   <% end %>
   myTime.start(<%= @result[:time] %>);
 <% else %>
