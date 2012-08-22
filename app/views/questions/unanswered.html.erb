@@ -1,4 +1,5 @@
 <%=render '/layouts/nav'%>
+<input type="hidden" id="current_page" value="unanswered" />
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
@@ -13,29 +14,22 @@
                 <p><span class="orange">补充：</span><%=uaq.description%></p>
               </div>
               <div class="userProblem_box">
-                <div class="us_pic"><img src="/assets/u01.jpg"/></div>
-                <h3><%=uaq.user_name%></h3><!--提问的问题的用户名-->
-                <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p><!--日期-->
-                <p><%=uaq.created_at.strftime("%H:%M")%></p><!--时间-->
+                <div class="us_pic"><img src="<%= uaq.cover_url.nil? ? User::DEFAULT_COVER : uaq.cover_url %>"/></div>
+                <h3><%=uaq.user_name%></h3>
+                <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p>
+                <p><%=uaq.created_at.strftime("%H:%M")%></p>
               </div>
               <div class="clear"></div>
             </div>
             <div id="answer_<%= uaq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
               <% if index == 0 %>
-                <%= render :partial => "/questions/answers", :object => [uaq, @question_answers] %>
+                <%= render :partial => "/questions/unanswers", :object => [uaq, @question_answers, "unanswered"] %>
               <% end %>
             </div>
-            <%=form_for uaq.question_answers.build, :url =>"/questions/save_answer?category="+params[:category]  do |f| %>
-              <div class="problem_list">
-                <%=f.hidden_field :user_question_id,:value=>uaq.id%>
-                <%= f.text_area  :answer,:class=>"pro_textarea" %>
-                <%=f.submit "我要回答",:class=>"pro_btn"%>
-              </div>
-            <%end%>
           </div>
         <%end%>
       </div>
-      <%=will_paginate @unanswered_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
+      <%=will_paginate @unanswered_questions,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
 
     <%else%>
       <span style="font-size:30px;color:red;text-align: center;">暂无未回答的问题!</span>

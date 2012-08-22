@@ -1,12 +1,15 @@
 #encoding: utf-8
 class SkillsController < ApplicationController
+  include SkillsHelper
   layout 'main'
   def index
     category=params[:category_id].nil? ? 2 : params[:category_id]
     session[:pras]=nil
-    types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 1 : params[:con_t].to_i
+    @types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 1 : params[:con_t].to_i
     @skills=Skill.paginate_by_sql("select types,skill_title,skill_url,readed_num,s.created_at,name,simplify_con,s.id from skills s inner join
-    users u on u.id=s.user_id where category_id=#{category} and s.types=#{types} order by readed_num desc",:per_page => 3, :page => params[:page])
+    users u on u.id=s.user_id where category_id=#{category} and s.types=#{@types} order by readed_num desc",:per_page => 3, :page => params[:page])
+    @skill_page=Skill.find_by_sql("select types,skill_title,skill_url,readed_num,s.created_at,name,simplify_con,s.id from skills s inner join
+    users u on u.id=s.user_id where category_id=#{category} and s.types=#{@types} order by readed_num desc")
   end
 
 
@@ -45,6 +48,8 @@ class SkillsController < ApplicationController
   def search_result
     @skills=Skill.paginate_by_sql("select types,skill_title,skill_url,readed_num,s.created_at,name,simplify_con,s.id from skills s inner join
     users u on u.id=s.user_id where category_id=#{params[:category_id]} and skill_title like '%#{session[:pras]}%' order by readed_num desc",:per_page => 3, :page => params[:page])
+    @skill_page=Skill.find_by_sql("select types,skill_title,skill_url,readed_num,s.created_at,name,simplify_con,s.id from skills s inner join
+    users u on u.id=s.user_id where category_id=#{params[:category_id]} and skill_title like '%#{session[:pras]}%' order by readed_num desc")
     render :index
   end
 

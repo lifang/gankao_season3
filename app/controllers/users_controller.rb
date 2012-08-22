@@ -3,8 +3,14 @@ class UsersController < ApplicationController
     cookies[:user_id]=1
     user_id=cookies[:user_id]
     category=params[:category].nil?? "2":params[:category]
-    @user=Sun.find_by_sql("select users.name,users.school,users.email,suns.num from users,suns where
-      users.id=suns.user_id and users.id=#{user_id} and suns.category_id=#{category}")[0]
+    user=User.find(user_id)
+    user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
+    if user_sun.nil?
+      num=0
+    else
+      num=user_sun.num.to_i
+    end
+    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
   end
   #更新用户信息
   def update_users
@@ -35,14 +41,14 @@ class UsersController < ApplicationController
     user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
  
     if user_sun.nil?
-      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>1,:num=>1)
+      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>Sun::TYPES[:CHECKIN],:num=>1)
       data="签到成功，获得一个小太阳。"
       num=1
     else
       if is_check?(user_sun)
         data="你已经签过到了！！！"
       else
-        user_sun.num.to_i+=1
+        user_sun.num=user_sun.num.to_i+1
         user_sun.save
         data="签到成功，获得一个小太阳。"
       end
@@ -54,11 +60,33 @@ class UsersController < ApplicationController
       }
     end
   end
+  
   def is_check?(user_sun)
     #获取上一次更新时间-日期
     update_date=user_sun.updated_at.strftime("%Y%m%d").to_i
     #获取当前时间-日期
     date_now=Time.now.strftime("%Y%m%d").to_i
     return update_date==date_now
+  end
+
+
+  def send_message
+    @return_message = ""
+    @web = ""
+    if params[:web] == "sina"
+      @web = "sina"
+      ret = sina_send_message(cookies[:access_token], params[:message])
+      @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
+    elsif params[:web] == "renren"
+      @web = "renren"
+      @type = params[:type]
+      @secret_key = @type == "8" ? @@renren8_secret_key : (@type=="6" ? @@renren6_secret_key : @@renren_secret_key)
+      ret = renren_send_message(cookies[:access_token], params[:message], @secret_key , @type)
+      @return_message = "分享失败，请重新尝试" if ret[:error_code]
+    end
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 end

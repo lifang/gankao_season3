@@ -45,7 +45,7 @@ function show_blog(index){
 function like_one(id){
     var like_num=parseInt($(".like em").html())+1;
     $(".like em").html(like_num);
-    $(".like em").attr("onclick",'');
+    $(".like").attr("onclick",'');
     $.ajax({
         async:true,
         type: "POST",
@@ -64,7 +64,7 @@ function like_one(id){
 function search_blog(){
     var search_con = $("#search_con").val();
     if (search_con==""&&search_con.length==0){
-        alert("请输入查询条件");
+        tishi_alert("请输入您查询的关键字");
         return false;
     }
     $("#search_blog").submit();

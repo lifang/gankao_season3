@@ -2,15 +2,7 @@
 <% if @user_score_info.nil? %>
   <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
 <% end %>
-<div class="m_nav">
-  <ul>
-    <li><a href="#" class="hover">我的复习</a></li>
-    <li><a href="#">真题</a></li>
-    <li><a href="#">技巧</a></li>
-    <li><a href="#">名师视频</a></li>
-    <li><a href="#">答疑</a></li>
-  </ul>
-</div>
+<%= render :partial => "/layouts/nav" %>
 <div class="m_content">
   <% if @plan_list %>
     <% if @plan_list[:current] <= @plan_list[:cha1_days] %>

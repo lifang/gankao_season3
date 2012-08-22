@@ -1,3 +1,7 @@
 $('#answer_<%= @user_question.id %>').css("display", "none");
-$('#answer_<%= @user_question.id %>').html("<%= escape_javascript(render :partial => '/questions/answers', :object => [@user_question, @question_answers]) %>");
+<% if @current_page == "unanswered" %>
+  $('#answer_<%= @user_question.id %>').html("<%= escape_javascript(render :partial => '/questions/unanswers', :object => [@user_question, @question_answers, @current_page]) %>");
+<% else %>
+  $('#answer_<%= @user_question.id %>').html("<%= escape_javascript(render :partial => '/questions/answers', :object => [@user_question, @question_answers, @current_page]) %>");
+<% end %>
 $('#answer_<%= @user_question.id %>').attr("class", "load");
