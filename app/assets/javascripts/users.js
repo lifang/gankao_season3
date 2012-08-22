@@ -43,8 +43,20 @@ function checkIn(){
         success:function(data){
             tishi_alert(data.message);
             $(".s_sun").html(data.num);
-            //$(".checkIn_box").hide();
+        //$(".checkIn_box").hide();
         }
     });
 }
- 
+
+//分享
+function send(web,message){
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            message:message
+        },
+        url:"/users/send_message?category="+category+"&web="+web,
+        type:'post' 
+    });
+}

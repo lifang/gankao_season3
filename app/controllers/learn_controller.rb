@@ -296,10 +296,10 @@ class LearnController < ApplicationController
       write_xml(xml,x_url)
       index=xml_and_index[:index]
     end
- 
-    if !(ids.empty?)
-      index=index<ids.length-1?index+1:0
-      next_id=ids[index]
+
+    if !($ids.empty?)
+      index=index<$ids.length-1?index+1:0
+      next_id=$ids[index]
       #获取新数据
       source=listen_write_by_id(xml,type,current,next_id,part_type)
       source[:index]=index
