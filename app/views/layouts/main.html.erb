@@ -58,8 +58,8 @@
         <div class="middle">
           <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
         </div>
-        <div><a href="#" onclick="window.open('/users/check_login?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>
-<a href="#" onclick="window.open('/users/check_login?web=sina&category='+category, '_blank', 'height=500,width=600,left=300,top=150');">分享微博</a></div>
+        <div><a href="#" onclick="window.open('/users/share?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>
+<a href="#" onclick="window.open('/users/share?web=sina&category='+category, '_blank', 'height=500,width=600,left=300,top=150');">分享微博</a></div>
         <div class="right">广告</div>
         <div class="clear"></div>
       </div>
@@ -68,7 +68,9 @@
     <div class="footer">
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
-
     <%=render :partial=>'users/details',:object=>user_info%>
+     <div class="mask"></div>
+    <%=render :partial=>'/users/charge_vip'%>
   </body>
+ 
 </html>

@@ -2,12 +2,10 @@ GankaoSeason3::Application.routes.draw do
 
   resources :logins do
     collection do
-      get :friend_add_request,:renren_like,:add_user,:charge_vip
+      get :friend_add_request,:renren_like,:add_user,:alipay_exercise
       get :follow_me,:login_from_qq,:qq_index,:get_code,:user_code,:logout
       get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo,:request_renren,:respond_renren
-      post :manage_qq,:add_watch_weibo
-      get :request_kaixin,:respond_kaixin
-      get :request_baidu,:respond_baidu
+      post :manage_qq,:add_watch_weibo,:check_vip,:accredit_check
     end
   end
   resources :videos do
@@ -51,7 +49,7 @@ GankaoSeason3::Application.routes.draw do
       get :share_back
     end
     collection do
-      get :check_login
+      get :share
       post :update_users,:check_in
     end
   end

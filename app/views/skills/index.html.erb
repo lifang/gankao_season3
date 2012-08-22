@@ -22,7 +22,6 @@
               </div>
             </div>
           <% end%>
-        <%#= handle_paginate(params[:page], @skills.length) %>
           <%= will_paginate @skills, :class=> 'pageTurn', :previous_label=>"<  Prev",:next_label=>"Next  > " %>
         <% else %>
           <h1 style="margin: 50px 60px;">暂无文章，欢迎分享您的宝贵见解。</h1>
@@ -44,6 +43,9 @@
     </div>
   </div>
   <div class="clear"></div>
+  <% unless flash[:notice].nil? %>
   <script type="text/javascript">
+    tishi_alert('<%= flash[:notice] %>');
   </script>
+  <% end %>
 </div>

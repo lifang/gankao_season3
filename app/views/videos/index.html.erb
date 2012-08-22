@@ -1,5 +1,5 @@
 <%= javascript_include_tag "video_skill"  %>
-<%= javascript_include_tag "/assets/flowplayer/flowplayer"  %>
+<%= javascript_include_tag "/assets/jwplayer/jwplayer"  %>
 <%= render :partial=>"/layouts/nav" %>
 <div class="m_content">
   <div class="mc_box">
@@ -23,7 +23,7 @@
             <div class="video_box">
               <ul class="video_ul">
                 <%@sched_vis[index+1][0].each do |video|%>
-                <li onclick="load_video('<%= Constant::SERVER_PATH +video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
+                <li onclick="load_video('<%=video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
                 <% end %>
               </ul>
             </div>

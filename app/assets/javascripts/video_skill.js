@@ -10,8 +10,16 @@ function video_show(index){
 
 
 function load_video(video_url){
-    $(".video_area").html('<a  href='+ video_url+' style="display:block;width:520px;height:390px"  id="player"> </a>')
-    flowplayer("player", "/assets/flowplayer/flowplayer.swf");
+    $(".video_area").html('<div id="mediaspace"> </div>')
+    jwplayer('mediaspace').setup({
+        'flashplayer': '/assets/jwplayer/player.swf',
+        'file': video_url,
+        'controlbar': 'bottom',
+        'width': '520',
+        'height': '390',
+        'screencolor': '#000000',
+        'image': "/skill.png"
+    });
 }
 
 function deliver_blog(){
