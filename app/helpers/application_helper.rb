@@ -63,8 +63,7 @@ module ApplicationHelper
   end
   #获取用户的所有太阳数
   def get_user_sun_nums(user,category)
-    num=0
-    num=Sun.find_by_sql("select sum(num) num from suns where category_id=#{category} and user_id=#{user.id}")[0].num
-    return num
+    sun=Sun.find_by_sql("select sum(num) num from suns where category_id=#{category} and user_id=#{user.id}")[0]
+    return sun.nil?? 0:sun.num.to_i
   end
 end
