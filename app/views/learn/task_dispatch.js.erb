@@ -1,9 +1,9 @@
-<% if @result
-  type = @result[:type].to_i
-  step = @result[:step].to_i
-  case type
+<% if @result %>
+  window.items = "<%= @items_str %>";
+  window.ids = "<%= @ids_str %>";
+  <% case @result[:type].to_i
   when UserPlan::CHAPTER_TYPE_NUM[:WORD]
-    if step != 3
+    if @result[:step].to_i != 3
     %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_12") %>");
     <% else %>
@@ -13,10 +13,10 @@
   when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
   %>
     $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence") %>");
-  <%
-  when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
-  %>
+  <% when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
     $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
+  <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
+    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
   <% end %>
   myTime.start(<%= @result[:time] %>);
 <% else %>

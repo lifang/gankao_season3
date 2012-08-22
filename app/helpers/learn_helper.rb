@@ -58,7 +58,7 @@ module LearnHelper
   #通过id查询句子 type为review或plan current为当前包数
   def listen_write_by_id(xml,web_type,current,id,part_type)
     source=xml.get_elements("root/#{web_type}/_#{current}/part[@type='#{part_type}']/item[@id='#{id}']")[0]
-    listen_sentence=PracticeSentence.find(source.attributes["id"])
+    listen_sentence=PracticeSentence.find(source.attributes["id"].to_i)
     return {:listen_sentence=>listen_sentence,:web_type=>web_type}
   end
   #处理句子 id 当前做的题目id is_correct答题正确和错误 index当前题目在总题目中的索引
@@ -76,7 +76,7 @@ module LearnHelper
         sentence.add_attribute("step",step.to_s)
         sentence.add_attribute("is_pass",'true')
         #从ids中删除已经答对的 ,index-1
-        $ids.delete(id.to_i)
+        $ids.delete(id)
         index=index-1
       else
         #只改repeat_time

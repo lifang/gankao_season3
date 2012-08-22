@@ -40,6 +40,7 @@ module ApplicationHelper
     return current_role.to_i
   end
 
+
   #判断是否vip
   def is_vip?(category_id)
     return category_role(category_id) == Order::USER_ORDER[:VIP]
@@ -50,19 +51,19 @@ module ApplicationHelper
     return category_role(category_id) == Order::USER_ORDER[:NOMAL]
   end
   
-
   #获取当前用户的基本信息和小太阳个数
   def user_info
     cookies[:user_id]=1
     user_id=cookies[:user_id]
     category=params[:category].nil?? "2":params[:category]
     user=User.find(user_id)
-    user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
-    if user_sun.nil?
-      num=0
-    else
-      num=user_sun.num.to_i
-    end
-    user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
+    num= get_user_sun_nums(user,category)
+    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
+  end
+  #获取用户的所有太阳数
+  def get_user_sun_nums(user,category)
+    num=0
+    num=Sun.find_by_sql("select sum(num) num from suns where category_id=#{category} and user_id=#{user.id}")[0].num
+    return num
   end
 end
