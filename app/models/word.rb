@@ -11,7 +11,7 @@ class Word < ActiveRecord::Base
   #根据 等级、类型 随机抽取N条单词
   def Word.get_words_by_level(level, category, limit, except)
     return Word.find_by_sql([
-      "select t.* from words t where t.id != ? and t.level = ? and t.category_id = ? order by rand() limit ?",
-      except, level, category, limit])
+      "select t.* from words t where t.id != ? and t.category_id = ? and t.level = ? order by rand() limit ?",
+      except, category, level, limit])
   end
 end
