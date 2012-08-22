@@ -339,9 +339,9 @@ class UserPlan < ActiveRecord::Base
     sentence_list = proof_code(tiku_hash[:practice_sentences], chapter_info[:sentence_avg])
     listen_list = proof_code(tiku_hash[:listens], chapter_info[:listen_avg])
     word_info, sentence_info, listen_info = "", "", ""
-    word_list.each { |w| word_info += "<item id='#{w}' is_pass='false' repeat_time='0' step='0' />" }
-    sentence_list.each { |s| sentence_info += "<item id='#{s}' is_pass='false' repeat_time='0' step='0' />" }
-    listen_list.each { |l| listen_info += "<item id='#{l}' is_pass='false' repeat_time='0' step='0' />" }
+    word_list.each { |w| word_info += "<item id='#{w}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
+    sentence_list.each { |s| sentence_info += "<item id='#{s}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
+    listen_list.each { |l| listen_info += "<item id='#{l}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
     return {:word_info => word_info, :sentence_info => sentence_info, :listen_info => listen_info,
       :leave_word => tiku_hash[:word] - word_list, :leave_sentence  => tiku_hash[:practice_sentences] - sentence_list,
       :leave_listen => tiku_hash[:listens] - listen_list}
@@ -462,7 +462,7 @@ class UserPlan < ActiveRecord::Base
       part.add_attribute("status", "#{PLAN_STATUS[:UNFINISHED]}")
       if tomorrow_task[part.attributes["type"].to_i].any?
         tomorrow_task[part.attributes["type"].to_i].each {|i|
-          part.add_element("item", {"id" => i, "is_pass" => "false", "repeat_time" => "0", "step" => "0"})
+          part.add_element("item", {"id" => i, "is_pass" => "#{PLAN_STATUS[:UNFINISHED]}", "repeat_time" => "0", "step" => "0"})
         }
       else
         next_plan.delete_element(part)
@@ -512,7 +512,7 @@ class UserPlan < ActiveRecord::Base
     part.attributes["repeat_time"] = "#{repeat_time}"
     part.attributes["status"] = "#{PLAN_STATUS[:UNFINISHED]}"
     part.each_element {|item|
-      item.attributes["is_pass"] = "false"
+      item.attributes["is_pass"] = "#{PLAN_STATUS[:UNFINISHED]}"
       item.attributes["repeat_time"] = "0"
       item.attributes["step"] = "0"
     }

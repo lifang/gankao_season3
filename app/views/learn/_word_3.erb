@@ -1,7 +1,7 @@
 <div class="pt_title">
   <h1>单词学习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">1/2</span>
+  <span class="t_number"><%= $ids.index($items[0].split("-")[0]) + 1 %>/<%= $ids.length %></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <div class="mc_box">

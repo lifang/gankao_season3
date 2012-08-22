@@ -1,16 +1,18 @@
 <div class="pt_title">
   <h1>单词学习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">1/2</span>
+  <span class="t_number"><%= $ids.index($items[0].split("-")[0]) + 1 %>/<%= $ids.length %></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <div class="mc_box">
   <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <% if @result[:step] == 1 %>
+      <%=javascript_include_tag "jquery.jplayer.min"%>
       <h1><%= @result[:word].name %></h1>
       <span class="fyin">[ <%= @result[:word].phonetic %> ]</span>
-      <a id="playAudio" href="#" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
       <input id="SID" type="hidden" value="<%= @result[:word].ch_mean %>" />
     <% else %>
       <h1><%= @result[:word].ch_mean %></h1>
@@ -50,6 +52,29 @@
         send_message("/learn/jude_word?flag=false");
       }
     });
+<% if @result[:step] == 1 %>
+      $(function(){
+        $("#jquery_jplayer_1").jPlayer({
+          ready: function (event) {
+            $(this).jPlayer("setMedia",{
+              mp3: "<%= @result[:word].enunciate_url %>"
+            }
+          );
+          },
+          swfPath: "../assets/Jplayer.swf",
+          supplied: 'mp3',
+          vmode:"window",
+          solution:"flash, html",
+          errorAlerts: false,
+          warningAlerts: false
+        });
+
+        $("#playAudio").click(function(){
+          $("#jquery_jplayer_1").jPlayer("play");
+
+        });
+      });
+<% end %>
   })
 
   function callback(){

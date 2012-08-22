@@ -1,9 +1,9 @@
 <%=javascript_include_tag 'users'%>
 <%
-@username=info[:name]
-@school=info[:school]
-@email=info[:email]
-@sun_num=info[:num]
+    @username=info[:name]
+    @school=info[:school]
+    @email=info[:email]
+    @sun_num=info[:num]
 %>
 <script type="text/javascript">
   <%params[:category]=2 if params[:category].nil? or params[:category].empty?%>
@@ -17,10 +17,10 @@
     <p><span class="s_sun"><%=@sun_num%></span><a href="#">获得小太阳</a></p>
   </div>
   <ul class="user_fun">
-    <li><a href="#" class="u_set">设置</a></li>
-    <li><a href="#" class="u_exit">退出</a></li>
+    <li><a href="javascript:void(0);" class="u_set">设置</a></li>
+    <li><a href="javascript:void(0);" class="u_exit">退出</a></li>
     <li><a href="#" class="u_bbs">论坛</a></li>
-    <li><a href="#" class="u_subject">科目</a></li>
+    <li><a href="javascript:void(0);" class="u_subject">科目</a></li>
   </ul>
 </div>
 

@@ -54,6 +54,7 @@ class UsersController < ApplicationController
       }
     end
   end
+
   #是否签到、分享 按日期比较的
   def is_check?(user_sun)
     #获取上一次更新时间-日期

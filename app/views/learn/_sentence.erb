@@ -1,7 +1,7 @@
 <div class="pt_title">
   <h1>短语学习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">1/2</span>
+  <span class="t_number"><%= $ids.index($items[0].split("-")[0]) + 1 %>/<%= $ids.length %></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <% if @result[:step].to_i == 1 %>
@@ -67,7 +67,7 @@
 <% end %>
 <script type="text/javascript">
   $(document).ready(function(){
-    $("#read").fadeTo(<%= @result[:time]*1000 %>, 0.3);
+    $("#read .words_con").fadeTo(<%= @result[:time]*1000 %>, 0.3);
   })
 
   function click_word(id){

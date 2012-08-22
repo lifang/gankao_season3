@@ -3,7 +3,8 @@
 //顶部人物信息弹出层 u_tab_div
 function infoTab(i_tab,i_box,x){
     $(i_tab).click(function(e){
-        $(i_box).css('display','block');
+        $(".u_tab_div").hide();
+        $(i_box).show();
         $(i_box).css({
             'top':(e.pageY+10)+'px',
             'left':(e.pageX-50)+'px'
@@ -67,34 +68,6 @@ $(function(){
         $(this).next().addClass('open').parent().siblings().children('.article_p').removeClass('open');
         $('.open').slideDown("slow").parent().siblings().children('.article_p').slideUp("slow");
     })
-})
-
-//答疑
-$(function(){
-    $('.problem_box').click(
-        function () {
-            var current_id = $(this).attr("id").replace("problem_", "");
-            var current_answer_div = $("#answer_" + current_id);
-            if (current_answer_div.attr("class") == "load") {               
-                if (current_answer_div.css("display") == "block") {
-                    current_answer_div.slideUp("slow");
-                }else{
-                    current_answer_div.slideDown("slow");
-                }
-            } else {
-                $.ajax({
-                    async:true,
-                    dataType:'script',
-                    url:"/questions/"+current_id+"/get_answers",
-                    complete: function(){
-                        current_answer_div.slideDown("slow");
-                    },
-                    type:'post'
-                });
-                return false;
-            }
-        }
-        )
 })
 
 

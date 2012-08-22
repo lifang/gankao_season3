@@ -30,7 +30,7 @@ GankaoSeason3::Application.routes.draw do
   end
   resources :learn do
     collection do
-      get :task_dispatch, :jude_word, :listen, :i_have_remember, :pass_status, :jude_sentence, :jude_hearing,:next_sentence
+      get :task_dispatch, :jude_word, :listen, :i_have_remember, :pass_status, :jude_sentence, :jude_hearing,:next_sentence,:study_it
     end
   end
   resources :questions ,:only=>[:index]
