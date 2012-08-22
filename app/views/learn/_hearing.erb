@@ -2,7 +2,7 @@
 <div class="pt_title">
   <h1>听力练习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number"><%= $ids.index($items[0].split("-")[0]) + 1 %>/<%= $ids.length %></span>
+  <span class="t_number"></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <div class="mc_box">
@@ -21,7 +21,7 @@
 
   <div class="words_func">
     <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
-    <a onclick="send_message('/learn/jude_hearing?redirct=true&flag=false')" title="下一题" class="next tooltip">Next</a>
+    <a onclick="jude('/learn/jude_hearing','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
 <script type="text/javascript">
@@ -55,17 +55,17 @@
     if($(".words_con .hover_on a").html() == $("#SID").attr("value")){
       $(".trueFalse").html("<img src='assets/true.png' />");
       clearInterval(myTime.timeId);
-      send_message("/learn/jude_hearing?redirct=true&flag=true");
+      jude('/learn/jude_hearing','true','true');
     }else{
       $(".trueFalse").html("<img src='assets/false.png' />");
       clearInterval(myTime.timeId);
-      send_message("/learn/jude_hearing?redirct=true&flag=false");
+      jude('/learn/jude_hearing','false','true');
     }
   }
 
   function callback(){
     $("#timeup").show();
-    send_message("/learn/jude_hearing?flag=false");
+    jude('/learn/jude_hearing','false','false');
   }
   
 </script>

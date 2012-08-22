@@ -12,7 +12,7 @@
           <% if @plan_list[:current] > i %>
             <img src="/assets/dui.png"/>
           <% elsif @plan_list[:current] == i %>
-            <img id="unlock" style="cursor: pointer;" src="/assets/kai.png"/>
+            <img id="unlock" style="cursor: pointer;" src="/assets/kai.png" onclick="dispatch('<%= params[:category] %>')"/>
           <% else %>
             <img src="/assets/suo.png"/>
           <% end %>
