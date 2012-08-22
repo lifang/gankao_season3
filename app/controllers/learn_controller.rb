@@ -7,7 +7,8 @@ class LearnController < ApplicationController
   
   def task_dispatch
     cookies[:category] = params[:category]
-    cookies[:modulus] = UserScoreInfo.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first.modulus
+    cookies[:modulus] = UserScoreInfo.where(["user_id = ? and category_id = ?",
+        cookies[:user_id], cookies[:category]]).first.modulus
     items = params[:items].split(",") if params[:items]
     if items.nil? or items.blank?
       return if (info = willdo_part_infos(cookies[:category])).nil?
@@ -32,9 +33,14 @@ class LearnController < ApplicationController
   #取出当前part的items 并组装 [id-repeat_time-step]
   def willdo_part_infos(category)
     plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], category]).first
+    puts plan.plan_url
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+   puts xml
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+    puts "----------------"
+    puts xpath
     node = xml.elements[xpath]
+    puts node
     return nil unless !node.nil?
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end

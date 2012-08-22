@@ -4,8 +4,9 @@
   <span class="t_number"></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
+<%= render :partial => "learn/tip" %>
 <div class="mc_box">
-  <%= render :partial => "learn/tip" %>
+  
   <div class="words_func">
     <% if @result[:step] == 1 %>
       <%=javascript_include_tag "jquery.jplayer.min"%>
@@ -39,11 +40,14 @@
     <a onclick="jude('/learn/jude_word','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   $(document).ready(function(){
     $(".words_ul li").click(function(){
       if($("#SID").attr("value") == $("#I"+this.id).html()){
+        $(".tip_mask").show();
         $("#right").show();
+        generate_flash_div("#right");
         clearInterval(myTime.timeId);
         jude("/learn/jude_word","true");
       }else{
