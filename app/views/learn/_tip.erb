@@ -1,4 +1,4 @@
-<% if $type != UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
+<% if cookies[:type].to_i != UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
   <div id="right" class="tishi_box" style="display: none">
     <div class="ts_img"><img src="assets/s_face.png" /></div>
     <div class="ts_text">答对了！</div>
@@ -20,7 +20,7 @@
   <div class="ts_text">已经全部掌握了开始检验一下吧！</div>
   <div class="ts_btn_box"><button class="b_btn" onclick="next()">开始检查</button></div>
 </div>
-<% if $type == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
   <div id="all_pass" class="tishi_box" style="display: none">
     <div class="ts_img"><img src="assets/s_face.png" /></div>
     <div class="ts_text">恭喜今天的xx任务全部掌握！</div>
@@ -29,6 +29,6 @@
 <% end %>
 <script type="text/javascript">
   function next (){
-    send_message("/learn/task_dispatch?category=<%= $category %>");
+    dispatch('<%= cookies[:category] %>');
   }
 </script>

@@ -1,11 +1,12 @@
 <div class="pt_title">
   <h1>单词学习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number"><%= $ids.index($items[0].split("-")[0]) + 1 %>/<%= $ids.length %></span>
+  <span class="t_number"></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
+<%= render :partial => "learn/tip" %>
 <div class="mc_box">
-  <%= render :partial => "learn/tip" %>
+  
   <div class="words_func">
     <% if @result[:step] == 1 %>
       <%=javascript_include_tag "jquery.jplayer.min"%>
@@ -35,21 +36,24 @@
     </ul>
   </div>
   <div class="words_func">
-    <a onclick="send_message('/learn/i_have_remember')"  title="我记住了" class="sign tooltip">标记</a>
-    <a onclick="send_message('/learn/jude_word?redirct=true&flag=false')" title="下一题" class="next tooltip">Next</a>
+    <a onclick="remember()"  title="我记住了" class="sign tooltip">标记</a>
+    <a onclick="jude('/learn/jude_word','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   $(document).ready(function(){
     $(".words_ul li").click(function(){
       if($("#SID").attr("value") == $("#I"+this.id).html()){
+        $(".tip_mask").show();
         $("#right").show();
+        generate_flash_div("#right");
         clearInterval(myTime.timeId);
-        send_message("/learn/jude_word?flag=true");
+        jude("/learn/jude_word","true");
       }else{
         $("#wrong").show();
         clearInterval(myTime.timeId);
-        send_message("/learn/jude_word?flag=false");
+        jude("/learn/jude_word","false");
       }
     });
 <% if @result[:step] == 1 %>
@@ -79,6 +83,6 @@
 
   function callback(){
     $("#timeup").show();
-    send_message("/learn/jude_word?flag=false");
+    jude("/learn/jude_word","false");
   }
 </script>

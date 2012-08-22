@@ -11,8 +11,22 @@
       <%= render :partial => "colligation_practice" %>
     <% else %>
       <%= render :partial => "sprint_practice" %>
-    <% end %>    
+    <% end %>
   <% else %>
-    暂无计划
+    <div class="mc_box">
+      <div class="noTest">
+        <div class="r_text">
+          <h1>为什么要前测？</h1>
+          <p>为了帮助你更好的安排复习，我们会生成一份完全
+            个性化的复习方案，了解你当前的水平是最基础的步骤，
+            前测可以帮助我们了解你的水平 ，所以在前测时请不
+            要参考书本、网络或是请教别人。
+          </p>
+        </div>
+        <div class="btn_div"><a href="#" class="noTest_btn">开始前测</a></div>
+      </div>
+    </div>
   <% end %>
 </div>
+<div class="mask" style="display: none;"></div>
+<div class="plan_tab"></div>

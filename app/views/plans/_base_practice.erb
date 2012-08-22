@@ -12,7 +12,7 @@
           <% if @plan_list[:current] > i %>
             <img src="/assets/dui.png"/>
           <% elsif @plan_list[:current] == i %>
-            <img id="unlock" style="cursor: pointer;" src="/assets/kai.png"/>
+            <img style="cursor: pointer;" src="/assets/kai.png" onclick="dispatch('<%= params[:category] %>')"/>
           <% else %>
             <img src="/assets/suo.png"/>
           <% end %>
@@ -26,8 +26,6 @@
     </div>
   <% end %>
 </div>
-<div class="plan_tab"></div>
-
 <div class="clear"></div>
 <div class="pn_btn">  
   <button onclick="javascript:pre_page(<%= @user_plan.id %>, 1);" <% if current_page == 1 %>style="display: none;"<% end %>>上一页</button>
