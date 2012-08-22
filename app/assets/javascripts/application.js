@@ -61,3 +61,9 @@ function tishi_alert(str){
     body.append(div);
     show_flash_div();
 }
+
+//弹出复习的层
+function show_plan_tab() {
+    $(".mask").show();
+    generate_flash_div(".plan_tab");
+}

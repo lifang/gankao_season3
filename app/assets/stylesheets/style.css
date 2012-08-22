@@ -309,7 +309,7 @@ nav li { float: left; margin: 0 20px;}
 .pn_btn button:hover { background: #deccb9;}
 
 /*复习计划弹层*/
-.plan_tab { width: 530px; border-radius: 0.6em; background: #b0d3d4;}
+.plan_tab { width: 530px; border-radius: 0.6em; background: #b0d3d4; position: absolute;}
 .pt_title {
     height: 50px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#e4e3ce), to(#dddcc3));
