@@ -191,7 +191,7 @@ class LoginsController < ApplicationController
         if order.nil?
           Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:pay_type=>Order::PAY_TYPES[:LICENSE],
             :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
-            :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:types=>Order::TYPES[:VIP],
+            :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:types=>Order::TYPES[:ACCREDIT],
             :end_time=>Time.now+Constant::DATE_LONG.days)
         else
           str = order.end_time.nil? ? "" : "，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
@@ -275,7 +275,7 @@ class LoginsController < ApplicationController
                 if order.nil?
                   Order.create(:user_id=>trade_nu[0],:category_id=>trade_nu[2].to_i,:pay_type=>Order::PAY_TYPES[:CHARGE],
                     :out_trade_no=>"#{params[:out_trade_no]}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",
-                    :start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG.days,:types=>Order::TYPES[:VIP])
+                    :start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG.days,:types=>Order::TYPES[:CHARGE])
                 end
               end
               render :text=>"success"

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>赶考--答疑--等待回答</title>
+    <title>赶考</title>
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application" %>
     <%= stylesheet_link_tag    "style" %>
@@ -19,20 +19,35 @@
       DD_belatedPNG.fix('*');
     </script>
     <![endif]-->
-
   </head>
   <body>
     <div class="wraper">
       <div class="header">
-        <h1 class="logo"><a href="#">赶考网</a></h1>
+        <h1 class="logo">
+          <a href="/" title="赶考网">
+            <% if params[:category].to_i == Category::TYPE[:CET4] %>
+              <img src="/assets/logo_cet4.png"/>
+            <% elsif params[:category].to_i == Category::TYPE[:CET6] %>
+              <img src="/assets/logo_cet6.png"/>
+            <% else %>
+              <img src="/assets/logo_graduate.png"/>
+            <% end %>            
+          </a>
+        </h1>
         <%=render :partial=>'users/info',:object=>user_info%>
         <div class="clear"></div>
-        <nav class="border_radius">
-          <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#" onclick="show_mask('.payment','.pay_close')">了解更多</a></span>
-        </nav>
+        <% if cookies[:user_id] and is_nomal?(params[:category]) %>
+          <nav class="border_radius">
+            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#">了解更多</a></span>
+          </nav>
+        <% end %>
       </div>
       <div class="main">
         <div class="left">
+          <div class="countDown">
+            <p>距研究生考试还有</p>
+            <h1>22<span>天</span></h1>
+          </div>
           <div class="checkIn_box">
             <div class="checkIn_img"><a onclick="checkIn()" href="#"><img src="/assets/checkIn.png" /></a></div>
             <span class="checkIn_sun"><img src="/assets/sun.png" /></span>
@@ -43,7 +58,8 @@
         <div class="middle">
           <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
         </div>
-
+        <div><a href="#" onclick="window.open('/users/check_login?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>
+<a href="#" onclick="window.open('/users/check_login?web=sina&category='+category, '_blank', 'height=500,width=600,left=300,top=150');">分享微博</a></div>
         <div class="right">广告</div>
         <div class="clear"></div>
       </div>

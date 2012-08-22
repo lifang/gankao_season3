@@ -3,6 +3,13 @@ function updateUserInfo(){
     var username=$("#username").val();
     var school=$("#school").val();
     var email=$("#email").val();
+    
+    var myReg =new RegExp(/^\w+([-+.])*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/);
+    if ( !myReg.test(email)) {
+        tishi_alert("邮件格式输入错误example:xxxxx@sina.com");
+        return false;
+    }
+    
     info["name"]=username;
     info["school"]=school;
     info["email"]=email;
@@ -18,7 +25,7 @@ function updateUserInfo(){
         success : function(data) {
             $("#name").html(info["name"]);
             $("#schoolName").html(info["school"]);
-            alert(data.message);
+            tishi_alert(data.message);
         }
     });
     $(".x").click();
@@ -34,10 +41,22 @@ function checkIn(){
         url:"/users/check_in?category="+category,
         type:'post',
         success:function(data){
-            alert(data.message);
+            tishi_alert(data.message);
             $(".s_sun").html(data.num);
-            //$(".checkIn_box").hide();
+        //$(".checkIn_box").hide();
         }
     });
 }
- 
+
+//分享
+function send(web,message){
+    $.ajax({
+        async:true,
+        dataType:'json',
+        data:{
+            message:message
+        },
+        url:"/users/send_message?category="+category+"&web="+web,
+        type:'post' 
+    });
+}

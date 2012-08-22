@@ -1,15 +1,11 @@
 class UsersController < ApplicationController
+  include Oauth2Helper
   def index
     cookies[:user_id]=1
     user_id=cookies[:user_id]
     category=params[:category].nil?? "2":params[:category]
     user=User.find(user_id)
-    user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
-    if user_sun.nil?
-      num=0
-    else
-      num=user_sun.num.to_i
-    end
+    num= get_user_sun_nums(user,category)
     @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
   end
   #更新用户信息
@@ -36,13 +32,11 @@ class UsersController < ApplicationController
   def check_in
     cookies[:user_id]=1
     category=params[:category].empty?? 2:params[:category].to_i
-    
     user=User.find(cookies[:user_id])
-    user_sun=user.suns.where("category_id=#{category}").find(:all)[0]
- 
+    user_sun=user.suns.where("category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}").find(:all)[0]
     if user_sun.nil?
-      Sun.create(:user_id=>user[:id],:category_id=>category,:types=>Sun::TYPES[:CHECKIN],:num=>1)
-      data="签到成功，获得一个小太阳。"
+      Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SIGNIN],:num=>Sun::TYPE_NUM[:SIGNIN])
+      data="签到成功，获得1个小太阳。"
       num=1
     else
       if is_check?(user_sun)
@@ -50,9 +44,9 @@ class UsersController < ApplicationController
       else
         user_sun.num=user_sun.num.to_i+1
         user_sun.save
-        data="签到成功，获得一个小太阳。"
+        data="签到成功，获得1个小太阳。"
       end
-      num=user_sun.num
+      num=get_user_sun_nums(user,category)
     end
     respond_to do |format|
       format.json {
@@ -60,6 +54,8 @@ class UsersController < ApplicationController
       }
     end
   end
+
+  #是否签到、分享 按日期比较的
   def is_check?(user_sun)
     #获取上一次更新时间-日期
     update_date=user_sun.updated_at.strftime("%Y%m%d").to_i
@@ -67,25 +63,67 @@ class UsersController < ApplicationController
     date_now=Time.now.strftime("%Y%m%d").to_i
     return update_date==date_now
   end
-
-
-  def send_message
-    @return_message = ""
-    @web = ""
-    if params[:web] == "sina"
-      @web = "sina"
-      ret = sina_send_message(cookies[:access_token], params[:message])
-      @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
-    elsif params[:web] == "renren"
-      @web = "renren"
-      @type = params[:type]
-      @secret_key = @type == "8" ? @@renren8_secret_key : (@type=="6" ? @@renren6_secret_key : @@renren_secret_key)
-      ret = renren_send_message(cookies[:access_token], params[:message], @secret_key , @type)
-      @return_message = "分享失败，请重新尝试" if ret[:error_code]
+  #分享
+  def check_login
+    @web= params[:web].to_s
+    category=params[:category].to_i
+    level=case category
+    when 2 then "英语4级"
+    when 3 then "英语6级"
+    else "考研英语"
     end
-    respond_to do |format|
-      format.html
-      format.js
+    @message="我在赶考网复习"+level
+    #获取用户
+    cookies[:user_id]=77
+    user=User.find_by_id_and_code_type(cookies[:user_id],@web)
+   
+    if user and user.access_token and (user.end_time-Time.now>0)
+      @message=@message+",来自链接:"+Constant::SERVER_PATH+"/users/#{user.id}/share_back?category=#{category}"
+      if @web=="sina"
+        ret = sina_send_message(user.access_token, @message)
+        @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
+      elsif @web=="renren"
+        ret = renren_send_message(user.access_token, @message)
+        @return_message = "分享失败，请重新尝试" if ret[:error_code]
+      end
+      if @return_message.nil?
+        render :text=>update_user_suns(user,category)
+      else
+        render :text=>@return_message
+      end
+    else
+      if params[:web].to_s=="sina"
+        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Constant::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
+      elsif params[:web].to_s=="renren"
+        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Constant::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
+      end
     end
+  end
+  #更新用户太阳数
+  def update_user_suns(user,category)
+    user_sun=user.suns.where("category_id=#{category} and types=#{Sun::TYPES[:SHARE]}").find(:all)[0]
+    if is_check?(user_sun)
+      data="分享成功"
+    else
+      if user_sun.nil?
+        Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SHARE],:num=>Sun::TYPE_NUM[:SHARE])
+      else
+        user_sun.num=user_sun.num.to_i+Sun::TYPE_NUM[:SHARE]
+        user_sun.save
+      end
+      data="分享成功,获得2个小太阳."
+    end
+    return data
+  end
+  #推荐网站，获得小太阳
+  def share_back
+    user=User.find(params[:id].to_i)
+    category=params[:category]
+    count=Sun.find_by_sql("select count(*) commend_count from suns where types=#{Sun::TYPES[:COMMEND]} and
+       category_id=#{category} and user_id=#{user.id}")[0].commend_count
+    if count<5
+      Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:COMMEND],:num=>Sun::TYPE_NUM[:COMMEND])
+    end
+    redirect_to Constant::SERVER_PATH
   end
 end

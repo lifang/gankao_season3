@@ -12,7 +12,7 @@
           <% if current_practice > i %>
             <img src="/assets/dui.png"/>
           <% elsif current_practice == i %>
-            <img src="/assets/kai.png"/>
+            <img src="/assets/kai.png" onclick="dispatch('<%= params[:category] %>')"/>
           <% else %>
             <img src="/assets/suo.png"/>
           <% end %>

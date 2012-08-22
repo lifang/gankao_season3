@@ -18,7 +18,8 @@
       <div class="problem_list"><h2 class="other_h">其他回答</h2></div>
     <% elsif answers[1].length == 3 and i == 1  %>
       <div class="problem_list">
-        <%= link_to "更多答案>>", "/questions/#{answers[0].id}/answered_more?category=#{answers[0].category_id}",
+        <%= link_to "更多答案>>", 
+          "/questions/#{answers[0].id}/answered_more?category=#{answers[0].category_id}&current_page=#{answers[2]}",
           :class=> "an_more" %>
       </div>
     <% end %>

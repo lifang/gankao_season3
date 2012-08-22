@@ -1,11 +1,17 @@
-<% if @redirct == "true" && !$items.blank? %>
+window.items = "<%= @items_str %>";
+window.ids = "<%= @ids_str %>";
+<% if @redirct == "true" && !@items_str.empty? %>
   $.ajax({
   async:true,
   dataType:'script',
-  url:"/learn/task_dispatch?category=<%= $type %>",
-  type:'get'
+  url:"/learn/task_dispatch?category=<%= cookies[:category] %>",
+  type:'post',
+  data:{
+  items : window.items,
+  ids : window.ids
+  }
   })
-<% elsif $items.blank? %>
+<% elsif @items_str.empty? %>
   clearInterval(myTime.timeId);
   $("#all_pass").show();
 <% end %>

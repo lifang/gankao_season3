@@ -1,6 +1,6 @@
 GankaoSeason3::Application.routes.draw do
 
-    resources :logins do
+  resources :logins do
     collection do
       get :friend_add_request,:renren_like,:add_user,:alipay_exercise
       get :follow_me,:login_from_qq,:qq_index,:get_code,:user_code,:logout
@@ -8,8 +8,6 @@ GankaoSeason3::Application.routes.draw do
       post :manage_qq,:add_watch_weibo,:check_vip,:accredit_check
     end
   end
-  get "users/index"
-
   resources :videos do
     member do
     end
@@ -30,7 +28,8 @@ GankaoSeason3::Application.routes.draw do
   end
   resources :learn do
     collection do
-      get :task_dispatch, :jude_word, :listen, :i_have_remember, :pass_status, :jude_sentence, :jude_hearing
+      get  :listen, :pass_status, :study_it
+      post :task_dispatch,:jude_word, :jude_sentence, :jude_hearing, :i_have_remember
     end
   end
   resources :questions ,:only=>[:index]
@@ -46,7 +45,11 @@ GankaoSeason3::Application.routes.draw do
   end
   resources :users ,:only=>[:index]
   resources :users do
+    member do
+      get :share_back
+    end
     collection do
+      get :check_login
       post :update_users,:check_in
     end
   end

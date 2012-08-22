@@ -1,7 +1,7 @@
 <div class="pt_title">
   <h1>单词学习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">1/2</span>
+  <span class="t_number"></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
 <div class="mc_box">
@@ -17,7 +17,7 @@
   </div>
   <div class="words_func">
     <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
-    <a onclick="send_message('/learn/jude_word?redirct=true&flag=false')" title="下一题" class="next tooltip">Next</a>
+    <a onclick="jude('/learn/jude_word','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
 <script type="text/javascript">
@@ -25,15 +25,15 @@
     if($("#SID").attr("value").toLowerCase() == $(".answer_input").attr("value").trim().toLowerCase()){
       $(".trueFalse").html("<img src='assets/true.png' />");
       clearInterval(myTime.timeId);
-      send_message("/learn/jude_word?flag=true&redirct=true");
+      jude("/learn/jude_word","true","true");
     }else{
       $(".trueFalse").html("<img src='assets/false.png' />");
       clearInterval(myTime.timeId);
-      send_message("/learn/jude_word?flag=false&redirct=true");
+      jude("/learn/jude_word","false","true");
     }
   }
   function callback(){
     $("#timeup").show();
-    send_message("/learn/jude_word?&flag=false");
+    jude("/learn/jude_word","false","false");
   }
 </script>

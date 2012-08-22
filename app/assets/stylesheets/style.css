@@ -315,7 +315,7 @@ nav li { float: left; margin: 0 20px;}
 .pn_btn button:hover { background: #deccb9;}
 
 /*复习计划弹层*/
-.plan_tab { width: 530px; border-radius: 0.6em; background: #b0d3d4;}
+.plan_tab { width: 530px; border-radius: 0.6em; background: #b0d3d4; position: absolute; z-index: 299;}
 .pt_title {
     height: 50px;
     background: -webkit-gradient(linear, left top, left bottom, from(#e4e3ce), to(#dddcc3));
@@ -426,6 +426,8 @@ nav li { float: left; margin: 0 20px;}
     padding: 20px 0;
     background: #387580;
     box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
+    position: absolute;
+    z-index: 399;
 }
 .ts_img { width: 56px; height: 56px; margin: 10px auto;}
 .ts_text { font-size: 16px; color: #FFF; width: 150px; line-height: 32px; margin: 10px auto; text-align: center;}
@@ -513,6 +515,16 @@ nav li { float: left; margin: 0 20px;}
     left: 0;
     background: url(/assets/mask_bg.png) repeat;
     z-index: 100;
+}
+
+.tip_mask {
+    width: 530px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url(/assets/mask_bg.png) repeat;
+    z-index: 300;
 }
 .noTest_tab {
     width: 543px;
