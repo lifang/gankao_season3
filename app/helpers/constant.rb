@@ -13,4 +13,5 @@ module Constant
     :CET6 => '2012-10-7',
     :GRADUATE => '2012-10-7'
   }
+  DATE_LONG=90
 end

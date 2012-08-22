@@ -80,6 +80,7 @@ module ApplicationHelper
     return current_role.to_i
   end
 
+
   require 'net/http'
   #START -----人人API
   #人人主方法
@@ -89,7 +90,7 @@ module ApplicationHelper
     response = http.request(request).body
   end
   #
-   #构成人人签名请求
+  #构成人人签名请求
   def renren_sig_request(query,secret_key)
     str = ""
     query.sort.each{|key,value|str<<"#{key}=#{value}"}
