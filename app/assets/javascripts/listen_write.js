@@ -40,27 +40,20 @@ function answer_correct(){
     $("div.trueFalse").find("img").attr("src","/assets/true.png");
 }
 //播放音频
-//$(function(){
-//    //alert(url)
-//    $("#jquery_jplayer_1").jPlayer({
-//        ready: function (event) {
-//            $(this).jPlayer("setMedia",{
-//                mp3:url
-//            }
-//            );
-//        },
-//        swfPath: "../assets/Jplayer.swf",
-//        supplied: 'mp3',
-//        vmode:"window",
-//        solution:"flash, html",
-//        errorAlerts: false,
-//        warningAlerts: false
-//    });
-//
-//    $("#playAudio").click(function(){
-//        $("#jquery_jplayer_1").jPlayer("play");
-//    });
-//});
+$(function(){
+    //alert(url)
+    jwplayer("jquery_jplayer_1").setup({
+        file: "/music.mp3",
+        flashplayer: "/assets/jwplayer/player.swf",
+        height:0,
+        width: 0
+    });
+
+    $("#playAudio").click(function(){
+        jwplayer().play();
+    });
+});
+
 $(function(){
 
     $("div.trueFalse").hide();
