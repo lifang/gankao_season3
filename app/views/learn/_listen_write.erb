@@ -3,7 +3,7 @@
 @web_type=listen_write[:web_type]
 @index=listen_write[:index]
 %>
-<%=javascript_include_tag "jquery.jplayer.min"%>
+<%=javascript_include_tag "jwplayer/jwplayer"%>
 <%=javascript_include_tag "listen_write"%>
 <input type="hidden" id="global_sentence_en_mean" value="<%= @listen_sentence.en_mean.gsub("\"","").strip%>"></input>
 <script type="text/javascript">
@@ -28,7 +28,15 @@
       <h2>听录音，在下面写入你听到的内容。</h2>
       <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; ">
       </div>
-      <a id="playAudio" href="#" title="播放音频"  class="play_audio tooltip">播放音频</a>
+      <script type="text/javascript">
+        jwplayer("jquery_jplayer_1").setup({
+          file: "http://localhost:3000/music.mp3",
+          flashplayer: "/assets/jwplayer/player.swf",
+          height:0,
+          width: 0
+        });
+      </script>
+      <a id="playAudio" href="#" title="播放音频"  class="play_audio tooltip" onclick="jwplayer().stop();jwplayer().play();">播放音频</a>
     </div>
     <div class="words_con">
       <textarea id="ls_answer" name="" cols="" rows="" class="answer_textarea"></textarea>
