@@ -1,3 +1,4 @@
+#encoding: utf-8
 class LearnController < ApplicationController
   layout 'main'
   require 'rexml/document'
