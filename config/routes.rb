@@ -28,7 +28,7 @@ GankaoSeason3::Application.routes.draw do
   end
   resources :learn do
     collection do
-      get  :listen, :pass_status, :study_it
+      get  :listen, :pass_status, :study_it,:next_sentence
       post :task_dispatch,:jude_word, :jude_sentence, :jude_hearing, :i_have_remember
     end
   end

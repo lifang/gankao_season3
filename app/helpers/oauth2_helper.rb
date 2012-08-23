@@ -153,7 +153,7 @@ module Oauth2Helper
   def renren_sig_request(query)
     str = ""
     query.sort.each{|key,value|str<<"#{key}=#{value}"}
-    str<<Constant::RENREN_API_SECRET
+    str<<RENREN_API_SECRET
     sig = Digest::MD5.hexdigest(str)
     query[:sig]=sig
     request = Net::HTTP::Post.new("/restserver.do")

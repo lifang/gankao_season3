@@ -35,7 +35,7 @@ class LearnController < ApplicationController
     plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], category]).first
     puts plan.plan_url
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-   puts xml
+    puts xml
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     puts "----------------"
     puts xpath
@@ -272,6 +272,9 @@ class LearnController < ApplicationController
     return str.gsub(/"/," ").gsub(/:/," ").gsub(/;/," ").gsub(/\?/," ").gsub(/!/," ").gsub(/,/," ").gsub(/\./," ").gsub(/  /," ").split(" ")
   end
 
+
+
+   #----Start-------听写过程--------Start----
   def listen
     #获取用户信息和xml路径和类别
     x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
@@ -287,7 +290,9 @@ class LearnController < ApplicationController
     id = params[:id]
     is_correct=params[:is_correct]
     is_answer=params[:is_answer]
-    index=params[:index].to_i
+    @index=params[:index].to_i
+    @listen_ids=params[:ids].split(",").to_a
+    p @listen_ids
     #题目类型  5为听写
     part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s
     #获取用户xml路径
@@ -296,19 +301,22 @@ class LearnController < ApplicationController
     current=xml.elements["root/plan/current"].text.to_i
     #处理句子更改状态,根据类型不同进行不同的操作
     if is_answer=='true'
-      xml_and_index=handle_sentences(xml,current,type,id,is_correct,index,part_type)
+      xml_and_index=handle_sentences(xml,current,type,id,is_correct,@index,part_type,@listen_ids)
       xml=xml_and_index[:xml]
       #写入xml
       write_xml(xml,x_url)
-      index=xml_and_index[:index]
+      @index=xml_and_index[:index]
+      @listen_ids=xml_and_index[:ids]
+      p @listen_ids
     end
-
-    if !($ids.empty?)
-      index=index<$ids.length-1?index+1:0
-      next_id=$ids[index]
+    p @index
+    p @index<@listen_ids.length-1?@index+1:0
+    p !(@listen_ids.empty?)
+    if !(@listen_ids.empty?)
+      @index=@index<@listen_ids.length-1?@index+1:0
+      next_id=@listen_ids[@index]
       #获取新数据
       source=listen_write_by_id(xml,type,current,next_id,part_type)
-      source[:index]=index
       render :partial=>'/learn/listen_write',:object=>source
     else
       #更改当前句子部分的status的值 type为plan或review current为当前包
@@ -323,4 +331,100 @@ class LearnController < ApplicationController
       end
     end
   end
+
+  #获取听写句子的数据，复习或计划
+  def listen_write_source(xml)
+    part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s #听写为5
+    #获取当前正在做的计划包
+    current=xml.root.elements["plan"].elements["current"].text.to_i
+    p ("root/review/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
+    #复习的句子
+    review_listen_sentences=[]
+    #复习个数
+    review_sum=0
+    #获取复习听的句子
+    review_listen_sentences=xml.
+      get_elements("root/review/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
+
+    review_sum=review_listen_sentences.length
+
+    #计划要学的句子
+    plan_listen_sentences=[]
+    plan_sum=0
+    plan_listen_sentences=xml.
+      get_elements("root/plan/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
+    plan_sum = plan_listen_sentences.length #新学听写总数
+    #如果没有数据
+    if  review_sum!=0 || plan_sum!=0
+      if review_sum>0
+        #获取第一个复习的听写句子
+        xml_sentence,web_type = review_listen_sentences[0],"review"
+      else
+        if plan_sum > 0
+          #获取第一个新学的听写句子
+          xml_sentence,web_type = plan_listen_sentences[0],"plan"
+        else
+          return nil
+        end
+      end
+      @listen_ids=get_ids(xml,web_type,current,part_type)
+      p @listen_ids.to_s.gsub(/([\[\]])/i,"")
+      @index=0
+      listen_sentence=PracticeSentence.find(xml_sentence.attributes["id"])
+      return {:listen_sentence=>listen_sentence,:web_type=>web_type}
+    else
+      return nil
+    end
+  end
+  #通过id查询句子 type为review或plan current为当前包数
+  def listen_write_by_id(xml,web_type,current,id,part_type)
+    source=xml.get_elements("root/#{web_type}/_#{current}/part[@type='#{part_type}']/item[@id='#{id}']")[0]
+    listen_sentence=PracticeSentence.find(source.attributes["id"].to_i)
+    return {:listen_sentence=>listen_sentence,:web_type=>web_type}
+  end
+  #处理句子 id 当前做的题目id is_correct答题正确和错误 index当前题目在总题目中的索引
+  def handle_sentences(xml,current,type,id,is_correct,index,part_type,ids)
+    #找到句子
+    sentence=xml.elements["root/#{type}/_#{current}/part[@type='#{part_type}']/item[@id='#{id}']"]
+
+    #如果答对了就修改step+1和is_pass='1'
+    if is_correct=='true'
+      #获取repeat_time,如果不为0，则减一,不修改step和is_pass
+      repeat_time=sentence.attributes["repeat_time"].to_i
+      if repeat_time==0
+        #改step和is_pass
+        step=sentence.attributes["step"].to_i+1
+        sentence.add_attribute("step",step.to_s)
+        sentence.add_attribute("is_pass",UserPlan::PLAN_STATUS[:FINISHED].to_s)
+        #从ids中删除已经答对的 ,index-1
+        ids.delete(id)
+        index=index-1
+      else
+        #只改repeat_time
+        repeat_time=repeat_time-1
+        sentence.add_attribute("repeat_time",repeat_time.to_s)
+      end
+      #答错，修改repeat_time=1
+    else
+      sentence.add_attribute("repeat_time",'1')
+    end
+    return {:xml=>xml,:index=>index,:ids=>ids}
+  end
+  #获取句子的ids,type为review或plan current为当前包数 part_type为题目类型
+  def get_ids(xml,type,current,part_type)
+    items=xml.get_elements("root/#{type}/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
+    ids=[]
+    items.each do |i|
+      ids<<i.attributes["id"].to_i
+    end
+    return ids
+  end
+  #更改part的status  part_type为xml部分的类型 --听写 5
+  def change_part_status(xml,type,current,part_type)
+    part=xml.elements["root/#{type}/_#{current}/part[@type='#{part_type}']"]
+    part.add_attribute("status",'1')
+    return xml
+  end
+
+   #-----End------听写过程------End------
 end
