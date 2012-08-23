@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     end
   end
   #分享
-  def check_login
+  def share
     @web= params[:web].to_s
     category=params[:category].to_i
     level=case category
@@ -108,9 +108,9 @@ class UsersController < ApplicationController
       end
     else
       if params[:web].to_s=="sina"
-        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Constant::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
+        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
       elsif params[:web].to_s=="renren"
-        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Constant::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
+        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
       end
     end
   end
