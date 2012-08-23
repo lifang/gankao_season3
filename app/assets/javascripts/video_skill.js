@@ -5,21 +5,15 @@ function video_show(index){
     $(".video_more,.other_video h1").css("display","none");
     $(".video_more")[index].style.display="block";
     $(".other_video h1")[index].style.display="block";
-    $(".video_area").html('<div class="xz_video">↑<br/>选择讲师<br/>开始学习</div>');
+    $(".xz_video").css("display","");
+    $(".video_area embed").css("display","none");
 }
 
 
 function load_video(video_url){
-    $(".video_area").html('<div id="mediaspace"> </div>')
-    jwplayer('mediaspace').setup({
-        'flashplayer': '/assets/jwplayer/player.swf',
-        'file': video_url,
-        'controlbar': 'bottom',
-        'width': '520',
-        'height': '390',
-        'screencolor': '#000000',
-        'image': "/skill.png"
-    });
+    $(".xz_video").css("display","none");
+    $(".video_area embed").css("display","");
+    $(".video_area embed").attr("src",video_url);
 }
 
 function deliver_blog(){
