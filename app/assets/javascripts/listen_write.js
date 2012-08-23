@@ -49,9 +49,9 @@ $(function(){
         width: 0
     });
 
-    $("#playAudio").click(function(){
-        jwplayer().play();
-    });
+//    $("#playAudio").click(function(){
+//        //jwplayer().play();
+//    });
 });
 
 $(function(){
