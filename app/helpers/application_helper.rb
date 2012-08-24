@@ -59,7 +59,7 @@ module ApplicationHelper
     category=params[:category].nil?? "2":params[:category]
     user=User.find(user_id)
     num= get_user_sun_nums(user,category)
-    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
+    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:signin_days=>user[:signin_days],:num=>num}
   end
   #获取用户的所有太阳数
   def get_user_sun_nums(user,category)

@@ -1,5 +1,5 @@
 class AddDetailToUsers < ActiveRecord::Migration
   def change
-    add_column :skills, :remarks, :string
+    add_column :users, :remarks, :string
   end
 end
