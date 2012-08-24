@@ -4,9 +4,8 @@
   <span class="t_number"></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
-<%= render :partial => "learn/tip" %>
 <div class="mc_box">
-  
+  <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <% if @result[:step] == 1 %>
       <%=javascript_include_tag "jquery.jplayer.min"%>
@@ -45,15 +44,11 @@
   $(document).ready(function(){
     $(".words_ul li").click(function(){
       if($("#SID").attr("value") == $("#I"+this.id).html()){
-        $(".tip_mask").show();
-        $("#right").show();
-        generate_flash_div("#right");
         clearInterval(myTime.timeId);
-        jude("/learn/jude_word","true");
+        jude("/learn/jude_word","true","true");
       }else{
-        $("#wrong").show();
         clearInterval(myTime.timeId);
-        jude("/learn/jude_word","false");
+        jude("/learn/jude_word","false","true");
       }
     });
 <% if @result[:step] == 1 %>
@@ -75,14 +70,13 @@
 
         $("#playAudio").click(function(){
           $("#jquery_jplayer_1").jPlayer("play");
-
         });
       });
 <% end %>
   })
 
   function callback(){
-    $("#timeup").show();
-    jude("/learn/jude_word","false");
+    show_tip("#timeup");
+    jude("/learn/jude_word","false","false");
   }
 </script>

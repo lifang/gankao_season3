@@ -1,34 +1,38 @@
-<% if cookies[:type].to_i != UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
-  <div id="right" class="tishi_box" style="display: none">
-    <div class="ts_img"><img src="assets/s_face.png" /></div>
-    <div class="ts_text">答对了！</div>
-    <div class="ts_btn_box"><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
-  </div>
-  <div id="wrong" class="tishi_box" style="display: none">
-    <div class="ts_img"><img src="assets/c_face.png" /></div>
-    <div class="ts_text">答错了！</div>
-    <div class="ts_btn_box"><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
-  </div>
-<% end %>
+<div id="right" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/s_face.png" /></div>
+  <div class="ts_text">答对了！</div>
+  <div class="ts_btn_box"><% if cookies[:type].to_i != UserPlan::CHAPTER_TYPE_NUM[:READ] %><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><% end %><button onclick="next()" class="b_btn">直接下题</button></div>
+</div>
+<div id="wrong" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_face.png" /></div>
+  <div class="ts_text">答错了！</div>
+  <div class="ts_btn_box"><% if cookies[:type].to_i != UserPlan::CHAPTER_TYPE_NUM[:READ] %><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><% end %><button onclick="next()" class="b_btn">直接下题</button></div>
+</div>
 <div id="timeup" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/c_face.png" /></div>
   <div class="ts_text">没时间了！</div>
-  <div class="ts_btn_box"><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><button onclick="next()" class="b_btn">直接下题</button></div>
+  <div class="ts_btn_box"><% if cookies[:type].to_i != UserPlan::CHAPTER_TYPE_NUM[:READ] %><button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button><% end %><button onclick="next()" class="b_btn">直接下题</button></div>
 </div>
 <div id="pass" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/s_face.png" /></div>
   <div class="ts_text">已经全部掌握了开始检验一下吧！</div>
   <div class="ts_btn_box"><button class="b_btn" onclick="next()">开始检查</button></div>
 </div>
-<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
-  <div id="all_pass" class="tishi_box" style="display: none">
-    <div class="ts_img"><img src="assets/s_face.png" /></div>
-    <div class="ts_text">恭喜今天的xx任务全部掌握！</div>
-    <div class="ts_btn_box"><button class="b_btn" onclick="next()">开始其他学习</button></div>
-  </div>
-<% end %>
+<div id="all_pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/s_face.png" /></div>
+  <div class="ts_text">恭喜今天的xx任务全部掌握！</div>
+  <div class="ts_btn_box"><button class="b_btn" onclick="next()">开始其他学习</button></div>
+</div>
 <script type="text/javascript">
-  function next (){
-    dispatch('<%= cookies[:category] %>');
-  }
+
+<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:READ] %>
+    function next (){
+      alert(flag);
+      jude_read(flag,'true');
+    }
+<% else %>
+    function next (){
+      dispatch('<%= cookies[:category] %>');
+    }
+<% end %>
 </script>

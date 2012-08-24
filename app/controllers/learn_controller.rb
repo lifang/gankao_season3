@@ -11,12 +11,20 @@ class LearnController < ApplicationController
         cookies[:user_id], cookies[:category]]).first.modulus
     items = params[:items].split(",") if params[:items]
     if items.nil? or items.blank?
-      return if (info = willdo_part_infos(cookies[:category])).nil?
+      return if (info = willdo_part_infos).nil?
       cookies[:type] = info[:type].to_i
       items = info[:ids]
+    end
+    if !params[:ids].nil? && !params[:ids].empty?
+      @ids_str = params[:ids]
+    else
       @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
     end
     @items_str = items.join(",")
+    p "-------------"
+    p @items_str
+    p cookies[:type]
+    p "-------------"
     cookies[:current_id] = items[0].split("-")[0] if items[0]
     case cookies[:type].to_i
     when UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -31,49 +39,42 @@ class LearnController < ApplicationController
   end
   
   #取出当前part的items 并组装 [id-repeat_time-step]
-  def willdo_part_infos(category)
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], category]).first
-    puts plan.plan_url
+  def willdo_part_infos
+    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-   puts xml
-    xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
-    puts "----------------"
-    puts xpath
+    current = xml.elements["//current"].text
+    xpath = "//plan//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
-    puts node
     return nil unless !node.nil?
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
   def operate_word(items)
-
     result = nil
     repeat = items[0].split("-")[1]
     step = items[0].split("-")[2].to_i + 1
     step = 3 if step > 3
-    type = UserPlan::CHAPTER_TYPE_NUM[:WORD]
     word = Word.find(cookies[:current_id])
     if (step != 3)
       options = Word.get_words_by_level(word.level, word.category_id, 3, cookies[:current_id]) << word
       result = {
-        :type => type,
+        :type => cookies[:type],
         :step => step,
         :repeat => repeat,
-        :time => (Constant::WORD_TIME[step] * cookies[:modulus]).to_i,
+        :time => (Constant::WORD_TIME[step] * cookies[:modulus].to_f).to_i,
         :word => word,
         :options => options.sort_by { rand }
       }
     else
       result = {
-        :type => type,
+        :type => cookies[:type],
         :step => step,
         :repeat => repeat,
-        :time => (Constant::WORD_TIME[step] * cookies[:modulus]).to_i,
+        :time => (Constant::WORD_TIME[step] * cookies[:modulus].to_f).to_i,
         :word => word,
         :sentence => WordSentence.find_all_by_word_id(cookies[:current_id]).first.description.gsub(word.name,"_______")
       }
     end
-   
     return result
   end
 
@@ -83,8 +84,8 @@ class LearnController < ApplicationController
     step = items[0].split("-")[2].to_i + 1
     step = 2 if step > 2
     words = sentence_words(sentence.en_mean)
-    rtime = Constant::SENTENCE_TIME[:READ] * words.length  * cookies[:modulus]
-    ctime = Constant::SENTENCE_TIME[:COMBIN] * words.length  * cookies[:modulus]
+    rtime = Constant::SENTENCE_TIME[:READ] * words.length  * cookies[:modulus].to_f
+    ctime = Constant::SENTENCE_TIME[:COMBIN] * words.length  * cookies[:modulus].to_f
     rtime = ctime  if step == 2
     result = {
       :type => cookies[:type],
@@ -101,7 +102,7 @@ class LearnController < ApplicationController
     result = nil
     listen = PracticeSentence.find(cookies[:current_id])
     words = sentence_words(listen.en_mean)
-    time = words.length * Constant::LISTEN_TIME[:PER] * cookies[:modulus]
+    time = words.length * Constant::LISTEN_TIME[:PER] * cookies[:modulus].to_f
     options = PracticeSentence.get_listen_by_level(listen.level, listen.category_id, listen.types, 1, cookies[:current_id]) << listen
     result = {
       :type => cookies[:type],
@@ -116,11 +117,16 @@ class LearnController < ApplicationController
     result = nil
     path = Tractate.find(cookies[:current_id]).tractate_url
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + path)) if path
+    description = xml.elements["//description"].elements.each("p"){}.inject(Array.new){ |arr,a| arr.push(a.text) }
+    time = description.inject(0){ |result, element| result + sentence_words(element.gsub("[]","")).length * Constant::READ_TIME[:DEFAULT] * cookies[:modulus].to_f }
+    questions =  xml.elements["//questions"].elements.each("question"){}.inject(Array.new) { |array, a|
+      array.push({:id => a.attributes["id"],:title => a.elements["title"].text, :options => a.elements["options"].text.split("[]").sort_by { rand },:answer => a.elements["answer"].text}) }
     result = {
-      :description => xml.elements["//description"].text,
-      :title => xml.elements["//question//title"].text,
-      :options => xml.elements["//question//options"].text.split("[]").sort_by { rand },
-      :answer => xml.elements["//question//answer"].text
+      :type => cookies[:type],
+      :description => description,
+      :time => time.to_i,
+      :qtime => Constant::READ_TIME[:QUESTION],
+      :questions => questions
     }
     return result
   end
@@ -148,7 +154,9 @@ class LearnController < ApplicationController
     end
     if params[:flag] == "false"
       elem = "#{cookies[:current_id]}-2-#{step}"
+      p "ooooooooooo"
       rewrite_xml_item(xpath, nil, 2, nil)
+      p "-------!!!!"
     end
     if (step == 2 && repeat <= 1 && params[:flag] == "true")
       ids = ids - [items[0].split("-")[0]]
@@ -157,7 +165,9 @@ class LearnController < ApplicationController
       items = (items - [items[0]]).push(elem)
     end
     pass_status("part") if items.blank?
-    @items_str = items.join(",")
+    @status = is_part_pass?
+    p @items_str = items.join(",")
+    @flag = params[:flag]
     @ids_str = ids.join(",")
     @redirct = params[:redirct]
   end
@@ -179,9 +189,9 @@ class LearnController < ApplicationController
     else
       items = (items - [items[0]]).push(items[0])
     end
-    if items.blank?
-      pass_status("part")
-    end
+    pass_status("part") if items.blank?
+    @status = is_part_pass?
+    @flag = params[:flag]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
     @redirct = params[:redirct]
@@ -200,9 +210,27 @@ class LearnController < ApplicationController
     end
     if items.blank?
       pass_status("part")
-      pass_status("all")
-      UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first.update_plan
     end
+    @status = is_part_pass?
+    @flag = params[:flag]
+    @items_str = items.join(",")
+    @ids_str = ids.join(",")
+    @redirct = params[:redirct]
+  end
+
+  def jude_read
+    items =  params[:items].split(",")
+    ids = params[:ids].split(",")
+    xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{cookies[:current_id]}']"
+    if params[:flag] == "true"
+      rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+      ids = ids - [items[0].split("-")[0]]
+      items = items - [items[0]]
+    else
+      items = (items - [items[0]]).push(items[0])
+    end
+    pass_status("part") if items.blank?
+    @status = is_part_pass?
     @items_str = items.join(",")
     @ids_str = ids.join(",")
     @redirct = params[:redirct]
@@ -248,6 +276,20 @@ class LearnController < ApplicationController
     f.close
   end
 
+  def is_part_pass?
+    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
+    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+    current = xml.elements["//current"].text
+    xpath = "//plan//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+    node = xml.elements[xpath]
+    if node.nil?
+      pass_status("all")
+      UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first.update_plan
+      return true
+    end
+    return false
+  end
+
   def study_it
     @result = nil
     if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -257,7 +299,7 @@ class LearnController < ApplicationController
       }
     elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
       @result = {
-        :sentence => WordSentence.find(cookies[:current_id])
+        :sentence => PracticeSentence.find(cookies[:current_id])
       }
     elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
       @result = {
@@ -267,7 +309,6 @@ class LearnController < ApplicationController
     return @result
   end
 
- 
   def sentence_words(str)
     return str.gsub(/"/," ").gsub(/:/," ").gsub(/;/," ").gsub(/\?/," ").gsub(/!/," ").gsub(/,/," ").gsub(/\./," ").gsub(/  /," ").split(" ")
   end

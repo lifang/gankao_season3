@@ -24,6 +24,7 @@
     <a onclick="jude('/learn/jude_hearing','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   $(function(){
     $("#jquery_jplayer_1").jPlayer({
@@ -53,18 +54,16 @@
 
   function hedui(){
     if($(".words_con .hover_on a").html() == $("#SID").attr("value")){
-      $(".trueFalse").html("<img src='assets/true.png' />");
       clearInterval(myTime.timeId);
-      jude('/learn/jude_hearing','true','true');
+      jude('/learn/jude_hearing','true','false');
     }else{
-      $(".trueFalse").html("<img src='assets/false.png' />");
       clearInterval(myTime.timeId);
-      jude('/learn/jude_hearing','false','true');
+      jude('/learn/jude_hearing','false','false');
     }
   }
 
   function callback(){
-    $("#timeup").show();
+    show_tip("#timeup");
     jude('/learn/jude_hearing','false','false');
   }
   
