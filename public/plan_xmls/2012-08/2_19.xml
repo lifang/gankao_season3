@@ -470,19 +470,19 @@
     </plan>
     <review>
         <_11 status='0'>
-            <part status='0' type='5'>
-                <item id='11' is_pass='false' repeat_time='0' step='0'/>
-                <item id='13' is_pass='false' repeat_time='0' step='0'/>
+            <part status='1' type='5'>
+                <item id='11' is_pass='0' repeat_time='0' step='1'/>
+                <item id='13' is_pass='0' repeat_time='0' step='1'/>
             </part>
         </_11>
         <_14 status='0'>
             <part repeat_time='0' status='0' type='0'>
-                <item id='11' is_pass='false' repeat_time='0' step='0'/>
-                <item id='13' is_pass='false' repeat_time='0' step='0'/>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
             </part>
             <part repeat_time='0' status='0' type='1'>
-                <item id='11' is_pass='false' repeat_time='0' step='0'/>
-                <item id='13' is_pass='false' repeat_time='0' step='0'/>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
             </part>
             <part repeat_time='0' status='0' type='2'>
                 <item id='11' is_pass='false' repeat_time='0' step='0'/>

@@ -2,7 +2,7 @@ $(function(){
     $("#keywords").focus();
     $("#btnSearch").bind('click',function(){
         if($("#keywords").val()==""){
-            alert('请输入关键字!');
+            tishi_alert('请输入关键字!');
         }
         else{
             window.location="/questions/show_result?keywords="+$("#keywords").val()+"&category="+category;

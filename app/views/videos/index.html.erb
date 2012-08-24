@@ -12,8 +12,11 @@
       <div class="clear"></div>
     </div>
     <div class="mc_menu_box">
+
       <div class="video_area">
-        <div class="xz_video">↑<br/>选择讲师<br/>开始学习</div>
+        <div class="xz_video" >↑<br/>选择讲师<br/>开始学习</div>
+        <embed style="display: none" src="" allowFullScreen="true" quality="high" width="520" height="390" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+
       </div>
       <div class="other_video">
         <% @sched_vis.each_with_index do |schedule,index| %>
@@ -23,7 +26,7 @@
             <div class="video_box">
               <ul class="video_ul">
                 <%@sched_vis[index+1][0].each do |video|%>
-                <li onclick="load_video('<%=video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
+                  <li onclick="load_video('<%=video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
                 <% end %>
               </ul>
             </div>
@@ -33,10 +36,21 @@
         <% end %>
       </div>
     </div>
+    <div id="container"></div>
     <script type="text/javascript">
       $( $(".mc_menu li")[0]).trigger("onclick");
+      jwplayer("container").setup({
+        file: "http://localhost:3000/music.mp3",
+        flashplayer: "/assets/jwplayer/player.swf",
+        height: 10,
+        width: 10
+      });
     </script>
   </div>
 
-
+  <ul>
+    <li><a href="#" onclick="jwplayer().stop();jwplayer().play();">Toggle the playback</a></li>
+    <li><a href="#" onclick="jwplayer().load({file: '/music.mp3', image: '/thumbnails/sintel.jpg'})">Toggle the audio</a></li>
+    <li><a href="#" onclick="jwplayer().stop();">Stop playback</a></li>
+  </ul>
 </div>

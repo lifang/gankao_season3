@@ -39,10 +39,13 @@ class UsersController < ApplicationController
     else
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SIGNIN],:num=>Sun::TYPE_NUM[:SIGNIN])
       data="签到成功，获得1个小太阳。"
-      #随机奖励
+      
       if check_keep_on_login(user.id,category)
+        #连续登录5天奖励一个小太阳
+        Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:KEEP_ON_LOGIN],:num=>Sun::TYPE_NUM[:KEEP_ON_LOGIN])
+        data=data+"连续签到5天，奖励1个小太阳"
+        #随机奖励
         num=(rand*(Sun::TYPE_NUM[:RANDOM_AWARD].to_i+1)).to_i #随机[0,2]
- 
         if num!=0
           Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:RANDOM_AWARD],:num=>num)
           data=data+"连接登录5天，获赠#{num.to_s}个小太阳!"
@@ -57,7 +60,7 @@ class UsersController < ApplicationController
     end
   end
 
-  #是否签到、分享 按日期比较的
+  #是否签到 按日期比较的
   def is_check?(user_sun)
     #获取上一次更新时间-日期
     create_time=user_sun.created_at.strftime("%Y%m%d").to_i
@@ -89,20 +92,22 @@ class UsersController < ApplicationController
     end
     @message="我在赶考网复习"+level
     #获取用户
-    cookies[:user_id]=77
+    cookies[:user_id]=76
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
    
     if user and user.access_token and (user.end_time-Time.now>0)
       @message=@message+",来自链接:"+Constant::SERVER_PATH+"/users/#{user.id}/share_back?category=#{category}"
       if @web=="sina"
+        type=Sun::TYPES[:SINASHARE].to_i
         ret = sina_send_message(user.access_token, @message)
         @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
       elsif @web=="renren"
+        type=Sun::TYPES[:RENRENSHARE].to_i
         ret = renren_send_message(user.access_token, @message)
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
       end
       if @return_message.nil?
-        render :text=>update_user_suns(user,category)
+        render :text=>update_user_suns(user,category,type)
       else
         render :text=>@return_message
       end
@@ -115,16 +120,17 @@ class UsersController < ApplicationController
     end
   end
   #更新用户太阳数--分享成功
-  def update_user_suns(user,category)
-    user_sun=user.suns.where("category_id=#{category} and types=#{Sun::TYPES[:SHARE]}").find(:all)[0]
-    if user_sun and is_check?(user_sun)
+  def update_user_suns(user,category,type)
+    user_sun=user.suns.where("category_id=#{category} and types=#{type}").find(:all)[0]
+    if user_sun  #有分享记录，则不再赠送小太阳
       data="分享成功"
     else
-      Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SHARE],:num=>Sun::TYPE_NUM[:SHARE])
+      Sun.create(:user_id=>user.id,:category_id=>category,:types=>type,:num=>Sun::TYPE_NUM[:SHARE])
       data="分享成功,获得2个小太阳."
     end
     return data
   end
+ 
   #推荐网站，获得小太阳
   def share_back
     user=User.find(params[:id].to_i)
@@ -134,6 +140,6 @@ class UsersController < ApplicationController
     if count<5
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:COMMEND],:num=>Sun::TYPE_NUM[:COMMEND])
     end
-    redirect_to Constant::SERVER_PATH
+    redirect_to Constant::SERVER_PATH+"/plans?category=#{category}"
   end
 end
