@@ -31,35 +31,35 @@
               <img src="/assets/logo_cet6.png"/>
             <% else %>
               <img src="/assets/logo_graduate.png"/>
-            <% end %>            
+            <% end %>
           </a>
         </h1>
         <%=render :partial=>'users/info',:object=>user_info%>
         <div class="clear"></div>
         <% if cookies[:user_id] and is_nomal?(params[:category]) %>
           <nav class="border_radius">
-            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#">了解更多</a></span>
+            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#" onclick="show_mask('.payment','.pay_close')">了解更多</a></span>
           </nav>
         <% end %>
       </div>
       <div class="main">
         <div class="left">
           <div class="countDown">
-            <p>距研究生考试还有</p>
-            <h1>22<span>天</span></h1>
+            <p>距考研还有：</p>
+            <h1><%=from_kaoyan%><span>天</span></h1>
           </div>
           <div class="checkIn_box">
             <div class="checkIn_img"><a onclick="checkIn()" href="#"><img src="/assets/checkIn.png" /></a></div>
             <span class="checkIn_sun"><img src="/assets/sun.png" /></span>
-            <p>*每天签到奖励1个小太阳</p>
+            <p>*你已经连续签到<span id="checkIn_days"><%=user_info[:signin_days]%></span>天</p>
           </div>
           <div class="path_box"><img src="/assets/path.jpg" /></div>
         </div>
         <div class="middle">
           <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
         </div>
-        <div><a href="#" onclick="window.open('/users/check_login?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>
-<a href="#" onclick="window.open('/users/check_login?web=sina&category='+category, '_blank', 'height=500,width=600,left=300,top=150');">分享微博</a></div>
+        <div><a href="#" onclick="window.open('/users/share?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>
+          <a href="#" onclick="window.open('/users/share?web=sina&category='+category, '_blank', 'height=500,width=600,left=300,top=150');">分享微博</a></div>
         <div class="right">广告</div>
         <div class="clear"></div>
       </div>
@@ -68,7 +68,9 @@
     <div class="footer">
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
-
     <%=render :partial=>'users/details',:object=>user_info%>
+    <div class="mask"></div>
+    <%=render :partial=>'/users/charge_vip'%>
   </body>
+
 </html>

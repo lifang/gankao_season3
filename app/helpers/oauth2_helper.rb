@@ -4,6 +4,15 @@ module Oauth2Helper
   require "uri"
   require 'openssl'
 
+  #支付宝
+  PAGE_WAY="https://www.alipay.com/cooperate/gateway.do"
+  NOTIFY_URL="http://notify.alipay.com/trade/notify_query.do"
+  PARTNER_KEY="y8wpddg38lpu0ks66uluaj8506sw7tks"
+  PARTNER="2088002153002681"
+  SELLER_EMAIL="yesen@yahoo.cn"
+  CALLBACK_URL="http://localhost:3001/user/alipays/take_over_return"
+  NONSYNCH_URL="http://localhost:3001/user/alipays/over_pay"
+
   #weibo账号
   WEIBO_ID = 2359288352
 
@@ -60,7 +69,7 @@ module Oauth2Helper
     :redirect_uri=>"#{Constant::SERVER_PATH}/logins/respond_weibo"
   }
   WEIBO_NAME="gankao2011"
-#  WEIBO_ID="2359288352"
+  #  WEIBO_ID="2359288352"
 
   #构造post请求
   def create_post_http(url,route_action,params)
@@ -144,7 +153,7 @@ module Oauth2Helper
   def renren_sig_request(query)
     str = ""
     query.sort.each{|key,value|str<<"#{key}=#{value}"}
-    str<<Constant::RENREN_API_SECRET
+    str<<RENREN_API_SECRET
     sig = Digest::MD5.hexdigest(str)
     query[:sig]=sig
     request = Net::HTTP::Post.new("/restserver.do")

@@ -60,7 +60,7 @@ class UserPlan < ActiveRecord::Base
   # 计算各个练习需要达到的等级
   def self.target_level_report(target_score,category_id)
     category = Category::FLAG[category_id]
-    max_score = Examination::MAX_SCORE[:"#{category}"]
+    max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
     return nil unless word = calculate_target_level(target_score, max_score, Word::MAX_LEVEL[:"#{category}"])
     return nil unless sentence = calculate_target_level(target_score, max_score, PracticeSentence::SENTENCE_MAX_LEVEL[:"#{category}"])
     if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
@@ -173,20 +173,20 @@ class UserPlan < ActiveRecord::Base
       score += sys_provide_score(user_plan[:DICTATION].to_f/PER_ITEMS[:DICTATION], PracticeSentence::DICTATION_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
       score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ], Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.05)
       score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE], Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
-      score += Examination::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.05
+      score += UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.05
     else
       score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD], Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
       score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE], PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.25)
       score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ], Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.3)
       score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE], Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
-      score += Examination::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.1
+      score += UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.1
     end
   end
 
   #根据计划计算 每一项所占的预计分数
   def UserPlan.sys_provide_score(target_level, max_level, category_id, score_precent)
     category = Category::FLAG[category_id]
-    max_score = Examination::MAX_SCORE[:"#{category}"]
+    max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
     y = max_level%2 == 0 ? max_level + 1 : max_level # 41
     x = (y-1)*0.5  # 20
     total_area = max_level%2 == 0 ? x*y-y/x*0.5 : x*y

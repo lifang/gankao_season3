@@ -1,5 +1,5 @@
 <%= javascript_include_tag "video_skill"  %>
-<%= javascript_include_tag "/assets/flowplayer/flowplayer"  %>
+<%= javascript_include_tag "/assets/jwplayer/jwplayer"  %>
 <%= render :partial=>"/layouts/nav" %>
 <div class="m_content">
   <div class="mc_box">
@@ -12,8 +12,10 @@
       <div class="clear"></div>
     </div>
     <div class="mc_menu_box">
+
       <div class="video_area">
-        <div class="xz_video">↑<br/>选择讲师<br/>开始学习</div>
+        <div class="xz_video" >↑<br/>选择讲师<br/>开始学习</div>
+        <embed style="display: none" src="" allowFullScreen="true" quality="high" width="520" height="390" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
       </div>
       <div class="other_video">
         <% @sched_vis.each_with_index do |schedule,index| %>
@@ -23,7 +25,7 @@
             <div class="video_box">
               <ul class="video_ul">
                 <%@sched_vis[index+1][0].each do |video|%>
-                <li onclick="load_video('<%= Constant::SERVER_PATH +video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
+                  <li onclick="load_video('<%=video.video_url %>')"><img src="<%= video.img_url %>" ><%= video.title %></img></li>
                 <% end %>
               </ul>
             </div>
@@ -37,6 +39,4 @@
       $( $(".mc_menu li")[0]).trigger("onclick");
     </script>
   </div>
-
-
 </div>

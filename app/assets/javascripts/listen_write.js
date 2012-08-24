@@ -31,7 +31,7 @@ function formatStr(str){
 }
 //下一个问题
 function nextQuestion(){
-    $("div.middle").load("/learn/next_sentence?id="+id+"&type="+web_type+"&is_correct="+answer_mark+"&is_answer="+is_answer+"&index="+index)
+    $("div.middle").load("/learn/next_sentence?id="+id+"&type="+web_type+"&is_correct="+answer_mark+"&is_answer="+is_answer+"&index="+index+"&ids="+listen_ids)
 }
 
 function answer_correct(){
@@ -40,27 +40,18 @@ function answer_correct(){
     $("div.trueFalse").find("img").attr("src","/assets/true.png");
 }
 //播放音频
-//$(function(){
-//    //alert(url)
-//    $("#jquery_jplayer_1").jPlayer({
-//        ready: function (event) {
-//            $(this).jPlayer("setMedia",{
-//                mp3:url
-//            }
-//            );
-//        },
-//        swfPath: "../assets/Jplayer.swf",
-//        supplied: 'mp3',
-//        vmode:"window",
-//        solution:"flash, html",
-//        errorAlerts: false,
-//        warningAlerts: false
-//    });
-//
-//    $("#playAudio").click(function(){
-//        $("#jquery_jplayer_1").jPlayer("play");
-//    });
-//});
+$(function(){
+    flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
+        clip: {
+            url: '/music.mp3'
+        }
+    });
+
+    $("#playAudio").click(function(){
+        flowplayer('player').play();
+    });
+});
+
 $(function(){
 
     $("div.trueFalse").hide();

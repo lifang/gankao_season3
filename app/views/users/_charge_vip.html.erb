@@ -1,0 +1,27 @@
+<% category=params[:category].nil? ? 2 : params[:category].to_i %>
+<div class="payment" style="display: none">
+  <span class="close pay_close" >关闭</span>
+  <div class="pay_title">亲！升级为本站的高级用户后可享受更多优质服务和备考指导，
+    让您的赶考节奏稳步提升！您可以通过以下两种方式加入：</div>
+  <div class="pay_box">
+    <h1 class="pay_way_one">开通方式一：</h1>
+    <div class="pay_con_one">
+      <div class="pcon_bg"><img src="/assets/zfb_bg.jpg" /></div>
+      <div class="pay_price"><h1 id="pay_fee"><%= Order::PAY_FEE[:"#{Category::FLAG[category]}"] %></h1>元</div>
+      <a href="#" class="pay_a_one" onclick="check_vip('<%= params[:category] %>')"></a>
+    </div>
+    <span class="orange">温馨提示：支付宝充值免手续费</span>
+    <h1 class="pay_way_two">开通方式一：</h1>
+    <div class="pay_con_two">
+      <div class="pcon_bg"><img src="/assets/sqm_bg.jpg" /></div>
+      <input name="" type="text" class="pay_input" id="invit_code" />
+      <a href="#" class="pay_a_tow" onclick="accredit('<%= params[:category] %>')"></a>
+    </div>
+  </div>
+</div>
+<div class="tab tishi_tab" style="display:none">
+  <span class="close tishi_close">关闭</span>
+  <p>前测大约用时前测大约用时前测大约用时</p>
+  <div class="tab_btn_w"><button class="b_btn" onclick="window.open('/logins/alipay_exercise?category='+category+'&total_fee='+$('#pay_fee').html(),'_blank','height=750,width=1000,left=200,top=50');">重新支付</button>
+    <button class="b_btn" onclick="window.location.reload()">完成充值</button></div>
+</div>

@@ -6,6 +6,7 @@ class Skill < ActiveRecord::Base
 
   TYPES = {:LINSTEN => 1, :WORD => 2, :READ => 3, :SPEAK => 4} #听力  单词  阅读  口语
   SKILL_NAME={1=>"听力技巧",2=>"单词技巧",3=>"阅读技巧",4=>"口语技巧"}
+  PASS={:NOT=>0,:YES=>1} 
 
   #创建xml文件
   def self.xml_content(total_text)

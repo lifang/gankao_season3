@@ -685,12 +685,12 @@
                 }
             }
             t.playerId=E;
+            t.clip.autoPlay=false;
             t.clip=t.clip||{};
 
             if(q.getAttribute("href",2)&&!t.clip.url){
                 t.clip.url=q.getAttribute("href",2)
-                t.clip.autoPlay=false
-
+                
             }
             s=new h(t.clip,-1,w);
             t.playlist=t.playlist||[t.clip];
@@ -889,8 +889,8 @@
 })();
 (function(){
     var h=document.all,j="http://get.adobe.com/flashplayer",c=typeof jQuery=="function",e=/(\d+)[^\d]+(\d+)[^\d]*(\d*)/,b={
-        width:"100%",
-        height:"100%",
+        width:"0px",
+        height:"0px",
         id:"_"+(""+Math.random()).slice(9),
         allowfullscreen:true,
         allowscriptaccess:"always",

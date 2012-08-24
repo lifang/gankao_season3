@@ -1,9 +1,11 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
+  include Oauth2Helper
+#  before_filter :get_role, :except=> ["charge_vip"]  #charge_vip需开放请求，避免过滤
+  respond_to :html, :xml, :json
+  @@m = Mutex.new
 
-  def  renren_like
-    redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Constant::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
-  end
+
 
   #退出
   def logout
@@ -16,7 +18,6 @@ class LoginsController < ApplicationController
   #查看是否充值成功
   def charge_vip
     cookies.delete(:user_role)
-    user_role?(cookies[:user_id])
     category_id = params[:category].nil? ? 2 : params[:category]
     redirect_to "/"
   end
@@ -25,9 +26,9 @@ class LoginsController < ApplicationController
     redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
   end
 
-#  def respond_qq
-#    render :layout=>"oauth"
-#  end
+  #  def respond_qq
+  #    render :layout=>"oauth"
+  #  end
 
   def manage_qq
     begin
@@ -43,7 +44,7 @@ class LoginsController < ApplicationController
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-#        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+        #        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -52,7 +53,6 @@ class LoginsController < ApplicationController
       end
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
-      user_role?(cookies[:user_id])
       data=true
     rescue
       data=false
@@ -82,7 +82,7 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-#          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+          #          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -91,7 +91,6 @@ class LoginsController < ApplicationController
         end
         cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
-        user_role?(cookies[:user_id])
         render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -102,47 +101,6 @@ class LoginsController < ApplicationController
     end
   end
 
-#  def watch_weibo
-#    if cookies[:user_id].nil?
-#      redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
-#    else
-#      user=User.find(cookies[:user_id].to_i)
-#      if user.code_type!="sina" || user.access_token.nil? || user.end_time<Time.now
-#        redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
-#      else
-#        begin
-#          flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
-#        rescue
-#          flash[:warn]="关注失败，请登录微博查看"
-#        end
-#        render :inline => "<div style='width: 200px; height: 32px; margin: 0 auto;' id='text_body'>#{flash[:warn]}</div><script> setTimeout(function(){
-#                            window.close();}, 3000)</script><% flash[:warn]=nil %>#"
-#      end
-#    end
-#  end
-
-#  def respond_weibo
-#    render :layout=>"oauth"
-#  end
-#
-#  def add_watch_weibo
-#    layout "oauth"
-#    data="关注失败，请登录微博查看"
-#    begin
-#      meters={}
-#      params[:access_token].split("&").each do |parm|
-#        parms=parm.split("=")
-#        parms.each {meters[parms[0]]=parms[1]}
-#      end
-#      data=request_weibo(meters["access_token"],meters["uid"],data)
-#    rescue
-#    end
-#    respond_to do |format|
-#      format.json {
-#        render :json=>{:data=>data}, :layout => "ouath"
-#      }
-#    end
-#  end
 
 
   def request_renren
@@ -164,7 +122,7 @@ class LoginsController < ApplicationController
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-#          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+          #          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -173,7 +131,6 @@ class LoginsController < ApplicationController
         end
         cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
-        user_role?(cookies[:user_id])
         render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -202,7 +159,7 @@ class LoginsController < ApplicationController
       if @user.nil?
         @user=User.create(:code_id=>response["uid"],:code_type=>'baidu',:name=>response["uname"],
           :username=>response["uname"], :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-#        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
+        #        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -212,10 +169,128 @@ class LoginsController < ApplicationController
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies.delete(:user_role)
-      user_role?(cookies[:user_id])
       render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
+    end
+  end
+
+
+  #邀请码升级vip
+  def accredit_check
+    cookies[:user_id]=66
+    code=InviteCode.first(:conditions=>["code = ? and category_id = ?", params[:info].strip, params[:category]])
+    if code.nil?
+      data="邀请码不存在"
+    else
+      if code.user_id
+        data="邀请码已被使用"
+      else
+        data="升级成功"
+        order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{code.category_id} and status=#{Order::STATUS[:NOMAL]}")
+        if order.nil?
+          Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:pay_type=>Order::PAY_TYPES[:LICENSE],
+            :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
+            :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:types=>Order::TYPES[:ACCREDIT],
+            :end_time=>Time.now+Constant::DATE_LONG.days)
+        else
+          str = order.end_time.nil? ? "" : "，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
+          data = "您已是vip用户#{str}"
+        end
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:message=>data}
+      }
+    end
+  end
+
+  #检查是否需要充值vip
+  def check_vip
+    order = Order.first(
+      :conditions => "user_id = #{cookies[:user_id]} and category_id = #{params[:category]} and status = #{Order::STATUS[:NOMAL]}")
+    end_time = ""
+    is_vip = true
+    if order
+      is_vip = false
+      end_time = (order.end_time.nil?) ? "" : order.end_time.strftime("%Y-%m-%d")
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:vip => is_vip, :time => end_time}
+      }
+    end
+  end #此查询状态status需在过期时被自动作废
+
+  #发送充值请求
+  def alipay_exercise
+    category = Category.find(params[:category].to_s)
+    options ={
+      :service=>"create_direct_pay_by_user",
+      :notify_url=>Constant::SERVER_PATH+"/logins/alipay_compete",
+      :subject=>"会员购买#{category.name}产品",
+      :payment_type=>Order::PAY_TYPES[:CHARGE],
+      :total_fee=>params[:total_fee]
+    }
+    out_trade_no="#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}_#{params[:category]}"
+    options.merge!(:seller_email =>Oauth2Helper::SELLER_EMAIL, :partner =>Oauth2Helper::PARTNER, :_input_charset=>"utf-8", :out_trade_no=>out_trade_no)
+    options.merge!(:sign_type => "MD5", :sign =>Digest::MD5.hexdigest(options.sort.map{|k,v|"#{k}=#{v}"}.join("&")+Oauth2Helper::PARTNER_KEY))
+    redirect_to "#{Oauth2Helper::PAGE_WAY}?#{options.sort.map{|k, v| "#{CGI::escape(k.to_s)}=#{CGI::escape(v.to_s)}"}.join('&')}"
+  end
+
+  #充值异步回调
+  def alipay_compete
+    out_trade_no=params[:out_trade_no]
+    trade_nu =out_trade_no.to_s.split("_")
+    order=Order.find(:first, :conditions => ["out_trade_no=?",params[:out_trade_no]])
+    if order.nil?
+      alipay_notify_url = "#{Oauth2Helper::NOTIFY_URL}?partner=#{Oauth2Helper::PARTNER}&notify_id=#{params[:notify_id]}"
+      response_txt =Net::HTTP.get(URI.parse(alipay_notify_url))
+      my_params = Hash.new
+      request.parameters.each {|key,value|my_params[key.to_s]=value}
+      my_params.delete("action")
+      my_params.delete("controller")
+      my_params.delete("sign")
+      my_params.delete("sign_type")
+      mysign = Digest::MD5.hexdigest(my_params.sort.map{|k,v|"#{k}=#{v}"}.join("&")+Oauth2Helper::PARTNER_KEY)
+      dir = "#{Rails.root}/public/compete"
+      Dir.mkdir(dir)  unless File.directory?(dir)
+      file_path = dir+"/#{Time.now.strftime("%Y%m%d")}.log"
+      if File.exists? file_path
+        file = File.open( file_path,"a")
+      else
+        file = File.new(file_path, "w")
+      end
+      file.puts "#{Time.now.strftime('%Y%m%d %H:%M:%S')}   #{request.parameters.to_s}\r\n"
+      file.close
+      if mysign==params[:sign] and response_txt=="true"
+        if params[:trade_status]=="WAIT_BUYER_PAY"
+          render :text=>"success"
+        elsif params[:trade_status]=="TRADE_FINISHED" or params[:trade_status]=="TRADE_SUCCESS"
+          @@m.synchronize {
+            begin
+              Order.transaction do
+                order=Order.first(:conditions=>"user_id=#{trade_nu[0]} and category_id=#{trade_nu[2]} and status=#{Order::STATUS[:NOMAL]}")
+                if order.nil?
+                  Order.create(:user_id=>trade_nu[0],:category_id=>trade_nu[2].to_i,:pay_type=>Order::PAY_TYPES[:CHARGE],
+                    :out_trade_no=>"#{params[:out_trade_no]}",:status=>Order::STATUS[:NOMAL],:remark=>"支付宝充值升级vip",
+                    :start_time=>Time.now,:end_time=>Time.now+Constant::DATE_LONG.days,:types=>Order::TYPES[:CHARGE])
+                end
+              end
+              render :text=>"success"
+            rescue
+              render :text=>"success"
+            end
+          }
+        else
+          render :text=>"fail" + "<br>"
+        end
+      else
+        redirect_to "/"
+      end
+    else
+      render :text=>"success"
     end
   end
 

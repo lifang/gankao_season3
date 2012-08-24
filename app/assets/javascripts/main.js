@@ -128,3 +128,70 @@ $(function(){
 	
 	
 })
+
+function check_vip(category){
+    $('.close').trigger('click');
+    $.ajax({
+        async:true,
+        dataType:'json',
+        type:'post',
+        url:"/logins/check_vip",
+        data:{
+            category:category
+        },
+        success : function(data) {
+            if(data.vip){
+                show_mask('.tishi_tab','.tishi_close');
+                window.open("/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html(),
+                    '_blank','height=750,width=1000,left=200,top=50');
+            }else{
+                var str = (data.time == null || data.time == "") ? "" : "，截止日期是"+data.time;
+                tishi_alert("您已是vip用户"+str);
+            }
+        }
+    });
+}
+
+//带遮罩层的弹出层
+function show_mask(outer_div,close_btn){
+    var doc_height = $(document).height();
+    var doc_width = $(document).width();
+    var z_layer_height = $(outer_div).height();
+    var z_layer_width = $(outer_div).width();
+    $(outer_div).css('top',(doc_height-z_layer_height)/2);
+    $(outer_div).css('left',(doc_width-z_layer_width)/2);
+    $(outer_div).css('display','block');
+    $('.mask').css('height',doc_height)
+    $('.mask').css('display','');
+    $(close_btn).bind('click',function(){
+        $(outer_div).css('display','none');
+        $('.mask').css('display','none');
+    })
+}//outer_div 遮罩层显示的部分 close_btn 关闭按钮
+
+
+function accredit(category){
+    if($("#invit_code").val()==""||$("#invit_code").val()==null){
+        tishi_alert("请输入邀请码");
+        return false;
+    }
+    $.ajax({
+        async:true,
+        dataType:'json',
+        type:'post',
+        data:{
+            info:$("#invit_code").val(),
+            category:category
+        },
+        url:"/logins/accredit_check",
+        success : function(data) {
+            $("#invit_code").val("");
+            if (data.message=="升级成功"){
+                window.location.reload();
+            } else {
+                tishi_alert(data.message);
+            }
+        }
+    });
+    return false;
+}

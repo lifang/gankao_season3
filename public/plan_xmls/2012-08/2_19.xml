@@ -7,8 +7,52 @@
             <chapter2 days='25' dictation='20' read='4' translate='20'/>
             <chapter3 days='14' similarity='19' write='7'/>
         </info>
+<<<<<<< HEAD
         
         
+=======
+
+        <_11 status='0'>
+            <part status='0' type='0'>
+                <item id='11' is_pass='0' repeat_time='2' step='0'/>
+                <item id='13' is_pass='0' repeat_time='1' step='1'/>
+            </part>
+            <part status='0' type='5'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part>
+        </_11>
+        <_12 status='0'>
+            <part num='2' type='0'/>
+            <part num='1' type='1'/>
+            <part num='1' type='2'/>
+        </_12>
+        <_13 status='0'>
+            <part num='2' type='0'/>
+            <part num='1' type='1'/>
+            <part num='1' type='2'/>
+        </_13>
+        <_14 status='0'>
+            <part num='2' type='0'/>
+            <part num='1' type='1'/>
+            <part num='1' type='2'/>
+        </_14>
+        <_15 status='0'>
+            <part num='2' type='0'/>
+            <part num='1' type='1'/>
+            <part num='1' type='2'/>
+        </_15>
+        <_16 status='0'>
+            <part num='2' type='0'/>
+            <part num='1' type='1'/>
+            <part num='1' type='2'/>
+        </_16>
+        <_17 status='0'>
+            <part num='2' type='0'/>
+            <part num='1' type='1'/>
+            <part num='1' type='2'/>
+        </_17>
+>>>>>>> c1b7e769ca8ee78ceb5bc3e320e9661631c4c326
         <_18 status='0'>
             
             
@@ -430,10 +474,31 @@
         </_61>
     </plan>
     <review>
+<<<<<<< HEAD
         <_17 status='0'>
             <part repeat_time='0' status='0' type='3'>
                 <item id='11' is_pass='0' repeat_time='0' step='0'/>
                 <item id='13' is_pass='0' repeat_time='0' step='0'/>
+=======
+        <_11 status='0'>
+            <part status='1' type='5'>
+                <item id='11' is_pass='0' repeat_time='0' step='1'/>
+                <item id='13' is_pass='0' repeat_time='0' step='1'/>
+            </part>
+        </_11>
+        <_14 status='0'>
+            <part repeat_time='0' status='0' type='0'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part>
+            <part repeat_time='0' status='0' type='1'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part>
+            <part repeat_time='0' status='0' type='2'>
+                <item id='11' is_pass='false' repeat_time='0' step='0'/>
+                <item id='13' is_pass='false' repeat_time='0' step='0'/>
+>>>>>>> c1b7e769ca8ee78ceb5bc3e320e9661631c4c326
             </part>
         </_17>
     <_18 status='0'><part repeat_time='0' status='0' type='3'>
