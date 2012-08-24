@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     end
   end
 
-  #是否签到、分享 按日期比较的
+  #是否签到 按日期比较的
   def is_check?(user_sun)
     #获取上一次更新时间-日期
     create_time=user_sun.created_at.strftime("%Y%m%d").to_i
@@ -122,7 +122,7 @@ class UsersController < ApplicationController
   #更新用户太阳数--分享成功
   def update_user_suns(user,category,type)
     user_sun=user.suns.where("category_id=#{category} and types=#{type}").find(:all)[0]
-    if user_sun and is_check?(user_sun)
+    if user_sun  #有分享记录，则不再赠送小太阳
       data="分享成功"
     else
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>type,:num=>Sun::TYPE_NUM[:SHARE])
@@ -130,6 +130,7 @@ class UsersController < ApplicationController
     end
     return data
   end
+ 
   #推荐网站，获得小太阳
   def share_back
     user=User.find(params[:id].to_i)

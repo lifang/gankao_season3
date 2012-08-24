@@ -275,7 +275,7 @@ class LearnController < ApplicationController
 
 
 
-   #----Start-------听写过程--------Start----
+  #----Start-------听写过程--------Start----
   def listen
     #获取用户信息和xml路径和类别
     x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
@@ -383,7 +383,7 @@ class LearnController < ApplicationController
     listen_sentence=PracticeSentence.find(source.attributes["id"].to_i)
     return {:listen_sentence=>listen_sentence,:web_type=>web_type}
   end
-  #处理句子 id 当前做的题目id is_correct答题正确和错误 index当前题目在总题目中的索引
+  #处理句子 id 当前做的题目id is_correct答题正确和错误 index当前题目在总题目中的索引 ids当前所有题目的id
   def handle_sentences(xml,current,type,id,is_correct,index,part_type,ids)
     #找到句子
     sentence=xml.elements["root/#{type}/_#{current}/part[@type='#{part_type}']/item[@id='#{id}']"]
@@ -411,7 +411,7 @@ class LearnController < ApplicationController
     end
     return {:xml=>xml,:index=>index,:ids=>ids}
   end
-  #获取句子的ids,type为review或plan current为当前包数 part_type为题目类型
+  #获取句子的id,type为review或plan current为当前包数 part_type为题目类型
   def get_ids(xml,type,current,part_type)
     items=xml.get_elements("root/#{type}/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
     ids=[]
@@ -427,5 +427,5 @@ class LearnController < ApplicationController
     return xml
   end
 
-   #-----End------听写过程------End------
+  #-----End------听写过程------End------
 end
