@@ -33,7 +33,8 @@ class UsersController < ApplicationController
     cookies[:user_id]=1
     category=params[:category].empty?? 2:params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
-    user_sun=user.suns.where("category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}").find(:all)[0]
+    user_sun= Sun.find(:first, :conditions => [" category_id = ? and types = ? and user_id = ? and TO_DAYS(created_at) = TO_DAYS(NOW())"])
+      user.suns.where("category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}").find(:all)[0]
     if user_sun and is_check?(user_sun)
       data="你已经签过到了！！！"
     else
