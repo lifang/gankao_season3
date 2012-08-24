@@ -21,8 +21,12 @@ class LearnController < ApplicationController
     else
       @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
     end
+    p @ids_str
+    
     @items_str = items.join(",")
     cookies[:current_id] = items[0].split("-")[0] if items[0]
+    p  cookies[:current_id]
+    p @items_str
     case cookies[:type].to_i
     when UserPlan::CHAPTER_TYPE_NUM[:WORD]
       @result = operate_word(items)

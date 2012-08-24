@@ -52,6 +52,7 @@
       flowplayer('player').play();
     });
   });
+  
   $(document).ready(function(){
     $(".words_ul li").click(function(){
       if($("#SID").attr("value") == $("#I"+this.id).html()){
@@ -62,7 +63,7 @@
         jude("/learn/jude_word","false","false");
       }
     });
-  })
+  });
 
   function callback(){
     show_tip("#timeup");

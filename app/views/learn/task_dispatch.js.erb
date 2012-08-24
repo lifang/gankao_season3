@@ -19,7 +19,7 @@
   generate_flash_div(".plan_tab");
   myTime.start(<%= @result[:time] %>);
   <% id_arr = @ids_str.split(",") %>
-  $(".t_number").html(<%= id_arr.index(cookies[:current_id]) + 1 %>+"/"+<%= id_arr.length %>);
+  $(".t_number").html(<%= id_arr.index(cookies[:current_id]) + 1 %> + "/" + <%= id_arr.length %>);
 <% else %>
   alert("finish");
 <% end %>
