@@ -31,7 +31,7 @@ function formatStr(str){
 }
 //下一个问题
 function nextQuestion(){
-    $("div.middle").load("/learn/next_sentence?id="+id+"&type="+web_type+"&is_correct="+answer_mark+"&is_answer="+is_answer+"&index="+index)
+    $("div.middle").load("/learn/next_sentence?id="+id+"&type="+web_type+"&is_correct="+answer_mark+"&is_answer="+is_answer+"&index="+index+"&ids="+listen_ids)
 }
 
 function answer_correct(){
@@ -41,17 +41,15 @@ function answer_correct(){
 }
 //播放音频
 $(function(){
-    //alert(url)
-    jwplayer("jquery_jplayer_1").setup({
-        file: "/music.mp3",
-        flashplayer: "/assets/jwplayer/player.swf",
-        height:0,
-        width: 0
+    flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
+        clip: {
+            url: '/music.mp3'
+        }
     });
 
-//    $("#playAudio").click(function(){
-//        //jwplayer().play();
-//    });
+    $("#playAudio").click(function(){
+        flowplayer('player').play();
+    });
 });
 
 $(function(){
