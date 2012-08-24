@@ -47,7 +47,6 @@ class UsersController < ApplicationController
         user.signin_days=1
       end
       user.save
-      days=user.signin_days.to_i
       if check_keep_on_login(user.id,category)
         #连续登录5天奖励一个小太阳
         Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:KEEP_ON_LOGIN],:num=>Sun::TYPE_NUM[:KEEP_ON_LOGIN])
@@ -63,7 +62,7 @@ class UsersController < ApplicationController
     num=get_user_sun_nums(user,category)
     respond_to do |format|
       format.json {
-        render :json=>{:message=>data,:num=>num,:days=>days}
+        render :json=>{:message=>data,:num=>num,:days=>user.signin_days.to_i}
       }
     end
   end
