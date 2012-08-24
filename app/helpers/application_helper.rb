@@ -2,6 +2,7 @@ module ApplicationHelper
   include LearnHelper
 
   def sign?
+    cookies[:user_id] = 1
     deny_access unless signed_in?
   end
   
@@ -54,7 +55,6 @@ module ApplicationHelper
   
   #获取当前用户的基本信息和小太阳个数
   def user_info
-    cookies[:user_id]=1
     user_id=cookies[:user_id]
     category=params[:category].nil?? "2":params[:category]
     user=User.find(user_id)

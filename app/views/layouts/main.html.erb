@@ -34,11 +34,12 @@
             <% end %>
           </a>
         </h1>
-        <%=render :partial=>'users/info',:object=>user_info%>
+        <%=render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>
         <% if cookies[:user_id] and is_nomal?(params[:category]) %>
           <nav class="border_radius">
-            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#" onclick="show_mask('.payment','.pay_close')">了解更多</a></span>
+            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
+              <a href="javascript:void(0);" onclick="show_charge('.payment','.pay_close')">了解更多</a></span>
           </nav>
         <% end %>
       </div>
@@ -56,6 +57,9 @@
           <div class="path_box"><img src="/assets/path.jpg" /></div>
         </div>
         <div class="middle">
+          <% if @user_score_info.nil? %>
+            <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
+          <% end %>
           <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
         </div>
         <div><a href="#" onclick="window.open('/users/share?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>

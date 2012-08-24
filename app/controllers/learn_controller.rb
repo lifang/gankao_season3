@@ -3,6 +3,7 @@ class LearnController < ApplicationController
   layout 'main'
   require 'rexml/document'
   include REXML
+  before_filter :sign?
 
   respond_to :html, :xml, :json, :js
   

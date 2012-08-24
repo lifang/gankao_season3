@@ -178,7 +178,6 @@ class LoginsController < ApplicationController
 
   #邀请码升级vip
   def accredit_check
-    cookies[:user_id]=66
     code=InviteCode.first(:conditions=>["code = ? and category_id = ?", params[:info].strip, params[:category]])
     if code.nil?
       data="邀请码不存在"
@@ -225,7 +224,7 @@ class LoginsController < ApplicationController
 
   #发送充值请求
   def alipay_exercise
-    category = Category.find(params[:category].to_s)
+    category = Category.find(params[:category].to_i)
     options ={
       :service=>"create_direct_pay_by_user",
       :notify_url=>Constant::SERVER_PATH+"/logins/alipay_compete",

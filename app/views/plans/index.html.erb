@@ -1,7 +1,4 @@
 <%= javascript_include_tag "plan" %>
-<% if @user_score_info.nil? %>
-  <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
-<% end %>
 <%= render :partial => "/layouts/nav" %>
 <div class="m_content">
   <% if @plan_list %>
