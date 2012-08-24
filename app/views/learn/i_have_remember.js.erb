@@ -13,5 +13,5 @@ window.ids = "<%= @ids_str %>";
   })
 <% elsif @items_str.empty? %>
   clearInterval(myTime.timeId);
-  $("#pass").show();
+  show_tip("#pass");
 <% end %>

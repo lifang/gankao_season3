@@ -13,27 +13,25 @@
   <div class="words_con">
     <div class="w_question"><%= @result[:sentence] %></div>
     <input name="" type="text" class="answer_input" onfocus="$('.trueFalse').html('')" />
-    <div class="trueFalse"></div>
   </div>
   <div class="words_func">
     <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
     <a onclick="jude('/learn/jude_word','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   function hedui(){
     if($("#SID").attr("value").toLowerCase() == $(".answer_input").attr("value").trim().toLowerCase()){
-      $(".trueFalse").html("<img src='assets/true.png' />");
       clearInterval(myTime.timeId);
-      jude("/learn/jude_word","true","true");
+      jude("/learn/jude_word","true","false");
     }else{
-      $(".trueFalse").html("<img src='assets/false.png' />");
       clearInterval(myTime.timeId);
-      jude("/learn/jude_word","false","true");
+      jude("/learn/jude_word","false","false");
     }
   }
   function callback(){
-    $("#timeup").show();
+    show_tip("#timeup");
     jude("/learn/jude_word","false","false");
   }
 </script>

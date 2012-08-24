@@ -59,11 +59,16 @@ module ApplicationHelper
     category=params[:category].nil?? "2":params[:category]
     user=User.find(user_id)
     num= get_user_sun_nums(user,category)
-    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
+    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:signin_days=>user[:signin_days],:num=>num}
   end
   #获取用户的所有太阳数
   def get_user_sun_nums(user,category)
     sun=Sun.find_by_sql("select sum(num) num from suns where category_id=#{category} and user_id=#{user.id}")[0]
     return sun.nil?? 0:sun.num.to_i
+  end
+  #考研的倒计时
+  def from_kaoyan
+    exam_date=Constant::DEAD_LINE[:GRADUATE].to_datetime
+    ((exam_date.to_i-Time.now.to_i)/(3600*24)).round
   end
 end

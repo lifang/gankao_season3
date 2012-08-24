@@ -46,12 +46,12 @@
         <div class="left">
           <div class="countDown">
             <p>距考研还有：</p>
-            <h1>22<span>天</span></h1>
+            <h1><%=from_kaoyan%><span>天</span></h1>
           </div>
           <div class="checkIn_box">
             <div class="checkIn_img"><a onclick="checkIn()" href="#"><img src="/assets/checkIn.png" /></a></div>
             <span class="checkIn_sun"><img src="/assets/sun.png" /></span>
-            <p>*你已经连续签到 0 天</p>
+            <p>*你已经连续签到<span id="checkIn_days"><%=user_info[:signin_days]%></span>天</p>
           </div>
           <div class="path_box"><img src="/assets/path.jpg" /></div>
         </div>

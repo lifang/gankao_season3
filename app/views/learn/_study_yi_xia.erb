@@ -4,13 +4,14 @@
   <div class="ts_btn_box"><button class="b_btn" onclick="next()">开始检查</button></div>
 </div>
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
+  <%=javascript_include_tag "flowplayer/flowplayer"%>
   <div class="pt_title">
     <h1>单词学习</h1>
     <span onclick="close_pop()" class="close">关闭</span>
   </div>
   <div class="mc_box">
     <div class="words_func">
-      <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
       <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
       <h1><%= @result[:word].name %><span class="fyin">[ <%= @result[:word].phonetic %> ]</span></h1>
       <p><span><%= Word::TYPES[@result[:word].types] %></span><%= @result[:word].ch_mean %></p>
@@ -29,28 +30,18 @@
     </div>
   </div>
 <% end %>
-
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
     $(function(){
-      $("#jquery_jplayer_1").jPlayer({
-        ready: function (event) {
-          $(this).jPlayer("setMedia",{
-            mp3: "<%= @result[:word].enunciate_url %>"
-          }
-        );
-        },
-        swfPath: "../assets/Jplayer.swf",
-        supplied: 'mp3',
-        vmode:"window",
-        solution:"flash, html",
-        errorAlerts: false,
-        warningAlerts: false
+      flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
+        clip: {
+          url: '/music.mp3'
+        }
       });
 
       $("#playAudio").click(function(){
-        $("#jquery_jplayer_1").jPlayer("play");
-
+        flowplayer('player').play();
       });
     });
 <% end %>
