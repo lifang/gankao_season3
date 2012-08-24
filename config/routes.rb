@@ -23,6 +23,7 @@ GankaoSeason3::Application.routes.draw do
   resources :similarities
   resources :plans do
     collection do
+      get :end_result
       post :show_chapter
     end
   end
