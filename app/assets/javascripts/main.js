@@ -195,4 +195,3 @@ function accredit(category){
     });
     return false;
 }
-

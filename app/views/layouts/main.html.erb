@@ -38,7 +38,7 @@
         <div class="clear"></div>
         <% if cookies[:user_id] and is_nomal?(params[:category]) %>
           <nav class="border_radius">
-            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#">了解更多</a></span>
+            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。<a href="#" onclick="show_mask('.payment','.pay_close')">了解更多</a></span>
           </nav>
         <% end %>
       </div>
