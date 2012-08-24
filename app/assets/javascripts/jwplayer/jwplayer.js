@@ -2180,11 +2180,9 @@ this.resize=function(v,u){
 this.play=function(u){
     if(typeof u=="undefined"){
         u=this.getState();
-        alert(1);
         if(u==b.api.events.state.PLAYING||u==b.api.events.state.BUFFERING){
             this.callInternal("jwPause")
             }else{
-                 alert(2);
             this.callInternal("jwPlay")
             }
         }else{
