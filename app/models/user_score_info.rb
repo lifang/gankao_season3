@@ -2,6 +2,10 @@
 class UserScoreInfo < ActiveRecord::Base
   belongs_to :user
   belongs_to :category
+  
+  MAX_SCORE = {:CET4 => 550, :CET6 => 550, :GRADUATE => 75} #各个科目用我们系统复习所能达到的最高成绩
+  MODULUS_PERCENT = {:LOW => 0.2, :NOMAL => 0.5, :HIGH => 1}  # 0~20%低分， 21%~50%稍低， 51%~100%正常
+  MODULUS = {:LOW => 2, :NOMAL => 1, :HIGH => 0.5}  #低分， 稍低， 正常
 
 
   #取到默认开始的词库、句子跟听力
@@ -30,4 +34,26 @@ class UserScoreInfo < ActiveRecord::Base
     end
     return today_score
   end
+
+  #根据用户的测试成绩计算他的时间系数
+  def set_user_modulus
+    max_score = case self.category_id
+    when Category::TYPE[:CET4]
+      MAX_SCORE[:CET4]
+    when Category::TYPE[:CET6]
+      MAX_SCORE[:CET6]
+    when Category::TYPE[:GRADUATE]
+      MAX_SCORE[:GRADUATE]
+    end
+    percent = self.start_score.to_f/max_score
+    self.mudulus = if percent <= MODULUS_PERCENT[:LOW]
+      MODULUS[:LOW]
+    elsif percent > MODULUS_PERCENT[:LOW] and percent <= MODULUS_PERCENT[:NOMAL]
+      MODULUS[:NOMAL]
+    else
+      MODULUS[:HIGH]
+    end
+    self.save
+  end
+  
 end

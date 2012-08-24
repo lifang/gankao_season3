@@ -38,10 +38,8 @@
             </div>
           </div>
         <%end%>
-        <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
-      <%else%>
-        <span style="font-size:30px;color:red;text-align: center;">你还没有提问哦!</span>
-      <%end%>
+        <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>      
+      <%end %>
     </div>
   </div>
   <div class="clear"></div>
