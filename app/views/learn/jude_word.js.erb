@@ -18,5 +18,6 @@ window.ids = "<%= @ids_str %>";
 <% elsif @flag == "true" %>
   show_tip("#right");
 <% elsif @flag == "false" %>
+  <% p @flag %>
   show_tip("#wrong");
 <% end %>

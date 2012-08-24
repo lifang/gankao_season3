@@ -24,10 +24,10 @@
   function hedui(){
     if($("#SID").attr("value").toLowerCase() == $(".answer_input").attr("value").trim().toLowerCase()){
       clearInterval(myTime.timeId);
-      jude("/learn/jude_word","true","true");
+      jude("/learn/jude_word","true","false");
     }else{
       clearInterval(myTime.timeId);
-      jude("/learn/jude_word","false","true");
+      jude("/learn/jude_word","false","false");
     }
   }
   function callback(){

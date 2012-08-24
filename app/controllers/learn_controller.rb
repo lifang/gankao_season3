@@ -22,10 +22,6 @@ class LearnController < ApplicationController
       @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
     end
     @items_str = items.join(",")
-    p "-------------"
-    p @items_str
-    p cookies[:type]
-    p "-------------"
     cookies[:current_id] = items[0].split("-")[0] if items[0]
     case cookies[:type].to_i
     when UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -40,20 +36,26 @@ class LearnController < ApplicationController
   end
   
   #取出当前part的items 并组装 [id-repeat_time-step]
-<<<<<<< HEAD
   def willdo_part_infos
+    review = willdo_review_infos
+    return review if !review.nil?
+    
     plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-    current = xml.elements["//current"].text
-    xpath = "//plan//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
-=======
-  def willdo_part_infos(category)
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], category]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
->>>>>>> c1b7e769ca8ee78ceb5bc3e320e9661631c4c326
     node = xml.elements[xpath]
     return nil unless !node.nil?
+    cookies[:is_new] = "plan"
+    return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
+  end
+
+  def willdo_review_infos
+    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
+    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+    xpath = "//review//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+    node = xml.elements[xpath]
+    return nil unless !node.nil?
+    cookies[:is_new] = "review"
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
@@ -162,9 +164,7 @@ class LearnController < ApplicationController
     end
     if params[:flag] == "false"
       elem = "#{cookies[:current_id]}-2-#{step}"
-      p "ooooooooooo"
       rewrite_xml_item(xpath, nil, 2, nil)
-      p "-------!!!!"
     end
     if (step == 2 && repeat <= 1 && params[:flag] == "true")
       ids = ids - [items[0].split("-")[0]]
@@ -174,7 +174,7 @@ class LearnController < ApplicationController
     end
     pass_status("part") if items.blank?
     @status = is_part_pass?
-    p @items_str = items.join(",")
+    @items_str = items.join(",")
     @flag = params[:flag]
     @ids_str = ids.join(",")
     @redirct = params[:redirct]
@@ -261,7 +261,7 @@ class LearnController < ApplicationController
   def rewrite_xml_item(xpath, is_pass, repeat_time, step)
     plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-    element = xml.elements["//plan//_#{xml.elements['//current'].text}"+xpath]
+    element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath]
     element.add_attribute("is_pass", UserPlan::PLAN_STATUS[:FINISHED]) if is_pass == UserPlan::PLAN_STATUS[:FINISHED]
     element.add_attribute("repeat_time", repeat_time) if repeat_time
     element.add_attribute("step", step) if step
@@ -274,9 +274,9 @@ class LearnController < ApplicationController
     plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     if kind == "part"
-      element = xml.elements["//plan//_#{xml.elements['//current'].text}//part[@type=#{cookies[:type]}]"]
+      element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}//part[@type=#{cookies[:type]}]"]
     else
-      element = xml.elements["//plan//_#{xml.elements['//current'].text}"]
+      element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"]
     end
     element.add_attribute("status", UserPlan::PLAN_STATUS[:FINISHED])
     f = File.new(Constant::PUBLIC_PATH + plan.plan_url,"w+")
@@ -288,11 +288,11 @@ class LearnController < ApplicationController
     plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     current = xml.elements["//current"].text
-    xpath = "//plan//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+    xpath = "//#{cookies[:is_new]}//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
     if node.nil?
       pass_status("all")
-      UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first.update_plan
+      UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first.update_plan if cookies[:is_new] == "plan"
       return true
     end
     return false
