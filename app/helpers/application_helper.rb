@@ -66,4 +66,9 @@ module ApplicationHelper
     sun=Sun.find_by_sql("select sum(num) num from suns where category_id=#{category} and user_id=#{user.id}")[0]
     return sun.nil?? 0:sun.num.to_i
   end
+  #考研的倒计时
+  def from_kaoyan
+    exam_date=Constant::DEAD_LINE[:GRADUATE].to_datetime
+    ((exam_date.to_i-Time.now.to_i)/(3600*24)).round
+  end
 end
