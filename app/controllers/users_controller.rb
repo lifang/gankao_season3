@@ -33,17 +33,25 @@ class UsersController < ApplicationController
     cookies[:user_id]=1
     category=params[:category].empty?? 2:params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
-    user_sun=user.suns.where("category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}").find(:all)[0]
-    if user_sun and is_check?(user_sun)
+    user_sun=Sun.find_by_sql("select * from suns where user_id=#{user.id} and category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}
+       and  TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
+    if user_sun
       data="你已经签过到了！！！"
     else
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SIGNIN],:num=>Sun::TYPE_NUM[:SIGNIN])
       data="签到成功，获得1个小太阳。"
-      
+      #连续签到 +1 没有连续变为1
+      if check_everyday(user.id,category)
+        user.signin_days=user.signin_days.to_i+1
+      else
+        user.signin_days=1
+      end
+      user.save
+      days=user.signin_days.to_i
       if check_keep_on_login(user.id,category)
         #连续登录5天奖励一个小太阳
         Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:KEEP_ON_LOGIN],:num=>Sun::TYPE_NUM[:KEEP_ON_LOGIN])
-        data=data+"连续签到5天，奖励1个小太阳"
+        data=data+"连续签到5天，奖励1个小太阳!"
         #随机奖励
         num=(rand*(Sun::TYPE_NUM[:RANDOM_AWARD].to_i+1)).to_i #随机[0,2]
         if num!=0
@@ -55,18 +63,20 @@ class UsersController < ApplicationController
     num=get_user_sun_nums(user,category)
     respond_to do |format|
       format.json {
-        render :json=>{:message=>data,:num=>num}
+        render :json=>{:message=>data,:num=>num,:days=>days}
       }
     end
   end
 
   #是否签到 按日期比较的
-  def is_check?(user_sun)
-    #获取上一次更新时间-日期
-    create_time=user_sun.created_at.strftime("%Y%m%d").to_i
-    #获取当前时间-日期
-    date_now=Time.now.strftime("%Y%m%d").to_i
-    return create_time==date_now
+  def check_everyday(id,category)
+    user_sun=Sun.find_by_sql("select * from suns where and TO_DAYS(now())-1=TO_DAYS(created_at);
+    and user_id=#{id} and category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}")
+    if user_sun
+      return true
+    else
+      return false
+    end
   end
 
   #是否连续5天登录

@@ -43,7 +43,7 @@ function checkIn(){
         success:function(data){
             tishi_alert(data.message);
             $(".s_sun").html(data.num);
-        //$(".checkIn_box").hide();
+            $("#checkIn_days").html(data.days)
         }
     });
 }
