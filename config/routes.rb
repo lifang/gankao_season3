@@ -19,12 +19,6 @@ GankaoSeason3::Application.routes.draw do
     end
   end
 
-  resources :welcome do
-    collection do
-      get :login
-    end
-  end
-
   resources :logins 
   resources :similarities
   resources :plans do
