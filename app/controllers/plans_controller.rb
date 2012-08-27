@@ -42,7 +42,7 @@ class PlansController < ApplicationController
     else
       @score=cookies[:"#{Category::FLAG[@category]}"].split(",")
       if cookies[:user_id]
-        t_score=@score.pop
+        @t_score=@score.pop
         create_user_score(@category,@score,t_score)
       end
     end
