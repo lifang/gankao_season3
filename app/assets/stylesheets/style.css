@@ -945,3 +945,14 @@ nav li { float: left; margin: 0 20px;}
 .cz_tishi_btn { width: 300px; margin: 10px 100px;}
 .wanc_btn { width: 88px; height: 31px; background: url(/assets/wanc_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 .chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
+
+
+/*tab登录*/
+.tab_loginArea { }
+.tab_loginArea h1 { font-size: 20px; text-align: center;}
+.tab_loginArea ul { width: 176px; display: block; list-style: none; margin: 10px auto;}
+.tab_loginArea ul li { width: 176px; height: 35px; margin: 12px 0;}
+.tab_loginArea ul li a { width: 176px; height: 35px; display: block; overflow: hidden; text-indent: -999px;}
+.t_login_sina { background: url(/assets/login_li.png) no-repeat 0 0;}
+.t_login_renren { background: url(/assets/login_li.png) no-repeat 0 -68px;}
+.t_login_qq { background: url(/assets/login_li.png) no-repeat 0 -129px;}
