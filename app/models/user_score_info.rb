@@ -6,6 +6,7 @@ class UserScoreInfo < ActiveRecord::Base
   MAX_SCORE = {:CET4 => 550, :CET6 => 550, :GRADUATE => 75} #各个科目用我们系统复习所能达到的最高成绩
   MODULUS_PERCENT = {:LOW => 0.2, :NOMAL => 0.5, :HIGH => 1}  # 0~20%低分， 21%~50%稍低， 51%~100%正常
   MODULUS = {:LOW => 2, :NOMAL => 1, :HIGH => 0.5}  #低分， 稍低， 正常
+  PASS_SCORE = {:CET4 => 425, :CET6 => 425, :GRADUATE => 55} #各个科目过关成绩
 
 
   #取到默认开始的词库、句子跟听力

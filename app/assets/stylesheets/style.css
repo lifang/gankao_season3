@@ -11,6 +11,7 @@ img { border: none;}
 .clear { clear: both;}
 .orange { color: #e4411e;}
 .center {text-align: center;}
+.red { color: #F00;}
 
 .border_radius {
     -moz-border-radius: 0.6em;
