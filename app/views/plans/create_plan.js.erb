@@ -1,0 +1,2 @@
+$(".mc_box").html("<%= escape_javascript(render :partial => "/plans/personal_info",:object=>"#{@user_plan}".gsub("=>",":")) %>");
+

@@ -18,5 +18,8 @@ module Constant
     :GRADUATE => '2013-01-12'
   }
   DATE_LONG=90
+
   
+
+
 end

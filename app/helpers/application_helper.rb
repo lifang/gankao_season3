@@ -83,9 +83,11 @@ module ApplicationHelper
     if cookies[:user_id]
       user_score_info = UserScoreInfo.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
       if user_score_info
-        @user_plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
-        if @user_plan
-          #current_score =
+        user_plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
+        if user_plan
+          doc = user_plan.plan_list_xml
+          current_package = doc.root.elements["plan"].elements["current"].text.to_i
+          current_package = user_score_info.show_user_score(current_package, user_plan.days)
         end
       end
     end
