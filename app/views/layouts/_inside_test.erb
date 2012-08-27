@@ -1,0 +1,12 @@
+<div id="inside_test_div">
+<% url = case params[:category_id].to_i
+when Category::TYPE[:CET4]
+  Constant::GANKAO_CET4_PATH  
+when Category::TYPE[:CET6]
+  Constant::GANKAO_CET6_PATH
+when Category::TYPE[:GRADUATE]
+  Constant::GANKAO_GRADUATE_PATH
+end %>
+<iframe scrolling="no" frameborder="0" allowtransparency="true" 
+        src="<%= url %>" style="width:800px;height:623px;" ></iframe>
+</div>

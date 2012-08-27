@@ -72,9 +72,9 @@
     <div class="footer">
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
-    <%=render :partial=>'users/details',:object=>user_info%>
-    <div class="mask"></div>
-    <%=render :partial=>'/users/charge_vip'%>
+    <%= render :partial => 'users/details', :object => user_info %>
+    <div class="mask" style="display: none;"></div>
+    <%= render :partial => '/users/charge_vip' %>
+    <%= render :partial => '/layouts/inside_test' %>
   </body>
-
 </html>

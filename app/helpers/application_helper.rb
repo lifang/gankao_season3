@@ -2,7 +2,7 @@ module ApplicationHelper
   include LearnHelper
 
   def sign?
-    cookies[:user_id] = 1
+    cookies[:user_id] = 2
     deny_access unless signed_in?
   end
   
