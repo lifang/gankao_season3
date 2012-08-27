@@ -141,7 +141,7 @@ function check_vip(category){
         },
         success : function(data) {
             if(data.vip){
-                show_mask('.tishi_tab','.tishi_close');
+                show_charge('.tishi_tab','.tishi_close');
                 window.open("/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html(),
                     '_blank','height=750,width=1000,left=200,top=50');
             }else{
@@ -153,16 +153,19 @@ function check_vip(category){
 }
 
 //带遮罩层的弹出层
-function show_mask(outer_div,close_btn){
-    var doc_height = $(document).height();
-    var doc_width = $(document).width();
-    var z_layer_height = $(outer_div).height();
-    var z_layer_width = $(outer_div).width();
-    $(outer_div).css('top',(doc_height-z_layer_height)/2);
-    $(outer_div).css('left',(doc_width-z_layer_width)/2);
-    $(outer_div).css('display','block');
-    $('.mask').css('height',doc_height)
-    $('.mask').css('display','');
+function show_charge(outer_div,close_btn){
+    show_mask('.mask');
+    generate_flash_div(outer_div);
+    
+    //    var doc_height = $(document).height();
+    //    var doc_width = $(document).width();
+    //    var z_layer_height = $(outer_div).height();
+    //    var z_layer_width = $(outer_div).width();
+    //    $(outer_div).css('top',(doc_height-z_layer_height)/2);
+    //    $(outer_div).css('left',(doc_width-z_layer_width)/2);
+    //    $(outer_div).css('display','block');
+    //    $('.mask').css('height',doc_height)
+    //    $('.mask').css('display','');
     $(close_btn).bind('click',function(){
         $(outer_div).css('display','none');
         $('.mask').css('display','none');
@@ -194,4 +197,14 @@ function accredit(category){
         }
     });
     return false;
+}
+
+function show_kaoyan_frame() {
+    show_mask('.mask');
+    generate_flash_div("#inside_test_frame");
+    $('.close').bind('click',function(){
+        $('.mask').hide();
+        $('#inside_test_frame').hide();
+        return false;
+    })
 }

@@ -12,7 +12,6 @@ class SkillsController < ApplicationController
 
 
   def create
-    cookies[:user_id]=1
     paras={:user_id=>cookies[:user_id],:skill_title=>params[:title],:category_id=>params[:category_id],:created_at=>Time.now,
       :simplify_con=>params[:text_con].strip[0..100].gsub("/r/n",""),:types=>params[:blog_types]}
     skill=Skill.create!(paras)

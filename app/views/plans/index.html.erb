@@ -1,7 +1,4 @@
 <%= javascript_include_tag "plan" %>
-<% if @user_score_info.nil? %>
-  <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
-<% end %>
 <%= render :partial => "/layouts/nav" %>
 <div class="m_content">
   <% if @plan_list %>
@@ -23,10 +20,11 @@
             要参考书本、网络或是请教别人。
           </p>
         </div>
-        <div class="btn_div"><a href="#" class="noTest_btn">开始前测</a></div>
+        <div class="btn_div">
+          <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();" class="noTest_btn">开始前测</a>
+        </div>
       </div>
-    </div>
+    </div>      
   <% end %>
 </div>
-<div class="mask" style="display: none;"></div>
 <div class="plan_tab"></div>
