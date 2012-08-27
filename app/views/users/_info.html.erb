@@ -1,26 +1,18 @@
-<%=javascript_include_tag 'users'%>
-<%
-    @username=info[:name]
-    @school=info[:school]
-    @email=info[:email]
-    @sun_num=info[:num]
-%>
-<script type="text/javascript">
-  <%params[:category]=2 if params[:category].nil? or params[:category].empty?%>
-  var category=<%=params[:category]%>
-</script>
-<div  class="login_info bb_radius">
-  <div class="info_left">
-    <div class="user_pic"><img src="/assets/u01.jpg" /></div>
-    <p id="name"><%=@username%></p>
-    <p id="schoolName"><%=@school%></p>
-    <p><span class="s_sun"><%=@sun_num%></span><a href="#">获得小太阳</a></p>
+<% if cookies[:user_id] %>
+  <div  class="login_info bb_radius">
+    <div class="info_left">
+      <div class="user_pic"><img src="<%= info[:cover_url].nil? ? User::DEFAULT_COVER : info[:cover_url] %>" /></div>
+      <p id="name"><%= info[:name] %></p>
+      <p id="schoolName"><%= info[:school] %></p>
+      <p><span class="s_sun"><%= info[:num] %></span><a href="#">获得小太阳</a></p>
+    </div>
+    <ul class="user_fun">
+      <li><a href="javascript:void(0);" class="u_set">设置</a></li>
+      <li><a href="/logins/logout" class="u_exit">退出</a></li>
+      <li><a href="javascript:void(0);" class="u_bbs">论坛</a></li>
+      <li><a href="javascript:void(0);" class="u_subject">科目</a></li>
+    </ul>
   </div>
-  <ul class="user_fun">
-    <li><a href="javascript:void(0);" class="u_set">设置</a></li>
-    <li><a href="javascript:void(0);" class="u_exit">退出</a></li>
-    <li><a href="#" class="u_bbs">论坛</a></li>
-    <li><a href="javascript:void(0);" class="u_subject">科目</a></li>
-  </ul>
-</div>
-
+<% else %>
+  <%= render :partial=>'layouts/login_tab' %>
+<% end %>

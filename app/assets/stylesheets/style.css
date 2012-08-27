@@ -80,7 +80,7 @@ img { border: none;}
     overflow: hidden;
 }
 /*登录区域*/
-.login_area { width: 500px; height: 80px; float: right;}
+.login_area { width: 400px; height: 80px; float: right;}
 .login_area li { width: 120px; height: 80px; float: left;}
 .login_area a.renren, .login_area a.sina, .login_area a.qq {
     width:55px;
@@ -206,7 +206,7 @@ nav li { float: left; margin: 0 20px;}
 
 .countDown { width:85px; height: 88px; margin-right: 5px; background: #e4411e; float: left; color: #e4e3ce;}
 .countDown p { width: 72px; margin: 10px auto 0 auto;}
-.countDown h1 { text-align: center; font-size: 50px; color: #FFF;}
+.countDown h1 { text-align: center; font-size: 36px; color: #FFF;}
 .countDown h1 span { font-size: 12px; color: #e4e3ce;}
 
 .checkIn_box { width: 140px; height: 88px; background: #387580; position: relative; float: left;}
@@ -254,7 +254,8 @@ nav li { float: left; margin: 0 20px;}
 .mc_box { padding: 10px; overflow: hidden;}
 
 
-.right { background: #e4e3ce; height: 300px;}
+.right {height: 300px;}
+.right_ad { background: #e4e3ce;}
 
 
 .recommend {
@@ -945,3 +946,43 @@ nav li { float: left; margin: 0 20px;}
 .cz_tishi_btn { width: 300px; margin: 10px 100px;}
 .wanc_btn { width: 88px; height: 31px; background: url(/assets/wanc_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 .chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
+
+/*------关注gz_tab----------*/
+.gz_tab {
+    width: 688px;
+	height: 450px;
+	background: url(/assets/gz_tab_bg.jpg) repeat;
+	border-radius: 0.6em;
+	box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
+	position: absolute;
+}
+.gz_top { border-bottom: 1px #3d8c9b dashed;  padding: 20px; overflow: hidden;}
+.gz_mh { width: 150px; float: left; margin-left: 20px;}
+.gz_mh li { height: 22px; line-height: 22px; margin: 10px 0;}
+.gz_mh li input { float: left;}
+.gz_mh li p { text-indent: -999px; overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 5px;}
+.gz_renren { background: url(/assets/gz_mh.png) no-repeat 0 0;}
+.gz_qq { background: url(/assets/gz_mh.png) no-repeat 0 -32px;}
+.gz_sina { background: url(/assets/gz_mh.png) no-repeat 0 -62px;}
+
+.gz_sun {
+    width: 434px;
+	height: 84px;
+	background: url(/assets/gz_sun.png) no-repeat;
+	float: left;
+	margin-top: 18px;
+}
+.gz_sun h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
+
+.gz_bottom { height: 200px; padding: 20px; overflow: hidden;}
+.gz_logo { float: left; margin-left: 30px;}
+.gz_why { width: 500px; float: left;}
+.gz_why h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
+.gz_select { padding-left: 100px; color: #397580;}
+.gz_select h2 { float: left;}
+.gz_select span { float: left;}
+.gz_bottom_btn { position: absolute; bottom: 20px; right: 20px; }
+
+/*---------------right分享------------------*/
+.right_fx { height: 80px; margin-bottom: 10px;}
+.right_fx a {text-indent: -999px; overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 5px;}

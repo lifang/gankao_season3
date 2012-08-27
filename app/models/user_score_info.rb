@@ -26,11 +26,11 @@ class UserScoreInfo < ActiveRecord::Base
   end
 
   #更新用户的进步曲线 y=ax  y最大值是测试成绩跟预期成绩的差值，x最大是学习期限
-  def show_user_score(current_day, total_day)
+  def show_user_score(current_package, total_package)
     leave_score = self.target_score - self.start_score
     today_score = self.target_score
-    if current_day < total_day
-      today_score = self.start_score + (leave_score/total_day)*current_day
+    if current_package < total_package
+      today_score = self.start_score + (leave_score/total_package)*current_package
     end
     return today_score
   end

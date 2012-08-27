@@ -28,46 +28,46 @@ class UsersController < ApplicationController
  
   #签到
   def check_in
-    category=params[:category].empty?? 2:params[:category].to_i
+    category = params[:category].empty? ? 2 : params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
-    user_sun=Sun.find_by_sql("select * from suns where user_id=#{user.id} and category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}
-       and  TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
+    user_sun=Sun.find_by_sql("select * from suns where category_id=#{category}
+      and types=#{Sun::TYPES[:SIGNIN]} and user_id=#{user.id} 
+       and TO_DAYS(NOW())=TO_DAYS(created_at)")[0]
     if user_sun
-      data="你已经签过到了！！！"
+      data="你今天已经签过到了哦~~~"
     else
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SIGNIN],:num=>Sun::TYPE_NUM[:SIGNIN])
       data="签到成功，获得1个小太阳。"
-      #连续签到 +1 没有连续变为1
+      #连续签到 +1 没有连续变为1      
       if check_everyday(user.id,category)
         user.signin_days=user.signin_days.to_i+1
       else
         user.signin_days=1
       end
       user.save
+      data = data+"连续签到5天，奖励1个小太阳，并有机会得到额外奖励的1~2个小太阳!"
       if check_keep_on_login(user.id,category)
         #连续登录5天奖励一个小太阳
-        Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:KEEP_ON_LOGIN],:num=>Sun::TYPE_NUM[:KEEP_ON_LOGIN])
-        data=data+"连续签到5天，奖励1个小太阳!"
+        Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:KEEP_ON_LOGIN],:num=>Sun::TYPE_NUM[:KEEP_ON_LOGIN])       
         #随机奖励
-        num=(rand*(Sun::TYPE_NUM[:RANDOM_AWARD].to_i+1)).to_i #随机[0,2]
+        num = (rand*(Sun::TYPE_NUM[:RANDOM_AWARD].to_i+1)).to_i #随机[0,2]
         if num!=0
           Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:RANDOM_AWARD],:num=>num)
-          data=data+"连接登录5天，获赠#{num.to_s}个小太阳!"
         end
       end
     end
-    num=get_user_sun_nums(user,category)
+    total_num = get_user_sun_nums(user,category)
     respond_to do |format|
       format.json {
-        render :json=>{:message=>data,:num=>num,:days=>user.signin_days.to_i}
+        render :json=>{:message => data,:num => total_num,:days => user.signin_days.to_i}
       }
     end
   end
 
   #是否签到 按日期比较的
   def check_everyday(id,category)
-    user_sun=Sun.find_by_sql("select * from suns where and TO_DAYS(now())-1=TO_DAYS(created_at);
-    and user_id=#{id} and category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}")
+    user_sun=Sun.find_by_sql("select * from suns where category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]} 
+    and user_id=#{id} and TO_DAYS(now())-1=TO_DAYS(created_at)")
     if user_sun
       return true
     else
@@ -77,11 +77,10 @@ class UsersController < ApplicationController
 
   #是否连续5天登录
   def check_keep_on_login(user_id,category)
-    start_time=(Time.now-5.days).to_s(:db)
-    count=Sun.find_by_sql("select count(*) signin_count from suns where created_at>CONVERT_TZ('#{start_time}','+00:00','+00:00')
-    and created_at<=CONVERT_TZ('#{Time.now.to_s(:db)}','+00:00','+00:00') and user_id=#{user_id} and category_id=#{category}
-   and types=#{Sun::TYPES[:SIGNIN]}")[0].signin_count
-    if count>=5
+    count=Sun.count_by_sql("select count(id) signin_count from suns where category_id=#{category} and user_id=#{user_id}
+      and types=#{Sun::TYPES[:SIGNIN]}
+      and TO_DAYS(created_at)>TO_DAYS(now())-5 and TO_DAYS(created_at)<=TO_DAYS(now())")
+    if count >= 5
       return true
     else
       return false
