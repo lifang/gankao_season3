@@ -17,8 +17,4 @@ window.ids = "<%= @ids_str %>";
 <% elsif @items_str.empty? && @status == true %>
   clearInterval(myTime.timeId);
   show_tip("#all_pass");
-<% elsif @flag == "true" %>
-  show_tip("#right");
-<% elsif @flag == "false" %>
-  show_tip("#wrong");
 <% end %>

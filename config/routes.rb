@@ -23,13 +23,14 @@ GankaoSeason3::Application.routes.draw do
   resources :similarities
   resources :plans do
     collection do
+      get :end_result
       post :show_chapter
     end
   end
   resources :learn do
     collection do
       get  :listen, :pass_status, :study_it,:next_sentence
-      post :task_dispatch,:jude_word, :jude_sentence, :jude_hearing, :i_have_remember
+      post :task_dispatch,:jude_word, :jude_sentence, :jude_hearing, :jude_read, :i_have_remember
     end
   end
   resources :questions ,:only=>[:index]

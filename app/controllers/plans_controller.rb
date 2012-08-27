@@ -18,9 +18,8 @@ class PlansController < ApplicationController
           :SENTENCE=>47, :READ=>96, :WRITE=>96, :LISTEN=>47, :TRANSLATE=>500, :DICTATION=>500, :DAYS => 86, :TARGET_SCORE => 400}
         @user_plan = UserPlan.init_plan(@user_score_info, data_info, cookies[:user_id].to_i, category)
         @plan_list = @user_plan.get_plan_list
-
       end
-    end    
+    end
   end
 
   #显示部分

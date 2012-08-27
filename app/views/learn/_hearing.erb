@@ -1,16 +1,16 @@
-<%=javascript_include_tag "jquery.jplayer.min"%>
 <div class="pt_title">
   <h1>听力练习</h1>
   <div class="pt_time">00:00:00</div>
   <span class="t_number"></span>
   <span onclick="close_pop()" class="close">关闭</span>
 </div>
+<%=javascript_include_tag "flowplayer/flowplayer"%>
 <div class="mc_box">
   <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <h2>选择你听到的语句。</h2>
     <input type="hidden" id="SID" value="<%= @result[:listen].en_mean %>" />
-    <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+    <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
     <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
   </div>
   <div class="words_con">
@@ -24,26 +24,17 @@
     <a onclick="jude('/learn/jude_hearing','false','true')" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   $(function(){
-    $("#jquery_jplayer_1").jPlayer({
-      ready: function (event) {
-        $(this).jPlayer("setMedia",{
-          mp3: "<%= @result[:listen].enunciate_url %>"
-        }
-      );
-      },
-      swfPath: "../assets/Jplayer.swf",
-      supplied: 'mp3',
-      vmode:"window",
-      solution:"flash, html",
-      errorAlerts: false,
-      warningAlerts: false
+    flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
+      clip: {
+        url: '/music.mp3'
+      }
     });
 
     $("#playAudio").click(function(){
-      $("#jquery_jplayer_1").jPlayer("play");
-
+      flowplayer('player').play();
     });
   });
   
@@ -53,18 +44,16 @@
 
   function hedui(){
     if($(".words_con .hover_on a").html() == $("#SID").attr("value")){
-      $(".trueFalse").html("<img src='assets/true.png' />");
       clearInterval(myTime.timeId);
-      jude('/learn/jude_hearing','true','true');
+      jude('/learn/jude_hearing','true','false');
     }else{
-      $(".trueFalse").html("<img src='assets/false.png' />");
       clearInterval(myTime.timeId);
-      jude('/learn/jude_hearing','false','true');
+      jude('/learn/jude_hearing','false','false');
     }
   }
 
   function callback(){
-    $("#timeup").show();
+    show_tip("#timeup");
     jude('/learn/jude_hearing','false','false');
   }
   

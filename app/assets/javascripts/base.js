@@ -1,18 +1,3 @@
-//$(document).ready(function(){
-//    $(".pl_img #unlock").click(function(){
-//        part_one_start();
-//    })
-//})
-//
-//function part_one_start (){
-//    $.ajax({
-//        async:true,
-//        dataType:'script',
-//        url:"/learn/task_dispatch?category=2",
-//        type:'get'
-//    })
-//}
-
 window.items;
 window.ids;
 
@@ -66,7 +51,15 @@ function remember(){
     })
 }
 
+function show_tip(style){
+    $(".tip_mask").show();
+    $(style).show();
+    generate_tip_div(style);
+}
+
 function close_pop(){
     $(".plan_tab").html("");
+    $(".mask").hide();
+    clearInterval(myTime.timeId);
 }
 

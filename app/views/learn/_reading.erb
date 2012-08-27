@@ -1,17 +1,152 @@
+<style type="text/css">
+  .readH {
+    font-weight: bold;
+    font-size: 19px;
+  }
+</style>
 <div class="pt_title">
   <h1>阅读练习</h1>
   <div class="pt_time">00:00:00</div>
-  <span class="t_number">2/20</span>
-  <span class="close">关闭</span>
+  <span class="t_number"></span>
+  <span onclick="close_pop()" class="close">关闭</span>
 </div>
-<div class="mc_box">
+<div id="readit" class="mc_box">
   <div class="words_con">
     <div class="text_con">
-      <%= @result[:description] %>
+      <% tinx = 1 %>
+      <% @result[:description].each do |p| %>
+        <p>
+          <% p.split("[]").each do | line | %>
+            <span id="_<%= tinx %>"><%= line %></span>
+            <% tinx +=1 %>
+          <% end %>
+        </p>
+      <% end %>
     </div>
-
   </div>
   <div class="words_func">
-    <a href="#" title="下一步" class="next tooltip">Next</a>
+    <a onclick="next_step()" title="下一步" class="next tooltip">Next</a>
   </div>
 </div>
+<%= render :partial => "learn/tip" %>
+<%= render :partial => "learn/tip_read" %>
+<% @result[:questions].each_with_index do |question, index| %>
+  <div id="_q_<%= index %>" class="mc_box" style="display:none">
+    <input type="hidden" id="SID_<%= index %>" value="<%= question[:answer] %>"/>
+    <div class="w_question"><%= question[:title] %></div>
+    <div class="words_con">
+      <% question[:options].each do |option| %>
+        <div class="question_list"><a href="javascript:void(0)"><%= option %></a></div>
+      <% end %>
+    </div>
+    <div class="words_func">
+      <% if index < @result[:questions].length - 1 %>
+        <a onclick="next_q()" title="下一道" class="next tooltip">Next</a>
+      <% else %>
+        <a onclick="next_read()" title="下一题" class="next tooltip">Next</a>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<div class="tip_mask" style="display: none;"></div>
+<script type="text/javascript">
+  var modulus = <%= cookies[:modulus].to_f %>;
+  var defaultT = <%= Constant::READ_TIME[:DEFAULT] %>;
+  var num = $(".text_con p span").length;
+  var question_num = <%= @result[:questions].length %>;
+  var current_q = 0;
+  var flag = true;  //整体
+  var isright = false;  //每条小题
+  var i = 2;
+  var t;
+  function start(){
+    var word_num = str_len($("#_"+(i-1)).html().trim());
+    if(i <= num + 1) {
+      t = setTimeout(change,parseInt(word_num*modulus*defaultT)*1000);
+    }
+  }
+  function change(){
+    $("#_"+(i-1)).removeClass("readH");
+    $("#_"+i).addClass("readH");
+    i++;
+    start();
+  }
+
+  function str_len(str){
+    return str.replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").
+      replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ").split(" ").length;
+  }
+
+  //阅读直接点击跳转至做题
+  function next_step(){
+    clearTimeout(t);
+    clearInterval(myTime.timeId);
+    $("#readit").hide();
+    $("#_q_"+current_q).fadeIn(1000);
+    myTime.start(<%= @result[:qtime] %>);
+  }
+  //下一道题目
+  function next_q(){
+    flag = false;
+    clearInterval(myTime.timeId);
+    $("#_q_"+current_q).hide();
+    $("#_q_"+(++current_q)).fadeIn(1000);
+    myTime.start(<%= @result[:qtime] %>);
+  }
+  //下一篇阅读
+  function next_read(){
+    flag = false;
+    jude_read(flag,'true');
+  }
+
+  function callback(){
+    if($("#readit").css("display") == "block"){
+      next_step();
+    }else{
+      flag = false;
+      show_tip("#read_timeup");
+    }
+  }
+  
+  $(document).ready(function(){
+    $("#_1").addClass("readH");
+    start();
+    $(".words_con div a").click(function(){
+      clearInterval(myTime.timeId);
+      if($(this).html() == $("#SID_"+current_q).attr("value")){
+        isright = true;
+      }else{
+        flag = false;
+        isright = false;
+      }
+      if(isright){
+        show_tip("#read_right");
+      }else{
+        show_tip("#read_wrong");
+      }
+    })
+  })
+
+  function jude_read(flag, redirct){
+    $.ajax({
+      async:true,
+      dataType:'script',
+      url:'/learn/jude_read',
+      type:'post',
+      data:{
+        items : window.items,
+        ids : window.ids,
+        flag : flag,
+        redirct : redirct
+      }
+    })
+  }
+
+  function hide_read_tip(){
+    $("#read_right").hide();
+    $("#read_wrong").hide();
+    $("#read_timeup").hide();
+    $(".tip_mask").hide();
+  }
+
+</script>

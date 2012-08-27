@@ -58,9 +58,11 @@
         </div>
         <div class="middle">
           <% if @user_score_info.nil? %>
-            <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行<a href="#">前测</a>吧！</div>
+            <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行
+              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">前测</a>吧！
+            </div>
           <% end %>
-          <%= yield %> <!-- 用class为 m_content 的 div片段 填充 -->
+          <%= yield %>
         </div>
         <div><a href="#" onclick="window.open('/users/share?web=renren&category='+category, '_blank', 'height=500,width=600,left=300,top=100');">分享到人人 </a>
           <a href="#" onclick="window.open('/users/share?web=sina&category='+category, '_blank', 'height=500,width=600,left=300,top=150');">分享微博</a></div>
@@ -75,6 +77,6 @@
     <%= render :partial => 'users/details', :object => user_info %>
     <div class="mask" style="display: none;"></div>
     <%= render :partial => '/users/charge_vip' %>
-    <%= render :partial => '/layouts/inside_test' %>
+    <% unless @plan_list %><%= render :partial => '/layouts/inside_test' %><% end %>
   </body>
 </html>

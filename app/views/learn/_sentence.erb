@@ -65,6 +65,7 @@
     </div>
   </div>
 <% end %>
+<div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   $(document).ready(function(){
     $("#read .words_con").fadeTo(<%= @result[:time]*1000 %>, 0.3);
@@ -84,13 +85,11 @@
   function hedui(){
     var right = $("#SID").attr("value").replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ");
     if(right.trim() == $("#current").html().trim()){
-      $(".trueFalse").html("<img src='assets/true.png' />");
       clearInterval(myTime.timeId);
-      jude('/learn/jude_sentence','true','true');
+      jude('/learn/jude_sentence','true','false');
     }else{
-      $(".trueFalse").html("<img src='assets/false.png' />");
       clearInterval(myTime.timeId);
-      jude('/learn/jude_sentence','false','true');
+      jude('/learn/jude_sentence','false','false');
     }
   }
 
@@ -105,7 +104,7 @@
     if($("#read").css("display") == "block"){
       next_step();
     }else{
-      $("#timeup").show();
+      show_tip("#timeup");
       jude('/learn/jude_sentence','false','false');
     }
   }
