@@ -43,7 +43,7 @@ class PlansController < ApplicationController
       @score=cookies[:"#{Category::FLAG[@category]}"].split(",")
       if cookies[:user_id]
         @t_score=@score.pop
-        create_user_score(@category,@score,t_score)
+        create_user_score(@category,@score,@t_score)
       end
     end
   
@@ -56,6 +56,8 @@ class PlansController < ApplicationController
       user_score.update_attributes(paras)
     else
       UserScoreInfo.create(paras)
+      UserScoreInfo.set_user_modulus
+      UserScoreInfo.self.complete_test(category, cookies[:user_id])
     end
   end
 
