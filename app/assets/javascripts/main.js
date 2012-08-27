@@ -199,6 +199,12 @@ function accredit(category){
     return false;
 }
 
+//弹出复习的层
+function show_mask(style) {
+    $(style).css('height',document.body.scrollHeight);
+    $(style).show();
+}
+
 function show_kaoyan_frame() {
     show_mask('.mask');
     generate_flash_div("#inside_test_frame");
