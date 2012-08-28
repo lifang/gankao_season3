@@ -997,6 +997,8 @@ nav li { float: left; margin: 0 20px;}
 .gz_bottom_btn { position: absolute; bottom: 20px; right: 20px; }
 
 /*---------------right分享------------------*/
+.right_fx_box { background: #E4E3CE; padding: 5px 0 5px 2px; margin-bottom: 10px;}
+.right_fx_p { height: 30px; line-height: 30px; padding-left: 5px;}
 .right_fx {margin-bottom: 10px; overflow: hidden;}
 .right_fx a {text-indent: -999px; overflow: hidden; float: left; width: 32px; height: 32px; margin: 0 4px;}
 .fx_qq { background: url(/assets/fx_icon.png) no-repeat 0 0;}

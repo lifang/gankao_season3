@@ -141,18 +141,18 @@ class UsersController < ApplicationController
   def share_back
     user=User.find(params[:id].to_i)
     category=params[:category].to_i
-    count=Sun.find_by_sql("select count(*) commend_count from suns where types=#{Sun::TYPES[:COMMEND]} and
-       category_id=#{category} and user_id=#{user.id}")[0].commend_count
+    count=Sun.count_by_sql("select count(*) commend_count from suns where types=#{Sun::TYPES[:COMMEND]} and
+       category_id=#{category} and user_id=#{user.id}")
     if count<5
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:COMMEND],:num=>Sun::TYPE_NUM[:COMMEND])
     end
     redirect_to Constant::SERVER_PATH+"/plans?category=#{category}"
   end
+  
   #用户登录三次提示分享网站和关注
   def kaoyan_share
     @web= params[:web].to_s
     message=params[:message].to_s
-    cookies[:user_id]=77
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
  
     message="我选择赶考因为："+message
