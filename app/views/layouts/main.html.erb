@@ -31,7 +31,6 @@
             <% end %>
           </a>
         </h1>
-<<<<<<< HEAD
         <%=render :partial=>'users/info', :object=>user_info %>
         <div class="onlineUsers">在线人数:<span class="orange">10000</span>人</div>
         <div class="clear"></div>
@@ -40,11 +39,7 @@
           setInterval(function(){
             $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+2000);
           }, 3600000);
-        </script>
-=======
-        <%= render :partial=>'users/info', :object=>user_info %>
->>>>>>> b6bfcd64e84ca63087e0347b62aea2feeaa33d78
-        <div class="clear"></div>        
+        </script>      
         <nav class="border_radius">
           <% if cookies[:user_id] and is_nomal?(params[:category]) %>
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
