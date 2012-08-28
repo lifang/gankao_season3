@@ -60,7 +60,7 @@ module ApplicationHelper
     user=User.find(user_id)
     num= get_user_sun_nums(user,category)
     @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:signin_days=>user[:signin_days],
-        :login_times=>user[:login_times],:num=>num}
+      :login_times=>user[:login_times],:num=>num}
   end
   #获取用户的所有太阳数
   def get_user_sun_nums(user,category)
@@ -71,5 +71,13 @@ module ApplicationHelper
   def from_kaoyan
     exam_date=Constant::DEAD_LINE[:GRADUATE].to_datetime
     ((exam_date.to_i-Time.now.to_i)/(3600*24)).round
+  end
+  #用户登录天数
+  def signin_days(user,category_id)
+    hash=Hash.new()
+    p hash=user.signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
+    p Category::FLAG[category_id.to_i]
+    p hash[Category::FLAG[category_id.to_i]].to_i
+    return hash[Category::FLAG[category_id.to_i]].to_i
   end
 end
