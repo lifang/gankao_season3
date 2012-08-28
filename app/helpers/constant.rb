@@ -8,7 +8,6 @@ module Constant
   LISTEN_TIME = {:PER => 1.5}
   READ_TIME = {:DEFAULT => 0.5, :QUESTION => 30}
 
-
   SERVER_PATH = "http://localhost:3001"
   GANKAO_GRADUATE_PATH = "http://localhost:3000/graduate"
   GANKAO_CET4_PATH = "http://localhost:3000/cet_four"
@@ -19,7 +18,5 @@ module Constant
     :GRADUATE => '2013-01-12'
   }
   DATE_LONG=90
-
- 
 
 end

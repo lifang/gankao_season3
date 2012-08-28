@@ -16,6 +16,21 @@ function infoTab(i_tab,i_box,x){
     })
 }
 
+//小太阳提示
+$(function(){
+	$(".s_sun_mess").fadeIn(1000);
+	window.setTimeout(function sunMess(){
+		$(".s_sun_mess").fadeOut("slow");
+	},4000);
+
+	$(".s_sun").hover(function(){
+		$(".s_sun_mess").css("display","block");
+		},function(){
+		$(".s_sun_mess").css("display","none");
+		}
+	)
+})
+
 $(document).ready(function(){
     infoTab('.u_set','#u_set_div','.x');//设置弹出框
     infoTab('.u_subject','#u_subject_div','.x');//科目弹出框
@@ -156,16 +171,6 @@ function check_vip(category){
 function show_charge(outer_div,close_btn){
     show_mask('.mask');
     generate_flash_div(outer_div);
-    
-    //    var doc_height = $(document).height();
-    //    var doc_width = $(document).width();
-    //    var z_layer_height = $(outer_div).height();
-    //    var z_layer_width = $(outer_div).width();
-    //    $(outer_div).css('top',(doc_height-z_layer_height)/2);
-    //    $(outer_div).css('left',(doc_width-z_layer_width)/2);
-    //    $(outer_div).css('display','block');
-    //    $('.mask').css('height',doc_height)
-    //    $('.mask').css('display','');
     $(close_btn).bind('click',function(){
         $(outer_div).css('display','none');
         $('.mask').css('display','none');
@@ -205,6 +210,7 @@ function show_mask(style) {
     $(style).show();
 }
 
+//显示考研弹出层
 function show_kaoyan_frame() {
     show_mask('.mask');
     generate_flash_div("#inside_test_frame");
@@ -214,3 +220,4 @@ function show_kaoyan_frame() {
         return false;
     })
 }
+

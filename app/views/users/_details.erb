@@ -1,15 +1,15 @@
-<%
-@username=details[:name]
-@school=details[:school]
-@email=details[:email]
-%>
+<%= javascript_include_tag 'users' %>
+<script type="text/javascript">
+<% params[:category]=2 if params[:category].nil? or params[:category].empty? %>
+  var category=<%= params[:category] %>
+</script>
 <div class="u_tab_div" id="u_set_div" style="display:none">
   <span class="s_triangle"><img src="/assets/s_triangle.png" /></span>
   <span class="x">关闭</span>
   <h2>个人资料</h2>
-  <p><label>姓名（昵称）：</label><input id="username" type="text" value=<%=@username%> /></p>
-  <p><label>学校：</label><input id="school" name="" type="text" value=<%=@school%> /></p>
-  <p><label>邮箱：</label><input id="email" name="" type="text" value=<%=@email%> /></p>
+  <p><label>姓名（昵称）：</label><input id="username" type="text" value=<%= details[:name] %> /></p>
+  <p><label>学校：</label><input id="school" name="" type="text" value=<%= details[:school] %> /></p>
+  <p><label>邮箱：</label><input id="email" name="" type="text" value=<%= details[:email] %> /></p>
   <div class="u_btn"><button class="affirm_btn" onclick="javascript:updateUserInfo()" >确认提交</button></div>
 </div>
 

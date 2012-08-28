@@ -1,7 +1,8 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
   include Oauth2Helper
-  #  before_filter :get_role, :except=> ["charge_vip"]  #charge_vip需开放请求，避免过滤
+  layout nil
+  before_filter :sign?, :only => ["check_vip", "alipay_exercise", "accredit_check"]
   respond_to :html, :xml, :json
   @@m = Mutex.new
 
@@ -74,7 +75,6 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-          #          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -114,7 +114,6 @@ class LoginsController < ApplicationController
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-          #          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -253,16 +252,69 @@ class LoginsController < ApplicationController
 
 
   def call_back_sina
-     if cookies[:oauth2_url_generate]
+    if cookies[:oauth2_url_generate]
       begin
         cookies.delete(:oauth2_url_generate)
         #发送微博
         access_token=params[:access_token]
-        uid=params[:uid]
+        content=cookies[:sharecontent].split('@!')
+        ret = sina_send_message(access_token, content[1])
+        type=Sun::TYPES[:SINASHARE].to_i
+        @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
+        if @return_message.nil?
+          render :text=>update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)
+        else
+          render :text=>@return_message
+        end
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
 
-        response = sina_get_user(access_token,uid)
-  
-        render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+  def call_back_renren
+    if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        #发送微博
+        access_token=params[:access_token]
+        content=cookies[:sharecontent].split('@!')
+        ret = renren_send_message(access_token, content[1])
+        type=Sun::TYPES[:RENRENSHARE].to_i
+        @return_message = "分享失败，请重新尝试" if ret[:error_code]
+        if @return_message.nil?
+          render :text=>update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)
+        else
+          render :text=>@return_message
+        end
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
+
+  def call_back_qq
+    if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        #发送微博
+        access_token=params["access_token"]
+        openid=params[:open_id]
+        content=cookies[:sharecontent].split('@!')
+        type=Sun::TYPES[:QQSHARE].to_i
+        ret = share_tencent_weibo(access_token,openid,content[1])
+        @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
+        if @return_message.nil?
+          render :text=>update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)
+        else
+          render :text=>@return_message
+        end
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end

@@ -33,7 +33,7 @@ function updateUserInfo(){
 }
 
 //签到
-function checkIn(){
+function checkIn(category){
     $.ajax({
         async:true,
         url:"/users/check_in?category="+category,
@@ -41,7 +41,7 @@ function checkIn(){
         success:function(data){
             tishi_alert(data.message);
             $(".s_sun").html(data.num);
-            $("#checkIn_days").html(data.days)
+            $("#checkIn_days").html(data.days);
         }
     });
 }
