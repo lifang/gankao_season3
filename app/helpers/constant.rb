@@ -19,7 +19,4 @@ module Constant
   }
   DATE_LONG=90
 
-
-
-
 end

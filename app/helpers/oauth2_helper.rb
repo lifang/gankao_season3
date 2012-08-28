@@ -274,4 +274,38 @@ module Oauth2Helper
     rescue
     end
   end
+
+  def watch_weibo
+    if cookies[:user_id].nil?
+      redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+    else
+      user=User.find(cookies[:user_id].to_i)
+      if user.code_type!="sina" || user.access_token.nil? || user.end_time<Time.now
+        redirect_to "#{Oauth2Helper::REQUEST_URL_WEIBO}?#{Oauth2Helper::REQUEST_WEIBO_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+      else
+        begin
+          flash[:warn]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        rescue
+          flash[:warn]="关注失败，请登录微博查看"
+        end
+        render :inline=>"<div style='width: 200px; height: 32px; margin: 0 auto;' id='text_body'>#{flash[:warn]}</div><script> setTimeout(function(){
+                            window.close();}, 3000)</script><% flash[:warn]=nil %>"
+      end
+    end
+  end
+
+  #关注腾讯微博
+  def focus_tencent_weibo(access_token,openid)
+    send_parms={:oauth_consumer_key=>Oauth2Helper::APPID,:access_token=>access_token,:openid=>openid,
+      :format=>"json",:scope=>"all",:oauth_version=>"2.a",:name=>Oauth2Helper::WEIBO_NAME}
+    return create_post_http("https://open.t.qq.com","/api/friends/add",send_parms)
+  end
+
+  #发送腾讯微博
+  def share_tencent_weibo(access_token,openid,message)
+    send_parms={:oauth_consumer_key=>Oauth2Helper::APPID,:access_token=>access_token,:openid=>openid,
+      :format=>"json",:scope=>"all",:oauth_version=>"2.a",:content=>message}
+    return create_post_http("https://open.t.qq.com","/api/t/add",send_parms)
+  end
+
 end

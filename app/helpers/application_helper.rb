@@ -62,7 +62,7 @@ module ApplicationHelper
       if user
         num= get_user_sun_nums(user,category)
         @user={:name => user.name, :school => user.school, :email => user.email,
-          :signin_days => user.signin_days, :num => num, :cover_url => user.cover_url}
+          :signin_days => user.signin_days, :login_times=>user.login_times, :num => num, :cover_url => user.cover_url}
       end
     end
   end
@@ -99,4 +99,12 @@ module ApplicationHelper
     return score_arr.join(",")
   end
   
+  #用户登录天数
+  def signin_days(user,category_id)
+    hash=Hash.new()
+    p hash=user.signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
+    p Category::FLAG[category_id.to_i]
+    p hash[Category::FLAG[category_id.to_i]].to_i
+    return hash[Category::FLAG[category_id.to_i]].to_i
+  end
 end
