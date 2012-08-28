@@ -1,9 +1,12 @@
 #encoding: utf-8
 class QuestionsController < ApplicationController
   layout 'main'
+  before_filter :sign?, :only => ["save_answer", "ask_question"]
+
   def index
-    params[:category]='2' if params[:category].nil?
-    redirect_to '/questions/ask?category='+params[:category] if cookies[:user_id]
+    category = (params[:category].nil? or params[:category].empty?) ? "2" : params[:category]
+    url = cookies[:user_id] ? '/questions/ask?category='+category : '/questions/answered?category='+category
+    redirect_to url
   end
 
   #获取已经回答的问题
@@ -49,41 +52,39 @@ class QuestionsController < ApplicationController
   #获取我提问的问题
   def ask
     #获取当前用户和类别
-    cookies[:user_id]=24
-    user_id=cookies[:user_id]
+    user_id = cookies[:user_id].to_i
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
-    @myasks=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+    if user_id
+      @myasks=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
           from user_questions uq left join users u on u.id = uq.user_id
           where uq.category_id = ? and  uq.user_id=? order by created_at desc",
-        category, user_id], :page => params[:page], :per_page => 3)
-    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+          category, user_id], :page => params[:page], :per_page => 3)
+      @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @myasks[0].id]) if @myasks.any?
-    
+    end
   end
 
   def answers
     #获取当前用户
-    cookies[:user_id]=24
-    user_id=cookies[:user_id]
+    user_id = cookies[:user_id].to_i
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
-    
-    #获取我回答问题的
-    @myanswers=UserQuestion.paginate_by_sql(["select user_questions.*,users.name user_name,users.cover_url from
+    if user_id
+      #获取我回答问题的
+      @myanswers=UserQuestion.paginate_by_sql(["select user_questions.*,users.name user_name,users.cover_url from
       user_questions,users where category_id=? and users.id=user_questions.user_id  and
       user_questions.id in (SELECT user_question_id from question_answers where user_id=?
       group by user_question_id)" ,category ,user_id],
-      :page=>params[:page],:per_page=>3)
+        :page=>params[:page],:per_page=>3)
 
-    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+      @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @myanswers[0].id]) if @myanswers.any?
+    end
   end
 
   def show_result
-    params[:category]="2" if params[:category].nil?
-    category = params[:category].empty? ? 2 : params[:category].to_i
-    
+    category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i    
     @keyword=params[:keywords]
    
     @query_questions=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
@@ -99,7 +100,6 @@ class QuestionsController < ApplicationController
 
   def save_answer
     #获取当前用户
-    cookies[:user_id]=24
     user_id=cookies[:user_id]
     #获取参数
     @answer = params[:question_answer][:answer].strip
@@ -109,9 +109,7 @@ class QuestionsController < ApplicationController
   end
 
   def ask_question
-    params[:category]="2" if params[:category].nil?
-    category = params[:category].empty?? 2 : params[:category].to_i
-    cookies[:user_id]=24
+    category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     user_id=cookies[:user_id]
     @uq=UserQuestion.new(params[:user_question])
     @uq.user_id=user_id #获取当前用户

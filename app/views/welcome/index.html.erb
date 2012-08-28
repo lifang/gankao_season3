@@ -6,11 +6,11 @@
     <%= stylesheet_link_tag  "style" %>
     <%= javascript_include_tag "application" %>
     <!--[if lt IE 9]>
-    <%= javascript_include_tag "html5" %>
+    <script src="/assets/html5.js"></script>
     <![endif]-->
 
     <!--[if IE 6]>
-    <%= javascript_include_tag "DD_belatedPNG_0.0.8a-min" %>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>
       DD_belatedPNG.fix('*');
     </script>
@@ -21,34 +21,38 @@
   <body class="body_bg">
     <div class="wraper">
       <div class="header">
-        <h1 class="logo"><a href="#">赶考网</a></h1>
-        <div class="login_area">
-          <ul>
-            <li><a href="#" class="renren" onclick ="window.open('/logins/request_renren', '_blank', 'height=500,width=600,left=300,top=100');">人人网<br />帐号登录</a></li>
-            <li><a href="#" class="sina" onclick ="window.open('/logins/request_sina', '_blank', 'height=500,width=600,left=300,top=150');">新浪微博<br />帐号登录</a></li>
-            <li><a href="#" class="qq" onclick ="window.open('/logins/request_qq', '_blank', 'height=480,width=510,left=300,top=150');">腾讯QQ<br />帐号登录</a></li>
-          </ul>
-        </div>
+        <h1 class="logo"><a href="/" title="赶考网"><img src="/assets/logo.png"/></a></h1>
+        <%= render :partial=>'layouts/login_tab' %>
         <div class="clear"></div>
         <nav class="border_radius">
           <span class="nav_span">选择科目：</span>
           <ul>
-            <li><a href="#">CET-4</a></li>
-            <li><a href="#">CET-6</a></li>
-            <li><a href="#">考研英语</a></li>
-            <li><a href="#">高考英语</a></li>
-            <li><a href="#">公务员英语</a></li>
-            <li><a href="#">雅思英语</a></li>
-            <li><a href="#">托福英语</a></li>
+            <li><a href="/plans?category=<%= Category::TYPE[:CET4] %>">CET-4</a></li>
+            <li><a href="/plans?category=<%= Category::TYPE[:CET6] %>">CET-6</a></li>
+            <li><a href="/plans?category=<%= Category::TYPE[:GRADUATE] %>">考研英语</a></li>
+            <li><a class="gray">高考英语</a></li>
+            <li><a class="gray">公务员英语</a></li>
+            <li><a class="gray">雅思英语</a></li>
+            <li><a class="gray">托福英语</a></li>
           </ul>
         </nav>
       </div>
       <div class="main">
         <div class="main_bg">
-          <div class="m_video"></div>
+          <div class="m_video">
+            <ul class="sp_ul">
+              <li><img src="/assets/sp_01.png"/></li>
+              <li><img src="/assets/sp_02.png"/></li>
+              <li><img src="/assets/sp_03.png"/></li>
+              <li><img src="/assets/sp_04.png"/></li>
+              <li><img src="/assets/sp_05.png"/></li>
+              <li><img src="/assets/sp_06.png"/></li>
+              <li><img src="/assets/sp_07.png"/></li>
+              <li><img src="/assets/sp_08.png"/></li>
+            </ul>
+          </div>
         </div>
       </div>
-
     </div>
     <div class="footer">
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>

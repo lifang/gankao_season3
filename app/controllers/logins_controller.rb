@@ -2,7 +2,7 @@
 class LoginsController < ApplicationController
   include Oauth2Helper
   layout nil
-  before_filter :sign?, :except=> ["charge_vip"]  #charge_vip需开放请求，避免过滤
+  before_filter :sign?, :only => ["check_vip", "alipay_exercise", "accredit_check"]
   respond_to :html, :xml, :json
   @@m = Mutex.new
 
@@ -75,7 +75,6 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-          #          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -115,7 +114,6 @@ class LoginsController < ApplicationController
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-          #          cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token

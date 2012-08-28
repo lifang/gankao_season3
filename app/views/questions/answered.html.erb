@@ -32,7 +32,7 @@
         <%=will_paginate @answered_questions,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
       </div>
     <%else%>
-      <span style="font-size:30px;color:red;text-align: center;">暂无已经回答的问题!</span>
+      <div class="mc_menu_box"><h1 class="noAnswer">还没有已经回答的问题。</h1></div>
     <%end%>
   </div>
   <div class="clear"></div>

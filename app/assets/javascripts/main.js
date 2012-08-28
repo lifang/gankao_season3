@@ -205,6 +205,7 @@ function show_mask(style) {
     $(style).show();
 }
 
+//显示考研弹出层
 function show_kaoyan_frame() {
     show_mask('.mask');
     generate_flash_div("#inside_test_frame");
@@ -214,3 +215,4 @@ function show_kaoyan_frame() {
         return false;
     })
 }
+
