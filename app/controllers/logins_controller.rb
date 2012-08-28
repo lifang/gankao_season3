@@ -251,4 +251,24 @@ class LoginsController < ApplicationController
     end
   end
 
+
+  def call_back_sina
+     if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        #发送微博
+        access_token=params[:access_token]
+        uid=params[:uid]
+
+        response = sina_get_user(access_token,uid)
+  
+        render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
 end

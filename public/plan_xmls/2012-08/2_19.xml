@@ -9,8 +9,8 @@
         </info>
         <_13 status='0'>
             <part repeat_time='1' status='0' type='0'>
-                <item id='11' is_pass='0' repeat_time='2' step='0'/>
-                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11' is_pass='0' repeat_time='2' step='1'/>
+                <item id='13' is_pass='0' repeat_time='2' step='1'/>
             </part>
             <part repeat_time='1' status='0' type='1'>
                 <item id='11' is_pass='0' repeat_time='0' step='0'/>

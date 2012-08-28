@@ -156,7 +156,7 @@ class UsersController < ApplicationController
   def kaoyan_share
     @web= params[:web].to_s
     message=params[:message].to_s
-    cookies[:user_id]=77
+    cookies[:user_id]=78
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
  
     message="我选择赶考因为："+message
@@ -215,4 +215,6 @@ class UsersController < ApplicationController
       return "获得5个小太阳"
     end
   end
+
+  
 end
