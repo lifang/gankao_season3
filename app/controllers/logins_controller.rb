@@ -16,12 +16,6 @@ class LoginsController < ApplicationController
     redirect_to root_path
   end
 
-  #查看是否充值成功
-  def charge_vip
-    cookies.delete(:user_role)
-    category_id = params[:category].nil? ? 2 : params[:category]
-    redirect_to "/"
-  end
 
   def request_qq
     redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
@@ -44,11 +38,13 @@ class LoginsController < ApplicationController
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+        Sun.first_login(@user.id)
       else
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
       end
+      user_role?(@user.id)
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
     rescue
@@ -75,12 +71,14 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+          Sun.first_login(@user.id)
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
+        user_role?(@user.id)
         cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
         render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
@@ -114,12 +112,14 @@ class LoginsController < ApplicationController
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+          Sun.first_login(@user.id)
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
+        user_role?(@user.id)
         cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
         render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
