@@ -61,6 +61,14 @@ module Oauth2Helper
   }
 
 
+  WEIBO_ACCESS_TOKEN={
+    :response_type=>"token",
+    :client_id=>APPID,
+    :redirect_uri=>"#{Constant::SERVER_PATH}/logins/call_back_qq",
+    :scope=>"get_user_info,add_topic",
+    :state=>"1"
+  }
+
   #新浪微博参数
   REQUEST_URL_WEIBO="https://api.weibo.com/oauth2/authorize"
   REQUEST_WEIBO_TOKEN={
@@ -308,4 +316,16 @@ module Oauth2Helper
     return create_post_http("https://open.t.qq.com","/api/t/add",send_parms)
   end
 
+  #更新用户太阳数--分享成功
+  def update_user_suns(id,category,type)
+    user=User.find(id)
+    user_sun=user.suns.where("category_id=#{category} and types=#{type}").find(:all)[0]
+    if user_sun  #有分享记录，则不再赠送小太阳
+      data="分享成功"
+    else
+      Sun.create(:user_id=>user.id,:category_id=>category,:types=>type,:num=>Sun::TYPE_NUM[:SHARE])
+      data="分享成功,获得2个小太阳."
+    end
+    return data
+  end
 end

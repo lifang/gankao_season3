@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     total_num = get_user_sun_nums(user,category)
     respond_to do |format|
       format.json {
-        render :json=>{:message=>data,:num=>num,:days=>hash[Category::FLAG[category]].to_i}
+        render :json=>{:message=>data,:num=>total_num,:days=>hash[Category::FLAG[category]].to_i}
       }
     end
   end
@@ -97,12 +97,11 @@ class UsersController < ApplicationController
     when 3 then "英语6级"
     else "考研英语"
     end
-    @message="我在赶考网复习"+level
+    @message="我在赶考网复习"+level+",来自链接:"+Constant::SERVER_PATH+"/users/#{cookies[:user_id]}/share_back?category=#{category}"
     #获取用户
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
    
     if user and user.access_token and (user.end_time-Time.now>0)
-      @message=@message+",来自链接:"+Constant::SERVER_PATH+"/users/#{user.id}/share_back?category=#{category}"
       if @web=="sina"
         type=Sun::TYPES[:SINASHARE].to_i
         ret = sina_send_message(user.access_token, @message)
@@ -122,27 +121,18 @@ class UsersController < ApplicationController
         render :text=>@return_message
       end
     else
+      cookies[:sharecontent]="#{category}@!#{@message}"
       if params[:web].to_s=="sina"
-        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
+        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_sina&response_type=token"
       elsif params[:web].to_s=="renren"
-        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
+        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_renren"
       elsif params[:web].to_s=="qq"
-        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::WEIBO_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       end
     end
   end
   
-  #更新用户太阳数--分享成功
-  def update_user_suns(user,category,type)
-    user_sun=user.suns.where("category_id=#{category} and types=#{type}").find(:all)[0]
-    if user_sun  #有分享记录，则不再赠送小太阳
-      data="分享成功"
-    else
-      Sun.create(:user_id=>user.id,:category_id=>category,:types=>type,:num=>Sun::TYPE_NUM[:SHARE])
-      data="分享成功,获得2个小太阳."
-    end
-    return data
-  end
+  
  
   #推荐网站，获得小太阳
   def share_back
@@ -160,6 +150,7 @@ class UsersController < ApplicationController
   def kaoyan_share
     @web= params[:web].to_s
     message=params[:message].to_s
+    # cookies[:user_id]=78
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
  
     message="我选择赶考因为："+message
@@ -199,12 +190,13 @@ class UsersController < ApplicationController
         end
       end
     else
-      if @web=="sina"
-        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
-      elsif @web=="renren"
-        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
-      elsif @web=="qq"
-        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+      cookies[:sharecontent]="#{Category::TYPE[:GRADUATE]}@!#{message}"
+      if params[:web].to_s=="sina"
+        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_sina&response_type=token"
+      elsif params[:web].to_s=="renren"
+        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_renren"
+      elsif params[:web].to_s=="qq"
+        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::WEIBO_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       end
     end
   end
@@ -218,4 +210,6 @@ class UsersController < ApplicationController
       return "获得5个小太阳"
     end
   end
+
+  
 end
