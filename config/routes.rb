@@ -49,7 +49,7 @@ GankaoSeason3::Application.routes.draw do
       get :share_back
     end
     collection do
-      get :share
+      get :share,:kaoyan_share
       post :update_users,:check_in
     end
   end

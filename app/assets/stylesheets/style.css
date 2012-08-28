@@ -854,3 +854,38 @@ nav li { float: left; margin: 0 20px;}
 .cz_tishi_btn { width: 300px; margin: 10px 100px;}
 .wanc_btn { width: 88px; height: 31px; background: url(/assets/wanc_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 .chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
+/*------关注gz_tab----------*/
+.gz_tab {
+    width: 688px;
+	height: 450px;
+	background: url(/assets/gz_tab_bg.jpg) repeat;
+	border-radius: 0.6em;
+	box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
+	position: absolute;
+}
+.gz_top { border-bottom: 1px #3d8c9b dashed;  padding: 20px; overflow: hidden;}
+.gz_mh { width: 150px; float: left; margin-left: 20px;}
+.gz_mh li { height: 22px; line-height: 22px; margin: 10px 0;}
+.gz_mh li input { float: left;}
+.gz_mh li p { text-indent: -999px; overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 5px;}
+.gz_renren { background: url(/assets/gz_mh.png) no-repeat 0 0;}
+.gz_qq { background: url(/assets/gz_mh.png) no-repeat 0 -32px;}
+.gz_sina { background: url(/assets/gz_mh.png) no-repeat 0 -63px;}
+
+.gz_sun {
+    width: 434px;
+	height: 84px;
+	background: url(/assets/gz_sun.png) no-repeat;
+	float: left;
+	margin-top: 18px;
+}
+.gz_sun h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
+
+.gz_bottom { height: 200px; padding: 20px; overflow: hidden;}
+.gz_logo { float: left; margin-left: 30px;}
+.gz_why { width: 500px; float: left;}
+.gz_why h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
+.gz_select { padding-left: 100px; color: #397580;}
+.gz_select h2 { float: left;}
+.gz_select span { float: left;}
+.gz_bottom_btn { position: absolute; bottom: 20px; right: 20px; }

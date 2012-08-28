@@ -32,8 +32,6 @@ function updateUserInfo(){
     return false;
 }
 
-
-
 //签到
 function checkIn(){
     $.ajax({
@@ -47,4 +45,34 @@ function checkIn(){
         }
     });
 }
- 
+
+//关注、 分享理由
+$(function(){
+    $("#btn_ok").click(function(){
+        var web=$("input[value=true]").parent().siblings("p").html();
+        if (web){
+            //获取理由信息
+            var message=$("select#share_reson").val();
+            if (message=="请选择")
+            {
+                alert("请选择分享理由!!");
+            }
+            else
+            {
+                if (web=="renren")
+                {
+                    window.open('/users/kaoyan_share?web=renren&message='+message, '_blank', 'height=500,width=600,left=300,top=100');
+                }
+                else if(web=="sina"){
+                    window.open('/users/kaoyan_share?web=sina&message='+message, '_blank', 'height=500,width=600,left=300,top=150');
+                }
+                else{
+                    window.open('/users/kaoyan_share?web=qq&message='+message, '_blank', 'height=480,width=510,left=300,top=150');
+                }
+            }
+        }
+        else{
+            alert("请选择关注或分享的类型!!!");
+        }
+    });
+});

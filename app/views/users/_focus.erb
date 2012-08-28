@@ -1,0 +1,55 @@
+
+<%= stylesheet_link_tag    "jqtransform.css" %>
+<%= javascript_include_tag "jquery.jqtransform.js" %>
+<script language="javascript">
+  $(function(){
+    generate_flash_div('.gz_tab');
+    $('.gz_tab').jqTransform({imgPath:'/assets/img/'});
+    $("span.close").click(function(){
+      $(this).parent().hide();
+    });
+  });
+  $(function(){
+    //切换
+    $(".gz_mh li>span>a").click(function(){
+      $(".gz_mh li>span>input").val("false");
+      $(".gz_mh li>span>a").removeClass("jqTransformChecked");
+      $(this).addClass("jqTransformChecked");
+      $(this).siblings("input").val("true");
+    })
+  });
+</script>
+<div class="gz_tab">
+  <span class="close">关闭</span>
+  <div class="gz_top">
+    <ul class="gz_mh">
+      <li><input name="" type="checkbox" value=""><p class="gz_renren">renren</p></li>
+      <li><input name="" type="checkbox" value=""><p class="gz_qq">qq</p></li>
+      <li><input name="" type="checkbox" value=""><p class="gz_sina">sina</p></li>
+    </ul>
+    <div class="gz_sun">
+      <h1>关注赶考</h1>
+      <h1>请选择您感兴趣的社交网络关注</h1>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="gz_bottom">
+    <div class="gz_logo"><img src="/assets/gz_logo.jpg"/></div>
+    <div class="gz_why">
+      <h1>告诉我们为什么选择赶考网复习考研？</h1>
+      <div class="gz_select">
+        <h2>我选择赶考因为：</h2>
+        <span>
+          <select id="share_reson">
+            <option>请选择</option>
+            <option>内容丰富</option>
+            <option>可以定制复习计划</option>
+            <option>方便学习</option>
+            <option>其他</option>
+          </select>
+        </span>
+      </div>
+    </div>
+    <div class="gz_bottom_btn"><button id="btn_ok" class="b_btn" style="background: #e45e1e; color: #FFF;">确定</button></div>
+  </div>
+</div>
