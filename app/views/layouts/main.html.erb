@@ -31,6 +31,7 @@
             <% end %>
           </a>
         </h1>
+<<<<<<< HEAD
         <%=render :partial=>'users/info', :object=>user_info %>
         <div class="onlineUsers">在线人数:<span class="orange">10000</span>人</div>
         <div class="clear"></div>
@@ -40,6 +41,9 @@
             $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+2000);
           }, 3600000);
         </script>
+=======
+        <%= render :partial=>'users/info', :object=>user_info %>
+>>>>>>> b6bfcd64e84ca63087e0347b62aea2feeaa33d78
         <div class="clear"></div>        
         <nav class="border_radius">
           <% if cookies[:user_id] and is_nomal?(params[:category]) %>
@@ -78,10 +82,13 @@
           <%= yield %>
         </div>
         <div class="right">
-          <div class="right_fx">
-            <a class="fx_qq tooltip" href="javascript:void(0);" onclick ="window.open('/users/share?web=qq&category=<%= params[:category] %>', '_blank', 'height=480,width=510,left=300,top=150');" title="分享到腾讯微博">腾讯微博</a>
-            <a href="javascript:void(0);" onclick="window.open('/users/share?web=renren&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=100');" class="fx_rr tooltip" title="分享到人人网">人人网</a>
-            <a href="javascript:void(0);" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');" class="fx_sina tooltip" title="分享到新浪微博">新浪微博</a>
+          <div class="right_fx_box">
+            <p class="right_fx_p">推荐好友获取小太阳:</p>
+            <div class="right_fx">
+             <a class="fx_qq tooltip" href="javascript:void(0);" onclick ="window.open('/users/share?web=qq&category=<%= params[:category] %>', '_blank', 'height=480,width=510,left=300,top=150');" title="分享到腾讯微博">腾讯微博</a>
+              <a href="javascript:void(0);" onclick="window.open('/users/share?web=renren&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=100');" class="fx_rr tooltip" title="分享到人人网">人人网</a>
+              <a href="javascript:void(0);" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');" class="fx_sina tooltip" title="分享到新浪微博">新浪微博</a>
+            </div>
           </div>
           <div class="right_ad">广告</div>
         </div>

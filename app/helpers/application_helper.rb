@@ -57,20 +57,29 @@ module ApplicationHelper
   def user_info
     if cookies[:user_id]
       user_id = cookies[:user_id]
-      category = params[:category].nil? ? "2" : params[:category]
       user = User.find_by_id(user_id.to_i)
       if user
-        num= get_user_sun_nums(user,category)
+        num= params[:category] ? get_user_sun_nums(user,params[:category].to_i) : 0
+        yestoday_suns = params[:category] ? get_yestoday_suns(params[:category].to_i, user_id) : 0
         @user={:name => user.name, :school => user.school, :email => user.email,
-          :signin_days => user.signin_days, :login_times=>user.login_times, :num => num, :cover_url => user.cover_url}
+          :signin_days => user.signin_days, :login_times => user.login_times,
+          :num => num, :cover_url => user.cover_url, :yestoday_suns => yestoday_suns}
       end
     end
   end
   
   #获取用户的所有太阳数
   def get_user_sun_nums(user,category)
-    sun=Sun.find_by_sql("select sum(num) num from suns where category_id=#{category} and user_id=#{user.id}")[0]
+    sun=Sun.find_by_sql("select ifnull(sum(num), 0) num from suns where category_id=#{category} and user_id=#{user.id}")[0]
     return sun.nil? ? 0 : sun.num.to_i
+  end
+
+  #获取昨天各科目获得的太阳
+  def get_yestoday_suns(category_id, user_id)
+    suns = Sun.find_by_sql(["select ifnull(sum(num), 0) total_num from suns where category_id = ?
+          and TO_DAYS(NOW())-TO_DAYS(created_at)=1 and user_id = ?",
+        category_id, user_id])[0]
+    return suns.nil? ? 0 : suns.total_num.to_i
   end
 
   #考研的倒计时

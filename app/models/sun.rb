@@ -15,4 +15,14 @@ class Sun < ActiveRecord::Base
     self.create(:category_id => category_id, :user_id => user_id, :types => TYPES[:TEST], :num => sun_num)
   end
 
+  #首次登录
+  def self.first_login(user_id)
+    self.create(:category_id => Category::TYPE[:CET4], :user_id => user_id,
+      :types => TYPES[:FIRSTLOGIN], :num => TYPE_NUM[:FIRSTLOGIN])
+    self.create(:category_id => Category::TYPE[:CET6], :user_id => user_id,
+      :types => TYPES[:FIRSTLOGIN], :num => TYPE_NUM[:FIRSTLOGIN])
+    self.create(:category_id => Category::TYPE[:GRADUATE], :user_id => user_id,
+      :types => TYPES[:FIRSTLOGIN], :num => TYPE_NUM[:FIRSTLOGIN])
+  end
+
 end
