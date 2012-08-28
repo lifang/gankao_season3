@@ -74,6 +74,7 @@ function search_blog(){
 
 
 function create_plan(category){
+    var max=$("#max_score").val();
     var fs_xz=$(".fs_ul .hover").attr("index");
     var  max_score=$(".fs_span").html();
     if (parseInt(fs_xz)==0){
@@ -82,8 +83,8 @@ function create_plan(category){
             tishi_alert("请输入您的目标分数")
             return false;
         }
-        if(parseInt(score)>max_score){
-            tishi_alert("我们建议的最高分数是"+max_score+"分")
+        if(parseInt(score)>parseInt(max)){
+            tishi_alert("我们建议的最高分数是"+max+"分")
             return false
         }
         max_score=score

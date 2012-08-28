@@ -1,5 +1,6 @@
 <%= javascript_include_tag "video_skill" %>
 <%= render :partial => "/layouts/nav" %>
+<input type="hidden" value="<%= UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[@category]}"] %>" id="max_score" />
 <div class="m_content">
   <div class="mc_box">
     <div class="plan_box">
@@ -32,14 +33,13 @@
 <div class="tab login_tab" style="display:none">
   <div class="tab_loginArea">
     <h1>会员登录</h1>
-    <ul>
-      <li><a href="#" class="t_login_sina"  onclick ="window.open('/logins/request_sina', '_blank', 'height=500,width=600,left=300,top=150');">sina</a></li>
-      <li><a href="#" class="t_login_renren" onclick ="window.open('/logins/request_renren', '_blank', 'height=500,width=600,left=300,top=100');">renren</a></li>
-      <li><a href="#" class="t_login_qq" onclick ="window.open('/logins/request_qq', '_blank', 'height=480,width=510,left=300,top=150');">qq</a></li>
-    </ul>
+    <%= render :partial=>"/layouts/login_nav" %>
   </div>
 </div>
-
+<div class="tab end_tab" style="display: none">
+  <p>结束测试将取消本次的成绩</p>
+  <div class="btn_center_double "><button class="b_btn" id="confirm">确定</button><button class="b_btn" onclick="$('.tab').css('display','none')">取消</button></div>
+</div>
 <script type="text/javascript">
 <% if cookies[:user_id].nil? %>
     $(function(){
