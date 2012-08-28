@@ -1,0 +1,29 @@
+@charset "utf-8";
+* { padding: 0; margin: 0;}
+article,aside,dialog,footer,header,section,footer,nav,figure,menu{display:block}
+
+body { background: url(/assets/login_body.png) repeat; font-family: "微软雅黑", "宋体", Arial; font-size: 12px; color: #525161;}
+a { text-decoration: none;}
+.clear { clear: both;}
+
+.wraper { width: 940px; margin: 0 auto; overflow: hidden;}
+.logo { width: 160px; height: 80px; margin-left: 20px;}
+.login_ad { float: left; margin: 40px 0 0 40px;}
+.login_area { 
+    float: left; 
+	width: 285px; 
+	height: 295px; 
+	background: url(/assets/login_area.png) no-repeat;
+	margin-left: 80px;
+}
+.login_area h1 { font-size: 16px; line-height: 32px; padding-left: 30px; margin: 20px 0; color: #505261;}
+.login_area ul { width: 176px; display: block; list-style: none; margin: 10px auto;}
+.login_area ul li { width: 176px; height: 35px; margin: 20px 0;}
+.login_area ul li a { width: 176px; height: 35px; display: block; overflow: hidden; text-indent: -999px;}
+.t_login_sina { background: url(/assets/login_li.png) no-repeat 0 0;}
+.t_login_renren { background: url(/assets/login_li.png) no-repeat 0 -68px;}
+.t_login_qq { background: url(/assets/login_li.png) no-repeat 0 -129px;}
+
+/*footer------------------------*/
+.footer { height: 60px; line-height: 60px; margin-top: 100px; color: #CCC; text-align: center;}
+

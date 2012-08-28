@@ -11,7 +11,14 @@ window.ids = "<%= @ids_str %>";
   ids : window.ids
   }
   })
-<% elsif @items_str.empty? %>
+<% elsif @items_str.empty? && @status == false %>
   clearInterval(myTime.timeId);
-  $("#all_pass").show();
+  show_tip("#pass");
+<% elsif @items_str.empty? && @status == true %>
+  clearInterval(myTime.timeId);
+  show_tip("#all_pass");
+<% elsif @flag == "true" %>
+  show_tip("#right");
+<% elsif @flag == "false" %>
+  show_tip("#wrong");
 <% end %>

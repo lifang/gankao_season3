@@ -11,6 +11,7 @@ img { border: none;}
 .clear { clear: both;}
 .orange { color: #e4411e;}
 .center {text-align: center;}
+.red { color: #F00;}
 
 .border_radius {
     -moz-border-radius: 0.6em;
@@ -40,11 +41,11 @@ img { border: none;}
 }
 
 .b_btn {
-    padding: 5px 20px;
+    padding: 5px 15px;
     border-radius: 0.6em;
     box-shadow: 0px 4px 2px rgba(102,102,102,0.6);
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     display: block;
     margin: 0 auto;
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f7f7f7));
@@ -53,6 +54,11 @@ img { border: none;}
     color: #387580;
     font-family: "微软雅黑";
 }
+.btn_center { width: 100px; margin: 0 auto; text-align: center; padding: 10px;}
+.btn_center button { width: 100px;}
+
+.btn_center_double { width: 240px; margin: 0 auto; text-align: center; padding: 10px; overflow: hidden;}
+.btn_center_double button { width: 100px; float: left; margin: 0 10px;}
 
 .close, .x {
     width: 20px;
@@ -313,6 +319,97 @@ nav li { float: left; margin: 0 20px;}
 .pn_btn { padding: 10px 0; margin: 10px 0; text-align: right; padding-right: 30px; overflow: hidden;}
 .pn_btn button { padding: 5px 15px; margin: 0 15px; background: #c2b19f; box-shadow: 1px 1px #333333;}
 .pn_btn button:hover { background: #deccb9;}
+
+/*---复习计划设定成绩----*/
+
+.plan_box {
+    width: 500px;
+    height: 430px;
+    margin: 45px auto 42px auto;
+    background: #029bb7;
+    position: relative;
+    box-shadow: 1px 1px 4px rgba(102,102,102,0.5),-1px -1px 4px rgba(102,102,102,0.5);
+}
+.b_triangle { position: absolute; top: -30px; left: 50px;}
+
+.plan_top { height: 110px; overflow: hidden;}
+.user_pic_fs { width: 65px; height: 65px; border: 2px #CCCCCC solid; float: left; margin: 30px 0 0 66px;}
+.fenshu_h1 {
+    line-height: 100px;
+    text-align: center;
+    color: #e4411e;
+    font-size: 30px;
+    text-shadow: 2px 0px 1px #f3eadb,
+        -2px 0px 1px #f3eadb,
+        0px 2px 1px #f3eadb,
+        0px -2px 1px #f3eadb;
+}
+.fenshu_h1 span { font-size: 72px;}
+
+.plan_bottom { height: 280px; background: #397580; padding-top: 40px;}
+.fs_ul {
+    width: 429px;
+    height: 152px;
+    display: block;
+    background: url(/assets/fenshu_li.png) no-repeat;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.fs_ul li { width: 182px; height: 152px; float: left; position: relative;}
+.fs_ul li.marginLeft { margin-left: 65px;}
+.fs_ul h2 { text-align: center; font-size: 20px; color: #f3eadb; margin: 20px 0 10px 0;}
+
+.fs_input, .fs_span {
+    width: 110px;
+    height: 40px;
+    margin: 0 auto;
+    display: block;
+    border-radius: 0.6em;
+    line-height: 40px;
+    text-align: center;
+    font-size: 20px;
+    color: #c9c9c9;
+    border: none;
+}
+.fs_span {
+    color: #e4411e;
+    font-weight: bolder;
+    background: #029bb7;
+    font-size: 30px;
+    text-shadow: 2px 0px 1px #f3eadb,
+        -2px 0px 1px #f3eadb,
+        0px 2px 1px #f3eadb,
+        0px -2px 1px #f3eadb;
+}
+.fs_btn {
+    width: 50%;
+    height: 60px;
+    margin: 30px auto 0 auto;
+    display: block;
+    line-height: 60px;
+    border: none;
+    color: #F3EADB;
+    font-size: 30px;
+    border-radius: 0.6em;
+    background: #e4401d;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e4401d), to(#c32d0d));
+    background: -moz-linear-gradient(top, #e4401d, #c32d0d);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#e4401d,endcolorstr=#c32d0d,gradientType=0);
+}
+
+.fs_xz { position: absolute; left: 77px; bottom: 6px; width: 20px; height: 20px; text-indent: -999px; overflow: hidden;}
+.fs_xz.hover { background: url(/assets/fs_xz.png) no-repeat;}
+
+
+/*完善个人资料*/
+.clock_bg { width: 90px; height: 52px; margin: 10px auto;}
+.plan_h1 { font-size: 20px; text-align: center; color: #e4e3ce;}
+.plan_h2 { font-size: 16px; text-align: center; color: #fff;}
+
+.user_data { margin: 10px ; font-size: 16px; color: #FFF;}
+.user_data label { display: inline-block; width: 100px; text-align: right; padding-right: 10px; font-weight: bold;}
+.user_data input { width: 240px; height:32px; line-height: 32px; padding: 0 10px; font-size: 16px; color: #333;}
+
 
 /*复习计划弹层*/
 .plan_tab { width: 530px; border-radius: 0.6em; background: #b0d3d4; position: absolute; z-index: 299;}
@@ -854,6 +951,7 @@ nav li { float: left; margin: 0 20px;}
 .cz_tishi_btn { width: 300px; margin: 10px 100px;}
 .wanc_btn { width: 88px; height: 31px; background: url(/assets/wanc_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 .chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
+
 /*------关注gz_tab----------*/
 .gz_tab {
     width: 688px;
@@ -889,3 +987,86 @@ nav li { float: left; margin: 0 20px;}
 .gz_select h2 { float: left;}
 .gz_select span { float: left;}
 .gz_bottom_btn { position: absolute; bottom: 20px; right: 20px; }
+
+
+
+/*tab登录*/
+.tab_loginArea { }
+.tab_loginArea h1 { font-size: 20px; text-align: center;}
+.tab_loginArea ul { width: 176px; display: block; list-style: none; margin: 10px auto;}
+.tab_loginArea ul li { width: 176px; height: 35px; margin: 12px 0;}
+.tab_loginArea ul li a { width: 176px; height: 35px; display: block; overflow: hidden; text-indent: -999px;}
+.t_login_sina { background: url(/assets/login_li.png) no-repeat 0 0;}
+.t_login_renren { background: url(/assets/login_li.png) no-repeat 0 -68px;}
+.t_login_qq { background: url(/assets/login_li.png) no-repeat 0 -129px;}
+
+
+/*考霸模式-----------*/
+.exam_model {
+    text-align: center;
+    background: #00bad0;
+    margin-top: 10px;
+    padding: 10px 0;
+}
+.exam_model .exam_btn_a {
+    display: block;
+    font-weight:bolder;
+    width: 130px;
+    height: 45px;
+    line-height: 45px;
+    margin: 0 auto;
+    font-size: 24px;
+    color:#00bad0;
+    border-radius: 0.1em;
+    background: #FFF;
+    box-shadow: 2px 2px 2px rgba(102,102,102,0.3),-2px -2px 2px rgba(102,102,102,0.3);
+}
+
+.exam_load {}
+.exam_load h1 { font-size: 14px; text-align: center; color: #e4e3ce;}
+.exam_load h2 { font-size: 14px; text-align: center; color: #fff;}
+.exam_loading {width: 200px; height: 4px; padding: 1px; margin: 5px auto; border-radius:0.6em; background: #FFF;}
+.exam_t { height: 4px; background: #e33f1d; border-radius:0.6em;}
+
+
+.exam_model_tab {
+    width: 400px;
+    background: #B0D3D4;
+    color:#387580;
+    border: 2px #E4E3CE solid;
+    border-radius: 0.6em;
+    box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
+    overflow: hidden;
+    padding: 10px;
+    position: absolute;
+
+}
+.exam_model_tab h1 { height: 45px; line-height: 45px; font-size: 24px; color:#387580; text-align: center;}
+.exam_set_time { width: 305px; height: 32px; line-height: 32px; margin: 20px auto 10px auto;}
+
+.s_time { float: right;}
+.s_time input { width: 52px; height: 32px ; border: none; text-align: center;}
+.s_time span {
+    display: inline-block;
+    width: 52px;
+    height: 32px;
+    background: #9cc7c8;
+    color: #FFF;
+    margin: 0 5px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.exam_tab_text { padding: 10px; line-height: 24px; font-size: 14px; text-align: center;}
+.exam_tab_btn { padding: 10px 50px; overflow: hidden;}
+.exam_tab_btn button { float: left; margin: 0 10px;}
+
+
+
+.exam_tab_login { height: 20px; line-height: 20px; padding: 5px 20px; background: #E4E3CE;}
+.exam_tab_login span { float: left;}
+.exam_tab_login li { float: left; margin: 0 10px;}
+.exam_tab_login li a { width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden; float: left;}
+
+.exam_next_a { float: right; color: #387580; padding: 5px;}
+

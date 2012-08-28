@@ -1,0 +1,37 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>快速登录</title>
+    <%= stylesheet_link_tag  "login" %>
+    <%= javascript_include_tag "application" %>
+    <!--[if lt IE 9]>
+    <script src="js/html5.js"></script>
+    <![endif]-->
+
+    <!--[if IE 6]>
+    <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+    <div class="wraper">
+      <div class="logo"><img src="/assets/logo.png" /></div>
+      <div class="login_ad"><img src="/assets/login_ad.jpg" /></div>
+      <div class="login_area">
+        <h1>会员登录</h1>
+        <%= render :partial=>"/layouts/login_nav" %>
+      </div>
+      <div class="clear"></div>
+      <div class="footer">
+        <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
+      </div>
+    </div>
+
+  </body>
+</html>

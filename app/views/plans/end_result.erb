@@ -1,0 +1,49 @@
+<%= javascript_include_tag "video_skill" %>
+<%= render :partial => "/layouts/nav" %>
+<input type="hidden" value="<%= UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[@category]}"] %>" id="max_score" />
+<div class="m_content">
+  <div class="mc_box">
+    <div class="plan_box">
+      <span class="b_triangle"><img src="/assets/b_triangle.png"/></span>
+      <div class="plan_top">
+        <div class="user_pic_fs"><img src="/assets/user_pic.jpg"/></div>
+        <h1 class="fenshu_h1">当前估分：<span><%= @t_score %></span></h1>
+      </div>
+      <div class="plan_bottom">
+        <ul class="fs_ul">
+          <li>
+            <h2>我要高分：</h2>
+            <input name="" type="text" class="fs_input" value="目标分数" onfocus="$(this).val('');$(this).attr('onfocus','')"  />
+            <a href="#" class="fs_xz hover" onclick="toggle_show_score(this)" index="0">选中</a>
+          </li>
+          <li class="marginLeft">
+            <h2>过关万岁：</h2>
+            <span class="fs_span"><%= UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[@category]}"] %></span>
+            <a href="#" class="fs_xz" onclick="toggle_show_score(this)" index="1">选中</a>
+          </li>
+        </ul>
+        <button class="fs_btn" onclick="create_plan(<%= @category %>)">生成复习方案</button>
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+</div>
+
+<div class="tab login_tab" style="display:none">
+  <div class="tab_loginArea">
+    <h1>会员登录</h1>
+    <%= render :partial=>"/layouts/login_nav" %>
+  </div>
+</div>
+<div class="tab end_tab" style="display: none">
+  <p>结束测试将取消本次的成绩</p>
+  <div class="btn_center_double "><button class="b_btn" id="confirm">确定</button><button class="b_btn" onclick="$('.tab').css('display','none')">取消</button></div>
+</div>
+<script type="text/javascript">
+<% if cookies[:user_id].nil? %>
+    $(function(){
+      show_charge('.login_tab','.close_tab')
+    })
+<% end %>
+</script>

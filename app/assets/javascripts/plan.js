@@ -65,9 +65,3 @@ function show_chapter(plan_id, chapter_num, direction) {
     });
     return false;
 }
-
-//弹出复习的层
-function show_mask(style) {
-    $(style).css('height',document.body.scrollHeight);
-    $(style).show();
-}

@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   include Oauth2Helper
   def index
-    cookies[:user_id]=1
     user_id=cookies[:user_id]
     category=params[:category].nil?? "2":params[:category]
     user=User.find(user_id)
@@ -10,7 +9,6 @@ class UsersController < ApplicationController
   end
   #更新用户信息
   def update_users
-    cookies[:user_id]=1
     user = User.find(cookies[:user_id].to_i)
     if user
       params[:info][:username] = user.username if params[:info][:username].nil? or params[:info][:username].empty?
@@ -30,7 +28,6 @@ class UsersController < ApplicationController
  
   #签到
   def check_in
-    cookies[:user_id]=1
     category=params[:category].empty?? 2:params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
     user_sun=Sun.find_by_sql("select * from suns where user_id=#{user.id} and category_id=#{category} and types=#{Sun::TYPES[:SIGNIN]}
@@ -106,7 +103,6 @@ class UsersController < ApplicationController
     end
     @message="我在赶考网复习"+level
     #获取用户
-    cookies[:user_id]=76
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
    
     if user and user.access_token and (user.end_time-Time.now>0)

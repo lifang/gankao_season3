@@ -71,3 +71,51 @@ function search_blog(){
     }
     $("#search_blog").submit();
 }
+
+
+function create_plan(category){
+    var max=$("#max_score").val();
+    var fs_xz=$(".fs_ul .hover").attr("index");
+    var  max_score=$(".fs_span").html();
+    if (parseInt(fs_xz)==0){
+        var score=$(".fs_input").val();
+        if (score==""||score.length==0||score=="目标分数"||isNaN(parseInt(score))){
+            tishi_alert("请输入您的目标分数")
+            return false;
+        }
+        if(parseInt(score)>parseInt(max)){
+            tishi_alert("我们建议的最高分数是"+max+"分")
+            return false
+        }
+        max_score=score
+    }
+    $.ajax({
+        async:true,
+        type: "POST",
+        url: "/plans/create_plan.js",
+        dataType: "script",
+        data:{
+            category_id : category,
+            target_score : max_score
+        }
+    })
+}
+
+function toggle_show_score(e){
+    $(".fs_xz").removeClass("hover");
+    $(e).addClass("hover");
+}
+
+function update_info(){
+    var email=$("#p_email").val();
+    var myReg =new RegExp(/^\w+([-+.])*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/);
+    if (email==""||email.length==0){
+        tishi_alert("请输入邮箱");
+        return false;
+    }
+    if ( !myReg.test(email)) {
+        tishi_alert("邮箱格式不正确，请核实！")
+        return false;
+    }
+    $("#p_infos").submit();
+}

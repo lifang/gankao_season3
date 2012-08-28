@@ -1,0 +1,13 @@
+<%unless  @user_plan["TARGET_SCORE"].nil?%>
+  $(".end_tab p").html("根据前测，您的理想分数最高是<%= @user_plan["TARGET_SCORE"].to_i %>,是否根据此分数生成复习计划");
+  generate_flash_div(".end_tab");
+  $(".end_tab #confirm").bind("click",function(){
+  $(".mc_box").html("<%= escape_javascript(render :partial => "/plans/personal_info",:object=>"#{@user_plan}".gsub("=>",":")) %>");
+  $(".end_tab").css("display","none");
+  });
+<% else %>
+  $(".mc_box").html("<%= escape_javascript(render :partial => "/plans/personal_info",:object=>"#{@user_plan}".gsub("=>",":")) %>");
+<% end %>
+
+
+
