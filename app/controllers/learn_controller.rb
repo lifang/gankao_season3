@@ -51,7 +51,7 @@ class LearnController < ApplicationController
   end
 
   def willdo_review_infos
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
+    plan = UserPlan.where(["category_id = ? and user_id = ?", cookies[:category], cookies[:user_id]]).first
     xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     xpath = "//review//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
@@ -322,8 +322,6 @@ class LearnController < ApplicationController
     return str.gsub(/"/," ").gsub(/:/," ").gsub(/;/," ").gsub(/\?/," ").gsub(/!/," ").gsub(/,/," ").gsub(/\./," ").gsub(/  /," ").split(" ")
   end
 
-
-
   #----Start-------听写过程--------Start----
   def listen
     #获取用户信息和xml路径和类别
@@ -335,6 +333,7 @@ class LearnController < ApplicationController
       render :text=>"今天题目已经答完"
     end
   end
+
   def next_sentence
     type = params[:type]
     id = params[:id]

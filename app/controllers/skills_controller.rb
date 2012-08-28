@@ -2,6 +2,8 @@
 class SkillsController < ApplicationController
   include SkillsHelper
   layout 'main'
+  before_filter :sign?, :only => ["create"]
+  
   def index
     category=params[:category_id].nil? ? 2 : params[:category_id]
     session[:pras]=nil

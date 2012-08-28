@@ -999,3 +999,4 @@ nav li { float: left; margin: 0 20px;}
 .t_login_renren { background: url(/assets/login_li.png) no-repeat 0 -68px;}
 .t_login_qq { background: url(/assets/login_li.png) no-repeat 0 -129px;}
 
+.noAnswer { height: 200px; line-height: 200px; color: #525161; font-size: 24px; text-align: center;}

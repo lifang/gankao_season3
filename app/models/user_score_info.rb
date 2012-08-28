@@ -31,21 +31,14 @@ class UserScoreInfo < ActiveRecord::Base
     leave_score = self.target_score - self.start_score
     today_score = self.target_score
     if current_package < total_package
-      today_score = self.start_score + (leave_score/total_package)*current_package
+      today_score = self.start_score + (leave_score*(current_package.to_f/total_package)).round
     end
     return today_score
   end
 
   #根据用户的测试成绩计算他的时间系数
   def set_user_modulus
-    max_score = case self.category_id
-    when Category::TYPE[:CET4]
-      MAX_SCORE[:CET4]
-    when Category::TYPE[:CET6]
-      MAX_SCORE[:CET6]
-    when Category::TYPE[:GRADUATE]
-      MAX_SCORE[:GRADUATE]
-    end
+    max_score = UserScoreInfo.return_max_score(self.category_id)
     percent = self.start_score.to_f/max_score
     self.mudulus = if percent <= MODULUS_PERCENT[:LOW]
       MODULUS[:LOW]
@@ -55,6 +48,17 @@ class UserScoreInfo < ActiveRecord::Base
       MODULUS[:HIGH]
     end
     self.save
+  end
+
+  def self.return_max_score(category_id)
+    return case category_id
+    when Category::TYPE[:CET4]
+      MAX_SCORE[:CET4]
+    when Category::TYPE[:CET6]
+      MAX_SCORE[:CET6]
+    when Category::TYPE[:GRADUATE]
+      MAX_SCORE[:GRADUATE]
+    end
   end
   
 end

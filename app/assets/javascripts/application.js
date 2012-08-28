@@ -31,7 +31,7 @@ function show_flash_div() {
     generate_flash_div("#flash_notice");
     setTimeout(function(){
         jQuery('#flash_notice').fadeTo("slow",0);
-    }, 2500);
+    }, 3000);
     setTimeout(function(){
         $('#flash_notice').remove();
     }, 3000);

@@ -1,7 +1,7 @@
 #encoding: utf-8
 class LoginsController < ApplicationController
   include Oauth2Helper
-  #  before_filter :get_role, :except=> ["charge_vip"]  #charge_vip需开放请求，避免过滤
+  before_filter :sign?, :only => ["check_vip", "alipay_exercise", "accredit_check"]
   respond_to :html, :xml, :json
   @@m = Mutex.new
 

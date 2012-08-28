@@ -2,7 +2,7 @@ module ApplicationHelper
   include LearnHelper
 
   def sign?
-    cookies[:user_id] = 2
+    cookies[:user_id] = 42
     deny_access unless signed_in?
   end
   
@@ -79,7 +79,8 @@ module ApplicationHelper
 
   #获得用户当前的分数
   def get_current_score
-    is_not_join = true
+    max_score = UserScoreInfo.return_max_score(params[:category].to_i) #最大分数
+    score_arr = ["5", "0", "#{max_score}", "0"]  #比例、开始、结束、目前状况
     if cookies[:user_id]
       user_score_info = UserScoreInfo.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
       if user_score_info
@@ -87,10 +88,13 @@ module ApplicationHelper
         if user_plan
           doc = user_plan.plan_list_xml
           current_package = doc.root.elements["plan"].elements["current"].text.to_i
-          current_package = user_score_info.show_user_score(current_package, user_plan.days)
+          current_score = user_score_info.show_user_score(current_package, user_plan.days)
+          current_percent = ((current_package.to_f/user_plan.days)*100).round
+          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{max_score}", "#{current_score}"]
         end
       end
     end
+    return score_arr.join(",")
   end
   
 end

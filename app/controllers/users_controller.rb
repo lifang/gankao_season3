@@ -1,12 +1,7 @@
 class UsersController < ApplicationController
   include Oauth2Helper
-  def index
-    user_id=cookies[:user_id]
-    category=params[:category].nil?? "2":params[:category]
-    user=User.find(user_id)
-    num= get_user_sun_nums(user,category)
-    @user={:name=>user[:name],:school=>user[:school],:email=>user[:email],:num=>num}
-  end
+  before_filter :sign?, :except => ["share_back"]
+  
   #更新用户信息
   def update_users
     user = User.find(cookies[:user_id].to_i)
@@ -86,6 +81,7 @@ class UsersController < ApplicationController
       return false
     end
   end
+  
   #分享
   def share
     @web= params[:web].to_s
@@ -123,6 +119,7 @@ class UsersController < ApplicationController
       end
     end
   end
+  
   #更新用户太阳数--分享成功
   def update_user_suns(user,category,type)
     user_sun=user.suns.where("category_id=#{category} and types=#{type}").find(:all)[0]

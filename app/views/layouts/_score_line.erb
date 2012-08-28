@@ -25,8 +25,7 @@
 <script type="text/javascript">
   //显示flash分数
   function displayString(s) {
-    
-    return ["5", "0", "550", "0"]; //比例、开始、结束、目前状况
-    
+    var arr = "<%= get_current_score %>".split(",");
+    return arr; //比例、开始、结束、目前状况    
   }
 </script>

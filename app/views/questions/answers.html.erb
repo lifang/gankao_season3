@@ -32,7 +32,7 @@
         <%=will_paginate @myanswers,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
       </div>
     <%else%>
-      <span style="font-size:30px;color:red;text-align: center;">你还没有回答过问题!</span>
+    <div class="mc_menu_box"><h1 class="noAnswer">您还未回答过问题。</h1></div>
     <%end%>
   </div>
   <div class="clear"></div>
