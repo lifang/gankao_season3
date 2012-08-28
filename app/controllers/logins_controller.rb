@@ -323,4 +323,86 @@ class LoginsController < ApplicationController
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
   end
+
+
+  #发送微博和关注微博
+  def call_back_and_focus_sina
+     if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        uid=params[:uid]
+        #发送微博
+        access_token=params[:access_token]
+        content=cookies[:sharecontent].split('@!')
+        ret = sina_send_message(access_token, content[1])
+        return_message = "微博发送失败，请重新尝试" if ret["error_code"]
+        if return_message.nil?
+           focus_and_share_sun(cookies[:user_id].to_i,Category::TYPE[:GRADUATE])
+        end
+
+        response = sina_get_user(access_token,uid)
+        render :text=>request_weibo(access_token,response["id"],"关注失败，请登录微博查看")
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
+  #关注人人和发送新鲜事
+  def call_back_and_focus_renren
+     if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        #发送人人新鲜事
+        access_token=params[:access_token]
+        content=cookies[:sharecontent].split('@!')
+        ret = renren_send_message(access_token, content[1])
+        @return_message = "分享失败，请重新尝试" if ret[:error_code]
+        if @return_message.nil?
+           focus_and_share_sun(cookies[:user_id].to_i,Category::TYPE[:GRADUATE])
+        end
+        #加人人好友
+        redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
+
+  def call_back_and_focus_qq
+     if cookies[:oauth2_url_generate]
+      begin
+        cookies.delete(:oauth2_url_generate)
+        #发送微博
+        access_token=params["access_token"]
+        open_id=params[:open_id]
+        content=cookies[:sharecontent].split('@!')
+        info=share_tencent_weibo(access_token,open_id,content[1])
+        @return_message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
+        #分享成功
+        if @return_message.nil?
+          #送5个太阳
+          focus_and_share_sun(cookies[:user_id].to_i,Category::TYPE[:GRADUATE])
+        end
+
+        info=focus_tencent_weibo(access_token,open_id)
+        @return_message="关注腾讯微博失败" if info["ret"].to_i!=0
+        if @return_message.nil?
+          render :text=>"关注腾讯微博成功"
+        else
+          render :text=>@return_message
+        end
+      rescue
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
+      end
+    else
+      cookies[:oauth2_url_generate]="replace('#','?')"
+      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
+    end
+  end
 end
