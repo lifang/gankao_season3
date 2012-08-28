@@ -33,12 +33,12 @@
         </h1>
         <%=render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>        
-          <nav class="border_radius">
-            <% if cookies[:user_id] and is_nomal?(params[:category]) %>
+        <nav class="border_radius">
+          <% if cookies[:user_id] and is_nomal?(params[:category]) %>
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
               <a href="javascript:void(0);" onclick="show_charge('.payment','.pay_close')">了解更多</a></span>
-            <% end %>
-          </nav>      
+          <% end %>
+        </nav>
       </div>
       <div class="main">
         <div class="left">
@@ -71,9 +71,9 @@
         </div>
         <div class="right">
           <div class="right_fx">
-            <a href="javascript:void(0);" onclick="window.open('/users/share?web=renren&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=100');" class="gz_renren">人人主页</a>
-            <a href="javascript:void(0);" class="gz_qq">腾讯微博</a>
-            <a href="javascript:void(0);" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');" class="gz_sina">新浪微博</a>
+            <a href="javascript:void(0);" onclick="window.open('/users/share?web=renren&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=100');" class="fx_qq tooltip" title="分享到腾讯微博">腾讯微博</a>
+            <a href="#" class="fx_rr tooltip" title="分享到人人网">人人网</a>
+            <a href="javascript:void(0);" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');" class="fx_sina tooltip" title="分享到新浪微博">新浪微博</a>
           </div>
           <div class="right_ad">广告</div>
         </div>
@@ -88,7 +88,7 @@
     <div class="mask" style="display: none;"></div>
     <%= render :partial => '/users/charge_vip' %>
     <% unless @plan_list %><%= render :partial => '/layouts/inside_test' %><% end %>
-    
+
     <%if params[:category].to_i==Category::TYPE[:GRADUATE] and user_info[:login_times].to_i==4%>
       <%=render :partial=>'users/focus' %>
     <%end%>
