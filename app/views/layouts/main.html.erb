@@ -7,8 +7,6 @@
     <%= javascript_include_tag "application" %>
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
-    <%= javascript_include_tag "jquery-1.7.2.min" %>
-    <%= javascript_include_tag "main" %>
     <!--[if lt IE 9]>
     <script src="/assets/html5.js"></script>
     <![endif]-->
@@ -35,7 +33,14 @@
           </a>
         </h1>
         <%=render :partial=>'users/info', :object=>user_info %>
+        <div class="onlineUsers">在线人数:<span class="orange">10000</span>人</div>
         <div class="clear"></div>
+        <script type="text/javascript">
+          $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+2000);
+          setInterval(function(){
+            $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+2000);
+          }, 3600000);
+        </script>
         <% if cookies[:user_id] and is_nomal?(params[:category]) %>
           <nav class="border_radius">
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
