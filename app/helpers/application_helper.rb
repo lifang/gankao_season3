@@ -58,10 +58,12 @@ module ApplicationHelper
     if cookies[:user_id]
       user_id = cookies[:user_id]
       category = params[:category].nil? ? "2" : params[:category]
-      user = User.find(user_id)
-      num= get_user_sun_nums(user,category)
-      @user={:name => user.name, :school => user.school, :email => user.email,
-        :signin_days => user.signin_days, :num => num, :cover_url => user.cover_url}
+      user = User.find_by_id(user_id.to_i)
+      if user
+        num= get_user_sun_nums(user,category)
+        @user={:name => user.name, :school => user.school, :email => user.email,
+          :signin_days => user.signin_days, :num => num, :cover_url => user.cover_url}
+      end
     end
   end
   

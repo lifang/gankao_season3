@@ -10,8 +10,12 @@ input {font-family: "微软雅黑";}
 img { border: none;}
 .clear { clear: both;}
 .orange { color: #e4411e;}
-.center {text-align: center;}
+.gray { color: #b9bab5;}
 .red { color: #F00;}
+.center {text-align: center;}
+.float_left { float: left;}
+.fontSize_10 { font-size: 10px;}
+.fontSize_20 { font-size: 20px;}
 
 .border_radius {
     -moz-border-radius: 0.6em;
@@ -202,8 +206,11 @@ nav li { float: left; margin: 0 20px;}
 
 /*main------------------------*/
 .main { padding: 10px 0; overflow: hidden;}
-.main_bg { padding: 0px 0 225px 310px; background: url(/assets/m_bg.jpg) no-repeat;}
+.main_bg { padding: 0px 0 225px 310px; background: url(/assets/m_bg.png) no-repeat;}
 .m_video { width: 620px; height: 320px; background: #333;}
+
+.sp_ul {}
+.sp_ul li { float: left; width: 155px; height: 160px; overflow: hidden;}
 
 .left, .middle, .right { float: left;}
 .left { width: 230px;}

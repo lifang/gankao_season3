@@ -1,4 +1,4 @@
-<% if cookies[:user_id] %>
+<% if cookies[:user_id] and info %>
   <div  class="login_info bb_radius">
     <div class="info_left">
       <div class="user_pic"><img src="<%= info[:cover_url].nil? ? User::DEFAULT_COVER : info[:cover_url] %>" /></div>

@@ -14,9 +14,9 @@ development:
   reconnect: false
   database: exam_app
   pool: 5
-  username: root
-  password: comdo1qaz2wsx
-  host: 116.255.202.122
+  username: gankao_season3
+  password: comdo2012
+  host: 192.168.0.250
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
