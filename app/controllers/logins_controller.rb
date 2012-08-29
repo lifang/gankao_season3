@@ -337,7 +337,7 @@ class LoginsController < ApplicationController
         ret = sina_send_message(access_token, content[1])
         return_message = "微博发送失败，请重新尝试" if ret["error_code"]
         if return_message.nil?
-           focus_and_share_sun(cookies[:user_id].to_i,Category::TYPE[:GRADUATE])
+           focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
         end
 
         response = sina_get_user(access_token,uid)
@@ -361,7 +361,7 @@ class LoginsController < ApplicationController
         ret = renren_send_message(access_token, content[1])
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
         if @return_message.nil?
-           focus_and_share_sun(cookies[:user_id].to_i,Category::TYPE[:GRADUATE])
+           focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
         end
         #加人人好友
         redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
@@ -387,7 +387,7 @@ class LoginsController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(cookies[:user_id].to_i,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
         end
 
         info=focus_tencent_weibo(access_token,open_id)

@@ -36,7 +36,11 @@
   <div class="gz_bottom">
     <div class="gz_logo"><img src="/assets/gz_logo.jpg"/></div>
     <div class="gz_why">
-      <h1>告诉我们为什么选择赶考网复习考研？</h1>
+      <h1>告诉我们为什么选择赶考网复习
+        <%if params[:category].to_i==Category::TYPE[:CET4]%>
+        四级<%elsif params[:category].to_i==Category::TYPE[:CET6]%>六级
+        <%else%>考研<%end%>
+        ？</h1>
       <div class="gz_select">
         <h2>我选择赶考因为：</h2>
         <span>

@@ -150,6 +150,7 @@ class UsersController < ApplicationController
   def kaoyan_share
     @web= params[:web].to_s
     message=params[:message].to_s
+    category=params[:category].to_i
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
  
     message="我选择赶考因为："+message
@@ -160,7 +161,7 @@ class UsersController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(user.id,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(user.id,category)
         end
         render :text=>request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
       elsif @web=="renren"
@@ -169,7 +170,7 @@ class UsersController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(user.id,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(user.id,category)
         end
         redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
       elsif @web=="qq"
@@ -178,7 +179,7 @@ class UsersController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(user.id,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(user.id,category)
         end
         info=focus_tencent_weibo(user.access_token,user.open_id)
         @return_message="关注腾讯微博失败" if info["ret"].to_i!=0
@@ -189,7 +190,7 @@ class UsersController < ApplicationController
         end
       end
     else
-      cookies[:sharecontent]="#{Category::TYPE[:GRADUATE]}@!#{message}"
+      cookies[:sharecontent]="#{category}@!#{message}"
       if params[:web].to_s=="sina"
         redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_and_focus_sina&response_type=token"
       elsif params[:web].to_s=="renren"
@@ -199,7 +200,5 @@ class UsersController < ApplicationController
       end
     end
   end
-
-
   
 end
