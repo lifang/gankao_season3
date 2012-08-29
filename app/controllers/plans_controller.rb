@@ -54,9 +54,9 @@ class PlansController < ApplicationController
     if user_score
       user_score.update_attributes(paras)
     else
-      UserScoreInfo.create(paras)
-      UserScoreInfo.set_user_modulus
-      UserScoreInfo.self.complete_test(category, cookies[:user_id].to_i)
+      user_score=UserScoreInfo.create(paras)
+      user_score.set_user_modulus
+      Sun.complete_test(category, cookies[:user_id].to_i)
     end
   end
 

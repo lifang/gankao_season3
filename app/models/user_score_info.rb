@@ -40,7 +40,7 @@ class UserScoreInfo < ActiveRecord::Base
   def set_user_modulus
     max_score = UserScoreInfo.return_max_score(self.category_id)
     percent = self.start_score.to_f/max_score
-    self.mudulus = if percent <= MODULUS_PERCENT[:LOW]
+    self.modulus = if percent <= MODULUS_PERCENT[:LOW]
       MODULUS[:LOW]
     elsif percent > MODULUS_PERCENT[:LOW] and percent <= MODULUS_PERCENT[:NOMAL]
       MODULUS[:NOMAL]
