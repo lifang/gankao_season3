@@ -150,7 +150,7 @@ class UsersController < ApplicationController
   def kaoyan_share
     @web= params[:web].to_s
     message=params[:message].to_s
-    # cookies[:user_id]=78
+    category=params[:category].to_i
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
  
     message="我选择赶考因为："+message
@@ -161,7 +161,7 @@ class UsersController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(user.id,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(user.id,category)
         end
         render :text=>request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
       elsif @web=="renren"
@@ -170,7 +170,7 @@ class UsersController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(user.id,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(user.id,category)
         end
         redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
       elsif @web=="qq"
@@ -179,7 +179,7 @@ class UsersController < ApplicationController
         #分享成功
         if @return_message.nil?
           #送5个太阳
-          focus_and_share_sun(user.id,Category::TYPE[:GRADUATE])
+          focus_and_share_sun(user.id,category)
         end
         info=focus_tencent_weibo(user.access_token,user.open_id)
         @return_message="关注腾讯微博失败" if info["ret"].to_i!=0
@@ -190,26 +190,15 @@ class UsersController < ApplicationController
         end
       end
     else
-      cookies[:sharecontent]="#{Category::TYPE[:GRADUATE]}@!#{message}"
+      cookies[:sharecontent]="#{category}@!#{message}"
       if params[:web].to_s=="sina"
-        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_sina&response_type=token"
+        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_and_focus_sina&response_type=token"
       elsif params[:web].to_s=="renren"
-        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_renren"
+        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_and_focus_renren"
       elsif params[:web].to_s=="qq"
-        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::WEIBO_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
+        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::KANYAN_SHARE_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
       end
     end
   end
-  #关注和分享网站,奖励5个小太阳
-  def focus_and_share_sun(id,category)
-    user_sun=Sun.find_by_sql("select * from suns where user_id=#{id} and category_id=#{category} and types=#{Sun::TYPES[:LOGIN_MORE]}")[0]
-    if user_sun
-      return "已经奖励了"
-    else
-      Sun.create(:user_id=>id,:category_id=>category.to_i,:types=>Sun::TYPES[:LOGIN_MORE],:num=>Sun::TYPE_NUM[:LOGIN_MORE])
-      return "获得5个小太阳"
-    end
-  end
-
   
 end

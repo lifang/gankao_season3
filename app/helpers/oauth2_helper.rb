@@ -69,6 +69,13 @@ module Oauth2Helper
     :state=>"1"
   }
 
+  KANYAN_SHARE_ACCESS_TOKEN={
+    :response_type=>"token",
+    :client_id=>APPID,
+    :redirect_uri=>"#{Constant::SERVER_PATH}/logins/call_back_and_focus_qq",
+    :scope=>"get_user_info,add_topic",
+    :state=>"1"
+  }
   #新浪微博参数
   REQUEST_URL_WEIBO="https://api.weibo.com/oauth2/authorize"
   REQUEST_WEIBO_TOKEN={
@@ -327,5 +334,16 @@ module Oauth2Helper
       data="分享成功,获得2个小太阳."
     end
     return data
+  end
+
+  #关注和分享网站,奖励5个小太阳
+  def focus_and_share_sun(id,category)
+    user_sun=Sun.find_by_sql("select * from suns where user_id=#{id} and category_id=#{category} and types=#{Sun::TYPES[:LOGIN_MORE]}")[0]
+    if user_sun
+      return "已经奖励了"
+    else
+      Sun.create(:user_id=>id,:category_id=>category.to_i,:types=>Sun::TYPES[:LOGIN_MORE],:num=>Sun::TYPE_NUM[:LOGIN_MORE])
+      return "获得5个小太阳"
+    end
   end
 end

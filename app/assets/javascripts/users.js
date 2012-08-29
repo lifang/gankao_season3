@@ -61,13 +61,13 @@ $(function(){
             {
                 if (web=="renren")
                 {
-                    window.open('/users/kaoyan_share?web=renren&message='+message, '_blank', 'height=500,width=600,left=300,top=100');
+                    window.open('/users/kaoyan_share?web=renren&message='+message+"&category="+category, '_blank', 'height=500,width=600,left=300,top=100');
                 }
                 else if(web=="sina"){
-                    window.open('/users/kaoyan_share?web=sina&message='+message, '_blank', 'height=500,width=600,left=300,top=150');
+                    window.open('/users/kaoyan_share?web=sina&message='+message+"&category="+category, '_blank', 'height=500,width=600,left=300,top=150');
                 }
                 else{
-                    window.open('/users/kaoyan_share?web=qq&message='+message, '_blank', 'height=480,width=510,left=300,top=150');
+                    window.open('/users/kaoyan_share?web=qq&message='+message+"&category="+category, '_blank', 'height=480,width=510,left=300,top=150');
                 }
             }
         }

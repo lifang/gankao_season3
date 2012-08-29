@@ -102,9 +102,9 @@
     <% unless @plan_list %><%= render :partial => '/layouts/inside_test' %><% end %>
 
 
-    <%if params[:category].to_i==Category::TYPE[:GRADUATE] and
-     Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
-    types=#{Sun::TYPES[:LOGIN_MORE]}")[0].nil? or  user_info[:login_times].to_i==4 
+    <%if Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
+      types=#{Sun::TYPES[:LOGIN_MORE]} and category_id=#{params[:category].to_i}")[0].nil? and
+      user_info[:login_times].to_i==4
     %>
       <%=render :partial=>'users/focus'%>
     <%end%>
