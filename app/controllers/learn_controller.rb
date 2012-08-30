@@ -8,13 +8,11 @@ class LearnController < ApplicationController
   respond_to :html, :xml, :json, :js
   
   def task_dispatch
+    #打开任务包--扣除小太阳
     p Sun.open_package(cookies[:user_id], params[:category].to_i)
     cookies[:category] = params[:category]
     cookies[:modulus] = UserScoreInfo.where(["user_id = ? and category_id = ?",
         cookies[:user_id], cookies[:category]]).first.modulus
-    #打开任务包--扣除小太阳
-   
-
     items = params[:items].split(",") if params[:items]
     if items.nil? or items.blank?
       return if (info = willdo_part_infos).nil?
