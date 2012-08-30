@@ -164,3 +164,14 @@ function show_kaoyan_frame() {
     })
 }
 
+//小太阳充值验证
+function sun_charge(){
+    var sun_num=$("#sun_fee").val();
+    if (sun_num.match(/^[0-9]+$/)==null || parseInt(sun_num)<=0){
+        tishi_alert("请输入整数");
+        return false;
+    }
+     $('#close_sun').trigger('click');
+      show_charge('#tab_sun','#tab_close');
+    window.open("/logins/alipay_sun?category="+$("#sun_category").val()+"&total_fee="+sun_num,'_blank','height=750,width=1000,left=200,top=50');
+}

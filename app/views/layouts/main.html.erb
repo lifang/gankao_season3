@@ -32,14 +32,14 @@
           </a>
         </h1>
         <%=render :partial=>'users/info', :object=>user_info %>
-         
+
         <div class="clear"></div>
-         
+
 
         <nav class="border_radius">
           <% if cookies[:user_id] and is_nomal?(params[:category]) %>
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
-              <a href="javascript:void(0);" onclick="show_charge('.payment','.pay_close')">了解更多</a></span>
+              <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
           <% end %>
         </nav>
       </div>
@@ -92,7 +92,10 @@
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
     <div class="mask" style="display: none;"></div>
-    <%= render :partial => '/users/charge_vip' %>
+    <% if cookies[:user_id] and is_nomal?(params[:category]) %>
+      <%= render :partial => '/users/charge_vip' %>
+      <%= render :partial => '/users/charge_sun' %>
+    <% end %>
     <% unless @plan_list %><%= render :partial => '/layouts/inside_test' %><% end %>
     <%if show_focus%>
       <%=render :partial=>'users/focus'%>

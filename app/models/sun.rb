@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Sun < ActiveRecord::Base
   require 'rexml/document'
   include REXML
@@ -6,7 +7,7 @@ class Sun < ActiveRecord::Base
 
   TYPES = {:FIRSTLOGIN => 0, :TEST => 1, :SIGNIN => 2, :SINASHARE => 3,:RENRENSHARE => 4 ,:KEEP_ON_LOGIN =>5,
     :RANDOM_AWARD => 6, :COMMEND => 7, :ANSWER => 8, :LOGIN_MORE=>9,:QQSHARE=>10,:OPEN_CET4=>11,:OPEN_CET6=>12,
-    :OPEN_KAOYAN=>13} #0首次登陆 1前测 2签到 3新浪微博分享 4人人分享 5连续登录 6 随机奖励 7 推荐 8答疑
+    :OPEN_KAOYAN=>13,:CHARGE=>14} #0首次登陆 1前测 2签到 3新浪微博分享 4人人分享 5连续登录 6 随机奖励 7 推荐 8答疑,14 充值
   TYPE_NUM = {:FIRSTLOGIN => 1, :GRADUATE_TEST => 14, :CET_TEST => 4, :SIGNIN => 1, :SHARE => 2,
     :KEEP_ON_LOGIN => 1, :RANDOM_AWARD => 2, :COMMEND => 5, :ANSWER => 2,:LOGIN_MORE=>5,:CET=>-3,:KAOYAN=>-8}
 
