@@ -10,7 +10,8 @@ GankaoSeason3::Application.routes.draw do
     end
   end
   resources :videos do
-    member do
+    collection do
+      post :request_url,:request_video
     end
   end
   resources :skills do

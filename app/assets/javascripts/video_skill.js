@@ -1,19 +1,43 @@
-
-function video_show(index){
+function video_show(schedule_id,e){
     $(".mc_menu li").removeClass("hover");
-    $($(".mc_menu li")[index]).addClass("hover");
-    $(".video_more,.other_video h1").css("display","none");
-    $(".video_more")[index].style.display="block";
-    $(".other_video h1")[index].style.display="block";
+    $(e).addClass("hover");
     $(".xz_video").css("display","");
-    $(".video_area embed").css("display","none");
+    if ( $("#video_"+schedule_id)[0]==null){
+        $(".video_more,.h1_title").css("display","none");
+        $.ajax({
+            async:true,
+            type: "POST",
+            dataType: "script",
+            url: "/videos/request_video.js",
+            data:{
+                schedule_id : schedule_id
+            }
+        })
+    }else{
+        $(".video_more,.h1_title").css("display","none");
+        $("#video_"+schedule_id).css("display","");
+        $("#schedule_title_"+schedule_id).css("display","");
+    }
+    
 }
 
 
-function load_video(video_url){
+function load_video(video_id){
     $(".xz_video").css("display","none");
-    $(".video_area embed").css("display","");
-    $(".video_area embed").attr("src",video_url);
+    $.ajax({
+        async:true,
+        type: "POST",
+        dataType: "json",
+        url: "/videos/request_url.json",
+        data:{
+            video_id : video_id
+        },
+        success : function(data) {
+            $("#video_pan").html('<embed src='+ data.video_url+' style="background:#E4E3CE;" allowFullScreen="true" quality="high" width="520" height="390" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>');
+            $(".video_area embed").css("display","");
+        }
+    })
+    
 }
 
 function deliver_blog(){
@@ -119,3 +143,5 @@ function update_info(){
     }
     $("#p_infos").submit();
 }
+
+
