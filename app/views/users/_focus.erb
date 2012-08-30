@@ -1,11 +1,12 @@
-
 <%= stylesheet_link_tag    "jqtransform.css" %>
 <%= javascript_include_tag "jquery.jqtransform.js" %>
 <script language="javascript">
   $(function(){
+    show_mask(".mask");
     generate_flash_div('.gz_tab');
     $('.gz_tab').jqTransform({imgPath:'/assets/img/'});
     $("span.close").click(function(){
+      $(".mask").hide();
       $(this).parent().hide();
     });
   });
@@ -23,9 +24,9 @@
   <span class="close">关闭</span>
   <div class="gz_top">
     <ul class="gz_mh">
-      <li><input name="" type="checkbox" value=""><p class="gz_renren">renren</p></li>
-      <li><input name="" type="checkbox" value=""><p class="gz_qq">qq</p></li>
-      <li><input name="" type="checkbox" value=""><p class="gz_sina">sina</p></li>
+      <li><input name="" type="checkbox" value=""/><p class="gz_renren">renren</p></li>
+      <li><input name="" type="checkbox" value=""/><p class="gz_qq">qq</p></li>
+      <li><input name="" type="checkbox" value=""/><p class="gz_sina">sina</p></li>
     </ul>
     <div class="gz_sun">
       <h1>关注赶考</h1>

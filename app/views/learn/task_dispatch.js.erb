@@ -1,6 +1,6 @@
 <% if @result %>
   window.items = "<%= @items_str %>";
-  window.ids = "<%= @ids_str %>";
+  window.ids = "<%= @ids_str %>";  
   show_mask(".mask");
   <% case @result[:type].to_i %>
   <% when UserPlan::CHAPTER_TYPE_NUM[:WORD] %>

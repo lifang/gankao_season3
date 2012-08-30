@@ -9,11 +9,12 @@ class LearnController < ApplicationController
   
   def task_dispatch
     cookies[:category] = params[:category]
-    cookies[:modulus] = UserScoreInfo.where(["user_id = ? and category_id = ?",
-        cookies[:user_id], cookies[:category]]).first.modulus
+    cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
     items = params[:items].split(",") if params[:items]
     if items.nil? or items.blank?
-      return if (info = willdo_part_infos).nil?
+      plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+      xml = plan.plan_list_xml
+      return if (info = willdo_part_infos(xml)).nil?
       cookies[:type] = info[:type].to_i
       items = info[:ids]
     end
@@ -37,25 +38,20 @@ class LearnController < ApplicationController
   end
   
   #取出当前part的items 并组装 [id-repeat_time-step]
-  def willdo_part_infos
-    review = willdo_review_infos
+  def willdo_part_infos(xml)
+    review = willdo_review_infos(xml)
     return review if !review.nil?
-    
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
-    return nil unless !node.nil?
+    return nil if node.nil?
     cookies[:is_new] = "plan"
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
-  def willdo_review_infos
-    plan = UserPlan.where(["category_id = ? and user_id = ?", cookies[:category], cookies[:user_id]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+  def willdo_review_infos(xml)
     xpath = "//review//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
-    return nil unless !node.nil?
+    return nil if node.nil?
     cookies[:is_new] = "review"
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
@@ -83,7 +79,7 @@ class LearnController < ApplicationController
         :repeat => repeat,
         :time => (Constant::WORD_TIME[step] * cookies[:modulus].to_f).to_i,
         :word => word,
-        :sentence => WordSentence.find_all_by_word_id(cookies[:current_id]).first.description.gsub(word.name,"_______")
+        :sentence => WordSentence.find_by_word_id(cookies[:current_id]).description
       }
     end
     return result
@@ -248,7 +244,7 @@ class LearnController < ApplicationController
   def i_have_remember
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
-    type = UserPlan::CHAPTER_TYPE_NUM[:WORD]
+    type = cookies[:type].to_i
     xpath = "//part[@type='#{type}']//item[@id='#{cookies[:current_id]}']"
     rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     ids = ids - [cookies[:current_id]]
@@ -260,8 +256,8 @@ class LearnController < ApplicationController
   end
   
   def rewrite_xml_item(xpath, is_pass, repeat_time, step)
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath]
     element.add_attribute("is_pass", UserPlan::PLAN_STATUS[:FINISHED]) if is_pass == UserPlan::PLAN_STATUS[:FINISHED]
     element.add_attribute("repeat_time", repeat_time) if repeat_time

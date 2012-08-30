@@ -1,7 +1,7 @@
 <div id="pass" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/s_face.png" /></div>
   <div class="ts_text">已经全部掌握了开始检验一下吧！</div>
-  <div class="ts_btn_box"><button class="b_btn" onclick="next()">开始检查</button></div>
+  <div class="btn_center"><button class="b_btn" onclick="next()">开始检查</button></div>
 </div>
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
   <%=javascript_include_tag "flowplayer/flowplayer"%>
@@ -29,17 +29,57 @@
       <a onclick="next()" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
+<% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
+  <div class="pt_title">
+    <h1>短语学习</h1>
+    <span onclick="close_pop()" class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="words_func">
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+    </div>
+    <div class="words_con">
+      <div class="example_list">
+        <p><%= @result[:sentence].en_mean %></p>
+        <p><%= @result[:sentence].ch_mean %></p>
+      </div>
+    </div>
+    <div class="words_func">
+      <a onclick="remember()"  title="我记住了" class="sign tooltip">标记</a>
+      <a onclick="next()" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+  <div class="pt_title">
+    <h1>短语学习</h1>
+    <span onclick="close_pop()" class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+    <div class="words_con">
+      <div class="example_list">
+        <p><%= @result[:sentence].en_mean %></p>
+      </div>
+    </div>
+    <div class="words_func">
+      <a onclick="remember()"  title="我记住了" class="sign tooltip">标记</a>
+      <a onclick="next()" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
 <% end %>
 <div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
-<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
+<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] or cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+  <% url = cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] ?
+      @result[:word].enunciate_url : @result[:sentence].enunciate_url %>
+        alert("<%= url %>");
     $(function(){
       flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
         clip: {
-          url: '/music.mp3'
+          url: '<%= url %>'
         }
       });
-
       $("#playAudio").click(function(){
         flowplayer('player').play();
       });
