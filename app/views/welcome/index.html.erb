@@ -22,8 +22,7 @@
   <body>
     <div class="wraper">
       <div class="header">
-        <h1 class="logo"><a href="#" title="赶考网"><img src="/assets/logo.png"></a></h1>
-       
+        <h1 class="logo"><a href="#" title="赶考网"><img src="/assets/logo.png"/></a></h1>
         <%= render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>
         
@@ -33,20 +32,10 @@
       <div class="m_index_box">
         <div class="m_video">
           <a href="#" class="m_video_btn"></a>
-          <div id="mediaspace_wrapper" style="position: relative; width: 321px; height: 210px; "><object type="application/x-shockwave-flash" data="player.swf" width="100%" height="100%" bgcolor="#000000" id="mediaspace" name="mediaspace" tabindex="0"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><param name="seamlesstabbing" value="true"><param name="wmode" value="opaque"><param name="flashvars" value="netstreambasepath=file%3A%2F%2F%2FC%3A%2FUsers%2FXuya%2FDesktop%2Fweb%2Fweb%2Findex.html&amp;id=mediaspace&amp;file=videos%2F5.mp4&amp;screencolor=%23000000&amp;image=videos%2Fpreview.jpg&amp;controlbar.position=none"></object></div>
-          <script type="text/javascript">
-            jwplayer('mediaspace').setup({
-              'flashplayer': '/assets/jwplayer/player.swf',
-              'file': '/videos/2/5.mp4',
-              'controlbar': 'none',
-              'width': '321',
-              'height': '210',
-              'screencolor': '#000000',
-              'image': "/videos/preview.jpg"
-            });
-          </script>
+          <div id="mediaspace_wrapper" style="position: relative; width: 321px; height: 210px; ">
+          </div>
         </div>
-        <div class="index_text"><img src="/assets/index_text.png"></div>
+        <div class="index_text"><img src="/assets/index_text.png"/></div>
         <div class="index_btn">
           <h1>请进入您要进行备考的频道：</h1>
           <br/>
