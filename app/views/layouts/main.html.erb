@@ -32,15 +32,9 @@
           </a>
         </h1>
         <%=render :partial=>'users/info', :object=>user_info %>
-        <div class="onlineUsers">在线人数:<span class="orange">10000</span>人</div>
+         
         <div class="clear"></div>
-        <script type="text/javascript">
-          $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+2000);
-          setInterval(function(){
-            $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+2000);
-          }, 3600000);
-        </script>
-        <div class="clear"></div>        
+         
 
         <nav class="border_radius">
           <% if cookies[:user_id] and is_nomal?(params[:category]) %>
@@ -100,11 +94,7 @@
     <div class="mask" style="display: none;"></div>
     <%= render :partial => '/users/charge_vip' %>
     <% unless @plan_list %><%= render :partial => '/layouts/inside_test' %><% end %>
-
-    <%if cookies[:user_id]!="" and Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
-    types=#{Sun::TYPES[:LOGIN_MORE]} and category_id=#{params[:category].to_i}")[0].nil? and
-        user_info[:login_times].to_i==4
-    %>
+    <%if show_focus%>
       <%=render :partial=>'users/focus'%>
     <%end%>
   </body>
