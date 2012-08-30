@@ -30,16 +30,19 @@ class Sun < ActiveRecord::Base
   end
 
   #打开任务包-扣小太阳数
-  def self.open_package(user_id,category)
+  def self.open_package(user_id,category, xml)
     #获取用户当前类别下的总太阳数
     sun=Sun.find_by_sql("select ifnull(sum(num), 0) num from suns where category_id=#{category} and user_id=#{user_id}")[0]
     total_suns= sun.nil? ? 0 : sun.num.to_i
-    p total_suns
-    if category==Category::TYPE[:CET4] or category==Category::TYPE[:CET6]
-      if total_suns+TYPE_NUM[:CET]<0
-        return "亲，小太阳不够哦!"
-      else #扣除小太阳
-        #当前类别 扣除小太阳的记录数
+    has_suns = false
+    if category==Category::TYPE[:GRADUATE]
+      if total_suns + TYPE_NUM[:KAOYAN] >= 0
+        count=Sun.count_by_sql("select count(id) open_count from suns
+        where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:KAOYAN]}")
+        has_suns = true
+      end
+    else
+      if total_suns + TYPE_NUM[:CET] >= 0
         if category==Category::TYPE[:CET4]
           count=Sun.count_by_sql("select count(id) open_count from suns
         where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:OPEN_CET4]}")
@@ -47,31 +50,25 @@ class Sun < ActiveRecord::Base
           count=Sun.count_by_sql("select count(id) open_count from suns
         where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:OPEN_CET6]}")
         end
-      end
-    elsif category==Category::TYPE[:GRADUATE]
-      if total_suns+TYPE_NUM[:KAOYAN]<0
-        return "亲，小太阳不够哦!"
-      else
-        count=Sun.count_by_sql("select count(id) open_count from suns
-        where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:KAOYAN]}")
+        has_suns = true
+      end    
+    end
+    if has_suns
+      current = xml.elements["root/plan/current"].text.to_i
+      if current > count
+        if category == Category::TYPE[:CET4]
+          self.create(:category_id => category, :user_id => user_id,
+            :types => TYPES[:OPEN_CET4], :num => TYPE_NUM[:CET])
+        elsif category == Category::TYPE[:CET6]
+          self.create(:category_id => category, :user_id => user_id,
+            :types => TYPES[:OPEN_CET6], :num => TYPE_NUM[:CET])
+        else
+          self.create(:category_id => category, :user_id => user_id,
+            :types => TYPES[:OPEN_KAOYAN], :num => TYPE_NUM[:KAOYAN])
+        end
       end
     end
-
-    #获取 current 包
-    plan = UserPlan.where(["category_id = ? and user_id = ?", category, user_id]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-    current=xml.elements["root/plan/current"].text.to_i
-    if current >= count
-      if category==Category::TYPE[:CET4]
-        self.create(:category_id => category, :user_id => user_id,
-          :types => TYPES[:OPEN_CET4], :num => TYPE_NUM[:CET])
-      elsif category==Category::TYPE[:CET6]
-        self.create(:category_id => category, :user_id => user_id,
-          :types => TYPES[:OPEN_CET6], :num => TYPE_NUM[:CET])
-      else
-        self.create(:category_id => category, :user_id => user_id,
-          :types => TYPES[:OPEN_KAOYAN], :num => TYPE_NUM[:KAOYAN])
-      end
-    end
+    return has_suns
   end
+
 end

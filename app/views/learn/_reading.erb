@@ -60,7 +60,7 @@
   var i = 2;
   var t;
   function start(){
-    var word_num = str_len($("#_"+(i-1)).html().trim());
+    var word_num = str_len($.trim($("#_"+(i-1)).html()));
     if(i <= num + 1) {
       t = setTimeout(change,parseInt(word_num*modulus*defaultT)*1000);
     }

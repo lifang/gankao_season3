@@ -14,7 +14,7 @@
     <% leving_word = leving_word(@result[:sentence], @result[:word].name.strip) %>
     <div class="w_question"><%= @result[:sentence].gsub("#{leving_word}", "_______").
                       gsub("#{leving_word.capitalize}", "_______") %></div>
-    <input name="" type="text" class="answer_input" onfocus="$('.trueFalse').html('')" />
+    <input name="" type="text" class="answer_input" />
   </div>
   <div class="words_func">
     <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
@@ -24,7 +24,7 @@
 <div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   function hedui(){
-    if($("#SID").attr("value").toLowerCase() == $(".answer_input").attr("value").trim().toLowerCase()){
+    if($("#SID").val().toLowerCase() == $.trim($(".answer_input").val()).toLowerCase()){
       clearInterval(myTime.timeId);
       jude("/learn/jude_word","true","false");
     }else{

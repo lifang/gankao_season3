@@ -380,7 +380,7 @@ class UserPlan < ActiveRecord::Base
   def update_plan
     doc = self.plan_list_xml
     current_day = doc.root.elements["plan"].elements["current"].text.to_i
-    update_review_task(doc, current_day, self.category_id)
+    update_review_task(doc, current_day)
     doc.root.elements["plan"].elements["current"].text = current_day + 1
     f = File.new("#{Rails.root}/public" + self.plan_url,"w+")
     f.write("#{doc.to_s.force_encoding('UTF-8')}")
@@ -388,7 +388,7 @@ class UserPlan < ActiveRecord::Base
   end
 
   #将需要复习的内容放到review中
-  def update_review_task(plan_xml, current_day, category_id)
+  def update_review_task(plan_xml, current_day)
     current_review = plan_xml.root.elements["review"].elements["_#{current_day}"]
     if !current_review.nil? and current_review.has_elements?
       current_review.each_element { |part|
@@ -410,12 +410,12 @@ class UserPlan < ActiveRecord::Base
         end
       }
       plan_xml.delete_element(current_task.xpath)
-      update_new_task(plan_xml, current_day, category_id)
+      update_new_task(plan_xml, current_day)
     end
   end
   
   #将需要新学的内容提到包中
-  def update_new_task(plan_xml, current_day, category_id)
+  def update_new_task(plan_xml, current_day)
     next_plan = plan_xml.root.elements["plan"].elements["_#{current_day+1}"]
     unless next_plan.nil?
       tomorrow_task_plan = {}
@@ -439,14 +439,14 @@ class UserPlan < ActiveRecord::Base
           else
             tomorrow_task[k] = already_items
             tiku_hash[k].attributes["lv"] = tiku_hash[k].attributes["lv"].to_i + 1
-            new_tiku = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i, category_id)
+            new_tiku = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i)
             proof_code(new_tiku, (v - already_items.length)).each {|i|
               tomorrow_task[k] << i
             }
             tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
           end
         else #当今天需要学习的内容题库中没有，特别是阶段转换时
-          new_tiku = get_new_tiku(k, 1, category_id)
+          new_tiku = get_new_tiku(k, 1)
           proof_code(new_tiku, v).each {|i|
             tomorrow_task[k] << i
           }
@@ -474,14 +474,12 @@ class UserPlan < ActiveRecord::Base
   end
 
   #取新的题库
-  def get_new_tiku(type, level, category_id)
+  def get_new_tiku(type, level)
     items = []
     if type == CHAPTER_TYPE_NUM[:WORD]
-      infos = Word.find(:all, :select => "id", :conditions => ["category_id = ? and level = ?",
-          category_id, level])
+      infos = Word.find(:all, :select => "id", :conditions => ["level = ?", level])
     elsif type == CHAPTER_TYPE_NUM[:READ]
-      infos = Tractate.find(:all, :select => "id", :conditions => ["category_id = ? and level = ?",
-          category_id, level])
+      infos = Tractate.find(:all, :select => "id", :conditions => ["level = ?", level])
     else
       sql_type = case type
       when CHAPTER_TYPE_NUM[:SENTENCE]
@@ -493,8 +491,8 @@ class UserPlan < ActiveRecord::Base
       else
         PracticeSentence::TYPES[:DICTATION]
       end
-      infos = PracticeSentence.find(:all, :select => "id", :conditions => ["category_id = ? and types = ? and level = ?",
-          category_id, sql_type, level])
+      infos = PracticeSentence.find(:all, :select => "id", :conditions => ["types = ? and level = ?",
+          sql_type, level])
     end
     items = infos.collect { |i| i.id }
     return items

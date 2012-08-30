@@ -8,34 +8,35 @@ class LearnController < ApplicationController
   respond_to :html, :xml, :json, :js
   
   def task_dispatch
-    #打开任务包--扣除小太阳
-    p Sun.open_package(cookies[:user_id], params[:category].to_i)
-    cookies[:category] = params[:category]
-    cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
-    items = params[:items].split(",") if params[:items]
-    if items.nil? or items.blank?
-      plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
-      xml = plan.plan_list_xml
-      return if (info = willdo_part_infos(xml)).nil?
-      cookies[:type] = info[:type].to_i
-      items = info[:ids]
-    end
-    if !params[:ids].nil? && !params[:ids].empty?
-      @ids_str = params[:ids]
-    else
-      @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
-    end
-    @items_str = items.join(",")
-    cookies[:current_id] = items[0].split("-")[0] if items[0]
-    case cookies[:type].to_i
-    when UserPlan::CHAPTER_TYPE_NUM[:WORD]
-      @result = operate_word(items)
-    when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
-      @result = operate_sentence(items)
-    when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
-      @result = operate_hearing
-    when UserPlan::CHAPTER_TYPE_NUM[:READ]
-      @result = operate_reading
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    @has_suns = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
+    if @has_suns
+      cookies[:category] = params[:category]
+      cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
+      items = params[:items].split(",") if params[:items]
+      if items.nil? or items.blank?      
+        return if (info = willdo_part_infos(xml)).nil?
+        cookies[:type] = info[:type].to_i
+        items = info[:ids]
+      end
+      if !params[:ids].nil? && !params[:ids].empty?
+        @ids_str = params[:ids]
+      else
+        @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
+      end
+      @items_str = items.join(",")
+      cookies[:current_id] = items[0].split("-")[0] if items[0]
+      case cookies[:type].to_i
+      when UserPlan::CHAPTER_TYPE_NUM[:WORD]
+        @result = operate_word(items)
+      when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE]
+        @result = operate_sentence(items)
+      when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN]
+        @result = operate_hearing
+      when UserPlan::CHAPTER_TYPE_NUM[:READ]
+        @result = operate_reading
+      end      
     end
   end
   
@@ -112,20 +113,18 @@ class LearnController < ApplicationController
     listen = PracticeSentence.find(cookies[:current_id])
     words = sentence_words(listen.en_mean)
     time = words.length * Constant::LISTEN_TIME[:PER] * cookies[:modulus].to_f
-    options = PracticeSentence.get_listen_by_level(listen.level, listen.category_id, listen.types, 1, cookies[:current_id]) << listen
     result = {
       :type => cookies[:type],
       :time => time.to_i,
-      :listen => listen,
-      :options => options.sort_by { rand }
+      :listen => listen
     }
     return result
   end
 
   def operate_reading
     result = nil
-    path = Tractate.find(cookies[:current_id]).tractate_url
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + path)) if path
+    tractate = Tractate.find(cookies[:current_id])
+    xml = tractate.tractate_xml if tractate
     description = xml.elements["//description"].elements.each("p"){}.inject(Array.new){ |arr,a| arr.push(a.text) }
     time = description.inject(0){ |result, element| result + sentence_words(element.gsub("[]","")).length * Constant::READ_TIME[:DEFAULT] * cookies[:modulus].to_f }
     questions =  xml.elements["//questions"].elements.each("question"){}.inject(Array.new) { |array, a|
@@ -141,6 +140,8 @@ class LearnController < ApplicationController
   end
 
   def jude_word
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     items = params[:items].split(",")
     ids = params[:ids].split(",")
     repeat = items[0].split("-")[1].to_i
@@ -151,19 +152,19 @@ class LearnController < ApplicationController
       if repeat == 0 or repeat == 1
         if step == 0 or step == 1
           elem = "#{cookies[:current_id]}-0-#{step+1}"
-          rewrite_xml_item(xpath, nil, 0, step + 1)
+          rewrite_xml_item(plan, xml, xpath, nil, 0, step + 1)
         elsif step == 2
           elem = "#{cookies[:current_id]}-0-#{step+1}"
-          rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], 0, step + 1)
+          rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], 0, step + 1)
         end
       elsif repeat == 2
         elem = "#{cookies[:current_id]}-1-#{step}"
-        rewrite_xml_item(xpath, nil, 1, step)
+        rewrite_xml_item(plan, xml, xpath, nil, 1, step)
       end
     end
     if params[:flag] == "false"
       elem = "#{cookies[:current_id]}-2-#{step}"
-      rewrite_xml_item(xpath, nil, 2, nil)
+      rewrite_xml_item(plan, xml, xpath, nil, 2, nil)
     end
     if (step == 2 && repeat <= 1 && params[:flag] == "true")
       ids = ids - [items[0].split("-")[0]]
@@ -171,8 +172,8 @@ class LearnController < ApplicationController
     else
       items = (items - [items[0]]).push(elem)
     end
-    pass_status("part") if items.blank?
-    @status = is_part_pass?
+    pass_status(plan, xml, "part") if items.blank?
+    @status = is_part_pass?(plan, xml)
     @items_str = items.join(",")
     @flag = params[:flag]
     @ids_str = ids.join(",")
@@ -180,6 +181,8 @@ class LearnController < ApplicationController
   end
 
   def jude_sentence
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
     step =  items[0].split("-")[2].to_i  #当前要进行的步骤 1、2
@@ -188,16 +191,16 @@ class LearnController < ApplicationController
       if step == 1
         ids = ids - [items[0].split("-")[0]]
         items = items - [items[0]]
-        rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+        rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
       else
         items = (items - [items[0]]).push("#{cookies[:current_id]}-0-#{step+1}")
-        rewrite_xml_item(xpath, nil, nil, step + 1)
+        rewrite_xml_item(plan, xml, xpath, nil, nil, step + 1)
       end
     else
       items = (items - [items[0]]).push(items[0])
     end
-    pass_status("part") if items.blank?
-    @status = is_part_pass?
+    pass_status(plan, xml, "part") if items.blank?
+    @status = is_part_pass?(plan, xml)
     @flag = params[:flag]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -205,20 +208,22 @@ class LearnController < ApplicationController
   end
 
   def jude_hearing
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
     xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{cookies[:current_id]}']"
     if params[:flag] == "true"
-      rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
       ids = ids - [items[0].split("-")[0]]
       items = items - [items[0]]
     else
       items = (items - [items[0]]).push(items[0])
     end
     if items.blank?
-      pass_status("part")
+      pass_status(plan, xml, "part")
     end
-    @status = is_part_pass?
+    @status = is_part_pass?(plan, xml)
     @flag = params[:flag]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -226,40 +231,47 @@ class LearnController < ApplicationController
   end
 
   def jude_read
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
     xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{cookies[:current_id]}']"
     if params[:flag] == "true"
-      rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
       ids = ids - [items[0].split("-")[0]]
       items = items - [items[0]]
     else
       items = (items - [items[0]]).push(items[0])
     end
-    pass_status("part") if items.blank?
-    @status = is_part_pass?
+    pass_status(plan, xml, "part") if items.blank?
+    @status = is_part_pass?(plan, xml)
     @items_str = items.join(",")
     @ids_str = ids.join(",")
     @redirct = params[:redirct]
   end
 
   def i_have_remember
+    puts "---------------------"
+    puts cookies[:current_id]
+    puts params[:items]
+    puts params[:ids]
+    puts cookies[:type]
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
     type = cookies[:type].to_i
     xpath = "//part[@type='#{type}']//item[@id='#{cookies[:current_id]}']"
-    rewrite_xml_item(xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+    rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     ids = ids - [cookies[:current_id]]
     items = items - [items[0]]
-    pass_status("part") if items.blank?
+    pass_status(plan, xml, "part") if items.blank?
     @items_str = items.join(",")
     @ids_str = ids.join(",")
     @redirct = "true"
   end
   
-  def rewrite_xml_item(xpath, is_pass, repeat_time, step)
-    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
-    xml = plan.plan_list_xml
+  def rewrite_xml_item(plan, xml, xpath, is_pass, repeat_time, step)
     element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath]
     element.add_attribute("is_pass", UserPlan::PLAN_STATUS[:FINISHED]) if is_pass == UserPlan::PLAN_STATUS[:FINISHED]
     element.add_attribute("repeat_time", repeat_time) if repeat_time
@@ -269,9 +281,7 @@ class LearnController < ApplicationController
     f.close
   end
 
-  def pass_status(kind) #kind = 部分 or 整个包
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+  def pass_status(plan, xml, kind) #kind = 部分 or 整个包
     if kind == "part"
       element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}//part[@type=#{cookies[:type]}]"]
     else
@@ -283,15 +293,13 @@ class LearnController < ApplicationController
     f.close
   end
 
-  def is_part_pass?
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
+  def is_part_pass?(plan, xml)
     current = xml.elements["//current"].text
     xpath = "//#{cookies[:is_new]}//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
     if node.nil?
-      pass_status("all")
-      UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], cookies[:category]]).first.update_plan if cookies[:is_new] == "plan"
+      pass_status(plan, xml, "all")
+      plan.update_plan if cookies[:is_new] == "plan"
       return true
     end
     return false

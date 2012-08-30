@@ -1,34 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
     <plan>
-        <current>13</current>
+        <current>14</current>
         <info>
             <chapter1 days='47' linsten='1' sentence='1' word='2'/>
             <chapter2 days='25' dictation='20' read='4' translate='20'/>
             <chapter3 days='14' similarity='19' write='7'/>
         </info>
-        <_13 status='0'>
-            <part repeat_time='1' status='1' type='0'>
-                <item id='11' is_pass='1' repeat_time='0' step='3'/>
-                <item id='13' is_pass='1' repeat_time='0' step='3'/>
-            </part>
-            <part repeat_time='1' status='1' type='1'>
-                <item id='11' is_pass='1' repeat_time='0' step='0'/>
-                <item id='13' is_pass='1' repeat_time='0' step='0'/>
-            </part>
-            <part repeat_time='1' status='0' type='2'>
-                <item id='11' is_pass='0' repeat_time='0' step='0'/>
-                <item id='13' is_pass='0' repeat_time='0' step='0'/>
-            </part>
-            <part repeat_time='1' status='0' type='3'>
-                <item id='11' is_pass='0' repeat_time='0' step='0'/>
-                <item id='13' is_pass='0' repeat_time='0' step='0'/>
-            </part>
-        </_13>
+        
         <_14 status='0'>
-            <part num='2' type='0'/>
-            <part num='1' type='1'/>
-            <part num='1' type='2'/>
+            
+            
+            
         </_14>
         <_15 status='0'>
             <part num='2' type='0'/>
@@ -472,11 +455,23 @@
                 <item id='11' is_pass='0' repeat_time='0' step='0'/>
                 <item id='13' is_pass='0' repeat_time='0' step='0'/>
             </part>
-        </_14>
+        <part repeat_time='0' status='0' type='0'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part><part repeat_time='0' status='0' type='1'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part><part repeat_time='0' status='0' type='2'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part><part repeat_time='0' status='0' type='3'>
+                <item id='11' is_pass='0' repeat_time='0' step='0'/>
+                <item id='13' is_pass='0' repeat_time='0' step='0'/>
+            </part></_14>
     </review>
     <tiku>
-        <part item='' lv='11' type='0'/>
-        <part item='' lv='22' type='1'/>
-        <part item='' lv='29' type='2'/>
+        <part item='' lv='12' type='0'/>
+        <part item='' lv='23' type='1'/>
+        <part item='' lv='30' type='2'/>
     </tiku>
 </root>
