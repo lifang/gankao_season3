@@ -8,6 +8,8 @@ class LearnController < ApplicationController
   respond_to :html, :xml, :json, :js
   
   def task_dispatch
+    #打开任务包--扣除小太阳
+    p Sun.open_package(cookies[:user_id], params[:category].to_i)
     cookies[:category] = params[:category]
     cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
     items = params[:items].split(",") if params[:items]
@@ -321,8 +323,8 @@ class LearnController < ApplicationController
   #----Start-------听写过程--------Start----
   def listen
     #获取用户信息和xml路径和类别
-    x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
-    xml =Document.new(File.open(x_url))
+    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], params[:category]]).first
+    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     #  获取听写数据
     @source=listen_write_source(xml)
     if @source.nil?
@@ -341,8 +343,8 @@ class LearnController < ApplicationController
     #题目类型  5为听写
     part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s
     #获取用户xml路径
-    x_url = "#{Rails.root}/public/plan_xmls/2012-08/2_19.xml"
-    xml =Document.new(File.open(x_url))
+    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], params[:category]]).first
+    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
     current=xml.elements["root/plan/current"].text.to_i
     #处理句子更改状态,根据类型不同进行不同的操作
     if is_answer=='true'

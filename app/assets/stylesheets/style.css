@@ -90,14 +90,14 @@ img { border: none;}
     overflow: hidden;
 }
 /*登录区域*/
-.login_area { width: 400px; height: 80px; float: right;}
-.login_area li { width: 120px; height: 80px; float: left;}
+.login_area {height: 40px; margin-top: 35px; float: right;}
+.login_area li { width: 120px; height: 40px; float: left;}
 .login_area a.renren, .login_area a.sina, .login_area a.qq {
-    width:55px;
-    height: 58px;
-    display: block;
-    padding: 22px 0 0 55px;
-    color: #397580;
+	width:55px;
+	height: 40px;
+	display: block;
+	padding: 0px 0 0 55px;
+	color: #397580;
 }
 .login_area a.renren { background: url(/assets/login_bg.png) no-repeat 0 center;}
 .login_area a.sina { background: url(/assets/login_bg.png) no-repeat -95px center;}
@@ -146,7 +146,7 @@ img { border: none;}
 
 
 
-.onlineUsers { position: absolute; top: 60px; right: 0; height: 24px; line-height: 24px;}
+.onlineUsers { position: absolute; top: 5px; right: 0; height: 24px; line-height: 24px;}
 .onlineUsers span { padding: 0 10px;}
 
 
@@ -982,10 +982,10 @@ nav li { float: left; margin: 0 20px;}
 
 .gz_sun {
     width: 434px;
-	height: 84px;
-	background: url(/assets/gz_sun.png) no-repeat;
-	float: left;
-	margin-top: 18px;
+    height: 84px;
+    background: url(/assets/gz_sun.png) no-repeat;
+    float: left;
+    margin-top: 18px;
 }
 .gz_sun h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
 
@@ -1087,3 +1087,39 @@ nav li { float: left; margin: 0 20px;}
 .exam_tab_login li a { width: 20px; height: 20px; display: block; text-indent: -999px; overflow: hidden; float: left;}
 
 .exam_next_a { float: right; color: #387580; padding: 5px;}
+
+
+/*main------------------------*/
+.main { padding: 10px 0; overflow: hidden;}
+.m_index { background: #e7debe;}
+.m_index_box {
+    width: 940px;
+    height: 500px;
+    padding-top: 55px;
+    margin: 0 auto;
+    background: url(/assets/m_index_bg.jpg) no-repeat 0 0;
+    position: relative;
+}
+.m_video { width: 326px; height: 212px; margin: 105px 0 0 106px; _margin: 52px 0 0 52px; float: left;}
+.m_video_btn {
+    width: 162px;
+    height: 162px;
+    display: block;
+    background: url(/assets/m_video_btn.png) no-repeat;
+    position: absolute;
+    top: 185px;
+    left: 190px;
+}
+.index_text { margin-left: 65px; float: left;}
+.index_btn { margin-left: 80px; float: left; height: 100px;}
+.index_btn h1 { font-size: 16px; line-height: 36px;}
+.index_btn a{
+    border: 1px #4b6c70 solid;
+    color: #e7debe;
+    padding: 5px 10px;
+    background: #387580;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    margin: 0 10px;
+    _width: 100px;
+}
+

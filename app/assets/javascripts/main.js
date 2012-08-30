@@ -18,17 +18,17 @@ function infoTab(i_tab,i_box,x){
 
 //小太阳提示
 $(function(){
-	$(".s_sun_mess").fadeIn(1000);
-	window.setTimeout(function sunMess(){
-		$(".s_sun_mess").fadeOut("slow");
-	},4000);
+    $(".s_sun_mess").fadeIn(1000);
+    window.setTimeout(function sunMess(){
+        $(".s_sun_mess").fadeOut("slow");
+    },4000);
 
-	$(".s_sun").hover(function(){
-		$(".s_sun_mess").css("display","block");
-		},function(){
-		$(".s_sun_mess").css("display","none");
-		}
-	)
+    $(".s_sun").hover(function(){
+        $(".s_sun_mess").css("display","block");
+    },function(){
+        $(".s_sun_mess").css("display","none");
+    }
+    )
 })
 
 $(document).ready(function(){
@@ -86,63 +86,6 @@ $(function(){
 })
 
 
-//video图标左右点击移动
-$(function(){
-    var page = 1;
-    var i = 5;
-    $('div.video_next').click(function(){
-        var $parent = $(this).parents('div.video_more');
-        var $video_show = $parent.find('.video_ul')
-        var $videoImg = $parent.find('.video_box');
-        var video_width = $videoImg.width();
-        var len = $video_show.find('li').length;
-        var page_count = Math.ceil(len/i);
-		
-        if(!$video_show.is(':animated')){
-            $parent.find('div.video_prev').css('visibility','visible');
-            if(page == page_count){
-                $(this).css('visibility','hidden');
-            }else{
-                $video_show.animate({
-                    marginLeft:'-='+video_width
-                },'slow');
-                page++;
-                if(page == page_count){
-                    $(this).css('visibility','hidden');
-                }
-            }
-        }
-    })
-	
-	
-    $('div.video_prev').click(function(){
-        var $parent = $(this).parents('div.video_more');
-        var $video_show = $parent.find('.video_ul')
-        var $videoImg = $parent.find('.video_box');
-        var video_width = $videoImg.width();
-        var len = $video_show.find('li').length;
-        var page_count = Math.ceil(len/i);
-		
-        if(!$video_show.is(':animated')){
-            $parent.find('div.video_next').css('visibility','visible');
-            if(page == 1){
-                $(this).css('visibility','hidden');
-            }else{
-                $video_show.animate({
-                    marginLeft:'+='+video_width
-                },'slow');
-                page--;
-                if(page == 1){
-                    $(this).css('visibility','hidden');
-
-                }
-				
-            }
-        }
-    })
-	
-	
-})
 
 function check_vip(category){
     $('.close').trigger('click');
