@@ -23,5 +23,5 @@
   <span class="close tishi_close">关闭</span>
   <p>赶考网会员充值,完成付款后请根据你的情况点击下面的按钮：</p>
   <div class="tab_btn_w"><button class="b_btn" onclick="window.open('/logins/alipay_exercise?category=<%= params[:category] %>&total_fee='+$('#pay_fee').html(),'_blank','height=750,width=1000,left=200,top=50');">重新支付</button>
-    <button class="b_btn" onclick="window.location.reload()">完成充值</button></div>
+    <button class="b_btn" onclick="over_pay()">完成充值</button></div>
 </div>

@@ -100,7 +100,6 @@ class UsersController < ApplicationController
     @message="我在赶考网复习"+level+",来自链接:"+Constant::SERVER_PATH+"/users/#{cookies[:user_id]}/share_back?category=#{category}"
     #获取用户
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
-   
     if user and user.access_token and (user.end_time-Time.now>0)
       if @web=="sina"
         type=Sun::TYPES[:SINASHARE].to_i
@@ -112,14 +111,12 @@ class UsersController < ApplicationController
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
       elsif @web=="qq"
         type=Sun::TYPES[:QQSHARE].to_i
-        ret = share_tencent_weibo(user.access_token,user.openid,@message)
+        ret = share_tencent_weibo(user.access_token,user.open_id,@message)
         @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
       end
-      if @return_message.nil?
-        render :text=>update_user_suns(user,category,type)
-      else
-        render :text=>@return_message
-      end
+      @return_message=update_user_suns(user,category,type) if @return_message.nil?
+      flash[:share_notice]=@return_message
+      render :inline => "<script>window.opener.location.reload();window.close();</script>"
     else
       cookies[:sharecontent]="#{category}@!#{@message}"
       if params[:web].to_s=="sina"
@@ -157,13 +154,11 @@ class UsersController < ApplicationController
     if user and user.access_token and (user.end_time-Time.now>0)
       if @web=="sina"
         ret = sina_send_message(user.access_token, message)
-        @return_message ="微博发送失败，请重新尝试" if ret["error_code"]
-        #分享成功
-        if @return_message.nil?
-          #送5个太阳
-          focus_and_share_sun(user.id,category)
-        end
-        render :text=>request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        @return_message ="微博发送失败，请重新尝试" if ret["error_code"]      
+        #送5个太阳
+        @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil? #分享成功
+        flash[:share_notice]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       elsif @web=="renren"
         ret = renren_send_message(user.access_token, message)
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
@@ -176,18 +171,11 @@ class UsersController < ApplicationController
       elsif @web=="qq"
         info=share_tencent_weibo(user.access_token,user.open_id,message)
         @return_message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
-        #分享成功
-        if @return_message.nil?
-          #送5个太阳
-          focus_and_share_sun(user.id,category)
-        end
+        #送5个太阳
+        @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil?  #分享成功
         info=focus_tencent_weibo(user.access_token,user.open_id)
-        @return_message="关注腾讯微博失败" if info["ret"].to_i!=0
-        if @return_message.nil?
-          render :text=>"关注腾讯微博成功"
-        else
-          render :text=>@return_message
-        end
+        flash[:share_notice]=@return_message
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
     else
       cookies[:sharecontent]="#{category}@!#{message}"

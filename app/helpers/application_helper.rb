@@ -118,7 +118,7 @@ module ApplicationHelper
   def show_focus
     if cookies[:user_id] and Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
       types=#{Sun::TYPES[:LOGIN_MORE]} and category_id=#{params[:category].to_i}")[0].nil? and
-       user_info and user_info[:login_times].to_i == 4
+       user_info and user_info[:login_times].to_i >3
       return true
     else
       return false

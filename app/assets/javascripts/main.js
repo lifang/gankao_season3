@@ -88,7 +88,7 @@ $(function(){
 
 
 function check_vip(category){
-    $('.close').trigger('click');
+    $('.pay_close').trigger('click');
     $.ajax({
         async:true,
         dataType:'json',
@@ -100,6 +100,9 @@ function check_vip(category){
         success : function(data) {
             if(data.vip){
                 show_charge('.tishi_tab','.tishi_close');
+                $(".tishi_close").bind('click',function(){
+                    over_pay();
+                })
                 window.open("/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html(),
                     '_blank','height=750,width=1000,left=200,top=50');
             }else{
@@ -119,6 +122,7 @@ function show_charge(outer_div,close_btn){
         $('.mask').css('display','none');
     })
 }//outer_div 遮罩层显示的部分 close_btn 关闭按钮
+
 
 
 function accredit(category){
@@ -172,7 +176,20 @@ function sun_charge(){
         tishi_alert("请输入整数");
         return false;
     }
-     $('#close_sun').trigger('click');
-      show_charge('#tab_sun','#tab_close');
+    $('#close_sun').trigger('click');
+    show_charge('#tab_sun','#tab_close');
     window.open("/logins/alipay_sun?category="+$("#sun_category").val()+"&total_fee="+sun_num,'_blank','height=750,width=1000,left=200,top=50');
+}
+
+
+function over_pay(){
+    $.ajax({
+        async:true,
+        dataType:'json',
+        type:'post',
+        url:"/logins/over_pay",
+        success : function(data) {
+            window.location.reload();
+        }
+    });
 }

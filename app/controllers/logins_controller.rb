@@ -26,7 +26,7 @@ class LoginsController < ApplicationController
   end
 
   def manage_qq
-     begin
+    begin
       meters=params[:access_token].split("&")
       access_token=meters[0].split("=")[1]
       expires_in=meters[1].split("=")[1].to_i
@@ -39,13 +39,14 @@ class LoginsController < ApplicationController
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-         Sun.first_login(@user.id)
+        Sun.first_login(@user.id)
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
       end
+      @user.increment!(:login_times)
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
@@ -87,6 +88,7 @@ class LoginsController < ApplicationController
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
+        @user.increment!(:login_times)
         user_role?(@user.id)
         cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
@@ -128,6 +130,7 @@ class LoginsController < ApplicationController
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
+        @user.increment!(:login_times)
         user_role?(@user.id)
         cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
@@ -270,11 +273,9 @@ class LoginsController < ApplicationController
         ret = sina_send_message(access_token, content[1])
         type=Sun::TYPES[:SINASHARE].to_i
         @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
-        if @return_message.nil?
-          render :text=>update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)
-        else
-          render :text=>@return_message
-        end
+        @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
+        flash[:share_notice]=@return_message
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
@@ -294,11 +295,9 @@ class LoginsController < ApplicationController
         ret = renren_send_message(access_token, content[1])
         type=Sun::TYPES[:RENRENSHARE].to_i
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
-        if @return_message.nil?
-          render :text=>update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)
-        else
-          render :text=>@return_message
-        end
+        @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)if @return_message.nil?
+        flash[:share_notice]=@return_message
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
@@ -319,11 +318,9 @@ class LoginsController < ApplicationController
         type=Sun::TYPES[:QQSHARE].to_i
         ret = share_tencent_weibo(access_token,openid,content[1])
         @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
-        if @return_message.nil?
-          render :text=>update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)
-        else
-          render :text=>@return_message
-        end
+        @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
+        flash[:share_notice]=@return_message
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
@@ -344,13 +341,12 @@ class LoginsController < ApplicationController
         access_token=params[:access_token]
         content=cookies[:sharecontent].split('@!')
         ret = sina_send_message(access_token, content[1])
-        return_message = "微博发送失败，请重新尝试" if ret["error_code"]
-        if return_message.nil?
-          focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
-        end
-
+        return_message = "微博发送失败，请重新尝试" if ret["error_code"]      
+        return_message= focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)  if return_message.nil?
         response = sina_get_user(access_token,uid)
-        render :text=>request_weibo(access_token,response["id"],"关注失败，请登录微博查看")
+        request_weibo(access_token,response["id"],"关注失败，请登录微博查看")
+        flash[:share_notice]=return_message
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
@@ -393,19 +389,11 @@ class LoginsController < ApplicationController
         content=cookies[:sharecontent].split('@!')
         info=share_tencent_weibo(access_token,open_id,content[1])
         @return_message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
-        #分享成功
-        if @return_message.nil?
-          #送5个太阳
-          focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
-        end
-
+        #送5个太阳
+        @return_message=focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i) if @return_message.nil?  #分享成功
         info=focus_tencent_weibo(access_token,open_id)
-        @return_message="关注腾讯微博失败" if info["ret"].to_i!=0
-        if @return_message.nil?
-          render :text=>"关注腾讯微博成功"
-        else
-          render :text=>@return_message
-        end
+        flash[:share_notice]=@return_message
+        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
@@ -423,7 +411,7 @@ class LoginsController < ApplicationController
       :notify_url=>Constant::SERVER_PATH+"/logins/sun_compete",
       :subject=>"购买#{params[:total_fee]}个小太阳",
       :payment_type=>Order::PAY_TYPES[:CHARGE],
-      :total_fee=>params[:total_fee]
+      :total_fee=>params[:total_fee].to_i
     }
     out_trade_no="#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}_#{params[:category]}_#{params[:total_fee]}"
     options.merge!(:seller_email =>Oauth2Helper::SELLER_EMAIL, :partner =>Oauth2Helper::PARTNER, :_input_charset=>"utf-8", :out_trade_no=>out_trade_no)
@@ -478,6 +466,15 @@ class LoginsController < ApplicationController
       end
     else
       render :text=>"success"
+    end
+  end
+
+  def over_pay
+    user_role?(cookies[:user_id])
+    respond_to do |format|
+      format.json {
+        render :json=>{}
+      }
     end
   end
 

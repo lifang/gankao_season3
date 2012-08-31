@@ -6,7 +6,7 @@ GankaoSeason3::Application.routes.draw do
       get :follow_me,:login_from_qq,:qq_index,:get_code,:user_code,:logout,:alipay_sun
       get :request_qq,:respond_qq,:request_sina,:respond_sina,:manage_sina,:watch_weibo,:respond_weibo,:request_renren,:respond_renren
       get :call_back_sina,:call_back_renren,:call_back_qq,:call_back_and_focus_sina,:call_back_and_focus_renren,:call_back_and_focus_qq
-      post :add_watch_weibo,:check_vip,:accredit_check,:alipay_compete,:sun_compete,:manage_qq
+      post :add_watch_weibo,:check_vip,:accredit_check,:alipay_compete,:sun_compete,:manage_qq,:over_pay
     end
   end
   resources :videos do
