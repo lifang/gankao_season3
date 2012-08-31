@@ -597,6 +597,8 @@ nav li { float: left; margin: 0 20px;}
 .text_con p { color: #387580; font-family: Arial; line-height: 24px; text-indent: 28px; text-align: justify;}
 .text_con p em { font-weight: bold; font-size: 18px}
 
+.example_list { padding: 5px; font-size: 14px; margin: 5px 0;}
+.example_list p { line-height: 24px; color: #387580;}
 
 /*未登录未前测的复习计划*/
 .noTest { width: 510px; height: 310px; background: url(/assets/noTest_bg.png) no-repeat; margin: 40px auto;}
@@ -614,7 +616,6 @@ nav li { float: left; margin: 0 20px;}
 }
 /*复习计划弹出层*/
 .mask {
-    width: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -963,11 +964,12 @@ nav li { float: left; margin: 0 20px;}
 /*------关注gz_tab----------*/
 .gz_tab {
     width: 688px;
-    height: 450px;
-    background: url(/assets/gz_tab_bg.jpg) repeat;
-    border-radius: 0.6em;
-    box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
-    position: absolute;
+	height: 450px;
+	background: url(/assets/gz_tab_bg.jpg) repeat;
+	border-radius: 0.6em;
+	box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
+	position: absolute;
+        z-index: 401;
 }
 .gz_top { border-bottom: 1px #3d8c9b dashed;  padding: 20px; overflow: hidden;}
 .gz_mh { width: 150px; float: left; margin-left: 20px;}

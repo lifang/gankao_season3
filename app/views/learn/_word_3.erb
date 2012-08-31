@@ -11,7 +11,9 @@
     <input type="hidden" id="SID" value="<%= @result[:word].name %>" />
   </div>
   <div class="words_con">
-    <div class="w_question"><%= @result[:sentence] %></div>
+    <% leving_word = leving_word(@result[:sentence], @result[:word].name.strip) %>
+    <div class="w_question"><%= @result[:sentence].gsub("#{leving_word}", "_______").
+                      gsub("#{leving_word.capitalize}", "_______") %></div>
     <input name="" type="text" class="answer_input" onfocus="$('.trueFalse').html('')" />
   </div>
   <div class="words_func">

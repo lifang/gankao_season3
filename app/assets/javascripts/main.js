@@ -150,6 +150,7 @@ function accredit(category){
 //弹出复习的层
 function show_mask(style) {
     $(style).css('height',document.body.scrollHeight);
+    $(style).css('width',document.body.scrollWidth);
     $(style).show();
 }
 

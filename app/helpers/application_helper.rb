@@ -3,7 +3,7 @@ module ApplicationHelper
   include LearnHelper
 
   def sign?
-    cookies[:user_id] = 42
+    cookies[:user_id] = 2
     deny_access unless signed_in?
   end
   
@@ -110,21 +110,36 @@ module ApplicationHelper
   end
   
   #用户登录天数
-  def signin_days(user,category_id)
+  def signin_days(signin_days,category_id)
     hash=Hash.new()
-    p hash=user.signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
-    p Category::FLAG[category_id.to_i]
-    p hash[Category::FLAG[category_id.to_i]].to_i
+    hash=signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
     return hash[Category::FLAG[category_id.to_i]].to_i
   end
 
   def show_focus
     if cookies[:user_id] and Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
       types=#{Sun::TYPES[:LOGIN_MORE]} and category_id=#{params[:category].to_i}")[0].nil? and
-        user_info[:login_times].to_i==4
+        user_info[:login_times].to_i == 4
       return true
     else
       return false
     end
   end
+
+  #寻找句子中相同的单词
+  def leving_word(sentence, word)
+    lev_word = case
+    when sentence =~/#{word}/
+      word
+    when sentence =~/#{word.capitalize}/
+      word
+    when sentence =~/#{word[0, word.length-1]}/
+      word[0, word.length-1]
+    when sentence =~/#{word[0, word.length-2]}/
+      word[0, word.length-2]
+    else word
+    end
+    return lev_word
+  end
+  
 end
