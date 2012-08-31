@@ -35,10 +35,10 @@ class PlansController < ApplicationController
 
   def end_result
     @category=params[:category].to_i
-    if cookies[:"#{Category::FLAG[@category]}"].nil?
+    if params[:info].nil?
       redirect_to "/plans?category=#{@category}"
     else
-      @score=cookies[:"#{Category::FLAG[@category]}"].split(",")
+      @score=params[:info].split(",")
       if cookies[:user_id]
         @t_score=@score.pop
         create_user_score(@category,@score,@t_score)

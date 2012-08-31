@@ -21,7 +21,7 @@ module ApplicationHelper
         cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
         orders = Order.find(:all, :conditions => ["status = #{Order::STATUS[:NOMAL]} and user_id = ?", user_id.to_i])
         orders.each do |order|
-          this_order = "#{order.category_id}=#{Order::USER_ORDER[:TRIAL]}"
+          this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         end unless orders.blank?
       end
