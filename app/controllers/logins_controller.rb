@@ -21,18 +21,17 @@ class LoginsController < ApplicationController
     redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::REQUEST_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
   end
 
-  def manage_qq
-    render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?').replace('manage_qq','respond_qq');</script>"
+  def respond_qq
+    render :layout=>"application"
   end
 
-  def respond_qq
-    begin
-      access_token=params["access_token"]||params["?access_token"]
-      puts "------------------------------"
-      puts params[:open_id]
-      expires_in=params[:expires_in].to_i
+  def manage_qq
+     begin
+      meters=params[:access_token].split("&")
+      access_token=meters[0].split("=")[1]
+      expires_in=meters[1].split("=")[1].to_i
       openid=params[:open_id]
-      @user= User.find_by_open_id(openid) if openid
+      @user= User.find_by_open_id(openid)
       if @user.nil?
         user_url="https://graph.qq.com"
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}"
@@ -40,18 +39,24 @@ class LoginsController < ApplicationController
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
-        Sun.first_login(@user.id)
+         Sun.first_login(@user.id)
       else
+        ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
           @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
         end
       end
-      user_role?(@user.id)
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
-      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
+      user_role?(cookies[:user_id])
+      data=true
     rescue
-      render :inline => "<script>window.opener.location.reload;window.close();</script>"
+      data=false
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>data
+      }
     end
     
   end

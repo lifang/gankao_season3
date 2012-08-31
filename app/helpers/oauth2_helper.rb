@@ -55,7 +55,7 @@ module Oauth2Helper
   REQUEST_ACCESS_TOKEN={
     :response_type=>"token",
     :client_id=>APPID,
-    :redirect_uri=>"#{Constant::SERVER_PATH}/logins/manage_qq",
+    :redirect_uri=>"#{Constant::SERVER_PATH}/logins/respond_qq",
     :scope=>"get_user_info,add_topic",
     :state=>"1"
   }
