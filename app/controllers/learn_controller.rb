@@ -10,8 +10,8 @@ class LearnController < ApplicationController
   def task_dispatch
     plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
-    @has_suns = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
-    if @has_suns
+    cookies[:can_open] = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
+    if cookies[:has_suns]
       cookies[:category] = params[:category]
       cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
       items = params[:items].split(",") if params[:items]

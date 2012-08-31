@@ -33,43 +33,35 @@ class Sun < ActiveRecord::Base
   #打开任务包-扣小太阳数
   def self.open_package(user_id,category, xml)
     #获取用户当前类别下的总太阳数
-    sun=Sun.find_by_sql("select ifnull(sum(num), 0) num from suns where category_id=#{category} and user_id=#{user_id}")[0]
-    total_suns= sun.nil? ? 0 : sun.num.to_i
-    has_suns = false
+    can_open = false
     if category==Category::TYPE[:GRADUATE]
-      if total_suns + TYPE_NUM[:KAOYAN] >= 0
-        count=Sun.count_by_sql("select count(id) open_count from suns
-        where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:KAOYAN]}")
-        has_suns = true
-      end
-    else
-      if total_suns + TYPE_NUM[:CET] >= 0
-        if category==Category::TYPE[:CET4]
-          count=Sun.count_by_sql("select count(id) open_count from suns
+      count = Sun.count_by_sql("select count(id) open_count from suns
+        where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:OPEN_KAOYAN]}")
+    elsif category==Category::TYPE[:CET4]
+      count=Sun.count_by_sql("select count(id) open_count from suns
         where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:OPEN_CET4]}")
-        else
-          count=Sun.count_by_sql("select count(id) open_count from suns
+    else
+      count=Sun.count_by_sql("select count(id) open_count from suns
         where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:OPEN_CET6]}")
-        end
-        has_suns = true
-      end    
     end
-    if has_suns
-      current = xml.elements["root/plan/current"].text.to_i
-      if current > count
-        if category == Category::TYPE[:CET4]
-          self.create(:category_id => category, :user_id => user_id,
-            :types => TYPES[:OPEN_CET4], :num => TYPE_NUM[:CET])
-        elsif category == Category::TYPE[:CET6]
-          self.create(:category_id => category, :user_id => user_id,
-            :types => TYPES[:OPEN_CET6], :num => TYPE_NUM[:CET])
-        else
-          self.create(:category_id => category, :user_id => user_id,
-            :types => TYPES[:OPEN_KAOYAN], :num => TYPE_NUM[:KAOYAN])
-        end
+    current = xml.elements["root/plan/current"].text.to_i
+    if current == count
+      can_open = true
+    elsif current > count
+      sun = Sun.find_by_sql("select ifnull(sum(num), 0) num from suns where category_id=#{category} and user_id=#{user_id}")[0]
+      total_suns = sun.nil? ? 0 : sun.num.to_i
+      if category == Category::TYPE[:CET4] and total_suns + TYPE_NUM[:CET] >= 0
+        self.create(:category_id => category, :user_id => user_id, :types => TYPES[:OPEN_CET4], :num => TYPE_NUM[:CET])
+        can_open = true
+      elsif category == Category::TYPE[:CET6] and total_suns + TYPE_NUM[:CET] >= 0
+        self.create(:category_id => category, :user_id => user_id, :types => TYPES[:OPEN_CET6], :num => TYPE_NUM[:CET])
+        can_open = true
+      elsif category==Category::TYPE[:GRADUATE] and total_suns + TYPE_NUM[:KAOYAN] >= 0
+        self.create(:category_id => category, :user_id => user_id, :types => TYPES[:OPEN_KAOYAN], :num => TYPE_NUM[:KAOYAN])
+        can_open = true
       end
     end
-    return has_suns
+    return can_open
   end
 
 end

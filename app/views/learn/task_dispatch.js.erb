@@ -1,4 +1,4 @@
-<% if @has_suns %>
+<% if cookies[:can_open] %>
   <% if @result %>
     window.items = "<%= @items_str %>";
     window.ids = "<%= @ids_str %>";
