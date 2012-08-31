@@ -8,7 +8,7 @@ class LearnController < ApplicationController
   respond_to :html, :xml, :json, :js
   
   def task_dispatch
-    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
     @has_suns = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
     if @has_suns
@@ -299,11 +299,15 @@ class LearnController < ApplicationController
     node = xml.elements[xpath]
     if node.nil?
       pass_status(plan, xml, "all")
+      send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
+         cookies[:user_id].to_i)
       plan.update_plan if cookies[:is_new] == "plan"
       return true
     end
     return false
   end
+
+  
 
   def study_it
     @result = nil

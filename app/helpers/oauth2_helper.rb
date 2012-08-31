@@ -55,7 +55,7 @@ module Oauth2Helper
   REQUEST_ACCESS_TOKEN={
     :response_type=>"token",
     :client_id=>APPID,
-    :redirect_uri=>"#{Constant::SERVER_PATH}/logins/respond_qq",
+    :redirect_uri=>"#{Constant::SERVER_PATH}/logins/manage_qq",
     :scope=>"get_user_info,add_topic",
     :state=>"1"
   }
@@ -280,11 +280,16 @@ module Oauth2Helper
       user=User.find(user_id)
       if !user.access_token.nil? and user.access_token!="" and !user.end_time.nil? and user.end_time>Time.now
         message +="赶考网http://www.gankao.co --#{Time.now.strftime(("%Y-%m-%d"))}"
-        send_message_qq(message,user.open_id,user.access_token,user_id) if user.code_type=="qq" and !user.open_id.nil?
-        renren_send_message(user.access_token,message)  if user.code_type=="renren"
-        sina_send_message(user.access_token,message) if user.code_type=="sina"
-        send_message_kaixin(user.access_token,message) if  user.code_type=="kaixin"
-        sleep 2
+        if user.code_type=="qq" and !user.open_id.nil?
+          send_message_qq(message,user.open_id,user.access_token,user_id)
+        elsif user.code_type=="renren"
+          renren_send_message(user.access_token,message)
+        elsif user.code_type=="sina"
+          sina_send_message(user.access_token,message)
+        elsif user.code_type=="kaixin"
+          send_message_kaixin(user.access_token,message)
+        end
+        #sleep 2
       end
     rescue
     end

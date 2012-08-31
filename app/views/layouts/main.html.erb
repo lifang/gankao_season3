@@ -90,10 +90,10 @@
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
     <div class="mask" style="display: none;"></div>
-    <%# if cookies[:user_id] and is_nomal?(params[:category]) %>
+    <% if cookies[:user_id] and is_nomal?(params[:category]) %>
       <%= render :partial => '/users/charge_vip' %>
       <%= render :partial => '/users/charge_sun' %>
-    <%# end %>
+    <% end %>
     <%= render :partial => '/layouts/inside_test' unless @plan_list %>
     <%= render :partial=>'users/focus' if show_focus %>
 
