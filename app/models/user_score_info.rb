@@ -12,16 +12,13 @@ class UserScoreInfo < ActiveRecord::Base
   #取到默认开始的词库、句子跟听力
   def get_start_level
     all_start_level =  self.all_start_level.split(",")
-    words = Word.find(:all, :select => "id", :conditions => ["category_id = ? and level = ?",
-        self.category_id, all_start_level[0]])
+    words = Word.find(:all, :select => "id", :conditions => [" level = ?", all_start_level[0]])
     word_list = words.collect { |w| w.id }
     practice_sentences = PracticeSentence.find(:all, :select => "id",
-      :conditions => ["category_id = ? and types = ? and level = ?",
-        self.category_id, PracticeSentence::TYPES[:SENTENCE], all_start_level[1]])
+      :conditions => [" types = ? and level = ?", PracticeSentence::TYPES[:SENTENCE], all_start_level[1]])
     sentence_list = practice_sentences.collect { |s| s.id }
     listens = PracticeSentence.find(:all, :select => "id",
-      :conditions => ["category_id = ? and types = ? and level = ?",
-        self.category_id, PracticeSentence::TYPES[:LINSTEN], all_start_level[2]])
+      :conditions => [" types = ? and level = ?", self.category_id, PracticeSentence::TYPES[:LINSTEN], all_start_level[2]])
     listen_list = listens.collect { |l| l.id }
     return {:word => word_list, :practice_sentences => sentence_list, :listens => listen_list, :levels => all_start_level}
   end
@@ -33,13 +30,14 @@ class UserScoreInfo < ActiveRecord::Base
     if current_package < total_package
       today_score = self.start_score + (leave_score*(current_package.to_f/total_package)).round
     end
+    self.set_user_modulus(today_score)
     return today_score
   end
 
   #根据用户的测试成绩计算他的时间系数
-  def set_user_modulus
+  def set_user_modulus(current_score = nil)
     max_score = UserScoreInfo.return_max_score(self.category_id)
-    percent = self.start_score.to_f/max_score
+    percent = current_score.nil? ? self.start_score.to_f/max_score : current_score.to_f/max_score
     self.modulus = if percent <= MODULUS_PERCENT[:LOW]
       MODULUS[:LOW]
     elsif percent > MODULUS_PERCENT[:LOW] and percent <= MODULUS_PERCENT[:NOMAL]
@@ -60,5 +58,8 @@ class UserScoreInfo < ActiveRecord::Base
       MAX_SCORE[:GRADUATE]
     end
   end
+
+
+
   
 end

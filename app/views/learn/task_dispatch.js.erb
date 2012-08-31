@@ -1,25 +1,27 @@
-<% if @result %>
-  window.items = "<%= @items_str %>";
-  window.ids = "<%= @ids_str %>";  
-  show_mask(".mask");
-  <% case @result[:type].to_i %>
-  <% when UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
-    <%  if @result[:step].to_i != 3 %>
-      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_12") %>");
-    <% else %>
-      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_3") %>");
+<% if @has_suns %>
+  <% if @result %>
+    window.items = "<%= @items_str %>";
+    window.ids = "<%= @ids_str %>";
+    show_mask(".mask");
+    <% case @result[:type].to_i %>
+    <% when UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
+      <%  if @result[:step].to_i != 3 %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_12") %>");
+      <% else %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_3") %>");
+      <% end %>
+    <% when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
     <% end %>
-  <% when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
-    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence") %>");
-  <% when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
-    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
-  <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
-    $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
+    generate_flash_div(".plan_tab");
+    myTime.start(<%= @result[:time] %>);
+    <% id_arr = @ids_str.split(",") %>
+    $(".t_number").html(<%= id_arr.index(cookies[:current_id]) + 1 %> + "/" + <%= id_arr.length %>);
   <% end %>
-  generate_flash_div(".plan_tab");
-  myTime.start(<%= @result[:time] %>);
-  <% id_arr = @ids_str.split(",") %>
-  $(".t_number").html(<%= id_arr.index(cookies[:current_id]) + 1 %> + "/" + <%= id_arr.length %>);
 <% else %>
-  alert("finish");
+  tishi_alert("您的小太阳个数不够打开一个任务包了哦，呜呜~~~~~");
 <% end %>

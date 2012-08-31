@@ -4,11 +4,7 @@
       <div class="user_pic"><img src="<%= info[:cover_url].nil? ? User::DEFAULT_COVER : info[:cover_url] %>" /></div>
       <p id="name"><%= info[:name] %></p>
       <p id="schoolName"><%= info[:school] %></p>
-<<<<<<< HEAD
       <p><% if params[:category] %><span class="s_sun"><%= info[:num] %></span><% end %><a href="#" onclick="show_charge('#payment_sun','#close_sun')">获得小太阳</a></p>
-=======
-      <p><% if params[:category] %><span class="s_sun"><%= info[:num] %></span><% end %><a href="javascript:void(0)">获得小太阳</a></p>
->>>>>>> d78bb411a425d70fe3b533653382d60c7a64683b
     </div>
     <ul class="user_fun">
       <li><a href="javascript:void(0);" class="u_set">设置</a></li>

@@ -35,14 +35,10 @@
     <span onclick="close_pop()" class="close">关闭</span>
   </div>
   <div class="mc_box">
-    <div class="words_func">
-      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
-      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
-    </div>
+    <div class="w_question"><%= @result[:sentence].ch_mean %></div>
     <div class="words_con">
       <div class="example_list">
         <p><%= @result[:sentence].en_mean %></p>
-        <p><%= @result[:sentence].ch_mean %></p>
       </div>
     </div>
     <div class="words_func">
@@ -56,10 +52,14 @@
     <span onclick="close_pop()" class="close">关闭</span>
   </div>
   <div class="mc_box">
-    <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+    <div class="words_func">
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+    </div>
     <div class="words_con">
       <div class="example_list">
-        <p><%= @result[:sentence].en_mean %></p>
+        <p>听力原文：&nbsp;&nbsp;<%= @result[:sentence].en_mean %></p>
+        <p>正确答案：&nbsp;&nbsp;<%= @result[:sentence].right_mean %></p>
       </div>
     </div>
     <div class="words_func">
@@ -72,8 +72,7 @@
 <script type="text/javascript">
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] or cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
   <% url = cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] ?
-      @result[:word].enunciate_url : @result[:sentence].enunciate_url %>
-        alert("<%= url %>");
+    @result[:word].enunciate_url : @result[:sentence].enunciate_url %>
     $(function(){
       flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
         clip: {

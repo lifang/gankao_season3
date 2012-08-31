@@ -57,7 +57,6 @@
         </ul>
         <div class="clear"></div>
       </div>
-      <div class="trueFalse"></div>
     </div>
     <div class="words_func">
       <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
@@ -79,12 +78,11 @@
   function redo(){
     $("#current").html("");
     $("#select li").show();
-    $(".trueFalse").html("");
   }
 
   function hedui(){
     var right = $("#SID").attr("value").replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ");
-    if(right.trim() == $("#current").html().trim()){
+    if($.trim(right) == $.trim($("#current").html())){
       clearInterval(myTime.timeId);
       jude('/learn/jude_sentence','true','false');
     }else{

@@ -9,14 +9,13 @@
   <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <h2>选择你听到的语句。</h2>
-    <input type="hidden" id="SID" value="<%= @result[:listen].en_mean %>" />
+    <input type="hidden" id="SID" value="<%= @result[:listen].right_mean %>" />
     <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
     <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
   </div>
-  <div class="words_con">
-    <div class="question_list"><a><%= @result[:options][0].en_mean %></a></div>
-    <div class="question_list"><a><%= @result[:options][1].en_mean %></a></div>
-    <div class="trueFalse"></div>
+  <div class="words_con" id="sort_div">
+    <div class="question_list"><a><%= @result[:listen].right_mean %></a></div>
+    <div class="question_list"><a><%= @result[:listen].error_mean %></a></div>
   </div>
 
   <div class="words_func">
@@ -26,10 +25,11 @@
 </div>
 <div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
+  $("#sort_div").reorder();
   $(function(){
     flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
       clip: {
-        url: '/music.mp3'
+        url: '<%= @result[:listen].enunciate_url %>'
       }
     });
 
