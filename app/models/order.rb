@@ -8,5 +8,5 @@ class Order < ActiveRecord::Base
 
   PAY_TYPES = {:CHARGE => 1,:LICENSE=>2 }
   PAY_TYPE_NAME = {1 => "充值付费",2=>"授权码"}
-  PAY_FEE={:CET4=>68,:CET6=>68,:GRADUATE=>680}
+  PAY_FEE={:CET4=>68,:CET6=>0.01,:GRADUATE=>0.01}
 end
