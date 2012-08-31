@@ -47,9 +47,11 @@ class LoginsController < ApplicationController
       user_role?(@user.id)
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
+      render :inline => "<script>var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1] ;window.opener.location.href=url;window.close();</script>"
     rescue
+      render :inline => "<script>window.opener.location.reload;window.close();</script>"
     end
-    render :inline => "<script>window.opener.location.reload;window.close();</script>"
+    
   end
 
 

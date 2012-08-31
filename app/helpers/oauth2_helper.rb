@@ -180,7 +180,7 @@ module Oauth2Helper
   def renren_get_user(access_token)
     query = {:access_token => access_token,:format => 'JSON',:method => 'xiaonei.users.getInfo',:v => '1.0'}
     request = renren_sig_request(query)
-    response = JSON renren_api(request)
+     response = JSON renren_api(request)
   end
   #
   #人人发送新鲜事
