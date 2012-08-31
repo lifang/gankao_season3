@@ -1,7 +1,7 @@
 #encoding: utf-8
 class UsersController < ApplicationController
   include Oauth2Helper
-  before_filter :sign?, :except => ["share_back"]
+  before_filter :sign?, :except => ["share_back", "share"]
   
   #更新用户信息
   def update_users

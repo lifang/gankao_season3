@@ -28,9 +28,11 @@ class LoginsController < ApplicationController
   def respond_qq
     begin
       access_token=params["access_token"]||params["?access_token"]
+      puts "------------------------------"
+      puts params[:open_id]
       expires_in=params[:expires_in].to_i
       openid=params[:open_id]
-      @user= User.find_by_open_id(openid)
+      @user= User.find_by_open_id(openid) if openid
       if @user.nil?
         user_url="https://graph.qq.com"
         user_route="/user/get_user_info?access_token=#{access_token}&oauth_consumer_key=#{Oauth2Helper::APPID}&openid=#{openid}"

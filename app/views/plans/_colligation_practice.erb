@@ -1,4 +1,6 @@
 <h1 class="mc_title"><%= UserPlan::CHAPTER[:cha2] %>阶段</h1>
+<%= javascript_include_tag "base" %>
+<%= javascript_include_tag "countdown" %>
 <div class="mc_box">
   <% total_time = @plan_list[:read]* 50 + @plan_list[:translate] + @plan_list[:dictation].to_i
   current_practice = @plan_list[:current] - @plan_list[:cha1_days]
