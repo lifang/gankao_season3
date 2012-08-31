@@ -16,15 +16,13 @@ module ApplicationHelper
 
   #判断是否vip、试用用户或普通用户
   def user_role?(user_id)
-    unless cookies[:user_id].nil? or params[:category].nil?
-      if cookies[:user_role].nil?
+    unless cookies[:user_id].nil?
         cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
         orders = Order.find(:all, :conditions => ["status = #{Order::STATUS[:NOMAL]} and user_id = ?", user_id.to_i])
         orders.each do |order|
           this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         end unless orders.blank?
-      end
     end
   end
 
