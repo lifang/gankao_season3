@@ -12,12 +12,15 @@
             <div class="article_area">
               <div class="readNumber"><%= skill.readed_num %></div>
               <div class="articleIntro">
-                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category_id=<%=category_id  %>&con_t=<%= @types %>"  target="_blank"><%= skill.skill_title %></a></h1>
+                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category=<%=category_id  %>&con_t=<%= @types %>"  target="_blank"><%= skill.skill_title %></a></h1>
                 <div class="article_text">
                   <p><%= skill.simplify_con %></p>
                 </div>
                 <div class="singlemeta">
-                  <span>分类：<%= Skill::SKILL_NAME[skill.types] %></span><span>时间：<%= skill.created_at.strftime("%Y-%m-%d %H:%M") %></span><span>作者: <%= skill.name %></span>
+                  <span>分类：<%= params[:category].to_i == Category::TYPE[:GRADUATE] ?
+                Skill::GRADUATE_SKILL_NAME[skill.types] : Skill::CET_SKILL_NAME[skill.types]%></span>
+                  <span>时间：<%= skill.created_at.strftime("%Y-%m-%d %H:%M") %></span>
+                  <span>作者: <%= skill.name %></span>
                 </div>
               </div>
             </div>

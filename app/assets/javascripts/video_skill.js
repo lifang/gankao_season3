@@ -59,13 +59,13 @@ function create_blog(){
     $(".blog_content").css("display","none");
     $("#new_blog").css("display","");
     var types=$("#blog_types").val();
-    if (parseInt(types)>4 || parseInt(types)<1){
-        $("#blog_types").val(1);
+    if (parseInt(types)>4 || parseInt(types)<0){
+        $("#blog_types").val(0);
     }
 }
 
 function show_blog(index){
-    window.location.href="/skills?category_id="+$("#category_id").val() +"&con_t="+index;
+    window.location.href="/skills?category="+$("#category_id").val() +"&con_t="+index;
 }
 
 function like_one(id){

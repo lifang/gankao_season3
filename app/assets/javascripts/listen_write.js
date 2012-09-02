@@ -41,7 +41,7 @@ function answer_correct(){
 }
 //播放音频
 $(function(){
-    flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
+    flowplayer("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
         clip: {
             url: '/music.mp3'
         }

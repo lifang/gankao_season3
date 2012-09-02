@@ -99,6 +99,7 @@ module ApplicationHelper
           current_package = doc.root.elements["plan"].elements["current"].text.to_i
           current_score = user_score_info.show_user_score(current_package, user_plan.days)
           current_percent = ((current_package.to_f/user_plan.days)*100).round
+          current_percent = current_percent < 5 ? 5 : current_percent
           score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{max_score}", "#{current_score}"]
         end
       end
@@ -137,6 +138,19 @@ module ApplicationHelper
     else word
     end
     return lev_word
+  end
+
+  # 中英文混合字符串截取
+  def truncate_u(text, length = 30, truncate_string = "......")
+    l=0
+    char_array=text.unpack("U*")
+    char_array.each_with_index do |c,i|
+      l = l+ (c<127 ? 0.5 : 1)
+      if l>=length
+        return char_array[0..i].pack("U*")+(i<char_array.length-1 ? truncate_string : "")
+      end
+    end
+    return text
   end
   
 end

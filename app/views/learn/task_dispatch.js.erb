@@ -17,8 +17,9 @@
     <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
     <% end %>
-    generate_flash_div(".plan_tab");
-    myTime.start(<%= @result[:time] %>);
+    generate_flash_div(".plan_tab");   
+    local_start_time = <%= @result[:time] %>;
+    local_save_start();
     <% id_arr = @ids_str.split(",") %>
     $(".t_number").html(<%= id_arr.index(cookies[:current_id]) + 1 %> + "/" + <%= id_arr.length %>);
   <% end %>

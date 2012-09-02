@@ -1,9 +1,10 @@
 <div class="mc_menu">
   <ul>
-    <li onclick="show_blog(<%= Skill::TYPES[:LINSTEN] %>)" <% if nav_types==Skill::TYPES[:LINSTEN] %>class="hover"<% end%> >听力技巧</li>
-    <li onclick="show_blog(<%= Skill::TYPES[:WORD] %>)" <% if nav_types==Skill::TYPES[:WORD] %> class="hover" <% end%>>单词技巧</li>
-    <li onclick="show_blog(<%= Skill::TYPES[:READ] %>)" <% if nav_types==Skill::TYPES[:READ] %> class="hover" <% end%>>阅读技巧</li>
-    <li onclick="show_blog(<%= Skill::TYPES[:SPEAK] %>)" <% if nav_types==Skill::TYPES[:SPEAK] %> class="hover" <% end%>>口语技巧</li>
+    <% all_types = params[:category].to_i == Category::TYPE[:GRADUATE] ?
+      Skill::GRADUATE_SKILL_NAME : Skill::CET_SKILL_NAME
+    all_types.each do |k, v| %>
+      <li onclick="show_blog(<%= k %>)" <% if nav_types == k %>class="hover"<% end %>><%= v %></li>
+    <% end %>
   </ul>
 
   <div class="search">
