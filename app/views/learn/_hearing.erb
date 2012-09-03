@@ -29,7 +29,7 @@
   $(function(){
     flowplayer("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
       clip: {
-        url: '<%= @result[:listen].enunciate_url %>'
+        url: '<%= Constant::BACK_SERVER_PATH %><%= @result[:listen].enunciate_url %>'
       }
     });
 
