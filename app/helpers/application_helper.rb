@@ -61,7 +61,7 @@ module ApplicationHelper
         yestoday_suns = params[:category] ? get_yestoday_suns(params[:category].to_i, user_id) : 0
         @user={:name => user.name, :school => user.school, :email => user.email,
           :signin_days => user.signin_days, :login_times => user.login_times,
-          :num => num, :cover_url => user.cover_url, :yestoday_suns => yestoday_suns}
+          :num => num, :img_url => user.img_url, :yestoday_suns => yestoday_suns}
       end
     end
   end

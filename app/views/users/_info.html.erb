@@ -1,7 +1,7 @@
 <% if cookies[:user_id] and info %>
   <div  class="login_info bb_radius">
     <div class="info_left">
-      <div class="user_pic"><img src="<%= info[:cover_url].nil? ? User::DEFAULT_COVER : info[:cover_url] %>" /></div>
+      <div class="user_pic"><img src="<%= info[:img_url].nil? ? User::DEFAULT_COVER : info[:img_url] %>" /></div>
       <p id="name"><%= info[:name] %></p>
       <p id="schoolName"><%= info[:school] %></p>
       <p><% if params[:category] %><span class="s_sun"><%= info[:num] %></span><% end %><a href="#" onclick="show_charge('#payment_sun','#close_sun')">获得小太阳</a></p>

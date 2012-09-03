@@ -38,7 +38,7 @@ class LoginsController < ApplicationController
         user_info=create_get_http(user_url,user_route)
         user_info["nickname"]="qq用户" if user_info["nickname"].nil?||user_info["nickname"]==""
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
-          :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+          :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>user_info["figureurl_1"])
         Sun.first_login(@user.id)
       else
         ActionLog.login_log(@user.id)
@@ -80,7 +80,7 @@ class LoginsController < ApplicationController
         if @user.nil?
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
-            :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+            :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["profile_image_url"])
           Sun.first_login(@user.id)
         else
           ActionLog.login_log(@user.id)
@@ -122,7 +122,7 @@ class LoginsController < ApplicationController
         @user=User.find_by_code_id_and_code_type("#{response["uid"]}","renren")
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
-            :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB])
+            :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["tinyurl"])
           Sun.first_login(@user.id)
         else
           ActionLog.login_log(@user.id)
