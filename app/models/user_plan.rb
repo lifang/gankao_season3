@@ -245,9 +245,11 @@ class UserPlan < ActiveRecord::Base
   def self.init_plan(user_score_info, data_info, user_id, category_id)
     user_plan = UserPlan.find_by_category_id_and_user_id(category_id,user_id)
     unless user_plan
-      user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
-      user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
-        "/" + category_id.to_s + "_" + user_plan.id.to_s)
+      UserPlan.transaction do
+        user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
+        user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
+          "/" + category_id.to_s + "_" + user_plan.id.to_s)
+      end
     end
     return user_plan
   end

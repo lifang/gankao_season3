@@ -34,6 +34,7 @@ class PlansController < ApplicationController
 
 
   def end_result
+    cookies[:user_id] = 1
     @category=params[:category].to_i
     if params[:info].nil?
       redirect_to "/plans?category=#{@category}"
