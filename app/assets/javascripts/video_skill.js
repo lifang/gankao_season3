@@ -65,7 +65,7 @@ function create_blog(){
 }
 
 function show_blog(index){
-    window.location.href="/skills?category_id="+$("#category_id").val() +"&con_t="+index;
+    window.location.href="/skills?category="+$("#category").val() +"&con_t="+index;
 }
 
 function like_one(id){

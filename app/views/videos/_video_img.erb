@@ -12,19 +12,20 @@
        <% if video_img[0].size<=5 %> style="visibility: hidden;" <% end %> >下翻</div>
 </div>
 <script type="text/javascript">
+  var div_id="#video_<%= video_img[1].id%>"
   setTimeout(function(){
-    var li_len=$(".video_ul li").length > 5 ? 5 : $(".video_ul li").length
+    var li_len=$(div_id+" li").length > 5 ? 5 : $(div_id+" li").length
     for (var k=0;k<li_len;k++){
-      var src=$($(".video_ul li")[k]).find("img").attr("_src");
-      $($(".video_ul li")[k]).find("img").attr("src",src);
+      var src=$($(div_id+" li")[k]).find("img").attr("_src");
+      $($(div_id+" li")[k]).find("img").attr("src",src);
     }
   },1000)
 
   //video图标左右点击移动
   var i = 5;
   var page=1;
-  $('div.video_next').click(function(){
-    var $parent = $(this).parents('div.video_more');
+  $(div_id+' .video_next').click(function(){
+    var $parent = $(this).parents(div_id);
     var $video_show = $parent.find('.video_ul');
     var $videoImg = $parent.find('.video_box');
     var video_width = $videoImg.width();
@@ -32,27 +33,23 @@
     var page_count = Math.ceil(len/i);
     if(!$video_show.is(':animated')){
       $parent.find('div.video_prev').css('visibility','visible');
+      var this_len=len>(page+1)*5 ? (page+1)*5 : len;
+      for (var k=i*page;k<this_len;k++){
+        var src=$($(div_id+" li")[k]).find("img").attr("_src");
+        $($(div_id+" li")[k]).find("img").attr("src",src);
+      }
+      $video_show.animate({
+        marginLeft:'-='+video_width
+      },'slow');
+      page++;
       if(page == page_count){
         $(this).css('visibility','hidden');
-      }else{
-        var this_len=len>(page+1)*5 ? (page+1)*5 : len;
-        for (var k=i*page;k<this_len;k++){
-          var src=$($(".video_ul li")[k]).find("img").attr("_src");
-          $($(".video_ul li")[k]).find("img").attr("src",src);
-        }
-        $video_show.animate({
-          marginLeft:'-='+video_width
-        },'slow');
-        page++;
-        if(page == page_count){
-          $(this).css('visibility','hidden');
-        }
       }
     }
   })
 
-  $('div.video_prev').click(function(){
-    var $parent = $(this).parents('div.video_more');
+  $(div_id+' .video_prev').click(function(){
+    var $parent = $(this).parents(div_id);
     var $video_show = $parent.find('.video_ul')
     var $videoImg = $parent.find('.video_box');
     var video_width = $videoImg.width();

@@ -12,7 +12,7 @@
             <div class="article_area">
               <div class="readNumber"><%= skill.readed_num %></div>
               <div class="articleIntro">
-                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category_id=<%=category_id  %>&con_t=<%= @types %>"  target="_blank"><%= skill.skill_title %></a></h1>
+                <h1 class="article_h"><a href="/skills/<%=skill.id  %>?category=<%=category_id  %>&con_t=<%= @types %>"  target="_blank"><%= skill.skill_title %></a></h1>
                 <div class="article_text">
                   <p><%= skill.simplify_con %></p>
                 </div>
@@ -36,7 +36,7 @@
             <textarea cols="" rows="" name="text_con" id="text_con"></textarea>
           </div>
           <input type="hidden" value="<%= @types %>" name="blog_types" id="blog_types"/>
-          <input type="hidden" value="<%= category_id %>" name="category_id" id="category_id" />
+          <input type="hidden" value="<%= category_id %>" name="category" id="category" />
         <% end %>
         <div class="publishArticles"><button onclick="deliver_blog()">我要发表</button></div>
       </div>
