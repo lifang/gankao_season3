@@ -17,13 +17,13 @@ class SkillsController < ApplicationController
 
 
   def create
-    paras={:user_id=>cookies[:user_id],:skill_title=>params[:title],:category_id=>params[:category_id],:created_at=>Time.now,
+    paras={:user_id=>cookies[:user_id],:skill_title=>params[:title],:category_id=>params[:category],:created_at=>Time.now,
       :simplify_con=>params[:text_con].strip[0..100].gsub("/r/n",""),:types=>params[:blog_types]}
     skill=Skill.create!(paras)
     skill.update_attributes(:skill_url=>"/skills_xml/#{skill.category_id}/#{skill.id}.xml")
     Skill.write_xml("/skills_xml/#{skill.category_id}","/#{skill.id}.xml",params[:text_con].strip)
     flash[:notice]="发表成功，等待审核"
-    redirect_to "/skills?category=#{params[:category_id]}&con_t=#{params[:blog_types]}"
+    redirect_to "/skills?category=#{params[:category]}&con_t=#{params[:blog_types]}"
   end
 
   def show
