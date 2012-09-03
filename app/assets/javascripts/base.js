@@ -24,6 +24,7 @@ function dispatch(category){
     })
 }
 function jude(url, flag, redirct){
+    window.clearInterval(local_timer);
     $.ajax({
         async:true,
         dataType:'script',
@@ -60,7 +61,8 @@ function show_tip(style){
 function close_pop(){
     $(".plan_tab").html("");
     $(".mask").hide();
-    clearInterval(myTime.timeId);
+    //clearInterval(myTime.timeId);
+    window.clearInterval(local_timer);
 }
 
 $.fn.reorder = function() {

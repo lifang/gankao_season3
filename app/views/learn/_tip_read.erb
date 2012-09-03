@@ -18,7 +18,9 @@
     if(current_q < question_num - 1){
       $("#_q_"+current_q).hide();
       $("#_q_"+(++current_q)).fadeIn(1000);
-      myTime.start(<%= @result[:qtime] %>);
+      local_start_time = <%= @result[:qtime] %>;
+      local_save_start();
+      //myTime.start(<%#= @result[:qtime] %>);
     }else{
       jude_read(flag,'true');
     }

@@ -2,7 +2,7 @@
 @listen_sentence=listen_write[:listen_sentence]
 @web_type=listen_write[:web_type]
 %>
-<%=javascript_include_tag "flowplayer/flowplayer"%>
+<%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
 <%=javascript_include_tag "listen_write"%>
 <input type="hidden" id="global_sentence_en_mean" value="<%= @listen_sentence.en_mean.gsub("\"","").strip%>"></input>
 <script type="text/javascript">

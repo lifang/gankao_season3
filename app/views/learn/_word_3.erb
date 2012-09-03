@@ -25,10 +25,12 @@
 <script type="text/javascript">
   function hedui(){
     if($("#SID").val().toLowerCase() == $.trim($(".answer_input").val()).toLowerCase()){
-      clearInterval(myTime.timeId);
+      //clearInterval(myTime.timeId);
+      window.clearInterval(local_timer);
       jude("/learn/jude_word","true","false");
     }else{
-      clearInterval(myTime.timeId);
+      //clearInterval(myTime.timeId);
+      window.clearInterval(local_timer);
       jude("/learn/jude_word","false","false");
     }
   }

@@ -12,10 +12,10 @@ window.ids = "<%= @ids_str %>";
   }
   })
 <% elsif @items_str.empty? && @status == false %>
-  clearInterval(myTime.timeId);
+  window.clearInterval(local_timer);
   show_tip("#pass");
 <% elsif @items_str.empty? && @status == true %>
-  clearInterval(myTime.timeId);
+  window.clearInterval(local_timer);
   show_tip("#all_pass");
 <% elsif @flag == "true" %>
   show_tip("#right");

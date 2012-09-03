@@ -16,15 +16,13 @@ module ApplicationHelper
 
   #判断是否vip、试用用户或普通用户
   def user_role?(user_id)
-    unless cookies[:user_id].nil? or params[:category].nil?
-      if cookies[:user_role].nil?
+    unless cookies[:user_id].nil?
         cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
         orders = Order.find(:all, :conditions => ["status = #{Order::STATUS[:NOMAL]} and user_id = ?", user_id.to_i])
         orders.each do |order|
-          this_order = "#{order.category_id}=#{Order::USER_ORDER[:TRIAL]}"
+          this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
           cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
         end unless orders.blank?
-      end
     end
   end
 
@@ -101,6 +99,7 @@ module ApplicationHelper
           current_package = doc.root.elements["plan"].elements["current"].text.to_i
           current_score = user_score_info.show_user_score(current_package, user_plan.days)
           current_percent = ((current_package.to_f/user_plan.days)*100).round
+          current_percent = current_percent < 5 ? 5 : current_percent
           score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{max_score}", "#{current_score}"]
         end
       end
@@ -139,6 +138,19 @@ module ApplicationHelper
     else word
     end
     return lev_word
+  end
+
+  # 中英文混合字符串截取
+  def truncate_u(text, length = 30, truncate_string = "......")
+    l=0
+    char_array=text.unpack("U*")
+    char_array.each_with_index do |c,i|
+      l = l+ (c<127 ? 0.5 : 1)
+      if l>=length
+        return char_array[0..i].pack("U*")+(i<char_array.length-1 ? truncate_string : "")
+      end
+    end
+    return text
   end
   
 end

@@ -1,0 +1,71 @@
+<script type="text/javascript">
+  var load_time = setTimeout(function(){
+    $("#load_message").html("SORRY,此份试题好像存在问题，管理员会尽快解决此问题，给您带来的不便敬请谅解。");
+  },15000);
+</script>
+
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
+
+
+<!-- 初始化播放器  -->
+<%= render :partial=>"/common/flowplayer" %>
+<div class="subject_head">
+  <h1><%= @paper.title %></h1>
+  <div class="icon_func">
+    <div class="float_right">
+      <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" title="上一题"  name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="icon_figure"><font id="global_problem_index"></font> / <font id="global_problem_sum"></font></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" title="下一题"  name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" title="放大"  name="放大">放大</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" title="缩小" name="缩小">缩小</a></span>
+      <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" title="返回" name="返回">返回</a></span>
+    </div>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" title="重做" name="重做" <% if params[:preview] %> onclick="javascript:window.location.reload();" <% else %>onclick="javascript:confirm_redo('<%= params["type"] %>');" <% end %>>重做</a></span>
+  </div>
+  <%#= render :partial=>"/common/advert"  %>
+</div>
+
+<!-- 试题生成入口 generate.js -->
+<div id="generate"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
+
+<!-- 报告错误框  -->
+<div class="upErrorTo_tab border_radius" id="report_error" style="top: 242px; left: 450px; display: none; ">
+  <span class="x"><img src="/assets/xx.png" onclick="javascript:close_report_error();"/></span>
+  <input type="hidden" id="report_error_paper_id" value="<%= @paper_id %>" />
+  <input type="hidden" id="report_error_paper_title" value="<%= @paper.title %>" />
+  <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id] %>" />
+  <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
+  <input type="hidden" id="report_error_question_id" />
+  <h3>错误类型:</h3>
+  <ul>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>"/>题目错误</li>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANSWER] %>"/>答案错误</li>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>"/>解析错误</li>
+    <li><input name="report_error_radio" class="report_error_radio" type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
+  </ul>
+  <h3>错误说明:</h3>
+  <textarea name="" id='report_error_description' cols="" rows="5"></textarea>
+  <div><button class="t_btn" onclick="ajax_report_error();">提交</button></div>
+</div>
+
+<%= javascript_include_tag "#{@answer_js_url}" %>
+<%= javascript_include_tag "#{@paper_js_url}" %>
+
+<script type="text/javascript" >
+  //初始化参数
+  var preview = 0;
+<% if params[:preview] %>
+    preview = 1;
+<% end %>
+  var sheet = null;
+  var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
+  var category = '<%= category_id %>';
+  var init_exam_user_id ='<%= params[:id] %>';
+  var init_paper_id = "<%= @paper_id %>";
+  var sheet_url = "<%= @sheet_url %>";
+  var init_problem = 0;
+  var collection = <%= array_or_string_for_javascript(@collection) %>;
+</script>
+
+
+<%= javascript_include_tag "/assets/exam_user/init.js" %>

@@ -1,5 +1,6 @@
 window.items = "<%= @items_str %>";
 window.ids = "<%= @ids_str %>";
+window.clearInterval(local_timer);
 <% if @redirct == "true" && !@items_str.empty? %>
   $.ajax({
   async:true,
@@ -12,10 +13,8 @@ window.ids = "<%= @ids_str %>";
   }
   })
 <% elsif @items_str.empty? && @status == false %>
-  clearInterval(myTime.timeId);
   show_tip("#pass");
 <% elsif @items_str.empty? && @status == true %>
-  clearInterval(myTime.timeId);
   show_tip("#all_pass");
 <% elsif @flag == "true" %>
   show_tip("#right");

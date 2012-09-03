@@ -1,28 +1,72 @@
-<div class="m_nav">
-  <ul>
-    <li><a href="#">复习计划</a></li>
-    <li><a href="#" class="hover">真题</a></li>
-    <li><a href="#">知识库</a></li>
-    <li><a href="#">视频</a></li>
-    <li><a href="#">答疑</a></li>
-  </ul>
-</div>
+<%= render :partial=>"/layouts/nav" %>
 <div class="m_content">
   <h1 class="mc_title"></h1>
   <div class="mc_box">
-    <div class="zhenti_list">
-      <a href="#"><img src="/assets/zhenti.png"><h2>2012年6月四级真题</h2></a>
-    </div>
-    <div class="zhenti_list">
-      <a href="#"><img src="/assets/zhenti.png"><h2>2012年6月四级真题</h2></a>
-    </div>
-    <div class="zhenti_list">
-      <a href="#"><img src="/assets/zhenti.png"><h2>2012年6月四级真题</h2></a>
-    </div>
+    <% if @similarities.blank? %>
+      <div class="mc_menu_box"><h1 class="noAnswer">暂无<%= @category.name %>真题</h1></div>
+    <% else %>
+      <% @similarities.each do |similarity| %>
+        <% if cookies[:user_id] %>
+          <div class="plan_list">
+            <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
+            <div class="pl_text">
+              <a href="/similarities/<%= similarity.id %>/join?category=<%= @category.id %>" target="_blank"
+              <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
+                   onclick="return already_submit('<%= similarity.id %>','<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>
+                 class="model <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>finish
+                 <% elsif @exam_user_hash[similarity.id] %>underWay<% end %>">练习模式</a>
+              <!--<a href="#" class="model underWay">模考模式</a>-->
+            </div>
+          </div>
+        <% else %>
+          <div class="plan_list">
+            <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
+            <div class="pl_text">
+              <a href="javascript:void(0);" onclick="javascript:tishi_alert('您需要登录才能联系真题哦');"
+                 class="model finish">练习模式</a>
+              <!--<a href="#" class="model underWay">模考模式</a>-->
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
   </div>
   <div class="clear"></div>
-  <div class="pn_btn">
-    <button>上一页</button>
-    <button>下一页</button>
+  <%=will_paginate @similarities,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+</div>
+
+<div id="already_submit_div" class="tab border_radius" style="display:none;">
+  <span class="close" onclick="javascript:$('#already_submit_div').hide();">关闭</span>
+  <input type="hidden" id="already_submit_ex_id" value=""></input>
+  <input type="hidden" id="already_submit_eu_id" value=""></input>
+  <input type="hidden" id="already_submit_sheet_url" value=""></input>
+  <div class="exam_tab_text">你已经做完了该份试卷，你是否要重做题目？</div>
+  <div class="btn_center_double">
+    <button class="b_btn" onclick="javascript:view_paper();">不,只想浏览</button>
+    <button class="b_btn" onclick="javascript:redo_paper();">好,我要重做</button>
   </div>
 </div>
+
+<script type="text/javascript">
+  function already_submit(eu_id,ex_id,sheet_url){
+    generate_flash_div("#already_submit_div");
+    $("#already_submit_eu_id").val(eu_id);
+    $("#already_submit_ex_id").val(ex_id);
+    $("#already_submit_sheet_url").val(sheet_url);
+    return false;
+  }
+
+  function view_paper(){
+    var eu_id = $("#already_submit_eu_id").val();
+    $("#already_submit_div").hide();
+    window.location.href="/similarities/"+eu_id+"/join?category=<%= @category.id %>";
+  }
+
+  function redo_paper(){
+    var ex_id = $("#already_submit_ex_id").val();
+    var sheet_url = $("#already_submit_sheet_url").val();
+    sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
+    $("#already_submit_div").hide();
+    window.location.href="/exam_users/"+ex_id+"/redo_paper?category=<%= @category.id %>&sheet_url="+sheet_url+"&type=similarities";
+  }
+</script>

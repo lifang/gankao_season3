@@ -40,3 +40,44 @@ myTime.showFormat = function(){
     seconds >= 10 ? seconds = seconds : seconds ="0"+ seconds ;
     return hours+":"+minutes+":"+seconds;
 }
+
+//定时器的初始参数
+var local_start_time = null;
+var local_timer = null;
+var local_save_time = null;
+function local_save_start() {
+    local_save_time = new Date();
+    local_timer = window.setInterval(function(){
+        local_save();
+    }, 100);
+}
+//定时执行函数
+function local_save() {
+    var start_date = new Date();
+    if (local_start_time <= 0) {
+        if (parseInt(local_start_time) == parseFloat(local_start_time)) {
+            $(".pt_time").html("00:00:00");
+            window.clearInterval(local_timer);
+            try{
+                callback();
+            }catch(e){}
+            return;
+        }
+    }
+    if (parseInt(local_start_time) == parseFloat(local_start_time)) {
+        var h = Math.floor(local_start_time/3600) < 10 ?
+            ("0" + Math.floor(local_start_time/3600)) : Math.floor(local_start_time/3600);
+        var m = Math.floor((local_start_time%3600)/60) < 10 ?
+            ("0" + Math.floor((local_start_time%3600)/60)) : Math.floor((local_start_time%3600)/60);
+        var s = (local_start_time - h*3600 - m*60) < 10 ?
+            ("0" + Math.floor(local_start_time - h*3600 - m*60)) : Math.floor(local_start_time - h*3600 - m*60);
+        $(".pt_time").html(h + ":" + m + ":" + s);
+    }
+    var end_date = new Date();
+    if ((end_date - local_save_time) > 500 && (end_date - local_save_time) < 5000) {
+        local_start_time = Math.round((local_start_time - (end_date - local_save_time)/1000)*10)/10;
+    } else {
+        local_start_time = Math.round((local_start_time - 0.1 - (end_date - start_date)/1000)*10)/10;
+    }
+    local_save_time = end_date;
+}

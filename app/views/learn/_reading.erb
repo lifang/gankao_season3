@@ -80,18 +80,24 @@
   //阅读直接点击跳转至做题
   function next_step(){
     clearTimeout(t);
-    clearInterval(myTime.timeId);
+    //clearInterval(myTime.timeId);
+    window.clearInterval(local_timer);
     $("#readit").hide();
     $("#_q_"+current_q).fadeIn(1000);
-    myTime.start(<%= @result[:qtime] %>);
+    //myTime.start(<%#= @result[:qtime] %>);
+    local_start_time = <%= @result[:qtime] %>;
+    local_save_start();
   }
   //下一道题目
   function next_q(){
     flag = false;
-    clearInterval(myTime.timeId);
+    //clearInterval(myTime.timeId);
+    window.clearInterval(local_timer);
     $("#_q_"+current_q).hide();
     $("#_q_"+(++current_q)).fadeIn(1000);
-    myTime.start(<%= @result[:qtime] %>);
+    //myTime.start(<%#= @result[:qtime] %>);
+    local_start_time = <%= @result[:qtime] %>;
+    local_save_start();
   }
   //下一篇阅读
   function next_read(){
@@ -112,7 +118,8 @@
     $("#_1").addClass("readH");
     start();
     $(".words_con div a").click(function(){
-      clearInterval(myTime.timeId);
+      //clearInterval(myTime.timeId);
+      window.clearInterval(local_timer);
       if($(this).html() == $("#SID_"+current_q).attr("value")){
         isright = true;
       }else{

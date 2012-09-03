@@ -29,8 +29,6 @@ GankaoSeason3::Application.routes.draw do
     end
   end
 
-  resources :logins 
-  resources :similarities
   resources :plans do
     collection do
       get :end_result
@@ -43,7 +41,7 @@ GankaoSeason3::Application.routes.draw do
       post :task_dispatch,:jude_word, :jude_sentence, :jude_hearing, :jude_read, :i_have_remember
     end
   end
-  resources :questions ,:only=>[:index]
+
   resources :questions do
     member do
       get :answered_more
@@ -54,7 +52,7 @@ GankaoSeason3::Application.routes.draw do
       get :answered, :unanswered, :ask, :answers, :show_result
     end
   end
-  resources :users ,:only=>[:index]
+
   resources :users do
     member do
       get :share_back
@@ -62,6 +60,29 @@ GankaoSeason3::Application.routes.draw do
     collection do
       get :share,:kaoyan_share
       post :update_users,:check_in
+    end
+  end
+
+  resources :similarities do
+    member do
+      get :join
+    end
+  end
+
+  resources :exam_users do
+    collection do
+      post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect,:ajax_add_word,:ajax_load_sheets
+      get :preview
+    end
+    member do
+      post :ajax_save_question_answer,:ajax_change_status
+      get :show_js,:redo_paper
+    end
+  end
+
+  resources :collections do
+    collection do
+      post :add_collection
     end
   end
 

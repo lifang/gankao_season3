@@ -18,7 +18,7 @@ class UserScoreInfo < ActiveRecord::Base
       :conditions => [" types = ? and level = ?", PracticeSentence::TYPES[:SENTENCE], all_start_level[1]])
     sentence_list = practice_sentences.collect { |s| s.id }
     listens = PracticeSentence.find(:all, :select => "id",
-      :conditions => [" types = ? and level = ?", self.category_id, PracticeSentence::TYPES[:LINSTEN], all_start_level[2]])
+      :conditions => [" types = ? and level = ?", PracticeSentence::TYPES[:LINSTEN], all_start_level[2]])
     listen_list = listens.collect { |l| l.id }
     return {:word => word_list, :practice_sentences => sentence_list, :listens => listen_list, :levels => all_start_level}
   end

@@ -83,19 +83,24 @@
   function hedui(){
     var right = $("#SID").attr("value").replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ");
     if($.trim(right) == $.trim($("#current").html())){
-      clearInterval(myTime.timeId);
+      //clearInterval(myTime.timeId);
+      window.clearInterval(local_timer);
       jude('/learn/jude_sentence','true','false');
     }else{
-      clearInterval(myTime.timeId);
+      //clearInterval(myTime.timeId);
+      window.clearInterval(local_timer);
       jude('/learn/jude_sentence','false','false');
     }
   }
 
   function next_step(){
-    clearInterval(myTime.timeId);
+    //clearInterval(myTime.timeId);
+    window.clearInterval(local_timer);
     $("#read").hide();
     $("#combin").fadeIn(1000);
-    myTime.start(<%= @result[:combin_time] %>)
+    local_start_time = <%= @result[:combin_time] %>;
+    local_save_start();
+    //myTime.start(<%#= @result[:combin_time] %>)
   }
 
   function callback(){

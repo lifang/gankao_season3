@@ -1,6 +1,7 @@
 window.items = "<%= @items_str %>";
 window.ids = "<%= @ids_str %>";
 <% if !@items_str.empty? %>
+  window.clearInterval(local_timer);
   $.ajax({
   async:true,
   dataType:'script',
@@ -12,6 +13,6 @@ window.ids = "<%= @ids_str %>";
   }
   })
 <% elsif @items_str.empty? %>
-  clearInterval(myTime.timeId);
+  window.clearInterval(local_timer);
   show_tip("#pass");
 <% end %>

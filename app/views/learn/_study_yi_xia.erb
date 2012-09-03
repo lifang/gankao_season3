@@ -4,7 +4,7 @@
   <div class="btn_center"><button class="b_btn" onclick="next()">开始检查</button></div>
 </div>
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
-  <%=javascript_include_tag "flowplayer/flowplayer"%>
+  <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
   <div class="pt_title">
     <h1>单词学习</h1>
     <span onclick="close_pop()" class="close">关闭</span>
@@ -74,7 +74,7 @@
   <% url = cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] ?
     @result[:word].enunciate_url : @result[:sentence].enunciate_url %>
     $(function(){
-      flowplayer("player", "/assets/flowplayer/flowplayer.swf", {
+      flowplayer("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
         clip: {
           url: '<%= url %>'
         }

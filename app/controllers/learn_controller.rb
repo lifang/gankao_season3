@@ -10,8 +10,8 @@ class LearnController < ApplicationController
   def task_dispatch
     plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
-    @has_suns = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
-    if @has_suns
+    cookies[:can_open] = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
+    if cookies[:can_open]
       cookies[:category] = params[:category]
       cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
       items = params[:items].split(",") if params[:items]
@@ -39,7 +39,7 @@ class LearnController < ApplicationController
       end      
     end
   end
-  
+
   #取出当前part的items 并组装 [id-repeat_time-step]
   def willdo_part_infos(xml)
     review = willdo_review_infos(xml)
@@ -59,14 +59,14 @@ class LearnController < ApplicationController
     return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
-  def operate_word(items)
+  def operate_word(items)    
     result = nil
     repeat = items[0].split("-")[1]
     step = items[0].split("-")[2].to_i + 1
     step = 3 if step > 3
     word = Word.find(cookies[:current_id])
     if (step != 3)
-      options = Word.get_words_by_level(word.level, word.category_id, 3, cookies[:current_id]) << word
+      options = Word.get_words_by_level(word.level, 3, cookies[:current_id]) << word
       result = {
         :type => cookies[:type],
         :step => step,
