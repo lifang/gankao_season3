@@ -52,15 +52,10 @@ class UserPlan < ActiveRecord::Base
     else
       if is_less_middle
         level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
-        puts "============================="
-        puts level
       else       
         level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a))#.to_i.abs
         level = max_level  - level
-        puts "--------------------------------"
-        puts level
       end
-      #return false
       return level.to_i
     end
     
@@ -71,18 +66,14 @@ class UserPlan < ActiveRecord::Base
     category = Category::FLAG[category_id]
     max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
     return nil unless word = calculate_target_level(target_score, max_score, Word::MAX_LEVEL[:"#{category}"])
-    puts word
     return nil unless sentence = calculate_target_level(target_score, max_score, PracticeSentence::SENTENCE_MAX_LEVEL[:"#{category}"])
-    puts sentence
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return nil unless listen = calculate_target_level(target_score, max_score, PracticeSentence::LISTEN_MAX_LEVEL[:"#{category}"])
       return nil unless translate = calculate_target_level(target_score, max_score, PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{category}"])
       return nil unless dictation = calculate_target_level(target_score, max_score, PracticeSentence::DICTATION_MAX_LEVEL[:"#{category}"])
     end
     return nil unless read = calculate_target_level(target_score, max_score, Tractate::READ_MAX_LEVEL[:"#{category}"])
-    puts read
     return nil unless write = calculate_target_level(target_score, max_score, Tractate::WRITE_MAX_LEVEL[:"#{category}"])
-    puts write
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return {:WORD => word, :SENTENCE => sentence, :LISTEN => listen, :READ => read, :WRITE => write, :TRANSLATE => translate, :DICTATION => dictation}
     else
@@ -131,7 +122,9 @@ class UserPlan < ActiveRecord::Base
     end
     #判断是否 可行，否则系统计算可达到的情况
     left_mis = package_sys_time(package_level(category_id))
-    if result[:ALL] <= left_mis
+    error_time = category_id == Category::TYPE[:GRADUATE] ? 300 :
+      (category_id == Category::TYPE[:CET4] ? 100 : 300)
+    if result[:ALL] <= (left_mis + error_time)
       return result
     else
       sys_provide_plan(s_word, s_sentence, s_listen, result, left_mis, category_id)
@@ -141,6 +134,9 @@ class UserPlan < ActiveRecord::Base
   #根据给定时间 计算可达目标
   def UserPlan.sys_provide_plan(s_word, s_sentence, s_listen, user_plan, sys_provide_time, category_id)
     precent = (sys_provide_time-TRUE_PAPER_TIME).to_f/(user_plan[:ALL]-TRUE_PAPER_TIME)
+    puts "+========================="
+    puts sys_provide_time
+    puts user_plan[:ALL]
     word_num = (user_plan[:WORD] * precent).to_i
     sentence_num = (user_plan[:SENTENCE] * precent).to_i
     read_num = (user_plan[:READ] * precent).to_i
@@ -170,7 +166,7 @@ class UserPlan < ActiveRecord::Base
         :ALL => (part1 + part2)/60 +TRUE_PAPER_TIME,
         :WORD => word_num, :SENTENCE => sentence_num, :READ => read_num, :WRITE => write_num
       }
-    end    
+    end
     result[:TARGET_SCORE] = sys_provide_score_report(s_word, s_sentence, s_listen, result,category_id)
     return result
   end
@@ -198,10 +194,10 @@ class UserPlan < ActiveRecord::Base
   #根据计划计算 每一项所占的预计分数
   def UserPlan.sys_provide_score(target_level, max_level, category_id, score_precent)
     category = Category::FLAG[category_id]
-    max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
-    y = max_level%2 == 0 ? max_level + 1 : max_level # 41
-    x = (y-1)*0.5  # 20
-    total_area = max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]    
+    y = max_level + 1 #max_level%2 == 0 ? max_level + 1 : max_level
+    x = (y-1)*0.5
+    total_area = x*y #max_level%2 == 0 ? x*y-y/x*0.5 : x*y
     if target_level*2 > max_level
       #在正轴
       return max_score*score_precent*(total_area - ((0.5*total_area*(max_level-target_level))/x))/total_area

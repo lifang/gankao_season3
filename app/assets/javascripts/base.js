@@ -40,6 +40,7 @@ function jude(url, flag, redirct){
 }
 
 function remember(){
+    
     $.ajax({
         async:true,
         dataType:'script',
