@@ -34,7 +34,7 @@
         <%=render :partial=>'users/info', :object=>user_info %>    
         <div class="clear"></div>
         <nav class="border_radius">
-          <% if cookies[:user_id] and is_nomal?(params[:category]) %>
+          <% if cookies[:user_id].nil? or (cookies[:user_id] and is_nomal?(params[:category])) %>
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
               <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
           <% end %>

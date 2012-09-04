@@ -119,10 +119,10 @@ module Oauth2Helper
       action="/2/friendships/create.json"
       add_info=create_post_http(weibo_url,action,params)
       if add_info["following"]
-        data="关注成功"
+        data="分享信息成功"
       end
     else
-      data="您已关注"
+      data="分享信息成功"
     end
     return data
   end

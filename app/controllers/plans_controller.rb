@@ -4,6 +4,7 @@ class PlansController < ApplicationController
   before_filter :sign?, :except => ["index", "end_result"]
   
   def index
+    cookies[:user_id] = 3
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info
@@ -63,7 +64,7 @@ class PlansController < ApplicationController
     category=params[:category_id].nil? ? 4 : params[:category_id].to_i
     user_score=UserScoreInfo.find_by_category_id_and_user_id(category,cookies[:user_id])
     user_score.update_attributes(:target_score=>params[:target_score].to_i)
-    plans=UserPlan.calculate_user_plan_info(cookies[:user_id], category,params[:target_score].to_i)
+    plans=UserPlan.calculate_user_plan_info(cookies[:user_id], category, params[:target_score].to_i)
     plans.merge!(:DAYS=>UserPlan.package_level(category))
     @user_plan={}
     plans.each do |k,v|

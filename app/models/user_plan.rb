@@ -63,7 +63,7 @@ class UserPlan < ActiveRecord::Base
     max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
     return nil unless word = calculate_target_level(target_score, max_score, Word::MAX_LEVEL[:"#{category}"])
     return nil unless sentence = calculate_target_level(target_score, max_score, PracticeSentence::SENTENCE_MAX_LEVEL[:"#{category}"])
-    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+    if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return nil unless listen = calculate_target_level(target_score, max_score, PracticeSentence::LISTEN_MAX_LEVEL[:"#{category}"])
       return nil unless translate = calculate_target_level(target_score, max_score, PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{category}"])
       return nil unless dictation = calculate_target_level(target_score, max_score, PracticeSentence::DICTATION_MAX_LEVEL[:"#{category}"])
@@ -71,7 +71,7 @@ class UserPlan < ActiveRecord::Base
     return nil unless read = calculate_target_level(target_score, max_score, Tractate::READ_MAX_LEVEL[:"#{category}"])
     return nil unless write = calculate_target_level(target_score, max_score, Tractate::WRITE_MAX_LEVEL[:"#{category}"])
 
-    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+    if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return {:WORD => word, :SENTENCE => sentence, :LISTEN => listen, :READ => read, :WRITE => write, :TRANSLATE => translate, :DICTATION => dictation}
     else
       return {:WORD => word, :SENTENCE => sentence, :READ => read, :WRITE => write}
@@ -90,7 +90,7 @@ class UserPlan < ActiveRecord::Base
     sentence_num = target_level_hash[:SENTENCE]*PER_ITEMS[:SENTENCE] - s_sentence
     read_num = target_level_hash[:READ]*PER_ITEMS[:READ]
     write_num = target_level_hash[:WRITE]*PER_ITEMS[:WRITE]
-    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+    if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       listen_num = target_level_hash[:LISTEN]*PER_ITEMS[:LISTEN] - s_listen
       translate_num = target_level_hash[:TRANSLATE]*PER_ITEMS[:TRANSLATE]
       dictation_num = target_level_hash[:DICTATION]*PER_ITEMS[:DICTATION]
@@ -133,7 +133,7 @@ class UserPlan < ActiveRecord::Base
     sentence_num = (user_plan[:SENTENCE] * precent).to_i
     read_num = (user_plan[:READ] * precent).to_i
     write_num = (user_plan[:WRITE] * precent).to_i
-    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+    if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       listen_num = (user_plan[:LISTEN] * precent).to_i
       translate_num = (user_plan[:TRANSLATE] * precent).to_i
       dictation_num = (user_plan[:DICTATION] * precent).to_i
@@ -165,7 +165,7 @@ class UserPlan < ActiveRecord::Base
 
   #根据计划计算 预计分数
   def UserPlan.sys_provide_score_report(s_word, s_sentence, s_listen, user_plan,category_id)
-    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+    if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD], Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
       score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE], PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
       score += sys_provide_score((user_plan[:LISTEN] + s_listen).to_f/PER_ITEMS[:LISTEN], PracticeSentence::LISTEN_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
@@ -203,7 +203,7 @@ class UserPlan < ActiveRecord::Base
   def UserPlan.package_level(category_id)
     today = Time.now.strftime("%Y-%m-%d")
     day = (Constant::DEAD_LINE[:"#{Category::FLAG[category_id]}"].to_time - today.to_time)/86400
-    if category_id == (Category::TYPE[:CET4] || Category::TYPE[:CET6])
+    if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       CET46_PLANS.each { |k,v|
         return v if v <= day
       }
@@ -245,9 +245,11 @@ class UserPlan < ActiveRecord::Base
   def self.init_plan(user_score_info, data_info, user_id, category_id)
     user_plan = UserPlan.find_by_category_id_and_user_id(category_id,user_id)
     unless user_plan
-      user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
-      user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
-        "/" + category_id.to_s + "_" + user_plan.id.to_s)
+      UserPlan.transaction do
+        user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
+        user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
+          "/" + category_id.to_s + "_" + user_plan.id.to_s)
+      end
     end
     return user_plan
   end
