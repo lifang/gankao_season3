@@ -279,6 +279,7 @@ class LoginsController < ApplicationController
         @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
+        cookies.delete(:sharecontent)
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -301,6 +302,7 @@ class LoginsController < ApplicationController
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)if @return_message.nil?
         flash[:share_notice]=@return_message
+        cookies.delete(:sharecontent)
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -324,6 +326,7 @@ class LoginsController < ApplicationController
         @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
+        cookies.delete(:sharecontent)
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"

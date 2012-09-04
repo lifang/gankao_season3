@@ -97,7 +97,7 @@ class UsersController < ApplicationController
     when 3 then "英语6级"
     else "考研英语"
     end
-    @message="我在赶考网复习"+level+",来自链接:"+Constant::SERVER_PATH+"/users/#{cookies[:user_id]}/share_back?category=#{category}"
+    @message="我在赶考网复习"+level+",来自链接:"+Constant::SERVER_PATH+"/users/#{cookies[:user_id]}/share_back?category=#{category}  #{Time.now.strftime(("%Y-%m-%d-%H-%M-%S"))}"
     #获取用户
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
     if user and user.access_token and (user.end_time-Time.now>0)
