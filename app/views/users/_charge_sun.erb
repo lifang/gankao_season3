@@ -8,7 +8,7 @@
     <div class="pay_con_two">
       <div class="pcon_bg"><img src="/assets/paySun_bg.jpg" /></div>
       <input name=""  id="sun_fee"  class="paySun_input" />
-      <a href="#" class="pay_a_tow" onclick="sun_charge()"></a>
+       <a href="javascript:void(0)" class="pay_a_tow" id="sunpay_a_tow" target="_blank" onclick="sun_charge()"></a>
     </div>
     <span class="orange">温馨提示：支付宝充值免手续费</span>
     <a href="#" class="huode_sun">如何获得更多小太阳</a>
@@ -19,5 +19,5 @@
 <div class="tab" id="tab_sun" style="display: none;">
   <span class="close" id="tab_close">关闭</span>
   <p>小太阳充值</p>
-  <div class="btn_center_double"><button class="b_btn" onclick="window.open('/logins/alipay_sun?category='+<%= params[:category] %>+'&total_fee='+$('#sun_fee').val(),'_blank','height=750,width=1000,left=200,top=50');">重新支付</button><button class="b_btn" onclick="window.location.reload()">完成充值</button></div>
+  <div class="btn_center_double"><a class="b_btn" onclick="window.open('/logins/alipay_sun?category='+<%= params[:category] %>+'&total_fee='+$('#sun_fee').val(),'_blank','height=750,width=1000,left=200,top=50');">重新支付</a><button class="b_btn" onclick="window.location.reload()">完成充值</button></div>
 </div>

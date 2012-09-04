@@ -149,7 +149,6 @@ class UsersController < ApplicationController
     message=params[:message].to_s
     category=params[:category].to_i
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
- 
     message="我选择赶考因为："+message
     if user and user.access_token and (user.end_time-Time.now>0)
       if @web=="sina"

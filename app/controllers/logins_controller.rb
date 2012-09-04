@@ -364,10 +364,8 @@ class LoginsController < ApplicationController
         access_token=params[:access_token]
         content=cookies[:sharecontent].split('@!')
         ret = renren_send_message(access_token, content[1])
-        @return_message = "分享失败，请重新尝试" if ret[:error_code]
-        if @return_message.nil?
-          focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
-        end
+        @return_message = "分享失败，请重新尝试" if ret[:error_code]      
+        focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)  if @return_message.nil?
         #加人人好友
         redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
       rescue
