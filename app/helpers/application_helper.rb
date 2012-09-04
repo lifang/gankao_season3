@@ -96,11 +96,11 @@ module ApplicationHelper
         user_plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
         if user_plan
           doc = user_plan.plan_list_xml
-          current_package = doc.root.elements["plan"].elements["current"].text.to_i
+          current_package = doc.root.elements["plan"].elements["current"].text.to_i - 1
           current_score = user_score_info.show_user_score(current_package, user_plan.days)
           current_percent = ((current_package.to_f/user_plan.days)*100).round
           current_percent = current_percent < 5 ? 5 : current_percent
-          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{max_score}", "#{current_score}"]
+          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{user_score_info.target_score}", "#{current_score}"]
         end
       end
     end
