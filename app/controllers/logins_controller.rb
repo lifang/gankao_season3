@@ -76,6 +76,10 @@ class LoginsController < ApplicationController
         uid=params[:uid]
         expires_in=params[:expires_in].to_i
         response = sina_get_user(access_token,uid)
+        unless response["id"]
+          redirect_to "/"
+          return false
+        end
         @user=User.find_by_code_id_and_code_type("#{response["id"]}","sina")
         if @user.nil?
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',

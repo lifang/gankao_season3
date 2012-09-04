@@ -155,23 +155,19 @@ class UsersController < ApplicationController
         ret = sina_send_message(user.access_token, message)
         @return_message ="微博发送失败，请重新尝试" if ret["error_code"]      
         #送5个太阳
+        request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
         @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil? #分享成功
-        flash[:share_notice]=request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
+        flash[:share_notice]=@return_message
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       elsif @web=="renren"
         ret = renren_send_message(user.access_token, message)
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
-        #分享成功
-        if @return_message.nil?
-          #送5个太阳
-          focus_and_share_sun(user.id,category)
-        end
+        focus_and_share_sun(user.id,category)  if @return_message.nil?  #分享成功
         redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
       elsif @web=="qq"
         info=share_tencent_weibo(user.access_token,user.open_id,message)
         @return_message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
-        #送5个太阳
-        @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil?  #分享成功
+        @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil?  #分享成功   #送5个太阳
         info=focus_tencent_weibo(user.access_token,user.open_id)
         flash[:share_notice]=@return_message
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
