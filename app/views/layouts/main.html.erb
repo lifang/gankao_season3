@@ -31,8 +31,7 @@
             <% end %>
           </a>
         </h1>
-        <%=render :partial=>'users/info', :object=>user_info %>
-
+        <%=render :partial=>'users/info', :object=>user_info %>    
         <div class="clear"></div>
         <nav class="border_radius">
           <% if cookies[:user_id].nil? or (cookies[:user_id] and is_nomal?(params[:category])) %>

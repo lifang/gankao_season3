@@ -76,6 +76,10 @@ class LoginsController < ApplicationController
         uid=params[:uid]
         expires_in=params[:expires_in].to_i
         response = sina_get_user(access_token,uid)
+        unless response["id"]
+          redirect_to "/"
+          return false
+        end
         @user=User.find_by_code_id_and_code_type("#{response["id"]}","sina")
         if @user.nil?
           @user=User.create(:code_id=>"#{response["id"]}", :code_type=>'sina',
@@ -275,6 +279,7 @@ class LoginsController < ApplicationController
         @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
+        cookies.delete(:sharecontent)
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -297,6 +302,7 @@ class LoginsController < ApplicationController
         @return_message = "分享失败，请重新尝试" if ret[:error_code]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)if @return_message.nil?
         flash[:share_notice]=@return_message
+        cookies.delete(:sharecontent)
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -320,6 +326,7 @@ class LoginsController < ApplicationController
         @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
+        cookies.delete(:sharecontent)
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       rescue
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
@@ -364,10 +371,8 @@ class LoginsController < ApplicationController
         access_token=params[:access_token]
         content=cookies[:sharecontent].split('@!')
         ret = renren_send_message(access_token, content[1])
-        @return_message = "分享失败，请重新尝试" if ret[:error_code]
-        if @return_message.nil?
-          focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)
-        end
+        @return_message = "分享失败，请重新尝试" if ret[:error_code]      
+        focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)  if @return_message.nil?
         #加人人好友
         redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
       rescue

@@ -179,7 +179,7 @@ function sun_charge(){
     }
     $('#close_sun').trigger('click');
     show_charge('#tab_sun','#tab_close');
-    window.open("/logins/alipay_sun?category="+$("#sun_category").val()+"&total_fee="+sun_num,'_blank','height=750,width=1000,left=200,top=50');
+    $("#sunpay_a_tow").attr("href","/logins/alipay_sun?category="+$("#sun_category").val()+"&total_fee="+sun_num)
 }
 
 
