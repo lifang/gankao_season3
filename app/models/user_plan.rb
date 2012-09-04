@@ -35,26 +35,35 @@ class UserPlan < ActiveRecord::Base
       is_less_middle = true
       target_score = target_score
     end
-    y = max_level%2 == 0 ? max_level + 1 : max_level # 41
-    x = (y-1)*0.5  # 20
-    total_area = max_level%2 == 0 ? x*y-y/x*0.5 : x*y
-    solute_quadratic(max_level*max_score, -max_level*max_score, max_level*max_level*0.25-target_score*total_area*max_level,is_less_middle,max_level)
+    y = max_level + 1 #max_level%2 == 0 ? max_level + 1 : max_level
+    x = max_level #(y-1)*0.5
+    total_area = x*y/2#max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    #return target_score > 0 ?
+    #solute_quadratic(max_level*max_score, -max_level*max_score,
+    #max_level*max_level*0.25-target_score*total_area*max_level,is_less_middle,max_level) : max_level
+    return target_score > 0 ? solute_quadratic(max_score, (max_level+1)*0.5*max_score, -target_score*total_area, is_less_middle, max_level) : max_level
   end
 
   #求解 一元二次方程 ax(2) + bx + c = 0
-  def self.solute_quadratic(a, b, c, is_less_middle,max_level)
+  def self.solute_quadratic(a, b, c, is_less_middle, max_level)
     if b*b-4*a*c < 0
       p 'error'
       return nil
     else
       if is_less_middle
         level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
-      else
-        level = ((-b-Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
+        puts "============================="
+        puts level
+      else       
+        level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a))#.to_i.abs
         level = max_level  - level
+        puts "--------------------------------"
+        puts level
       end
+      #return false
       return level.to_i
     end
+    
   end
 
   # 计算各个练习需要达到的等级
@@ -62,15 +71,18 @@ class UserPlan < ActiveRecord::Base
     category = Category::FLAG[category_id]
     max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
     return nil unless word = calculate_target_level(target_score, max_score, Word::MAX_LEVEL[:"#{category}"])
+    puts word
     return nil unless sentence = calculate_target_level(target_score, max_score, PracticeSentence::SENTENCE_MAX_LEVEL[:"#{category}"])
+    puts sentence
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return nil unless listen = calculate_target_level(target_score, max_score, PracticeSentence::LISTEN_MAX_LEVEL[:"#{category}"])
       return nil unless translate = calculate_target_level(target_score, max_score, PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{category}"])
       return nil unless dictation = calculate_target_level(target_score, max_score, PracticeSentence::DICTATION_MAX_LEVEL[:"#{category}"])
     end
     return nil unless read = calculate_target_level(target_score, max_score, Tractate::READ_MAX_LEVEL[:"#{category}"])
+    puts read
     return nil unless write = calculate_target_level(target_score, max_score, Tractate::WRITE_MAX_LEVEL[:"#{category}"])
-
+    puts write
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return {:WORD => word, :SENTENCE => sentence, :LISTEN => listen, :READ => read, :WRITE => write, :TRANSLATE => translate, :DICTATION => dictation}
     else

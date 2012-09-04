@@ -14,8 +14,8 @@ module Constant
   GANKAO_CET4_PATH = "http://localhost:3000/cet_four"
   GANKAO_CET6_PATH = "http://localhost:3000/cet_six"
   DEAD_LINE = {
-    :CET4 => '2012-9-12',
-    :CET6 => '2012-10-7',
+    :CET4 => '2012-12-01',
+    :CET6 => '2012-12-01',
     :GRADUATE => '2013-01-05'
   }
   DATE_LONG=90

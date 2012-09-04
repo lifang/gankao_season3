@@ -4,7 +4,7 @@ class PlansController < ApplicationController
   before_filter :sign?, :except => ["index", "end_result"]
   
   def index
-    cookies[:user_id] = 3
+    cookies[:user_id] = 1
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info
@@ -35,6 +35,7 @@ class PlansController < ApplicationController
 
 
   def end_result
+    cookies[:user_id] = 1
     @category=params[:category].to_i
     if params[:info].nil?
       redirect_to "/plans?category=#{@category}"
