@@ -12,7 +12,7 @@ class PlansController < ApplicationController
       if @user_plan
         #显示计划列表
         @plan_list = @user_plan.get_plan_list
-      #else
+        #else
         #生成初始的计划
         #data_info = {:ONE=>2800, :TWO=>1460, :THREE=>875, :ALL=>5135, :WORD=>94,
         #  :SENTENCE=>47, :READ=>96, :WRITE=>96, :LISTEN=>47, :TRANSLATE=>500, :DICTATION=>500, :DAYS => 86, :TARGET_SCORE => 400}
@@ -40,8 +40,8 @@ class PlansController < ApplicationController
       redirect_to "/plans?category=#{@category}"
     else
       @score=params[:info].split(",")
+      @t_score=@score.pop
       if cookies[:user_id]
-        @t_score=@score.pop
         create_user_score(@category,@score,@t_score)
       end
     end

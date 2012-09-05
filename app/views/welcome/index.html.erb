@@ -25,7 +25,7 @@
         <h1 class="logo"><a href="#" title="赶考网"><img src="/assets/logo.png"/></a></h1>
         <%= render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>
-        
+
       </div>
     </div>
     <div class="m_index">
@@ -39,9 +39,9 @@
         <div class="index_btn">
           <h1>请进入您要进行备考的频道：</h1>
           <br/>
-          <a href="/plans?category=<%= Category::TYPE[:GRADUATE] %>">考研英语频道</a>
-          <a href="/plans?category=<%= Category::TYPE[:CET6] %>">六级频道</a>
-          <a href="/plans?category=<%= Category::TYPE[:CET4] %>">四级频道</a>
+          <button onclick="window.location.href='/plans?category=<%= Category::TYPE[:GRADUATE] %>'">考研英语频道</button>
+          <button onclick="window.location.href='/plans?category=<%= Category::TYPE[:CET6] %>'">六级频道</button>
+          <button onclick="window.location.href='/plans?category=<%= Category::TYPE[:CET4] %>'">四级频道</button>
         </div>
 
       </div>
@@ -50,7 +50,16 @@
     <div class="footer">
       <p>Copyright © 2011-2012 &nbsp;&nbsp;赶考网www.gankao.co&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
     </div>
-   <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
-
+    <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
+    <script type="text/javascript">
+      jwplayer('mediaspace_wrapper').setup({
+        'flashplayer': '/assets/jwplayer/player.swf',
+        'file': 'videos/2/5.mp4',
+        'controlbar': 'none',
+        'width': '321',
+        'height': '210',
+        'image': "videos/preview.jpg"
+      });
+    </script>
   </body>
 </html>
