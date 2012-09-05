@@ -4,7 +4,7 @@ class SimilaritiesController < ApplicationController
   def index
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
-
+    
     sql = "select e.id, e.title, e.is_free from examinations e
         where e.category_id = #{@category.id} and e.types = #{Examination::TYPES[:OLD_EXAM]}"
     if !params[:category_type].nil? and params[:category_type] == Examination::IS_FREE[:YES].to_s

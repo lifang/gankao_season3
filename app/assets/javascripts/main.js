@@ -165,6 +165,7 @@ function show_kaoyan_frame() {
     $('.close').bind('click',function(){
         $('.mask').hide();
         $('#inside_test_frame').hide();
+        window.location.reload();
         return false;
     })
 }

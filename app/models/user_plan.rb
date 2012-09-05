@@ -35,26 +35,30 @@ class UserPlan < ActiveRecord::Base
       is_less_middle = true
       target_score = target_score
     end
-    y = max_level%2 == 0 ? max_level + 1 : max_level # 41
-    x = (y-1)*0.5  # 20
-    total_area = max_level%2 == 0 ? x*y-y/x*0.5 : x*y
-    solute_quadratic(max_level*max_score, -max_level*max_score, max_level*max_level*0.25-target_score*total_area*max_level,is_less_middle,max_level)
+    y = max_level + 1 #max_level%2 == 0 ? max_level + 1 : max_level
+    x = max_level #(y-1)*0.5
+    total_area = x*y/2#max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    #return target_score > 0 ?
+    #solute_quadratic(max_level*max_score, -max_level*max_score,
+    #max_level*max_level*0.25-target_score*total_area*max_level,is_less_middle,max_level) : max_level
+    return target_score > 0 ? solute_quadratic(max_score, (max_level+1)*0.5*max_score, -target_score*total_area, is_less_middle, max_level) : max_level
   end
 
   #求解 一元二次方程 ax(2) + bx + c = 0
-  def self.solute_quadratic(a, b, c, is_less_middle,max_level)
+  def self.solute_quadratic(a, b, c, is_less_middle, max_level)
     if b*b-4*a*c < 0
       p 'error'
       return nil
     else
       if is_less_middle
         level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
-      else
-        level = ((-b-Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
+      else       
+        level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a))#.to_i.abs
         level = max_level  - level
       end
       return level.to_i
     end
+    
   end
 
   # 计算各个练习需要达到的等级
@@ -70,7 +74,6 @@ class UserPlan < ActiveRecord::Base
     end
     return nil unless read = calculate_target_level(target_score, max_score, Tractate::READ_MAX_LEVEL[:"#{category}"])
     return nil unless write = calculate_target_level(target_score, max_score, Tractate::WRITE_MAX_LEVEL[:"#{category}"])
-
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
       return {:WORD => word, :SENTENCE => sentence, :LISTEN => listen, :READ => read, :WRITE => write, :TRANSLATE => translate, :DICTATION => dictation}
     else
@@ -119,7 +122,9 @@ class UserPlan < ActiveRecord::Base
     end
     #判断是否 可行，否则系统计算可达到的情况
     left_mis = package_sys_time(package_level(category_id))
-    if result[:ALL] <= left_mis
+    error_time = category_id == Category::TYPE[:GRADUATE] ? 300 :
+      (category_id == Category::TYPE[:CET4] ? 100 : 300)
+    if result[:ALL] <= (left_mis + error_time)
       return result
     else
       sys_provide_plan(s_word, s_sentence, s_listen, result, left_mis, category_id)
@@ -129,6 +134,9 @@ class UserPlan < ActiveRecord::Base
   #根据给定时间 计算可达目标
   def UserPlan.sys_provide_plan(s_word, s_sentence, s_listen, user_plan, sys_provide_time, category_id)
     precent = (sys_provide_time-TRUE_PAPER_TIME).to_f/(user_plan[:ALL]-TRUE_PAPER_TIME)
+    puts "+========================="
+    puts sys_provide_time
+    puts user_plan[:ALL]
     word_num = (user_plan[:WORD] * precent).to_i
     sentence_num = (user_plan[:SENTENCE] * precent).to_i
     read_num = (user_plan[:READ] * precent).to_i
@@ -158,7 +166,7 @@ class UserPlan < ActiveRecord::Base
         :ALL => (part1 + part2)/60 +TRUE_PAPER_TIME,
         :WORD => word_num, :SENTENCE => sentence_num, :READ => read_num, :WRITE => write_num
       }
-    end    
+    end
     result[:TARGET_SCORE] = sys_provide_score_report(s_word, s_sentence, s_listen, result,category_id)
     return result
   end
@@ -186,10 +194,10 @@ class UserPlan < ActiveRecord::Base
   #根据计划计算 每一项所占的预计分数
   def UserPlan.sys_provide_score(target_level, max_level, category_id, score_precent)
     category = Category::FLAG[category_id]
-    max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
-    y = max_level%2 == 0 ? max_level + 1 : max_level # 41
-    x = (y-1)*0.5  # 20
-    total_area = max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]    
+    y = max_level + 1 #max_level%2 == 0 ? max_level + 1 : max_level
+    x = (y-1)*0.5
+    total_area = x*y #max_level%2 == 0 ? x*y-y/x*0.5 : x*y
     if target_level*2 > max_level
       #在正轴
       return max_score*score_precent*(total_area - ((0.5*total_area*(max_level-target_level))/x))/total_area

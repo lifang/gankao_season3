@@ -7,12 +7,13 @@
   (1..@plan_list[:cha1_days]).each do |i| %>
     <div class="plan_list" <% if (i > (current_page -1) * 10) and (i < current_page * 10 + 1) %>style="display: block;"
          <% else %>style="display: none;"<% end %>>
-      <h1 class="pl_fk pl_m_bg">
+      <% class_name = @plan_list[:current] > i ? "pl_m_bg" : (@plan_list[:current] == i ? "pl_l_bg" : "pl_d_bg") %>
+      <h1 class="pl_fk <%= class_name %>" <%if @plan_list[:current] == i%> onclick="dispatch('<%= params[:category] %>')"<% end %>>
         <span class="pl_img">
           <% if @plan_list[:current] > i %>
             <img src="/assets/dui.png"/>
           <% elsif @plan_list[:current] == i %>
-            <img style="cursor: pointer;" src="/assets/kai.png" onclick="dispatch('<%= params[:category] %>')"/>
+            <img style="cursor: pointer;" src="/assets/kai.png"/>
           <% else %>
             <img src="/assets/suo.png"/>
           <% end %>

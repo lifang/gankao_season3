@@ -109,7 +109,11 @@ function create_plan(category){
         }
         if(parseInt(score)>parseInt(max)){
             tishi_alert("我们建议的最高分数是"+max+"分")
-            return false
+            return false;
+        }
+        if (parseInt(score) < parseInt($("#current_score").html())) {
+            tishi_alert("建议您设置的目标成绩高于当前估分"+$("#current_score").html()+"分")
+            return false;
         }
         max_score=score
     }
