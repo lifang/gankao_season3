@@ -99,9 +99,9 @@ function search_blog(){
 
 function create_plan(category){
     var max=$("#max_score").val();
-    var fs_xz=$(".fs_ul .hover").attr("index");
-    var  max_score=$(".fs_span").html();
-    if (parseInt(fs_xz)==0){
+    var fs_xz=$(".fs_ul .fs_hover").attr("index");
+    var  max_score=$("#span_score").html();
+    if (parseInt(fs_xz)==1){
         var score=$(".fs_input").val();
         if (score==""||score.length==0||score=="目标分数"||isNaN(parseInt(score))){
             tishi_alert("请输入您的目标分数")
@@ -130,8 +130,8 @@ function create_plan(category){
 }
 
 function toggle_show_score(e){
-    $(".fs_xz").removeClass("hover");
-    $(e).addClass("hover");
+    $(".fs_ul li").removeClass("fs_hover");
+    $(e).addClass("fs_hover");
 }
 
 function update_info(){
