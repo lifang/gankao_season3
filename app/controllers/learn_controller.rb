@@ -251,11 +251,6 @@ class LearnController < ApplicationController
   end
 
   def i_have_remember
-    puts "---------------------"
-    puts cookies[:current_id]
-    puts params[:items]
-    puts params[:ids]
-    puts cookies[:type]
     plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
     items =  params[:items].split(",")
@@ -266,6 +261,7 @@ class LearnController < ApplicationController
     ids = ids - [cookies[:current_id]]
     items = items - [items[0]]
     pass_status(plan, xml, "part") if items.blank?
+    @current_step = params[:current_step]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
     @redirct = "true"

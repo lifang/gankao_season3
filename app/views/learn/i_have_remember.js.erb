@@ -14,5 +14,15 @@ window.ids = "<%= @ids_str %>";
   })
 <% elsif @items_str.empty? %>
   window.clearInterval(local_timer);
+  <% if @current_step == "word" %>
+    $("#pass #text1").html("恭喜你完成了单词部分的练习。");
+    $("#pass #text2").html("下面句子训练包含了对阅读理解、写作、语法等方面综合能力的训练，分两步完成，继续努力。");
+  <% elsif @current_step == "sentence" %>
+    $("#pass #text1").html("恭喜你完成了句子部分的练习。");
+    $("#pass #text2").html("下面听力训练，继续努力。");
+  <% elsif @current_step == "linsten" %>
+    $("#pass #text1").html("恭喜你完成了听力部分的练习。");
+    $("#pass #text2").html("下面阅读部分训练，继续努力。");
+  <% end %>
   show_tip("#pass");
 <% end %>

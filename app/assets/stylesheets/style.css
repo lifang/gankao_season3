@@ -321,7 +321,7 @@ nav li { float: left; margin: 0 20px;}
     background: #387580;
 }
 .pl_m_bg {background: #387580;}
-.pl_l_bg {background: #24acc5;}
+.pl_l_bg {background: #24acc5; cursor: pointer;}
 .pl_d_bg {background: #525161;}
 .pl_img { width: 35px; height: 35px; display: block; margin: 5px auto 0 auto;}
 .pl_text {
@@ -487,8 +487,8 @@ nav li { float: left; margin: 0 20px;}
     background: url(/assets/icon.png) no-repeat 0 -114px;
 }
 
-.sign {background: url(/assets/icon.png) no-repeat 0 -75px; float: left;}
-.next {background: url(/assets/icon.png) no-repeat 0 -37px; float: right;}
+.sign {background: url(/assets/icon.png) no-repeat 0 -75px; float: left; cursor: pointer;}
+.next {background: url(/assets/icon.png) no-repeat 0 -37px; float: right; cursor: pointer;}
 
 
 .hedui {
@@ -671,26 +671,23 @@ nav li { float: left; margin: 0 20px;}
 .mc_menu_box {padding: 5px 10px; overflow: hidden;}
 
 .mc_menu li {
-    width: 79px;
-    height: 35px;
-    margin: 5px 0;
-    line-height: 35px;
-    text-align: center;
-    color: #e4e3ce;
-    float: left;
-    cursor: pointer;
-    border-left: 1px #c32908 solid;
-    background: -webkit-gradient(linear, left top, left bottom, from(#ff7254), to(#e4421f));
-    background: -moz-linear-gradient(top, #ff7254, #e4421f);
-    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ff7254,endcolorstr=#e4421f,gradientType=0);
-    _background: #ff7254;
+    width: 99px;
+	height: 35px;
+	overflow: hidden;
+	margin: 5px 0;
+	line-height: 35px;
+	text-align: center;
+	color: #e4e3ce;
+	float: left;
+	cursor: pointer;
+	border-left: 1px #c32908 solid;
+	background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
 }
-.mc_menu li a {color: #e4e3ce;}
 .mc_menu li.hover, .mc_menu li:hover {
-    background: -webkit-gradient(linear, left top, left bottom, from(#be2605), to(#fe7153));
-    background: -moz-linear-gradient(top, #be2605, #fe7153);
-    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#be2605,endcolorstr=#fe7153,gradientType=0);
-    _background: #be2605;
+	background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
+}
+.mc_menu li a {
+    color: #fff;
 }
 
 
@@ -1165,3 +1162,4 @@ nav li { float: left; margin: 0 20px;}
 .qrcode { margin-bottom: 10px; background: #E4E3CE;}
 .qrcode p { font-size: 12px; line-height: 24px; text-align: center;}
 .qrcode div { font-size: 0;}
+hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; border-top:1px solid #285d67;}
