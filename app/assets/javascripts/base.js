@@ -39,8 +39,7 @@ function jude(url, flag, redirct){
     })
 }
 
-function remember(){
-    
+function remember(current_step){
     $.ajax({
         async:true,
         dataType:'script',
@@ -48,7 +47,8 @@ function remember(){
         type:'post',
         data:{
             items : window.items,
-            ids : window.ids
+            ids : window.ids,
+            current_step : current_step
         }
     })
 }

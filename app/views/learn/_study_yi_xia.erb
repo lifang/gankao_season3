@@ -25,7 +25,7 @@
       <% end  %>
     </div>
     <div class="words_func">
-      <a onclick="remember()"  title="我记住了" class="sign tooltip">标记</a>
+      <a onclick="remember('word')"  title="我记住了" class="sign tooltip">标记</a>
       <a onclick="next()" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
@@ -42,13 +42,13 @@
       </div>
     </div>
     <div class="words_func">
-      <a onclick="remember()"  title="我记住了" class="sign tooltip">标记</a>
+      <a onclick="remember('sentence')"  title="我记住了" class="sign tooltip">标记</a>
       <a onclick="next()" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
 <% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
   <div class="pt_title">
-    <h1>短语学习</h1>
+    <h1>听力学习</h1>
     <span onclick="close_pop()" class="close">关闭</span>
   </div>
   <div class="mc_box">
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="words_func">
-      <a onclick="remember()"  title="我记住了" class="sign tooltip">标记</a>
+      <a onclick="remember('linsten')"  title="我记住了" class="sign tooltip">标记</a>
       <a onclick="next()" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>

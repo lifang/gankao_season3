@@ -65,3 +65,8 @@ function show_chapter(plan_id, chapter_num, direction) {
     });
     return false;
 }
+
+//弹出开始练习框
+function start_practice() {
+    generate_flash_div("#start_tab");
+}
