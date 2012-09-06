@@ -82,13 +82,11 @@ class UserPlan < ActiveRecord::Base
   end
 
   #累计用户设定目标需要的时长/每项的题目数量（返回 单位值：分钟）
-  def self.calculate_user_plan_info(uid, category_id, target_score)
-    user = UserScoreInfo.where(["user_id = ? and category_id = ?", uid, category_id]).first
-    return if user.nil?
-    return nil unless target_level_hash = target_level_report(target_score, category_id)
-    s_word = user.all_start_level.split(",")[0].to_i*PER_ITEMS[:WORD]
-    s_sentence = user.all_start_level.split(",")[1].to_i*PER_ITEMS[:SENTENCE]
-    s_listen = user.all_start_level.split(",")[2].to_i*PER_ITEMS[:LISTEN]
+  def self.calculate_user_plan_info(all_start_level, category_id, target_score)
+    target_level_hash = target_level_report(target_score, category_id)
+    s_word = all_start_level.split(",")[0].to_i*PER_ITEMS[:WORD]
+    s_sentence = all_start_level.split(",")[1].to_i*PER_ITEMS[:SENTENCE]
+    s_listen = all_start_level.split(",")[2].to_i*PER_ITEMS[:LISTEN]
     word_num = target_level_hash[:WORD]*PER_ITEMS[:WORD] - s_word
     sentence_num = target_level_hash[:SENTENCE]*PER_ITEMS[:SENTENCE] - s_sentence
     read_num = target_level_hash[:READ]*PER_ITEMS[:READ]

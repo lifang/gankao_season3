@@ -194,3 +194,32 @@ function over_pay(){
         }
     });
 }
+//关注、 分享理由
+function share_reason(){
+    var reason=$(".gz_mh input:checked");
+    if (reason.length==0){
+        tishi_alert("请选择分享理由");
+    }else{
+        var  reasons="";
+        var gz=$(".gz_mh input");
+        for(var i=0;i<gz.length;i++){
+            reasons +=$(gz[i]).parent().find("p").html()+",";
+        }
+        $.ajax({
+            async:true,
+            dataType:'json',
+            type:'post',
+            url:"/users/share_reasons",
+            data :{
+                share_reason:reasons,
+                category :$("#share_category").val()
+            },
+            success : function(data) {
+                tishi_alert(data.message);
+                setTimeout(function(){
+                    window.location.reload();
+                },1500);
+            }
+        });
+    }
+}

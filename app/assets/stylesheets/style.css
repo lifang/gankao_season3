@@ -60,9 +60,11 @@ img { border: none;}
 }
 .btn_center { width: 100px; margin: 0 auto; text-align: center; padding: 10px;}
 .btn_center button { width: 100px;}
+.btn_center a { width: 70px;}
 
 .btn_center_double { width: 240px; margin: 0 auto; text-align: center; padding: 10px; overflow: hidden;}
 .btn_center_double button { width: 100px; float: left; margin: 0 10px;}
+.btn_center_double a { width: 70px; float: left; margin: 0 10px;}
 
 .close, .x {
     width: 20px;
@@ -114,7 +116,14 @@ img { border: none;}
 .info_left a { text-decoration: underline;}
 .info_left p { float: left; width: 130px; line-height: 18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .user_pic { float: left; margin: 7px 15px 0; _margin: 7px 7px 0;}
-.s_sun { height: 17px; background: url(/assets/s_sun.png) no-repeat 0 center; padding-left: 20px; margin-right: 10px;}
+.s_sun {
+    display: inline-block;
+    height: 17px;
+    line-height: 17px;
+    background: url(/assets/s_sun.png) no-repeat 0 center;
+    padding-left: 20px;
+    margin-right: 10px;
+}
 
 .s_sun_mess {
     width: 95px;
@@ -914,26 +923,18 @@ nav li { float: left; margin: 0 20px;}
 .tab_btn button, .tab_btn_w button { float: left; margin: 0 10px; font-size: 12px;}
 .tab_btn_w { padding: 10px 35px; overflow: hidden; margin: 10px 0;}
 
+
 /*payment支付--------------*/
 .payment {
-    width: 750px;
+    width: 700px;
     background: #e3e2ce;
     border-radius: 0.6em;
     box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
     position: absolute;
-    z-index:900;}
-.pay_title { padding: 10px 20px; border-radius: 0.3em; color: #e3e2ce; font-size: 24px; line-height: 48px; background: #3e94a4; }
-.pay_price {
-    position: absolute;
-    top: 33px;
-    left: 377px;
-    width: 95px;
-    height: 95px;
-    line-height: 95px;
-    text-align: center;
-    color: #e3e2ce;
+    z-index:900;
 }
-.pay_price h1 { display: inline-block; font-size: 36px;}
+.pay_title { padding: 10px 20px; border-radius: 0.3em; color: #e3e2ce; font-size: 14px; line-height: 24px; background: #3e94a4; }
+
 .pay_box { padding: 10px 20px 30px 20px;}
 .pay_way_one, .pay_way_two { width: 180px; height: 30px; margin: 10px 0; text-indent: -999px; overflow: hidden;}
 .pay_way_one { background: url(/assets/pay_h.jpg) no-repeat 0 0;}
@@ -942,12 +943,53 @@ nav li { float: left; margin: 0 20px;}
 .pay_con_one, .pay_con_two { background: #38747f; border-radius: 0.6em; border: 2px  #FFFFFF solid; position: relative;}
 .pay_con_one { height: 160px;}
 .pay_con_two { height: 100px;}
-.pcon_bg { position: absolute; top: 25px; left: 40px;}
+.pcon_bg { position: absolute; top: 25px; left: 10px;}
 .pay_a_one, .pay_a_tow { width: 120px; height: 35px; display: block; position: absolute; }
-.pay_a_one {top: 66px; right: 48px;}
-.pay_a_tow { top: 38px; right: 48px;}
+.pay_a_one {top: 66px; right: 28px;}
+.pay_a_tow { top: 38px; right: 28px;}
 
-.pay_input { position: absolute; top: 38px; left: 200px; height: 32px; line-height: 32px; width: 295px; border: none;}
+.pay_price {
+    position: absolute;
+    top: 33px;
+    left: 350px;
+    width: 95px;
+    height: 95px;
+    line-height: 95px;
+    text-align: center;
+    color: #e3e2ce;
+}
+.pay_price h1 { display: inline-block; font-size: 36px;}
+.pay_input {
+    position: absolute;
+    top: 38px;
+    left: 171px;
+    height: 32px;
+    line-height: 32px;
+    width: 284px;
+    border: none;
+    padding: 0 5px;
+}
+
+/*小太阳支付*/
+.pay_way_sun {
+    width: 180px;
+    height: 30px;
+    margin: 10px 0;
+    text-indent: -999px;
+    overflow: hidden;
+    background: url(/assets/pay_h.jpg) no-repeat 0 -60px;
+}
+.paySun_input {
+    position: absolute;
+    top: 42px;
+    left: 368px;
+    height: 32px;
+    line-height: 32px;
+    width: 100px;
+    border: none;
+    padding: 0 5px;
+}
+.huode_sun { float: right; text-decoration: underline;}
 
 /*充值提示*/
 .zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:920;}
@@ -961,39 +1003,35 @@ nav li { float: left; margin: 0 20px;}
 
 /*------关注gz_tab----------*/
 .gz_tab {
-    width: 688px;
-    height: 450px;
+    width: 580px;
     background: url(/assets/gz_tab_bg.jpg) repeat;
     border-radius: 0.6em;
     box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
     position: absolute;
     z-index: 401;
 }
-.gz_top { border-bottom: 1px #3d8c9b dashed;  padding: 20px; overflow: hidden;}
-.gz_mh { width: 150px; float: left; margin-left: 20px;}
-.gz_mh li { height: 22px; line-height: 22px; margin: 10px 0;}
+
+.gz_mh { width: 300px; margin-left: 20px; display: block;}
+.gz_mh li { height: 22px; line-height: 22px; margin: 10px 0; float: left;}
 .gz_mh li input { float: left;}
-.gz_mh li p { text-indent: -999px; overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 5px;}
-.gz_renren { background: url(/assets/gz_mh.png) no-repeat 0 0;}
-.gz_qq { background: url(/assets/gz_mh.png) no-repeat 0 -32px;}
-.gz_sina { background: url(/assets/gz_mh.png) no-repeat 0 -63px;}
+.gz_mh li p { overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 2px;}
+
 
 .gz_sun {
-    width: 434px;
-    height: 84px;
+    width: 48px;
+    height: 51px;
     background: url(/assets/gz_sun.png) no-repeat;
-    float: left;
-    margin-top: 18px;
+    position: absolute;
+    top: 50px;
+    right: 50px;
 }
 .gz_sun h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
 
 .gz_bottom { height: 200px; padding: 20px; overflow: hidden;}
-.gz_logo { float: left; margin-left: 30px;}
-.gz_why { width: 500px; float: left;}
-.gz_why h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
-.gz_select { padding-left: 100px; color: #397580;}
-.gz_select h2 { float: left;}
-.gz_select span { float: left;}
+.gz_logo { float: left; margin: 12px 0 0 12px;}
+.gz_why { width: 350px; float: left;}
+.gz_why h1 { font-size: 18px; padding-left: 20px; color: #397580; margin: 12px 0;}
+
 .gz_bottom_btn { position: absolute; bottom: 20px; right: 20px; }
 
 /*---------------right分享------------------*/
@@ -1113,35 +1151,15 @@ nav li { float: left; margin: 0 20px;}
 .index_btn h1 { font-size: 16px; line-height: 36px;}
 .index_btn button {
     border: 1px #4b6c70 solid;
-	color: #e7debe;
-	padding: 5px 15px;
-	background: #387580;
-	box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-	margin: 0 10px;
-	_width: 100px;
-	font-size: 16px;
+    color: #e7debe;
+    padding: 5px 15px;
+    background: #387580;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    margin: 0 10px;
+    _width: 100px;
+    font-size: 16px;
 }
 
-/*小太阳支付*/
-.pay_way_sun {
-    width: 180px;
-    height: 30px;
-    margin: 10px 0;
-    text-indent: -999px;
-    overflow: hidden;
-    background: url(/assets/pay_h.jpg) no-repeat 0 -60px;
-}
-.paySun_input {
-    position: absolute;
-    top: 42px;
-    left: 400px;
-    height: 32px;
-    line-height: 32px;
-    width: 100px;
-    border: none;
-    padding: 0 5px;
-}
-.huode_sun { float: right; text-decoration: underline;}
 
 /*二维码-------------*/
 .qrcode { margin-bottom: 10px; background: #E4E3CE;}

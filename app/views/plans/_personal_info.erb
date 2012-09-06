@@ -1,5 +1,6 @@
 <%= javascript_include_tag "video_skill" %>
-<input id="info" type="hidden" value= '<%= personal_info %>' />
+<input id="info" type="hidden" value= '<%= personal_info[0] %>' />
+<input id="score_info" type="hidden" value= '<%= personal_info[1] %>' />
 <div class="plan_box">
   <div class="plan_top">
     <div class="clock_bg"><img src="/assets/clock_bg.png" /></div>
@@ -42,7 +43,8 @@
     dataType:  "json",
     data : {
       plan_infos : $("#info").val(),
-      category_id : $("#category_id").val()
+      category_id : $("#category_id").val(),
+      score_info :$("#score_info").val()
     }
   })
 </script>

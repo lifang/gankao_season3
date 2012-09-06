@@ -20,9 +20,8 @@
         access_token:accessToken
       },
       success: function(data){
-        var url = (window.opener.location.href.split('?last_url=')[1]==null)? '/' : window.opener.location.href.split('?last_url=')[1];
         if(data){
-          window.opener.location.href=url;
+          (window.opener.location.href.split('?last_url=')[1]==null) ? window.opener.location.reload() : window.opener.location.href = window.opener.location.href.split('?last_url=')[1] ;window.close();
           window.close();
         }else{
           window.opener.location.reload();

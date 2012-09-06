@@ -104,18 +104,18 @@ class UsersController < ApplicationController
       if @web=="sina"
         type=Sun::TYPES[:SINASHARE].to_i
         ret = sina_send_message(user.access_token, @message)
-        @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
+        @message = "微博发送失败，请重新尝试" if ret["error_code"]
       elsif @web=="renren"
         type=Sun::TYPES[:RENRENSHARE].to_i
         ret = renren_send_message(user.access_token, @message)
-        @return_message = "分享失败，请重新尝试" if ret[:error_code]
+        @message = "分享失败，请重新尝试" if ret[:error_code]
       elsif @web=="qq"
         type=Sun::TYPES[:QQSHARE].to_i
         ret = share_tencent_weibo(user.access_token,user.open_id,@message)
-        @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
+        @message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
       end
-      @return_message=update_user_suns(user,category,type) if @return_message.nil?
-      flash[:share_notice]=@return_message
+      @message=update_user_suns(user,category,type) if @message.nil?
+      flash[:share_notice]=@message
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     else
       cookies[:sharecontent]="#{category}@!#{@message}"
@@ -144,43 +144,32 @@ class UsersController < ApplicationController
   end
   
   #用户登录三次提示分享网站和关注
-  def kaoyan_share
-    @web= params[:web].to_s
-    message=params[:message].to_s
+  def share_reasons
+    reason=params[:share_reason].chop
     category=params[:category].to_i
-    user=User.find_by_id_and_code_type(cookies[:user_id],@web)
-    message="我选择赶考因为："+message
+    user=User.find(cookies[:user_id].to_i)
+    reason="我选择赶考开始#{Category::TYPE_INFO[category]}复习的原因是："+reason
     if user and user.access_token and (user.end_time-Time.now>0)
-      if @web=="sina"
-        ret = sina_send_message(user.access_token, message)
-        @return_message ="微博发送失败，请重新尝试" if ret["error_code"]      
-        #送5个太阳
+      if user.code_type=="sina"
+        ret = sina_send_message(user.access_token, reason)
+        message ="微博发送失败，请重新尝试" if ret["error_code"] #送5个太阳
         request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
-        @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil? #分享成功
-        flash[:share_notice]=@return_message
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-      elsif @web=="renren"
-        ret = renren_send_message(user.access_token, message)
-        @return_message = "分享失败，请重新尝试" if ret[:error_code]
-        focus_and_share_sun(user.id,category)  if @return_message.nil?  #分享成功
-        redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
-      elsif @web=="qq"
-        info=share_tencent_weibo(user.access_token,user.open_id,message)
-        @return_message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
-        @return_message= focus_and_share_sun(user.id,category)  if @return_message.nil?  #分享成功   #送5个太阳
+        message= focus_and_share_sun(user.id,category)  if message.nil? #分享成功
+      elsif user.code_type=="renren"
+        ret = renren_send_message(user.access_token, reason)
+        message = "分享失败，请重新尝试" if ret[:error_code]
+        focus_and_share_sun(user.id,category)  if message.nil?  #分享成功
+      elsif user.code_type=="qq"
+        info=share_tencent_weibo(user.access_token,user.open_id,reason)
+        message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
+        message= focus_and_share_sun(user.id,category)  if message.nil?  #分享成功  送5个太阳
         info=focus_tencent_weibo(user.access_token,user.open_id)
-        flash[:share_notice]=@return_message
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
-    else
-      cookies[:sharecontent]="#{category}@!#{message}"
-      if params[:web].to_s=="sina"
-        redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_and_focus_sina&response_type=token"
-      elsif params[:web].to_s=="renren"
-        redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_and_focus_renren"
-      elsif params[:web].to_s=="qq"
-        redirect_to "#{Oauth2Helper::REQUEST_URL_QQ}?#{Oauth2Helper::KANYAN_SHARE_ACCESS_TOKEN.map{|k,v|"#{k}=#{v}"}.join("&")}"
-      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:message=>message}
+      }
     end
   end
   
