@@ -2,6 +2,7 @@ function video_show(schedule_id,e){
     $(".mc_menu li").removeClass("hover");
     $(e).addClass("hover");
     $(".xz_video").css("display","");
+    $(".video_area embed").css("display","none");
     if ( $("#video_"+schedule_id)[0]==null){
         $(".video_more,.h1_title").css("display","none");
         $.ajax({
@@ -124,7 +125,8 @@ function create_plan(category){
         dataType: "script",
         data:{
             category_id : category,
-            target_score : max_score
+            target_score : max_score,
+            level_score : $("#level_score").val()
         }
     })
 }

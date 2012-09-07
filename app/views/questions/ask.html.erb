@@ -7,9 +7,9 @@
       <%=form_for :user_question, :url=>"/questions/ask_question?category="+params[:category],
         :html => {:onsumbit => "javascript:check_user_question()"} do |f|%>
         <div class="my_question">
-          <h2>问题</h2>
+          <h2>标题</h2>
           <%=f.text_field :title,:class=>"my_q_input"%>
-          <h2>补充</h2>
+          <h2>问题</h2>
           <%=f.text_area :description,:class=>"my_q_textarea"%>
           <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
         </div>

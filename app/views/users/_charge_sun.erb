@@ -19,5 +19,6 @@
 <div class="tab" id="tab_sun" style="display: none;">
   <span class="close" id="tab_close">关闭</span>
   <p>小太阳充值</p>
-  <div class="btn_center_double"><a class="b_btn" onclick="window.open('/logins/alipay_sun?category='+<%= params[:category] %>+'&total_fee='+$('#sun_fee').val(),'_blank','height=750,width=1000,left=200,top=50');">重新支付</a><button class="b_btn" onclick="window.location.reload()">完成充值</button></div>
+  <div class="btn_center_double"><a class="b_btn" onclick="window.open('/logins/alipay_sun?category='+<%= params[:category] %>+'&total_fee='+$('#sun_fee').val(),'_blank','height=750,width=1000,left=200,top=50');">重新支付</a>
+    <a class="b_btn" onclick="window.location.reload()">完成充值</a></div>
 </div>

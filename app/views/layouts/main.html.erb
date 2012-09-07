@@ -34,7 +34,7 @@
         <%=render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>
         <nav class="border_radius">
-          <% if cookies[:user_id].nil? or (cookies[:user_id] and is_nomal?(params[:category])) %>
+          <% if cookies[:user_id] and is_nomal?(params[:category]) %>
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
               <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
           <% end %>
@@ -104,22 +104,22 @@
           <div class="clear"></div>
         </div>
       </div>
-      <div class="footer">
-        <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
-      </div>
     </div>
-      <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
-      <div class="mask" style="display: none;"></div>
-      <% if cookies[:user_id] and is_nomal?(params[:category]) %>
-        <%= render :partial => '/users/charge_vip' %>
-        <%= render :partial => '/users/charge_sun' %>
-      <% end %>
-      <%= render :partial => '/layouts/inside_test' unless @plan_list %>
-      <%= render :partial=>'users/focus' if show_focus %>
-      <% if flash[:share_notice] %>
-        <script type="text/javascript">
-          tishi_alert('<%= flash[:share_notice] %>')
-        </script>
-      <% end %>
+    <div class="footer">
+      <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
+    </div>
+    <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
+    <div class="mask" style="display: none;"></div>
+    <% if cookies[:user_id] and is_nomal?(params[:category]) %>
+      <%= render :partial => '/users/charge_vip' %>
+      <%= render :partial => '/users/charge_sun' %>
+    <% end %>
+    <%= render :partial => '/layouts/inside_test' unless @plan_list %>
+    <%= render :partial=>'users/focus' if show_focus %>
+    <% if flash[:share_notice] %>
+      <script type="text/javascript">
+        tishi_alert('<%= flash[:share_notice] %>')
+      </script>
+    <% end %>
   </body>
 </html>
