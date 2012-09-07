@@ -81,9 +81,20 @@ module ApplicationHelper
   end
 
   #考研的倒计时
-  def from_kaoyan
-    exam_date=Constant::DEAD_LINE[:GRADUATE].to_datetime
-    ((exam_date.to_i-Time.now.to_i)/(3600*24)).round
+  def from_kaoyan(category_id)
+    count_down = ['', '']
+    case category_id.to_i
+    when Category::TYPE[:CET4]
+      count_down[0] = "四级"
+      count_down[1] = ((Constant::EXAM_DATE[:CET4].to_datetime.to_i-Time.now.to_i)/(3600*24)).round
+    when Category::TYPE[:CET6]
+      count_down[0] = "六级"
+      count_down[1] = ((Constant::EXAM_DATE[:CET6].to_datetime.to_i-Time.now.to_i)/(3600*24)).round
+    when Category::TYPE[:GRADUATE]
+      count_down[0] = "考研"
+      count_down[1] = ((Constant::EXAM_DATE[:GRADUATE].to_datetime.to_i-Time.now.to_i)/(3600*24)).round
+    end
+    return count_down
   end
 
   #获得用户当前的分数
@@ -151,6 +162,20 @@ module ApplicationHelper
       end
     end
     return text
+  end
+
+  #是否已经生成复习计划
+  def is_has_plan?
+    is_has_plan = false
+    if cookies[:user_id] and params[:category]
+      if @user_plan
+        is_has_plan = true
+      else
+        user_plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
+        is_has_plan = true unless user_plan.nil?
+      end
+    end
+    return is_has_plan
   end
   
 end

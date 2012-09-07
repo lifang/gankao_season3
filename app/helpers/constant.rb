@@ -13,11 +13,17 @@ module Constant
   GANKAO_GRADUATE_PATH = "http://localhost:3000/graduate"
   GANKAO_CET4_PATH = "http://localhost:3000/cet_four"
   GANKAO_CET6_PATH = "http://localhost:3000/cet_six"
+
+  #根据设定的日期判断用户的学习周期
   DEAD_LINE = {
     :CET4 => '2012-12-01',
     :CET6 => '2012-12-01',
     :GRADUATE => '2013-01-05'
   }
+
+  #考试时间
+  EXAM_DATE = {:CET4 => '2012-12-22', :CET6 => '2012-12-22', :GRADUATE => '2013-01-05'}
+
   DATE_LONG=90
 
 end

@@ -47,6 +47,7 @@ class LoginsController < ApplicationController
         end
       end
       @user.increment!(:login_times)
+      cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
       user_role?(cookies[:user_id])
@@ -94,6 +95,7 @@ class LoginsController < ApplicationController
         end
         @user.increment!(:login_times)
         user_role?(@user.id)
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         cookies[:user_name] = {:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] = {:value =>@user.id, :path => "/", :secure  => false}
         render :inline => "<script>(window.opener.location.href.split('?last_url=')[1]==null) ? window.opener.location.reload() : window.opener.location.href = window.opener.location.href.split('?last_url=')[1] ;window.close();</script>"
@@ -136,6 +138,7 @@ class LoginsController < ApplicationController
         end
         @user.increment!(:login_times)
         user_role?(@user.id)
+        cookies[:first] = {:value => "1", :path => "/", :secure  => false}
         cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
         cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
         render :inline => "<script>(window.opener.location.href.split('?last_url=')[1]==null) ? window.opener.location.reload() : window.opener.location.href = window.opener.location.href.split('?last_url=')[1] ;window.close();</script>"

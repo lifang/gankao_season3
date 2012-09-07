@@ -43,8 +43,8 @@
       <div class="main">
         <div class="left">
           <div class="countDown">
-            <p>距考研还有：</p>
-            <h1><%= from_kaoyan %><span>天</span></h1>
+            <p>距<%= from_kaoyan(params[:category])[0] %>还有：</p>
+            <h1><%= from_kaoyan(params[:category])[1] %><span>天</span></h1>
           </div>
           <div class="checkIn_box">
             <div class="checkIn_img"><a onclick="checkIn(<%= params[:category] %>)" href="javascript:void(0);"><img src="/assets/checkIn.png" /></a></div>
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div class="middle">
-          <% if @user_score_info.nil? %>
+          <% unless is_has_plan? %>
             <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行
               <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">前测</a>吧！
             </div>
@@ -115,6 +115,11 @@
       <%= render :partial => '/users/charge_sun' %>
     <% end %>
     <%= render :partial => '/layouts/inside_test' unless @plan_list %>
-    <%= render :partial=>'users/focus' if show_focus  %>
+    <%= render :partial=>'users/focus' if show_focus %>
+    <% if flash[:share_notice] %>
+      <script type="text/javascript">
+        tishi_alert('<%= flash[:share_notice] %>')
+      </script>
+    <% end %>
   </body>
 </html>
