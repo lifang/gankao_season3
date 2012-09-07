@@ -16,12 +16,16 @@
       <li><a href="javascript:void(0);" class="u_bbs">论坛</a></li>
       <li><a href="/logins/logout" class="u_exit">退出</a></li>
     </ul>
-    <% if params[:category] %>
-      <div class="s_sun_mess">
-        <p>昨天获得<%= info[:yestoday_suns] %>个太阳</p>
-        <p>今天请再接再厉</p>
-      </div>
-    <% end %>
+    <% if cookies[:first] == "1" %>
+      <% if params[:category] %>
+        <div class="s_sun_mess">
+          <p>昨天获得<%= info[:yestoday_suns] %>个太阳</p>
+          <p>今天请再接再厉</p>
+        </div>
+      <% end %>
+    <% end
+    cookies.delete(:first)
+  %>
   </div>
 <% else %>
   <%= render :partial=>'layouts/login_tab' %>

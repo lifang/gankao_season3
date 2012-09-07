@@ -66,16 +66,21 @@ class UserPlan < ActiveRecord::Base
     category = Category::FLAG[category_id]
     max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]
     return nil unless word = calculate_target_level(target_score, max_score, Word::MAX_LEVEL[:"#{category}"])
-    return nil unless sentence = calculate_target_level(target_score, max_score, PracticeSentence::SENTENCE_MAX_LEVEL[:"#{category}"])
+    return nil unless sentence = calculate_target_level(target_score, max_score,
+      PracticeSentence::SENTENCE_MAX_LEVEL[:"#{category}"])
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
-      return nil unless listen = calculate_target_level(target_score, max_score, PracticeSentence::LISTEN_MAX_LEVEL[:"#{category}"])
-      return nil unless translate = calculate_target_level(target_score, max_score, PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{category}"])
-      return nil unless dictation = calculate_target_level(target_score, max_score, PracticeSentence::DICTATION_MAX_LEVEL[:"#{category}"])
+      return nil unless listen = calculate_target_level(target_score, max_score,
+        PracticeSentence::LISTEN_MAX_LEVEL[:"#{category}"])
+      return nil unless translate = calculate_target_level(target_score, max_score,
+        PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{category}"])
+      return nil unless dictation = calculate_target_level(target_score, max_score,
+        PracticeSentence::DICTATION_MAX_LEVEL[:"#{category}"])
     end
     return nil unless read = calculate_target_level(target_score, max_score, Tractate::READ_MAX_LEVEL[:"#{category}"])
     return nil unless write = calculate_target_level(target_score, max_score, Tractate::WRITE_MAX_LEVEL[:"#{category}"])
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
-      return {:WORD => word, :SENTENCE => sentence, :LISTEN => listen, :READ => read, :WRITE => write, :TRANSLATE => translate, :DICTATION => dictation}
+      return {:WORD => word, :SENTENCE => sentence, :LISTEN => listen, :READ => read,
+        :WRITE => write, :TRANSLATE => translate, :DICTATION => dictation}
     else
       return {:WORD => word, :SENTENCE => sentence, :READ => read, :WRITE => write}
     end
@@ -89,12 +94,15 @@ class UserPlan < ActiveRecord::Base
     s_word = user.all_start_level.split(",")[0].to_i*PER_ITEMS[:WORD]
     s_sentence = user.all_start_level.split(",")[1].to_i*PER_ITEMS[:SENTENCE]
     s_listen = user.all_start_level.split(",")[2].to_i*PER_ITEMS[:LISTEN]
-    word_num = target_level_hash[:WORD]*PER_ITEMS[:WORD] - s_word
-    sentence_num = target_level_hash[:SENTENCE]*PER_ITEMS[:SENTENCE] - s_sentence
+    word_num = target_level_hash[:WORD]*PER_ITEMS[:WORD] - s_word > 0 ?
+      (target_level_hash[:WORD]*PER_ITEMS[:WORD] - s_word) : PER_ITEMS[:WORD]
+    sentence_num = target_level_hash[:SENTENCE]*PER_ITEMS[:SENTENCE] - s_sentence > 0 ?
+      (target_level_hash[:SENTENCE]*PER_ITEMS[:SENTENCE] - s_sentence) : PER_ITEMS[:SENTENCE]
     read_num = target_level_hash[:READ]*PER_ITEMS[:READ]
     write_num = target_level_hash[:WRITE]*PER_ITEMS[:WRITE]
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
-      listen_num = target_level_hash[:LISTEN]*PER_ITEMS[:LISTEN] - s_listen
+      listen_num = target_level_hash[:LISTEN]*PER_ITEMS[:LISTEN] - s_listen > 0 ?
+        (target_level_hash[:LISTEN]*PER_ITEMS[:LISTEN] - s_listen) : PER_ITEMS[:LISTEN]
       translate_num = target_level_hash[:TRANSLATE]*PER_ITEMS[:TRANSLATE]
       dictation_num = target_level_hash[:DICTATION]*PER_ITEMS[:DICTATION]
       part1  = word_num*PER_TIME[:WORD]
@@ -134,9 +142,6 @@ class UserPlan < ActiveRecord::Base
   #根据给定时间 计算可达目标
   def UserPlan.sys_provide_plan(s_word, s_sentence, s_listen, user_plan, sys_provide_time, category_id)
     precent = (sys_provide_time-TRUE_PAPER_TIME).to_f/(user_plan[:ALL]-TRUE_PAPER_TIME)
-    puts "+========================="
-    puts sys_provide_time
-    puts user_plan[:ALL]
     word_num = (user_plan[:WORD] * precent).to_i
     sentence_num = (user_plan[:SENTENCE] * precent).to_i
     read_num = (user_plan[:READ] * precent).to_i
@@ -174,19 +179,30 @@ class UserPlan < ActiveRecord::Base
   #根据计划计算 预计分数
   def UserPlan.sys_provide_score_report(s_word, s_sentence, s_listen, user_plan,category_id)
     if category_id == Category::TYPE[:CET4] or  category_id == Category::TYPE[:CET6]
-      score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD], Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
-      score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE], PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
-      score += sys_provide_score((user_plan[:LISTEN] + s_listen).to_f/PER_ITEMS[:LISTEN], PracticeSentence::LISTEN_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
-      score += sys_provide_score(user_plan[:TRANSLATE].to_f/PER_ITEMS[:TRANSLATE], PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
-      score += sys_provide_score(user_plan[:DICTATION].to_f/PER_ITEMS[:DICTATION], PracticeSentence::DICTATION_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
-      score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ], Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.05)
-      score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE], Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
+      score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD],
+        Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
+      score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE],
+        PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
+      score += sys_provide_score((user_plan[:LISTEN] + s_listen).to_f/PER_ITEMS[:LISTEN],
+        PracticeSentence::LISTEN_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
+      score += sys_provide_score(user_plan[:TRANSLATE].to_f/PER_ITEMS[:TRANSLATE],
+        PracticeSentence::TRANSLATE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
+      score += sys_provide_score(user_plan[:DICTATION].to_f/PER_ITEMS[:DICTATION],
+        PracticeSentence::DICTATION_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
+      score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ],
+        Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.05)
+      score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE],
+        Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.1)
       score += UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.05
     else
-      score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD], Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
-      score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE], PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.25)
-      score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ], Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.3)
-      score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE], Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
+      score = sys_provide_score((user_plan[:WORD] + s_word).to_f/PER_ITEMS[:WORD],
+        Word::MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.2)
+      score += sys_provide_score((user_plan[:SENTENCE] + s_sentence).to_f/PER_ITEMS[:SENTENCE],
+        PracticeSentence::SENTENCE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.25)
+      score += sys_provide_score(user_plan[:READ].to_f/PER_ITEMS[:READ],
+        Tractate::READ_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.3)
+      score += sys_provide_score(user_plan[:WRITE].to_f/PER_ITEMS[:WRITE],
+        Tractate::WRITE_MAX_LEVEL[:"#{Category::FLAG[category_id]}"], category_id, 0.15)
       score += UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[category_id]}"]*0.1
     end
   end
@@ -200,7 +216,7 @@ class UserPlan < ActiveRecord::Base
     total_area = x*y #max_level%2 == 0 ? x*y-y/x*0.5 : x*y
     if target_level*2 > max_level
       #在正轴
-      return max_score*score_precent*(total_area - ((0.5*total_area*(max_level-target_level))/x))/total_area
+      return max_score*score_precent*(total_area - 0.5*(max_level-target_level)*(2*(target_level-max_level)+max_level))/total_area
     else
       return max_score*score_precent*((0.5*total_area*target_level)/x)/total_area
     end
@@ -302,36 +318,27 @@ class UserPlan < ActiveRecord::Base
                 <chapter3 write='#{chapter_info[:write_avg]}' similarity='#{chapter_info[:similarity_avg]}'  days='#{chapter_info[:third_chapter]}' />
             </info>
             <_1 status='0'>
-              <part type='#{CHAPTER_TYPE_NUM[:WORD]}' status='0'>#{task_info[:word_info]}</part>
-              <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' status='0'>#{task_info[:sentence_info]}</part>
-              <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' status='0'>#{task_info[:listen_info]}</part>
-            </_1>
     XML
+    part1 = "<part type='#{CHAPTER_TYPE_NUM[:WORD]}' status='0'>#{task_info[:word_info]}</part>" unless task_info[:word_info].empty?
+    part2 = "<part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' status='0'>#{task_info[:sentence_info]}</part>" unless task_info[:sentence_info].empty?
+    part3 = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' status='0'>#{task_info[:listen_info]}</part>" unless task_info[:sentence_info].empty?
+    content += "#{part1}#{part2}#{part3}</_1>"
+    word = "<part type='#{CHAPTER_TYPE_NUM[:WORD]}' num='#{chapter_info[:word_avg]}'/>" if chapter_info[:word_avg] > 0
+    sentence = "<part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' num='#{chapter_info[:sentence_avg]}'/>" if chapter_info[:sentence_avg] > 0
+    listen = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>" if chapter_info[:listen_avg] > 0
+    read = "<part type='#{CHAPTER_TYPE_NUM[:READ]}' num='#{chapter_info[:read_avg]}'/>" if chapter_info[:read_avg] > 0
+    translate = "<part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>" if chapter_info[:translate_avg] > 0
+    dictation = "<part type='#{CHAPTER_TYPE_NUM[:DICTATION]}' num='#{chapter_info[:dictation_avg]}'/>" if chapter_info[:dictation_avg] > 0
+    write = "<part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:write_avg]}'/>" if chapter_info[:write_avg] > 0
+    similarity = "<part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:similarity_avg]}'/>" if chapter_info[:similarity_avg] > 0
     (2..chapter_info[:first_chapter].to_i).each {|i|
-      content += <<-XML
-        <_#{i} status='0'>
-          <part type='#{CHAPTER_TYPE_NUM[:WORD]}' num='#{chapter_info[:word_avg]}'/>
-          <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' num='#{chapter_info[:sentence_avg]}'/>
-          <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>
-        </_#{i}>
-      XML
+      content += "<_#{i} status='0'>#{word}#{sentence}#{listen}</_#{i}>"
     }
     ((chapter_info[:first_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:second_chapter].to_i)).each{|i|
-      content += <<-XML
-        <_#{i} status='0'>
-          <part type='#{CHAPTER_TYPE_NUM[:READ]}' num='#{chapter_info[:read_avg]}'/>
-          <part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>
-          <part type='#{CHAPTER_TYPE_NUM[:DICTATION]}' num='#{chapter_info[:dictation_avg]}'/>
-        </_#{i}>
-      XML
+      content += "<_#{i} status='0'>#{read}#{translate}#{dictation}</_#{i}>"
     }
     ((chapter_info[:second_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:third_chapter].to_i)).each{|i|
-      content += <<-XML
-        <_#{i} status='0'>
-          <part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:write_avg]}'/>
-          <part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:similarity_avg]}'/>
-        </_#{i}>
-      XML
+      content += "<_#{i} status='0'>#{write}#{similarity}</_#{i}>"
     }
     content += <<-XML
         </plan>

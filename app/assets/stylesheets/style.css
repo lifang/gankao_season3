@@ -525,8 +525,7 @@ nav li { float: left; margin: 0 20px;}
 
 .tishi_box {
     width: 260px;
-    height: 230px;
-    margin: 50px auto;
+    margin: 0px auto;
     padding: 20px 0;
     background: #387580;
     box-shadow: 3px 3px 6px rgba(102,102,102,0.5),-3px -3px 6px rgba(102,102,102,0.5);
@@ -534,7 +533,7 @@ nav li { float: left; margin: 0 20px;}
     z-index: 399;
 }
 .ts_img { width: 56px; height: 56px; margin: 10px auto;}
-.ts_text { font-size: 16px; color: #FFF; width: 150px; line-height: 32px; margin: 10px auto; text-align: center;}
+.ts_text { font-size: 16px; color: #FFF; width: 200px; line-height: 32px; margin: 10px auto; text-align: center;}
 .ts_btn_box { margin: 0 0 0 62px; _margin: 20px 0 0 40px;}
 
 .w_question { color: #387580; font-size: 16px; line-height: 32px; margin-bottom: 10px; padding: 5px 0px; text-indent: 32px;}
@@ -663,7 +662,7 @@ nav li { float: left; margin: 0 20px;}
 .mc_menu_box {padding: 5px 10px; overflow: hidden;}
 
 .mc_menu li {
-    width: 99px;
+    width: 75px;
 	height: 35px;
 	overflow: hidden;
 	margin: 5px 0;
