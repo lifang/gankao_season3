@@ -11,7 +11,7 @@
           </div>
           <div class="userProblem_box">
             <div class="us_pic">
-              <img src="<%= (@user_question.user.nil? or @user_question.user.cover_url.nil?) ? User::DEFAULT_COVER : @user_question.user.cover_url %>"/>
+              <img src="<%= (@user_question.user.nil? or @user_question.user.img_url.nil?) ? User::DEFAULT_COVER : @user_question.user.img_url %>"/>
             </div>
             <h3><%= @user_question.user.name if @user_question.user %></h3>
             <p><%= @user_question.created_at.strftime("%Y-%m-%d") %></p>
@@ -23,7 +23,7 @@
           <div class="problem_list">
             <div class="userProblem_box">
               <% if answer.is_right %><span class="flag tooltip" title="最佳答案">最佳答案</span><% end %>
-              <div class="us_pic"><img src="<%= answer.cover_url.nil? ? User::DEFAULT_COVER : answer.cover_url %>"/></div>
+              <div class="us_pic"><img src="<%= answer.img_url.nil? ? User::DEFAULT_COVER : answer.img_url %>"/></div>
               <h3><%= answer.user_name %></h3>
               <p><%= answer.created_at.strftime("%Y-%m-%d") %></p>
               <p><%= answer.created_at.strftime("%H:%M") %></p>

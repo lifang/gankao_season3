@@ -10,10 +10,10 @@
             <div class="problem_list">
               <div class="problem_box" id="problem_<%= aq.id %>">
                 <span class="an_icon01"></span>
-                <p><span class="orange">补充：</span><%= aq.description %></p>
+                <p><span class="orange"></span><%= aq.description %></p>
               </div>
               <div class="userProblem_box">
-                <div class="us_pic"><img src="<%= aq.cover_url.nil? ? User::DEFAULT_COVER : aq.cover_url %>"/></div>
+                <div class="us_pic"><img src="<%= aq.img_url.nil? ? User::DEFAULT_COVER : aq.img_url %>"/></div>
                 <h3><%= aq.user_name %></h3>
                 <p><%= aq.created_at.strftime("%Y-%m-%d") %></p>
                 <p><%= aq.created_at.strftime("%H:%M") %></p>

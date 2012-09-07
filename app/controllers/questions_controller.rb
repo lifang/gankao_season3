@@ -7,11 +7,11 @@ class QuestionsController < ApplicationController
   #获取已经回答的问题
   def answered
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
-    @answered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+    @answered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.img_url
           from user_questions uq left join users u on u.id = uq.user_id
           where uq.is_answer = #{UserQuestion::IS_ANSWERED[:YES]} and uq.category_id = ? order by created_at desc",
         category], :page => params[:page], :per_page => 3)
-    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @answered_questions[0].id]) if @answered_questions.any?
   end
@@ -19,18 +19,18 @@ class QuestionsController < ApplicationController
   def answered_more
     @user_question = UserQuestion.find(params[:id].to_i)
     @current_page = params[:current_page].nil? ? "answered" : params[:current_page]
-    @question_answers = QuestionAnswer.paginate_by_sql(["select qa.*, u.name user_name, u.cover_url
+    @question_answers = QuestionAnswer.paginate_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at asc", @user_question.id], :page => params[:page], :per_page => 5)
   end
 
   def unanswered
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
-    @unanswered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+    @unanswered_questions = UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.img_url
           from user_questions uq left join users u on u.id = uq.user_id
           where uq.is_answer = #{UserQuestion::IS_ANSWERED[:NO]} and uq.category_id = ? order by created_at desc",
         category], :page => params[:page], :per_page => 3)
-    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @unanswered_questions[0].id]) if @unanswered_questions.any?
   end
@@ -39,7 +39,7 @@ class QuestionsController < ApplicationController
   def get_answers
     @current_page = params[:current_page]
     @user_question = UserQuestion.find(params[:id].to_i)   
-    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+    @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @user_question.id])
   end
@@ -50,11 +50,11 @@ class QuestionsController < ApplicationController
     user_id = cookies[:user_id].to_i
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     if user_id
-      @myasks=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+      @myasks=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.img_url
           from user_questions uq left join users u on u.id = uq.user_id
           where uq.category_id = ? and  uq.user_id=? order by created_at desc",
           category, user_id], :page => params[:page], :per_page => 3)
-      @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+      @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @myasks[0].id]) if @myasks.any?
     end
@@ -66,13 +66,13 @@ class QuestionsController < ApplicationController
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     if user_id
       #获取我回答问题的
-      @myanswers=UserQuestion.paginate_by_sql(["select user_questions.*,users.name user_name,users.cover_url from
+      @myanswers=UserQuestion.paginate_by_sql(["select user_questions.*,users.name user_name,users.img_url from
       user_questions,users where category_id=? and users.id=user_questions.user_id  and
       user_questions.id in (SELECT user_question_id from question_answers where user_id=?
       group by user_question_id)" ,category ,user_id],
         :page=>params[:page],:per_page=>3)
 
-      @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+      @question_answers = QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @myanswers[0].id]) if @myanswers.any?
     end
@@ -82,13 +82,13 @@ class QuestionsController < ApplicationController
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i    
     @keyword=params[:keywords]
    
-    @query_questions=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.cover_url
+    @query_questions=UserQuestion.paginate_by_sql(["select uq.*, u.name user_name, u.img_url
           from user_questions uq left join users u on u.id = uq.user_id
           where uq.category_id = ? and (title like concat_ws('#{@keyword}','%','%')
       or description like concat_ws('#{@keyword}','%','%')) order by created_at desc",
         category], :page => params[:page], :per_page => 3)
 
-    @question_answers=QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.cover_url
+    @question_answers=QuestionAnswer.find_by_sql(["select qa.*, u.name user_name, u.img_url
         from question_answers qa left join users u on u.id = qa.user_id where user_question_id = ?
         order by is_right desc, created_at desc limit 3", @query_questions[0].id]) if @query_questions.any?
   end
