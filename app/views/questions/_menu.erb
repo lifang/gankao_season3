@@ -2,7 +2,7 @@
 <div class="mc_menu">
   <ul class="subnav">
     <li<% if controller.action_name=="answered" or @current_page == "answered" %> class="hover"<%end%>>
-      <%=link_to "已经回答","/questions/answered?category=#{params[:category]}"  %>
+      <%=link_to "常见问题","/questions/answered?category=#{params[:category]}"  %>
     </li>
     <li<% if controller.action_name=="unanswered" or @current_page == "unanswered" %> class="hover"<%end%>>
       <%=link_to "等待回答","/questions/unanswered?category=#{params[:category]}"  %>

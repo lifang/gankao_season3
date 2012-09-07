@@ -3,11 +3,6 @@ class QuestionsController < ApplicationController
   layout 'main'
   before_filter :sign?, :only => ["save_answer", "ask_question"]
 
-  def index
-    category = (params[:category].nil? or params[:category].empty?) ? "2" : params[:category]
-    url = cookies[:user_id] ? '/questions/ask?category='+category : '/questions/answered?category='+category
-    redirect_to url
-  end
 
   #获取已经回答的问题
   def answered

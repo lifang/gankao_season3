@@ -29,13 +29,8 @@ $(function(){
 $(function(){
    //问题页面提示时 title和description检验
    $("#askQuestion").click(function(){
-      var title = $("#user_question_title").val();
       var description = $("#user_question_description").val();
-      if($.trim(title).length == 0 || $.trim(title).length > 50){
-          tishi_alert("请填写问题的内容，不能为空，且不能超过50个字符。")
-          return false;
-      }
-      if($.trim(description).length == 0 || $.trim(description).length > 250){
+      if($.trim(description).length == 0 || $.trim(description).length >250){
           tishi_alert("请填写补充的内容，不能为空，且不能超过250个字符。")
           return false;
       }

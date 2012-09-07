@@ -4,24 +4,13 @@
   <div class="mc_box">
     <%=render 'menu'%>
     <div class="mc_menu_box">
-      <%=form_for :user_question, :url=>"/questions/ask_question?category="+params[:category],
-        :html => {:onsumbit => "javascript:check_user_question()"} do |f|%>
-        <div class="my_question">
-          <h2>标题</h2>
-          <%=f.text_field :title,:class=>"my_q_input"%>
-          <h2>问题</h2>
-          <%=f.text_area :description,:class=>"my_q_textarea"%>
-          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
-        </div>
-      <%end%>
       <%if @myasks.any?%>
         <% @myasks.each_with_index do |aq, index| %>
           <div class="b_bottom">
             <div class="problem_list">
               <div class="problem_box" id="problem_<%= aq.id %>">
                 <span class="an_icon01"></span>
-                <p><%= aq.title %></p>
-                <p><span class="orange">补充：</span><%= aq.description %></p>
+                <p><span class="orange"></span><%= aq.description %></p>
               </div>
               <div class="userProblem_box">
                 <div class="us_pic"><img src="<%= aq.cover_url.nil? ? User::DEFAULT_COVER : aq.cover_url %>"/></div>
@@ -38,7 +27,9 @@
             </div>
           </div>
         <%end%>
-        <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>      
+        <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+      <% else %>
+      <h1 class="noAnswer">您还没提问哦,<a style="text-decoration: underline;" href="/questions/answered?category=<%= params[:category]%>">去提问</a></h1>
       <%end %>
     </div>
   </div>

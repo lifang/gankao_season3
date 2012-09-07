@@ -3,15 +3,22 @@
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
-    <%if @answered_questions.any?%>
-      <div class="mc_menu_box">
+    <div class="mc_menu_box">
+
+       <%=form_for :user_question, :url=>"/questions/ask_question?category="+params[:category] do |f|%>
+        <div class="my_question">
+          <h2>问题</h2>
+          <%=f.text_area :description,:class=>"my_q_textarea"%>
+          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
+        </div>
+      <%end%>
+      <%if @answered_questions.any?%>
         <% @answered_questions.each_with_index do |aq, index| %>
           <div class="b_bottom">
             <div class="problem_list">
               <div class="problem_box" id="problem_<%= aq.id %>">
                 <span class="an_icon01"></span>
-                <p><%= aq.title %></p>
-                <p><span class="orange">补充：</span><%= aq.description %></p>
+                <p><span class="orange"></span><%= aq.description %></p>
               </div>
               <div class="userProblem_box">
                 <div class="us_pic"><img src="<%= aq.cover_url.nil? ? User::DEFAULT_COVER : aq.cover_url %>"/></div>
@@ -23,17 +30,14 @@
             </div>
             <div id="answer_<%= aq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
               <% if index == 0 %>
-                <%= render :partial => "/questions/answers", :object => [aq, @question_answers, "answered"] %>
+                <%= render :partial => "/questions/answers", :object => [aq, @question_answers, "ask"] %>
               <% end %>
             </div>
           </div>
         <%end%>
-        <!--分页插件-->
         <%=will_paginate @answered_questions,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
-      </div>
-    <%else%>
-      <div class="mc_menu_box"><h1 class="noAnswer">还没有已经回答的问题。</h1></div>
-    <%end%>
+      <%end %>
+    </div>
   </div>
   <div class="clear"></div>
 </div>
