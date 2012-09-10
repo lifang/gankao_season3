@@ -1,4 +1,4 @@
-<%unless  @plan_score.nil?%>
+<%  unless @plan_score.nil? %>
   $(".end_tab p").html("根据前测，您的通过我们的计划最终达到的成绩在<%= @plan_score.to_i%>分左右,是否根据此分数生成复习计划");
   generate_flash_div(".end_tab");
   $(".end_tab #confirm").bind("click",function(){

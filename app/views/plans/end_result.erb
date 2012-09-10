@@ -1,13 +1,14 @@
 <%= javascript_include_tag "video_skill" %>
 <%= render :partial => "/layouts/nav" %>
 <input type="hidden" value="<%= UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[@category]}"] %>" id="max_score" />
+<input type="hidden" value="<%= UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[@category]}"] %>" id="pass_score" />
 <input type="hidden" value="<%= @score.join(",") %>" id="level_score" />
 <div class="m_content">
   <div class="mc_box">
     <div class="plan_box">
       <div class="plan_top">
         <div class="user_pic_fs"><img src="/assets/user_pic.jpg" /></div>
-        <h1 class="fenshu_h1">当前估分：<span><%=@score[-1] %></span></h1>
+        <h1 class="fenshu_h1">当前估分：<span id="current_score"><%=@score[-1] %></span></h1>
       </div>
       <div class="plan_bottom">
         <h2 class="plan_h2">请选择设定目标分数的方式，我们将根据当前估分和目标分数为你生成个性化复习方案。</h2>
@@ -25,14 +26,11 @@
         </ul>
         <button class="fs_btn" onclick="create_plan(<%= @category %>)">生成复习方案</button>
       </div>
-
     </div>
   </div>
   <div class="clear"></div>
 
 </div>
-
-
 
 <div class="tab login_tab" style="display:none">
   <div class="tab_loginArea">
@@ -48,7 +46,7 @@
 <script type="text/javascript">
 <% if cookies[:user_id].nil? %>
     $(function(){
-      show_charge('.login_tab','.close_tab')
+      show_charge('.login_tab','.close_tab');
     })
 <% end %>
 </script>

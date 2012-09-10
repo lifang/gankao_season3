@@ -35,13 +35,14 @@ class UserPlan < ActiveRecord::Base
       is_less_middle = true
       target_score = target_score
     end
-    y = max_level + 1 #max_level%2 == 0 ? max_level + 1 : max_level
-    x = max_level #(y-1)*0.5
-    total_area = x*y/2#max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    y = max_level + 1
+    x = max_level
+    total_area = x*y/2
     #return target_score > 0 ?
     #solute_quadratic(max_level*max_score, -max_level*max_score,
     #max_level*max_level*0.25-target_score*total_area*max_level,is_less_middle,max_level) : max_level
-    return target_score > 0 ? solute_quadratic(max_score, (max_level+1)*0.5*max_score, -target_score*total_area, is_less_middle, max_level) : max_level
+    return target_score > 0 ? solute_quadratic(max_score, -(max_level+0.5)*max_score,
+      0.25*(max_level+1)*max_level*max_score-target_score*total_area, is_less_middle, max_level) : max_level
   end
 
   #求解 一元二次方程 ax(2) + bx + c = 0
@@ -51,14 +52,14 @@ class UserPlan < ActiveRecord::Base
       return nil
     else
       if is_less_middle
-        level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
+        level = ((-b-Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
+        level = max_level.to_f/2 - level
       else       
-        level = ((-b+Math.sqrt(b*b-4*a*c))/(2*a))#.to_i.abs
-        level = max_level  - level
+        level = ((-b-Math.sqrt(b*b-4*a*c))/(2*a)).to_i.abs
+        level = max_level.to_f/2 + level
       end
       return level.to_i
     end
-    
   end
 
   # 计算各个练习需要达到的等级
@@ -209,14 +210,16 @@ class UserPlan < ActiveRecord::Base
   def UserPlan.sys_provide_score(target_level, max_level, category_id, score_precent)
     category = Category::FLAG[category_id]
     max_score = UserScoreInfo::MAX_SCORE[:"#{category}"]    
-    y = max_level + 1 #max_level%2 == 0 ? max_level + 1 : max_level
+    y = max_level + 1
     x = (y-1)*0.5
-    total_area = x*y #max_level%2 == 0 ? x*y-y/x*0.5 : x*y
+    total_area = x*y
     if target_level*2 > max_level
       #在正轴
-      return max_score*score_precent*(total_area - 0.5*(max_level-target_level)*(2*(target_level-max_level)+max_level))/total_area
+      return max_score*score_precent*(total_area - 0.5*(max_level-target_level)*(-2*(target_level-max_level/2)+(max_level+1)))/total_area
+    elsif target_level*2 == max_level
+      return max_score*score_precent*0.5
     else
-      return max_score*score_precent*((0.5*total_area*target_level)/x)/total_area
+      return max_score*score_precent*(0.5*target_level*(2*(-max_level/2+target_level)+(max_level+1)))/total_area
     end
   end
   
@@ -265,13 +268,11 @@ class UserPlan < ActiveRecord::Base
 
   #生成初始计划
   def self.init_plan(user_score_info, data_info, user_id, category_id)
-    user_plan = UserPlan.find_by_category_id_and_user_id(category_id,user_id)
-    unless user_plan
-      UserPlan.transaction do
-        user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS])
-        user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
-          "/" + category_id.to_s + "_" + user_plan.id.to_s)
-      end
+    user_plan = UserPlan.find_by_category_id_and_user_id(category_id,user_id)    
+    UserPlan.transaction do
+      user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS]) unless user_plan
+      user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
+        "/" + category_id.to_s + "_" + user_plan.id.to_s)
     end
     return user_plan
   end

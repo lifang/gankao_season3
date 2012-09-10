@@ -105,18 +105,18 @@ function create_plan(category){
     if (parseInt(fs_xz)==1){
         var score=$(".fs_input").val();
         if (score==""||score.length==0||score=="目标分数"||isNaN(parseInt(score))){
-            tishi_alert("请输入您的目标分数")
+            tishi_alert("请输入您的目标分数");
             return false;
         }
         if(parseInt(score)>parseInt(max)){
-            tishi_alert("我们建议的最高分数是"+max+"分")
+            tishi_alert("我们建议的最高分数是"+max+"分");
             return false;
         }
-        if (parseInt(score) < parseInt($("#current_score").html())) {
-            tishi_alert("建议您设置的目标成绩高于当前估分"+$("#current_score").html()+"分")
+        if (parseInt(score) < parseInt($("#pass_score").val())) {
+            tishi_alert("建议您设置的目标成绩高于当前估分"+$("#pass_score").val()+"分")
             return false;
         }
-        max_score=score
+        max_score=score;
     }
     $.ajax({
         async:true,
