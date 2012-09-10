@@ -43,7 +43,7 @@
 <div class="tab end_tab" style="display: none">
   <p>结束测试将取消本次的成绩</p>
   <div class="btn_center_double "><button class="b_btn" id="confirm">确定</button>
-    <button class="b_btn" onclick="$('.end_tab').css('display','none')">重新测试</button></div>
+    <button class="b_btn" onclick="window.location.reload()">重新测试</button></div>
 </div>
 <script type="text/javascript">
 <% if cookies[:user_id].nil? %>
