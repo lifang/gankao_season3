@@ -570,7 +570,7 @@ function open_report_error(question_id){
     $(".report_error_radio").attr("checked",false);
     $("#report_error_question_id").val(question_id);
     if(params_type=="specials" && problems[init_problem].paper_id!=null){
-       $("#report_error_paper_id").val(problems[init_problem].paper_id);
+        $("#report_error_paper_id").val(problems[init_problem].paper_id);
     }
 }
 
@@ -1259,6 +1259,14 @@ function problem_title(){
         problem_title += store1[store2.length];
     }
     return problem_title;
+}
+
+
+function main_height(){
+    var win_height = $(window).height();
+    var head_height = $(".subject_head").height();
+    $(".m_side").css('height',win_height-head_height-3);//12为head的padding的12px
+    $(".main").css('height',win_height-head_height-3);//34是m_top的高度，
 }
 
 //generate.js  end

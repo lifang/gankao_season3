@@ -59,6 +59,7 @@ function create_element(element, name, id, class_name, type, ele_flag) {
 
 //弹出错误提示框
 function tishi_alert(str){
+    $('#flash_notice').remove();
     var div = create_element("div",null,"flash_notice","tab",null,null);
     var p = create_element("p","","","","innerHTML");
     p.innerHTML = str;
