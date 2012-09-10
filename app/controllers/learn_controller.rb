@@ -324,7 +324,10 @@ class LearnController < ApplicationController
       pass_status(plan, xml, "all")
       send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
         cookies[:user_id].to_i)
-      plan.update_plan if cookies[:is_new] == "plan"
+      if cookies[:is_new] == "plan"
+        plan.update_plan
+        ActionLog.study_plan_log(cookies[:user_id].to_i)
+      end
       return true
     end
     return false
