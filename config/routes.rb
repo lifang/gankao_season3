@@ -31,8 +31,8 @@ GankaoSeason3::Application.routes.draw do
 
   resources :plans do
     collection do
-      get :end_result
-      post :show_chapter,:create_plan,:init_plan,:update_user
+      get :end_result, :retest
+      post :show_chapter,:create_plan,:init_plan,:update_user, :show_result
     end
   end
   resources :learn do

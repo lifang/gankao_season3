@@ -17,13 +17,14 @@
     <input name="" type="text" class="answer_input" />
   </div>
   <div class="words_func">
-    <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
-    <a onclick="jude('/learn/jude_word','false','true')" title="下一题" class="next tooltip">Next</a>
+    <a onclick="hedui()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+    <a onclick="next_word()" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
 <div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
   function hedui(){
+    $("#hedui_a").attr("onclick", "javascipt:void(0)");
     if($("#SID").val().toLowerCase() == $.trim($(".answer_input").val()).toLowerCase()){
       //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);
@@ -37,5 +38,11 @@
   function callback(){
     show_tip("#timeup");
     jude("/learn/jude_word","false","false");
+  }
+
+  function next_word() {
+    $("#next_word_a").attr('onclick', 'javascipt:void(0)');
+    window.clearInterval(local_timer);
+    jude('/learn/jude_word','false','true');
   }
 </script>

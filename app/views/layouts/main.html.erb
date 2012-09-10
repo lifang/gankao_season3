@@ -121,5 +121,12 @@
         tishi_alert('<%= flash[:share_notice] %>')
       </script>
     <% end %>
+    <% if cookies[:retest] %>
+      <script type="text/javascript">
+        show_kaoyan_frame();
+      </script>
+    <% end
+    cookies.delete(:retest)
+  %>
   </body>
 </html>

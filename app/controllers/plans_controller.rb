@@ -1,10 +1,9 @@
 #encoding: utf-8
 class PlansController < ApplicationController
   layout 'main'
-  before_filter :sign?, :except => ["index", "end_result"]
+  before_filter :sign?, :except => ["index", "end_result", "show_result"]
   
   def index
-    cookies[:user_id] = 1
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info
@@ -27,13 +26,22 @@ class PlansController < ApplicationController
     end
   end
 
-
-  def end_result
+  def show_result
     @category=params[:category].to_i
     if params[:info].nil?
       redirect_to "/plans?category=#{@category}"
     else
-      @score=params[:info].split(",")
+      cookies[:info] = {:value => params[:info], :path => "/", :secure  => false}
+      redirect_to "/plans/end_result?category=#{@category}"
+    end
+  end
+
+  def end_result
+    @category=params[:category].to_i
+    if cookies[:info].nil?
+      redirect_to "/plans?category=#{@category}"
+    else
+      @score = cookies[:info].split(",")
     end 
   end
 
@@ -106,6 +114,11 @@ class PlansController < ApplicationController
     infos.merge!(:remarks=>"#{user.remarks} qq:#{params[:p_qq]}") unless params[:p_qq]==""
     user.update_attributes(infos)
     redirect_to "/plans?category=#{params[:category_id]}"
+  end
+
+  def retest
+    cookies[:retest] = {:value => true, :path => "/", :secure  => false}
+    redirect_to "/plans?category=#{params[:category]}"
   end
 
 end

@@ -148,7 +148,7 @@ class UsersController < ApplicationController
     reason=params[:share_reason].chop
     category=params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
-    reason="我选择赶考开始#{Category::TYPE_INFO[category]}复习的原因是："+reason
+    reason="我正在使用赶考网#{Category::TYPE_INFO[category]}频道（#{Constant::SERVER_PATH}）复习，"+ reason + "，非常不错"
     if user and user.access_token and (user.end_time-Time.now>0)
       if user.code_type=="sina"
         ret = sina_send_message(user.access_token, reason)

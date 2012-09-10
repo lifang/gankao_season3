@@ -16,7 +16,7 @@ class LearnController < ApplicationController
       cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
       items = params[:items].split(",") if params[:items]
       if items.nil? or items.blank?      
-        return if (info = willdo_part_infos(xml)).nil?
+        return if (info = willdo_part_infos(plan, xml)).nil?
         cookies[:type] = info[:type].to_i
         items = info[:ids]
       end
@@ -26,6 +26,7 @@ class LearnController < ApplicationController
         @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
       end
       @items_str = items.join(",")
+      @complete_item = info[:complete_item]
       cookies[:current_id] = items[0].split("-")[0] if items[0]
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -40,23 +41,49 @@ class LearnController < ApplicationController
     end
   end
 
-  #取出当前part的items 并组装 [id-repeat_time-step]
-  def willdo_part_infos(xml)
-    review = willdo_review_infos(xml)
-    return review if !review.nil?
-    xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+  #判断特殊情况，如果第一部分item-status置为1，但是part-satus未置为1
+  def next_part_info(xpath, plan, xml)
     node = xml.elements[xpath]
-    return nil if node.nil?
-    cookies[:is_new] = "plan"
-    return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
+    if !node.nil? and node.elements["item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"].nil?
+      node.add_attribute("status", UserPlan::PLAN_STATUS[:FINISHED])
+      f = File.new(Constant::PUBLIC_PATH + plan.plan_url,"w+")
+      f.write("#{xml.to_s.force_encoding('UTF-8')}")
+      f.close
+    end
+    return xpath
   end
 
-  def willdo_review_infos(xml)
-    xpath = "//review//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+  #获取目前已经做完的题
+  def count_complete_item(node)
+    complete_item = node.get_elements("item[@is_pass='#{UserPlan::PLAN_STATUS[:FINISHED]}']")
+    complete_length = complete_item.nil? ? 0 : complete_item.length
+    all_length = node.get_elements("item").nil? ? 0 : node.get_elements("item").length
+    return complete_length.to_s + " / " + all_length.to_s
+  end
+  
+  #取出当前part的items 并组装 [id-repeat_time-step]
+  def willdo_part_infos(plan, xml)
+    review = willdo_review_infos(plan, xml)
+    return review if !review.nil?
+    xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+    xpath = next_part_info(xpath, plan, xml)
     node = xml.elements[xpath]
     return nil if node.nil?
+    item_length = count_complete_item(node)
+    cookies[:is_new] = "plan"
+    return {:type => node.attributes["type"], :complete_item => "#{item_length}",
+      :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
+  end
+
+  def willdo_review_infos(plan, xml)
+    xpath = "//review//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
+    xpath = next_part_info(xpath, plan, xml)
+    node = xml.elements[xpath]
+    return nil if node.nil?
+    item_length = count_complete_item(node)
     cookies[:is_new] = "review"
-    return {:type => node.attributes["type"], :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
+    return {:type => node.attributes["type"], :complete_item => "#{item_length}",
+      :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
   def operate_word(items)    
@@ -296,7 +323,7 @@ class LearnController < ApplicationController
     if node.nil?
       pass_status(plan, xml, "all")
       send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
-         cookies[:user_id].to_i)
+        cookies[:user_id].to_i)
       plan.update_plan if cookies[:is_new] == "plan"
       return true
     end

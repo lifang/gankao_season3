@@ -1,7 +1,9 @@
 <div id="pass" class="tishi_box" style="display: none">
-  <div class="ts_img"><img src="assets/s_face.png" /></div>
-  <div class="ts_text">已经全部掌握了开始检验一下吧！</div>
-  <div class="btn_center"><button class="b_btn" onclick="next()">开始检查</button></div>
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center"><button class="b_btn" onclick="next()">继续下一步</button></div>
 </div>
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
   <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
@@ -26,7 +28,7 @@
     </div>
     <div class="words_func">
       <a onclick="remember('word')"  title="我记住了" class="sign tooltip">标记</a>
-      <a onclick="next()" title="下一题" class="next tooltip">Next</a>
+      <a onclick="next()" id="next_a" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
 <% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
@@ -43,7 +45,7 @@
     </div>
     <div class="words_func">
       <a onclick="remember('sentence')"  title="我记住了" class="sign tooltip">标记</a>
-      <a onclick="next()" title="下一题" class="next tooltip">Next</a>
+      <a onclick="next()" id="next_a" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
 <% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
@@ -64,7 +66,7 @@
     </div>
     <div class="words_func">
       <a onclick="remember('linsten')"  title="我记住了" class="sign tooltip">标记</a>
-      <a onclick="next()" title="下一题" class="next tooltip">Next</a>
+      <a onclick="next()" id="next_a" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
 <% end %>
@@ -85,7 +87,7 @@
     });
 <% end %>
   function next (){
-    
+    $("#next_a").attr('onclick', 'javascipt:void(0)');
     dispatch('<%= cookies[:category] %>');
   }
 </script>

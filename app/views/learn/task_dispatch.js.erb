@@ -17,11 +17,13 @@
     <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
     <% end %>
-    generate_flash_div(".plan_tab");   
+    generate_flash_div(".plan_tab");
     local_start_time = <%= @result[:time] %>;
     local_save_start();
     <% id_arr = @ids_str.split(",") %>
-    $(".t_number").html(<%= id_arr.index(cookies[:current_id]) + 1 %> + "/" + <%= id_arr.length %>);
+    $(".t_number").html("<%= @complete_item.to_s %>");
+  <% else %>
+    tishi_alert("恭喜您已经完成所有的任务啦！");
   <% end %>
 <% else %>
   tishi_alert("您的小太阳个数不够打开一个任务包了哦，呜呜~~~~~");

@@ -22,7 +22,7 @@
           <div class="plan_list">
             <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
             <div class="pl_text">
-              <a href="javascript:void(0);" onclick="javascript:tishi_alert('您需要登录才能联系真题哦');"
+              <a href="javascript:void(0);" onclick="javascript:show_charge('#sim_login_tab','.close_tab');"
                  class="model finish">练习模式</a>
               <!--<a href="#" class="model underWay">模考模式</a>-->
             </div>
@@ -70,3 +70,10 @@
     window.location.href="/exam_users/"+ex_id+"/redo_paper?category=<%= @category.id %>&sheet_url="+sheet_url+"&type=similarities";
   }
 </script>
+
+<div class="tab login_tab" id="sim_login_tab" style="display:none">
+  <div class="tab_loginArea">
+    <h1>请先登录</h1>
+    <%= render :partial=>"/layouts/login_nav" %>
+  </div>
+</div>

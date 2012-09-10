@@ -12,7 +12,7 @@ class SkillsController < ApplicationController
     name, simplify_con, s.id from skills s inner join
     users u on u.id=s.user_id where category_id=#{category} 
     and s.status=#{Skill::PASS[:YES]} and s.types=#{@types}
-    order by readed_num desc",:per_page => 3, :page => params[:page])
+    order by readed_num desc",:per_page => 4, :page => params[:page])
   end
 
 
@@ -51,12 +51,12 @@ class SkillsController < ApplicationController
   def search_result
     @types=(params[:con_t].nil? or params[:con_t].to_i>4) ? 0 : params[:con_t].to_i
     @skills=Skill.paginate_by_sql("select types,skill_title,skill_url,readed_num,s.created_at,name,simplify_con,s.id from skills s inner join
-    users u on u.id=s.user_id where category_id=#{params[:category]} and s.status=#{Skill::PASS[:YES]} and skill_title like '%#{session[:pras].strip}%' order by readed_num desc",:per_page => 3, :page => params[:page])
+    users u on u.id=s.user_id where category_id=#{params[:category]} and s.status=#{Skill::PASS[:YES]} and skill_title like '%#{session[:pras].strip}%' order by readed_num desc",:per_page => 4, :page => params[:page])
     @skills=Skill.paginate_by_sql("select types, skill_title, skill_url, readed_num,
     s.created_at,name,simplify_con,s.id from skills s inner join
     users u on u.id=s.user_id where category_id=#{params[:category]} 
     and s.status=#{Skill::PASS[:YES]} and skill_title like '%#{session[:pras].strip}%'
-    order by readed_num desc",:per_page => 3, :page => params[:page])
+    order by readed_num desc",:per_page => 4, :page => params[:page])
     render :index
   end
 
