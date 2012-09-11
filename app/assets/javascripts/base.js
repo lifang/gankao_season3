@@ -40,6 +40,8 @@ function jude(url, flag, redirct){
 }
 
 function remember(current_step){
+    $(".sign").attr('onclick', 'javascipt:void(0)');
+    window.clearInterval(local_timer);
     $.ajax({
         async:true,
         dataType:'script',

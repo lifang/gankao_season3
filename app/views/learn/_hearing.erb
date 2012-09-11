@@ -19,8 +19,8 @@
   </div>
 
   <div class="words_func">
-    <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
-    <a onclick="jude('/learn/jude_hearing','false','true')" title="下一题" class="next tooltip">Next</a>
+    <a onclick="hedui()" id="hedui_a"  title="点击核对正确答案" class="hedui tooltip">核对</a>
+    <a onclick="next_hearing()" id="next_hearing_a" title="下一题" class="next tooltip">Next</a>
   </div>
 </div>
 <div class="tip_mask" style="display: none;"></div>
@@ -43,6 +43,7 @@
   })
 
   function hedui(){
+    $("#hedui_a").attr("onclick", "javascipt:void(0)");
     if($(".words_con .hover_on a").html() == $("#SID").attr("value")){
       //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);
@@ -58,6 +59,10 @@
     show_tip("#timeup");
     jude('/learn/jude_hearing','false','false');
   }
-  
+
+  function next_hearing() {
+    $("#next_hearing_a").attr('onclick', 'javascipt:void(0)');
+    jude('/learn/jude_hearing','false','true');
+  }
 </script>
 

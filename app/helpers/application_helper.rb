@@ -100,6 +100,7 @@ module ApplicationHelper
   #获得用户当前的分数
   def get_current_score
     max_score = UserScoreInfo.return_max_score(params[:category].to_i) #最大分数
+    pass_score = UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[params[:category].to_i]}"] #过关分数
     score_arr = ["5", "0", "#{max_score}", "0"]  #比例、开始、结束、目前状况
     if cookies[:user_id]
       user_score_info = UserScoreInfo.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
@@ -111,7 +112,7 @@ module ApplicationHelper
           current_score = user_score_info.show_user_score(current_package, user_plan.days)
           current_percent = ((current_package.to_f/user_plan.days)*100).round
           current_percent = current_percent < 5 ? 5 : current_percent
-          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{user_score_info.target_score}", "#{current_score}"]
+          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{pass_score}", "#{current_score}"]
         end
       end
     end

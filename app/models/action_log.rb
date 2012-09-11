@@ -19,4 +19,9 @@ class ActionLog < ActiveRecord::Base
         :created_at => Time.now.to_date, :total_num => 1)
     end
   end
+
+  def ActionLog.study_plan_log(user_id)
+    ActionLog.create(:user_id => user_id, :types => ActionLog::TYPES[:STUDY_PLAY],
+        :created_at => Time.now.to_date, :total_num => 1)
+  end
 end

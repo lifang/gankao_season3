@@ -34,10 +34,17 @@
         <%=render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>
         <nav class="border_radius">
-          <% if cookies[:user_id] and is_nomal?(params[:category]) %>
-            <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
+          <%# if cookies[:user_id] and is_nomal?(params[:category]) %>
+            <span class="v_message">
+              <% if params[:category].to_i == Category::TYPE[:CET4] %>
+              立刻升级为高级用户，即刻享有<em>四级保过</em>的复习效果保障服务。
+              <% elsif params[:category].to_i == Category::TYPE[:CET6] %>
+               立刻升级为高级用户，即刻享有<em>六级保过</em>的复习效果保障服务。
+              <% else %>
+                立刻升级为高级用户，即刻享有<em>考研英语不低于55分</em>的复习效果保障服务。
+              <% end %>
               <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
-          <% end %>
+          <%# end %>
         </nav>
       </div>
       <div class="main">
@@ -110,12 +117,12 @@
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
     <div class="mask" style="display: none;"></div>
-    <% if cookies[:user_id] and is_nomal?(params[:category]) %>
-      <%= render :partial => '/users/charge_vip' %>
-      <%= render :partial => '/users/charge_sun' %>
-    <% end %>
+<%# if cookies[:user_id] and is_nomal?(params[:category]) %>
+    <%= render :partial => '/users/charge_vip' %>
+    <%= render :partial => '/users/charge_sun' %>
+<%# end %>
     <%= render :partial => '/layouts/inside_test' unless @plan_list %>
-    <%= render :partial=>'users/focus'  %>
+    <%= render :partial=>'users/focus' if show_focus %>
     <% if flash[:share_notice] %>
       <script type="text/javascript">
         tishi_alert('<%= flash[:share_notice] %>')

@@ -1,7 +1,7 @@
 #encoding: utf-8
 class PlansController < ApplicationController
   layout 'main'
-  #  before_filter :sign?, :except => ["index", "end_result"]
+  before_filter :sign?, :except => ["index", "end_result", "show_result"]
   
   def index
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
@@ -26,22 +26,27 @@ class PlansController < ApplicationController
     end
   end
 
-
-  def end_result
+  def show_result
     @category=params[:category].to_i
     if params[:info].nil?
       redirect_to "/plans?category=#{@category}"
     else
-      @user=User.find(cookies[:user_id])
-      @score=params[:info].split(",")
+      cookies[:info] = {:value => params[:info], :path => "/", :secure  => false}
+      redirect_to "/plans/end_result?category=#{@category}"
     end
-  
+  end
+
+  def end_result
+    @category=params[:category].to_i
+    if cookies[:info].nil?
+      redirect_to "/plans?category=#{@category}"
+    else
+      @score = cookies[:info].split(",")
+    end 
   end
 
   
-
   def create_plan
-    cookies[:user_id]=1
     category=params[:category_id].nil? ? 4 : params[:category_id].to_i
     scores=params[:level_score].split(",")
     t_score=scores.pop
@@ -49,7 +54,7 @@ class PlansController < ApplicationController
     score=plans[:TARGET_SCORE].nil? ? params[:target_score].to_i : plans[:TARGET_SCORE].to_i
     paras={:category_id=>category,:user_id=>cookies[:user_id],:all_start_level=>scores.join(","),:start_score=>t_score,:target_score=>score}
     plans.merge!(:DAYS=>UserPlan.package_level(category))
-    @plan_score=plans[:TARGET_SCORE]
+   @plan_score = plans[:TARGET_SCORE] if (plans[:TARGET_SCORE] and plans[:TARGET_SCORE] > UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[category]}"])
     @user_plan=[js_hash(plans),js_hash(paras),User.find(cookies[:user_id])]
     respond_to do |format|
       format.js
@@ -107,6 +112,11 @@ class PlansController < ApplicationController
     infos.merge!(:remarks=>"#{user.remarks} qq:#{params[:p_qq]}") unless params[:p_qq]==""
     user.update_attributes(infos)
     redirect_to "/plans?category=#{params[:category_id]}"
+  end
+
+  def retest
+    cookies[:retest] = {:value => true, :path => "/", :secure  => false}
+    redirect_to "/plans?category=#{params[:category]}"
   end
 
 end

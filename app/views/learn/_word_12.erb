@@ -8,15 +8,15 @@
   <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
-    <% if @result[:step] == 1 %>
-     <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+    <% if @result[:step] == 1 %>     
       <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
       <h1><%= @result[:word].name.strip.gsub(/[0-9]/,"") %></h1>
       <span class="fyin">[ <%= @result[:word].phonetic %> ]</span>
       <input id="SID" type="hidden" value="<%= @result[:word].ch_mean %>" />
     <% else %>
-      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
       <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
       <h1><%= @result[:word].ch_mean %></h1>      
       <input id="SID" type="hidden" value="<%= @result[:word].name.strip.gsub(/[0-9]/,"") %>" />
     <% end %>
@@ -38,7 +38,7 @@
   </div>
   <div class="words_func">
     <a onclick="remember('word')"  title="我记住了" class="sign tooltip">标记</a>
-    <a onclick="jude('/learn/jude_word','false','true')" title="下一题" class="next tooltip">Next</a>
+    <a onclick="next_word()" title="下一题" id="next_word_a" class="next tooltip">Next</a>
   </div>
 </div>
 <div class="tip_mask" style="display: none;"></div>
@@ -72,5 +72,10 @@
   function callback(){
     show_tip("#timeup");
     jude("/learn/jude_word","false","false");
+  }
+  function next_word() {
+    $("#next_word_a").attr('onclick', 'javascipt:void(0)');
+    window.clearInterval(local_timer);
+    jude('/learn/jude_word','false','true');
   }
 </script>

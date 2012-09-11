@@ -34,8 +34,8 @@
       <div class="trueFalse"></div>
     </div>
     <div class="words_func">
-      <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
-      <a onclick="jude('/learn/jude_sentence','false','true')" title="下一题" class="next tooltip">Next</a>
+      <a onclick="hedui()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a onclick="next_sentence_a()" id="next_sentence_a" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
 <% elsif @result[:step].to_i == 2 %>
@@ -59,8 +59,8 @@
       </div>
     </div>
     <div class="words_func">
-      <a onclick="hedui()" title="点击核对正确答案" class="hedui tooltip">核对</a>
-      <a onclick="jude('/learn/jude_sentence','false','true')" title="下一题" class="next tooltip">Next</a>
+      <a onclick="hedui()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a onclick="next_sentence_a()" id="next_sentence_a" title="下一题" class="next tooltip">Next</a>
     </div>
   </div>
 <% end %>
@@ -81,6 +81,7 @@
   }
 
   function hedui(){
+    $("#hedui_a").attr("onclick", "javascipt:void(0)");
     var right = $("#SID").attr("value").replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ");
     if($.trim(right) == $.trim($("#current").html())){
       //clearInterval(myTime.timeId);
@@ -110,5 +111,10 @@
       show_tip("#timeup");
       jude('/learn/jude_sentence','false','false');
     }
+  }
+
+  function next_sentence_a() {
+    $("#next_sentence_a").attr('onclick', 'javascipt:void(0)');
+    jude('/learn/jude_sentence','false','true');
   }
 </script>
