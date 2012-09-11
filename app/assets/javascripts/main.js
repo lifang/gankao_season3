@@ -203,7 +203,7 @@ function share_reason(){
         var  reasons="";
         var gz=$(".gz_mh input");
         for(var i=0;i<gz.length;i++){
-            reasons +=$(gz[i]).parent().find("p").html()+",";
+            reasons +=$(gz[i]).parent().find("p").html()+"，";
         }
         $.ajax({
             async:true,

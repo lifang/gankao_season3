@@ -11,10 +11,7 @@
     <%= form_for :personal_info,:url=>"/plans/update_user",:html=>{:id=>"p_infos"} do %>
       <input type="hidden" id="category_id" name="category_id" value="<%= params[:category_id] %>" />
       <div class="user_data">
-        <label>用户名:</label><input name="p_name" id="p_name" type="text" value="" />
-      </div>
-      <div class="user_data">
-        <label><span class="red">*</span>&nbsp;邮箱:</label><input name="p_email" id="p_email" type="text" />
+        <label><span class="red">*</span>&nbsp;邮箱:</label><input name="p_email" id="p_email" type="text" value="<%= personal_info.email %>" />
       </div>
       <div class="user_data">
         <label>QQ:</label><input name="p_qq" id="p_qq" type="text" />

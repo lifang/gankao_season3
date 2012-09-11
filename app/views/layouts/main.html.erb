@@ -115,7 +115,7 @@
       <%= render :partial => '/users/charge_sun' %>
     <% end %>
     <%= render :partial => '/layouts/inside_test' unless @plan_list %>
-    <%= render :partial=>'users/focus' if show_focus %>
+    <%= render :partial=>'users/focus'  %>
     <% if flash[:share_notice] %>
       <script type="text/javascript">
         tishi_alert('<%= flash[:share_notice] %>')

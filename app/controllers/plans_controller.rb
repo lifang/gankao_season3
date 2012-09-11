@@ -50,7 +50,7 @@ class PlansController < ApplicationController
     paras={:category_id=>category,:user_id=>cookies[:user_id],:all_start_level=>scores.join(","),:start_score=>t_score,:target_score=>score}
     plans.merge!(:DAYS=>UserPlan.package_level(category))
     @plan_score=plans[:TARGET_SCORE]
-    @user_plan=[js_hash(plans),js_hash(paras)]
+    @user_plan=[js_hash(plans),js_hash(paras),User.find(cookies[:user_id])]
     respond_to do |format|
       format.js
     end
@@ -104,7 +104,6 @@ class PlansController < ApplicationController
   def update_user
     user=User.find(cookies[:user_id])
     infos={:email=>params[:p_email]}
-    infos.merge!(:name=>params[:p_name]) unless params[:p_name]==""
     infos.merge!(:remarks=>"#{user.remarks} qq:#{params[:p_qq]}") unless params[:p_qq]==""
     user.update_attributes(infos)
     redirect_to "/plans?category=#{params[:category_id]}"
