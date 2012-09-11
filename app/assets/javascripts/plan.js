@@ -67,6 +67,11 @@ function show_chapter(plan_id, chapter_num, direction) {
 }
 
 //弹出开始练习框
-function start_practice() {
-    generate_flash_div("#start_tab");
+function start_practice(category_id) {
+    setCookie("first_study", "1", 86400000, '/');
+    dispatch(category_id);
+    window.setTimeout(function(){
+       generate_flash_div("#start_tab");
+    }, 1000);
 }
+

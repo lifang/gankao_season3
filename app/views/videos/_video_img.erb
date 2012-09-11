@@ -4,7 +4,7 @@
   <div class="video_box">
     <ul class="video_ul">
       <%video_img[0].each do |video|%>
-        <li onclick="load_video('<%=video.id %>')"><img  _src="<%= video.img_url %>" ><%= video.title %></img></li>
+        <li onclick="load_video('<%=video.id %>')"><img src="<%= video.img_url %>" /><%= video.title %></img></li>
       <% end %>
     </ul>
   </div>

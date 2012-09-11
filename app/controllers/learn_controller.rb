@@ -55,21 +55,18 @@ class LearnController < ApplicationController
 
   #获取目前已经做完的题
   def count_complete_item(node)
-    complete_item = node.get_elements("item[@is_pass='#{UserPlan::PLAN_STATUS[:FINISHED]}']")
-    complete_length = complete_item.nil? ? 0 : complete_item.length
     all_length = node.get_elements("item").nil? ? 0 : node.get_elements("item").length
-    return complete_length.to_s + " / " + all_length.to_s
+    return all_length
   end
+  
   
   #取出当前part的items 并组装 [id-repeat_time-step]
   def willdo_part_infos(plan, xml)
-    puts "================================="
     review = willdo_review_infos(plan, xml)
     return review if !review.nil?
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     xpath = next_part_info(xpath, plan, xml)
     node = xml.elements[xpath]
-    puts node
     return nil if node.nil?
     item_length = count_complete_item(node)
     cookies[:is_new] = "plan"

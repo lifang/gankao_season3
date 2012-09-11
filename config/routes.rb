@@ -15,10 +15,9 @@ GankaoSeason3::Application.routes.draw do
     end
   end
 
-  resource :welcome do
+  resource :welcomes do
     collection do
-      get :alipay_exercise
-      post :alipay_compete
+      get :fast_icon
     end
   end
 
@@ -135,7 +134,7 @@ GankaoSeason3::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'welcome#index'
+  root :to => 'welcomes#index'
 
   # See how all your routes lay out with "rake routes"
 

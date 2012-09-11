@@ -26,4 +26,16 @@ module Constant
 
   DATE_LONG=90
 
+  #四级路由
+  CET4_PATH = "http://cet4.gankao.co"
+  #六级路由
+  CET6_PATH = "http://cet6.gankao.co"
+  #考研路由
+  GRADUATE_PATH = "http://graduate.gankao.co"
+  #快捷方式路由
+  FAST_PATH = {
+    2 => ["英语四级频道", "#{SERVER_PATH}/CET4.url"],
+    3 => ["英语四级频道", "#{SERVER_PATH}/CET6.url"],
+    4 => ["英语考研频道", "#{SERVER_PATH}/KAOYAN.url"]
+  }
 end

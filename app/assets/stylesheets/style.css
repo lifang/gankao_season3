@@ -420,7 +420,7 @@ nav li { float: left; margin: 0 20px;}
 /*完善个人资料*/
 .clock_bg { width: 90px; height: 52px; margin: 10px auto;}
 .plan_h1 { font-size: 20px; text-align: center; color: #387580;}
-.plan_h2 { font-size: 16px; text-align: center; color: #73B2BD; margin-bottom: 10px;}
+.plan_h2 {  font-size: 16px; text-align: center; color: #387580; margin-bottom: 10px;}
 
 .user_data { margin: 10px ; font-size: 16px; color: #73B2BD;}
 .user_data label { display: inline-block; width: 100px; text-align: right; padding-right: 10px; font-weight: bold;}

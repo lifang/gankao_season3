@@ -1,6 +1,14 @@
-<div class="tab" id="start_tab" style="display: none;">
-  <p>单词训练按照艾宾浩斯记忆曲线，分为三个阶段，为了达到最佳记忆效果，请尽量一次完成！</p>
-  <div class="btn_center_double ">
-    <button class="b_btn" onclick="dispatch(<%= params[:category] %>);$('#start_tab').hide();" >开始</button>
-    <button class="b_btn" onclick="$('#start_tab').hide();">取消</button></div>
+<div id="start_tab" class="tishi_box" style="display: none">
+  <div class="ts_text">单词训练按照艾宾浩斯记忆曲线，分为三个阶段，为了达到最佳记忆效果，请尽量一次完成！</div>
+  <div class="btn_center">
+    <button onclick="javascript:start_study();" class="b_btn">开始</button>
+  </div>
 </div>
+
+<script type="text/javascript">
+  //关闭开始练习框
+  function start_study() {
+    $("#start_tab").hide();
+    local_save_start();  
+  }
+</script>

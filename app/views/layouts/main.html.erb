@@ -38,6 +38,8 @@
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
               <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
           <% end %>
+          <span  class="v_message">点击将英语<%= Constant::FAST_PATH[params[:category].to_i][0] %>添加到
+            <a href="<%= Constant::FAST_PATH[params[:category].to_i][1] %>">桌面快捷方式</a></span>
         </nav>
       </div>
       <div class="main">
