@@ -34,12 +34,14 @@
         <%=render :partial=>'users/info', :object=>user_info %>
         <div class="clear"></div>
         <nav class="border_radius">
+          <marquee direction="up" scrollAmount="2" height="42" onmouseout="start()" onmouseover="stop()">
           <% if cookies[:user_id] and is_nomal?(params[:category]) %>
             <span class="v_message">立刻升级为高级用户，即刻享有复习效果保障服务。
               <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
-          <% end %>
-          <span  class="v_message">点击将英语<%= Constant::FAST_PATH[params[:category].to_i][0] %>添加到
-            <a href="<%= Constant::FAST_PATH[params[:category].to_i][1] %>">桌面快捷方式</a></span>
+          <% end %><br/>
+          <span  class="v_message">点击将英语<%= Constant::FAST_PATH[params[:category].to_i][0] %>添加到桌面快捷方式。
+            <a href="<%= Constant::FAST_PATH[params[:category].to_i][1] %>">添加快捷方式</a></span>
+          </marquee>
         </nav>
       </div>
       <div class="main">
