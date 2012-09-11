@@ -145,10 +145,9 @@ class UsersController < ApplicationController
   
   #用户登录三次提示分享网站和关注
   def share_reasons
-    reason=params[:share_reason].chop
     category=params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
-    reason="我正在使用赶考网#{Category::TYPE_INFO[category]}频道（#{Constant::SERVER_PATH}）复习，"+ reason + "，非常不错"
+    reason="我正在使用赶考网#{Category::TYPE_INFO[category]}频道（#{Constant::SERVER_PATH}）复习，资料太全面啦，非常不错"
     if user and user.access_token and (user.end_time-Time.now>0)
       if user.code_type=="sina"
         ret = sina_send_message(user.access_token, reason)

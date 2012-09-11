@@ -200,18 +200,12 @@ function share_reason(){
     if (reason.length==0){
         tishi_alert("请选择分享理由");
     }else{
-        var  reasons="";
-        var gz=$(".gz_mh input");
-        for(var i=0;i<gz.length;i++){
-            reasons +=$(gz[i]).parent().find("p").html()+",";
-        }
         $.ajax({
             async:true,
             dataType:'json',
             type:'post',
             url:"/users/share_reasons",
             data :{
-                share_reason:reasons,
                 category :$("#share_category").val()
             },
             success : function(data) {

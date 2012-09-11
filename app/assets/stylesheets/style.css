@@ -835,7 +835,7 @@ nav li { float: left; margin: 0 20px;}
     border-radius: 0.4em;
 }
 .video_ul { height: 100px;}
-.video_ul li { float: left; width: 80px; height: 80px; overflow: hidden; margin: 10px 9px; background: #73b2bd;}
+.video_ul li { float: left; width: 80px; height: 80px; overflow: hidden; margin: 10px 9px; background: #73b2bd;cursor: pointer;}
 
 
 /*---------------答疑--------------*/
@@ -1010,8 +1010,8 @@ nav li { float: left; margin: 0 20px;}
 
 .gz_mh { width: 300px; margin-left: 20px; display: block;}
 .gz_mh li { height: 22px; line-height: 22px; margin: 10px 0; float: left;}
-.gz_mh li input { float: left;}
-.gz_mh li p { overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 2px;}
+.gz_mh li span { float: left; display: block; padding-top: 2px;}
+.gz_mh li p { overflow: hidden; float: left; width: 118px; height: 22px; margin-top: 2px; margin-left: 5px;}
 
 
 .gz_sun {
@@ -1020,14 +1020,14 @@ nav li { float: left; margin: 0 20px;}
     background: url(/assets/gz_sun.png) no-repeat;
     position: absolute;
     top: 50px;
-    right: 50px;
+    right: 20px;
 }
 .gz_sun h1 { font-size: 18px; text-align: center; color: #397580; margin: 12px 0;}
 
 .gz_bottom { height: 200px; padding: 20px; overflow: hidden;}
 .gz_logo { float: left; margin: 12px 0 0 12px;}
 .gz_why { width: 350px; float: left;}
-.gz_why h1 { font-size: 18px; padding-left: 20px; color: #397580; margin: 12px 0;}
+.gz_why h1 { font-size: 16px; padding-left: 20px; color: #397580; margin: 12px 0;}
 
 .gz_bottom_btn { position: absolute; bottom: 20px; right: 20px; }
 

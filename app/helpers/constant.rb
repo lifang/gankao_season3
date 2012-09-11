@@ -38,4 +38,11 @@ module Constant
     3 => ["英语四级频道", "#{SERVER_PATH}/CET6.url"],
     4 => ["英语考研频道", "#{SERVER_PATH}/KAOYAN.url"]
   }
+
+  #游动文字
+  SCOLL_WORD = {
+    2 => "英语四级保过",
+    3 => "英语六级保过",
+    4 => "考研英语不低于55分",
+  }
 end

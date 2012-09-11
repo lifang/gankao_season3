@@ -4,7 +4,6 @@ class PlansController < ApplicationController
   before_filter :sign?, :except => ["index", "end_result", "show_result"]
   
   def index
-    cookies[:user_id]=1
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info
@@ -55,9 +54,8 @@ class PlansController < ApplicationController
     score=plans[:TARGET_SCORE].nil? ? params[:target_score].to_i : plans[:TARGET_SCORE].to_i
     paras={:category_id=>category,:user_id=>cookies[:user_id],:all_start_level=>scores.join(","),:start_score=>t_score,:target_score=>score}
     plans.merge!(:DAYS=>UserPlan.package_level(category))
-    #如果生成的成绩小于过关成绩
-    @plan_score = plans[:TARGET_SCORE] if (plans[:TARGET_SCORE] and plans[:TARGET_SCORE] > UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[category]}"])
-    @user_plan=[js_hash(plans),js_hash(paras)]
+   @plan_score = plans[:TARGET_SCORE] if (plans[:TARGET_SCORE] and plans[:TARGET_SCORE] > UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[category]}"])
+    @user_plan=[js_hash(plans),js_hash(paras),User.find(cookies[:user_id])]
     respond_to do |format|
       format.js
     end
@@ -111,7 +109,6 @@ class PlansController < ApplicationController
   def update_user
     user=User.find(cookies[:user_id])
     infos={:email=>params[:p_email]}
-    infos.merge!(:name=>params[:p_name]) unless params[:p_name]==""
     infos.merge!(:remarks=>"#{user.remarks} qq:#{params[:p_qq]}") unless params[:p_qq]==""
     user.update_attributes(infos)
     redirect_to "/plans?category=#{params[:category_id]}"
