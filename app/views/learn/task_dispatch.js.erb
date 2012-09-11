@@ -21,7 +21,7 @@
     local_start_time = <%= @result[:time] %>;
     local_save_start();
     <% id_arr = @ids_str.split(",") %>
-    $(".t_number").html("<%= @complete_item.to_s %>");
+    $(".t_number").html("<%= cookies[:complete_item].to_s %>");
   <% else %>
     tishi_alert("恭喜您已经完成所有的任务啦！");
   <% end %>

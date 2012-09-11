@@ -18,6 +18,7 @@ class LearnController < ApplicationController
       if items.nil? or items.blank?      
         return if (info = willdo_part_infos(plan, xml)).nil?
         cookies[:type] = info[:type].to_i
+        cookies[:complete_item] = info[:complete_item]
         items = info[:ids]
       end
       if !params[:ids].nil? && !params[:ids].empty?
@@ -25,8 +26,7 @@ class LearnController < ApplicationController
       else
         @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
       end
-      @items_str = items.join(",")
-      @complete_item = info[:complete_item]
+      @items_str = items.join(",")      
       cookies[:current_id] = items[0].split("-")[0] if items[0]
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -63,11 +63,13 @@ class LearnController < ApplicationController
   
   #取出当前part的items 并组装 [id-repeat_time-step]
   def willdo_part_infos(plan, xml)
+    puts "================================="
     review = willdo_review_infos(plan, xml)
     return review if !review.nil?
     xpath = "//plan//_#{xml.elements["//current"].text}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     xpath = next_part_info(xpath, plan, xml)
     node = xml.elements[xpath]
+    puts node
     return nil if node.nil?
     item_length = count_complete_item(node)
     cookies[:is_new] = "plan"
