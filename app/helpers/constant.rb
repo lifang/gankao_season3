@@ -22,6 +22,12 @@ module Constant
     :CET6 => '2012-10-15',
     :GRADUATE => '2013-01-05'
   }
+  #分享图片路径及大小
+  IMG_NAME_SIZE="/gankao_share.png&width=500&height=385"
+  SHARE_WORDS="我正在使用新版赶考网(http://www.gankao.co)复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
+
+  RENREN_IMG="/gankao_share.png"
+
 
   #考试时间
   EXAM_DATE = {:CET4 => '2012-12-22', :CET6 => '2012-12-22', :GRADUATE => '2013-01-05'}

@@ -31,6 +31,10 @@ class LoginsController < ApplicationController
       access_token=meters[0].split("=")[1]
       expires_in=meters[1].split("=")[1].to_i
       openid=params[:open_id]
+      unless openid
+        redirect_to "/"
+        return false
+      end
       @user= User.find_by_open_id(openid)
       if @user.nil?
         user_url="https://graph.qq.com"
@@ -41,6 +45,7 @@ class LoginsController < ApplicationController
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>user_info["figureurl_1"])
         Sun.first_login(@user.id)
         cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
+        send_message_qq(Constant::SHARE_WORDS,@user,{:richtype=>1,:richval=>"url=#{Constant::SERVER_PATH+Constant::IMG_NAME_SIZE}"})
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -66,6 +71,7 @@ class LoginsController < ApplicationController
 
 
   def request_sina
+    cookies.delete(:oauth2_url_generate)
     redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
   end
 
@@ -89,12 +95,14 @@ class LoginsController < ApplicationController
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["profile_image_url"])
           Sun.first_login(@user.id)
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
+          sina_send_message(@user.access_token,Constant::SHARE_WORDS)
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
+        
         @user.increment!(:login_times)
         user_role?(@user.id)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
@@ -133,6 +141,7 @@ class LoginsController < ApplicationController
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["tinyurl"])
           Sun.first_login(@user.id)
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
+          renren_send_message(@user.access_token,Constant::SHARE_WORDS,{:type=>2,:ugc_id=>6525229578,:user_id=>600942099})
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -282,7 +291,7 @@ class LoginsController < ApplicationController
         content=cookies[:sharecontent].split('@!')
         ret = sina_send_message(access_token, content[1])
         type=Sun::TYPES[:SINASHARE].to_i
-        @return_message = "微博发送失败，请重新尝试" if ret["error_code"]
+        @return_message = "微博发送失败，网络繁忙，请稍后再试" if ret["error_code"]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
         cookies.delete(:sharecontent)
@@ -305,7 +314,7 @@ class LoginsController < ApplicationController
         content=cookies[:sharecontent].split('@!')
         ret = renren_send_message(access_token, content[1])
         type=Sun::TYPES[:RENRENSHARE].to_i
-        @return_message = "分享失败，请重新尝试" if ret[:error_code]
+        @return_message = "分享失败，网络繁忙，请稍后再试" if ret[:error_code]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)if @return_message.nil?
         flash[:share_notice]=@return_message
         cookies.delete(:sharecontent)
@@ -329,7 +338,7 @@ class LoginsController < ApplicationController
         content=cookies[:sharecontent].split('@!')
         type=Sun::TYPES[:QQSHARE].to_i
         ret = share_tencent_weibo(access_token,openid,content[1])
-        @return_message = "分享失败，请重新尝试" if ret[:errcode].to_i!=0
+        @return_message = "分享失败，网络繁忙，请稍后再试" if ret[:errcode].to_i!=0
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
         cookies.delete(:sharecontent)
