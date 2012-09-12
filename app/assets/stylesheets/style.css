@@ -99,7 +99,7 @@ img { border: none;}
     height: 40px;
     display: block;
     padding: 0px 0 0 55px;
-    color: #397580;
+    color: #525161;
 }
 .login_area a.renren { background: url(/assets/login_bg.png) no-repeat 0 center;}
 .login_area a.sina { background: url(/assets/login_bg.png) no-repeat -95px center;}
@@ -275,8 +275,8 @@ nav li { float: left; margin: 0 20px;}
 
 .mc_box { padding: 10px; overflow: hidden;}
 
-
-.right_ad { background: #e4e3ce;padding: 0 2px; padding:  5px 0;}
+/*----广告----*/
+.right_ad { height: 240px; background: #E4E3CE; padding: 0px 2px 0px 3px;  margin-bottom: 5px;}
 
 
 .recommend {
@@ -671,7 +671,7 @@ nav li { float: left; margin: 0 20px;}
 .mc_menu_box {padding: 5px 10px; overflow: hidden;}
 
 .mc_menu li {
-    width: 75px;
+    width: 99px;
 	height: 35px;
 	overflow: hidden;
 	margin: 5px 0;
@@ -690,6 +690,26 @@ nav li { float: left; margin: 0 20px;}
     color: #fff;
 }
 
+/*----------------技巧专用s----------------*/
+.mc_menu00 li {
+    width: 75px;
+	height: 35px;
+	overflow: hidden;
+	margin: 5px 0;
+	line-height: 35px;
+	text-align: center;
+	color: #e4e3ce;
+	float: left;
+	cursor: pointer;
+	border-left: 1px #c32908 solid;
+	background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
+}
+.mc_menu00 li.hover, .mc_menu00 li:hover {
+	background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
+}
+.mc_menu00 li a {
+    color: #fff;
+}
 
 /*search-------*/
 .search {
@@ -697,10 +717,7 @@ nav li { float: left; margin: 0 20px;}
     height: 35px;
     margin: 5px 0;
     float: left;
-    background: -webkit-gradient(linear, left top, left bottom, from(#ff7254), to(#e4421f));
-    background: -moz-linear-gradient(top, #ff7254, #e4421f);
-    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ff7254,endcolorstr=#e4421f,gradientType=0);
-    _background: #ff7254;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
 }
 .search_box { width: 110px; height: 24px; margin: 5px auto; line-height: 24px; background: #FFF;}
 .search_box input { width: 80px; height: 24px; border: none; _border: red; float: left; outline: none;}
@@ -713,7 +730,56 @@ nav li { float: left; margin: 0 20px;}
     background: url(/assets/search.jpg) no-repeat;
 }
 
-
+.askQuestion { overflow: hidden; padding: 0 112px 0 10px; position: relative;}
+.askQuestion_span {
+    width: 420px;
+	height: 28px;
+	display: block;
+	text-indent: -999px;
+	overflow: hidden;
+	background: url(/assets/askQuestion_span_bg.png) no-repeat;
+	border: 1px #cfceb7 solid;
+	border-radius: 0.6em;
+	cursor: text;
+	position: absolute;
+	top: 0;
+	left: 10px;
+}
+.askQuestion_textarea {
+    width: 410px;
+	display: block;
+	height: 28px;
+	border: 1px #C2B19F solid;
+	line-height: 28px;
+	border-radius: 0.6em;
+	padding: 0 5px;
+	font-size: 12px;
+	color: #387580;
+	font-family: "微软雅黑";
+	margin-bottom: 10px;
+}
+.askQuestion_btn {
+    width: 45px;
+	height: 20px;
+	line-height: 20px;
+	background: #525161;
+	text-align: center;
+	color: #e4e3ce;
+	border-radius: 0.2em;
+	display: block;
+	font-size: 11px;
+	float: right;
+	margin: 0 10px;
+	display: none;
+}
+.askQuestion_up {
+	float: right;
+	line-height: 20px;
+	color: #666;
+	font-size: 11px;
+    display: none;
+}
+.askQuestion_number { color: #C2B19F; position:absolute; right: 114px; bottom: 32px; display: none;}
 
 
 /*知识库文章---*/
@@ -722,13 +788,13 @@ nav li { float: left; margin: 0 20px;}
     width: 130px;
     height: 32px;
     line-height: 32px;
-    background: #387580;
+    background: #525161;
     text-align: center;
     color: #e4e3ce;
     border-radius: 0.2em;
     float: right;
 }
-.publishArticles button:hover { background: #3f8490;}
+.publishArticles button:hover { background: #636174;}
 
 .article_area { margin: 10px 0; overflow: hidden; border-bottom: 1px #CCCCCC dotted;}
 
@@ -867,6 +933,7 @@ nav li { float: left; margin: 0 20px;}
 .us_pic { width: 45px; height: 45px; overflow: hidden; margin: 0 auto;}
 .userProblem_box h3 { font-size: 12px; text-align: center; width: 80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .userProblem_box p { font-size: 9px; text-align: center;}
+.problem_time { font-size: 9px; text-align: right; float: right;}
 
 .answer_box {
     width: 300px;
@@ -1124,38 +1191,42 @@ nav li { float: left; margin: 0 20px;}
 
 /*main------------------------*/
 .main { padding: 10px 0; overflow: hidden;}
-.m_index { background: #e4e3ce;}
+.m_index { background: #f0efe0; padding: 10px 0;}
 .m_index_box {
     width: 940px;
-    height: 500px;
-    padding-top: 55px;
-    margin: 0 auto;
-    background: url(/assets/m_index_bg.jpg) no-repeat 0 0;
-    position: relative;
+	height: 540px;
+	margin: 0 auto;
+	background: url(/assets/m_index_bg.png) no-repeat 0 0;
+	position: relative;
 }
-.m_video { width: 326px; height: 212px; margin: 105px 0 0 106px; _margin: 52px 0 0 52px; float: left;}
+.m_video { width: 326px; height: 212px; margin: 146px 0 0 63px; _margin: 146px 0 0 31px; float: left; }
 .m_video_btn {
     width: 162px;
-    height: 162px;
-    display: block;
-    background: url(/assets/m_video_btn.png) no-repeat;
-    position: absolute;
-    top: 185px;
-    left: 190px;
+	height: 162px;
+	display: block;
+	background: url(/assets/m_video_btn.png) no-repeat;
+	position: absolute;
+	top: 168px;
+	left: 143px;
+
 }
 .index_text { margin-left: 65px; float: left;}
-.index_btn { margin-left: 80px; float: left; height: 100px;}
+.index_btn { position: absolute; right: 32px; bottom: 127px; overflow: hidden; _width: 500px; _right: 12px;}
 .index_btn h1 { font-size: 16px; line-height: 36px;}
-.index_btn button {
+.index_btn a {
     border: 1px #4b6c70 solid;
-    color: #e7debe;
-    padding: 5px 15px;
-    background: #387580;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-    margin: 0 10px;
-    _width: 100px;
-    font-size: 16px;
+	color: #e7debe;
+	padding: 8px 15px 24px 15px;
+	background: #387580;
+	box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+	margin: 0 10px;
+	font-size: 22px;
+	font-weight: bolder;
+	display: inline-block;
+	position: relative;
+	border-radius: 0.6em;
 }
+.index_btn a span { position: absolute; right: 15px; bottom: 2px; font-size: 10px; font-weight:100;}
 
 
 /*二维码-------------*/

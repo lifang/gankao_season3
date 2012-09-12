@@ -3,15 +3,17 @@
 <div class="m_content">
   <div class="mc_box">
     <%=render 'menu'%>
-    <div class="mc_menu_box">
-
-       <%=form_for :user_question, :url=>"/questions/ask_question?category="+params[:category] do |f|%>
-        <div class="my_question">
-          <h2>问题</h2>
-          <%=f.text_area :description,:class=>"my_q_textarea"%>
-          <%=f.submit "我要提问",:class=>"pro_btn",:id=>"askQuestion"%>
-        </div>
+    <div class="askQuestion">
+      <span class="askQuestion_span">亲，来发布你的疑问...</span>
+      <%= form_for :user_question, :url=>"/questions/ask_question?category="+params[:category] do |f|%>
+        <%= f.text_area :description, :class=>"askQuestion_textarea" %>
+        <span class="askQuestion_number">200</span>
+        <%= f.submit "发布", :class=>"askQuestion_btn", :id=>"askQuestion" %>
       <%end%>
+      <a href="javascript:void(0)" class="askQuestion_up">收起</a>
+    </div>
+
+    <div class="mc_menu_box">
       <%if @answered_questions.any?%>
         <% @answered_questions.each_with_index do |aq, index| %>
           <div class="b_bottom">
@@ -19,12 +21,11 @@
               <div class="problem_box" id="problem_<%= aq.id %>">
                 <span class="an_icon01"></span>
                 <p><span class="orange"></span><%= aq.description %></p>
+                <span class="problem_time"><%= aq.created_at.strftime("%Y-%m-%d") %>   <%= aq.created_at.strftime("%H:%M") %></span>
               </div>
               <div class="userProblem_box">
                 <div class="us_pic"><img src="<%= aq.img_url.nil? ? User::DEFAULT_COVER : aq.img_url %>"/></div>
                 <h3><%= aq.user_name %></h3>
-                <p><%= aq.created_at.strftime("%Y-%m-%d") %></p>
-                <p><%= aq.created_at.strftime("%H:%M") %></p>
               </div>
               <div class="clear"></div>
             </div>

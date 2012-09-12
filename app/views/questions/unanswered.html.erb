@@ -11,12 +11,11 @@
               <div class="problem_box" id="problem_<%= uaq.id %>">
                 <span class="an_icon01"></span>
                 <p><span class="orange"></span><%=uaq.description%></p>
+                <span class="problem_time"><%=uaq.created_at.strftime("%Y-%m-%d")%>   <%=uaq.created_at.strftime("%H:%M")%></span>
               </div>
               <div class="userProblem_box">
                 <div class="us_pic"><img src="<%= uaq.img_url.nil? ? User::DEFAULT_COVER : uaq.img_url %>"/></div>
-                <h3><%=uaq.user_name%></h3>
-                <p><%=uaq.created_at.strftime("%Y-%m-%d")%></p>
-                <p><%=uaq.created_at.strftime("%H:%M")%></p>
+                <h3><%= uaq.user_name %></h3>
               </div>
               <div class="clear"></div>
             </div>

@@ -217,3 +217,35 @@ function share_reason(){
         });
     }
 }
+
+//答疑页面-----我要提问按钮
+$(function(){
+    $(".askQuestion_span").bind("click",function(){
+        $(this).hide();
+        $(".askQuestion_textarea").animate({
+            height: "80px"
+        }, 500);
+        $(".askQuestion_btn").show();
+        $(".askQuestion_up").show();
+        $(".askQuestion_number").show();
+    })
+    $(".askQuestion_up").bind("click",function(){
+        $(".askQuestion_span").show();
+        $(".askQuestion_textarea").css("height","28px")
+        $(".askQuestion_btn").hide();
+        $(this).hide();
+        $(".askQuestion_number").hide();
+    })
+})
+
+//随机生成在线人数
+$(function(){
+    $(".index_btn #span1").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    $(".index_btn #span2").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    setInterval(function(){
+        $(".index_btn #span1").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+        $(".index_btn #span2").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+        $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    }, 3600000);
+})

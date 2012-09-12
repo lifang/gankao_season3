@@ -3,7 +3,6 @@ class QuestionsController < ApplicationController
   layout 'main'
   before_filter :sign?, :only => ["save_answer", "ask_question"]
 
-
   #获取已经回答的问题
   def answered
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
