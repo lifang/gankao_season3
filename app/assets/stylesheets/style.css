@@ -96,7 +96,7 @@ img { border: none;}
 .login_area li { width: 120px; height: 36px; float: left;}
 .login_area a.renren, .login_area a.sina, .login_area a.qq {
     width:55px;
-    height: 40px;
+    height: 36px;
     display: block;
     padding: 0px 0 0 55px;
     color: #525161;
@@ -1247,7 +1247,6 @@ nav li { float: left; margin: 0 20px;}
 .qrcode div { font-size: 0;}
 hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; border-top:1px solid #285d67;}
 
-/*online_qq----*/
 .online_qq {
     width: 114px;
 	height: 91px;
