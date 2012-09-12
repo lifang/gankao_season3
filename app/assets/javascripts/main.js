@@ -249,3 +249,25 @@ $(function(){
         $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
     }, 3600000);
 })
+
+//复习计划页面功能介绍
+$(function(){
+	var doc_height = $(document).height();
+	//var doc_width = $(document).width();
+	var win_height = $(window).height();
+	var win_width = $(window).width();
+
+    $('.guideMask').css('height',doc_height);
+
+	var i= 1;
+	$(".guide_next").bind("click",function(){
+		    //alert($("this").parents(".guide01"));
+			$(this).parents(".guide0"+i).hide().next().show();
+			i++;
+	})
+	$(".guide_out").bind("click",function(){
+			$(this).parents(".guideBox").hide();
+			$('.guideMask').hide();
+	})
+
+})

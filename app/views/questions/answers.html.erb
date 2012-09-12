@@ -2,7 +2,8 @@
 <input type="hidden" id="current_page" value="answers" />
 <div class="m_content">
   <div class="mc_box">
-    <%=render 'menu'%>
+    <%=render :partial => '/questions/menu' %>
+    <%=render :partial => '/questions/ask_question' %>
     <%if @myanswers.any?%>
       <div class="mc_menu_box">
         <% @myanswers.each_with_index do |aq, index| %>

@@ -2,7 +2,8 @@
 <input type="hidden" id="current_page" value="unanswered" />
 <div class="m_content">
   <div class="mc_box">
-    <%=render 'menu'%>
+    <%=render :partial => '/questions/menu' %>
+    <%=render :partial => '/questions/ask_question' %>
     <%if @unanswered_questions.any?%>
       <div class="mc_menu_box">
         <%@unanswered_questions.each_with_index do |uaq,index|%>

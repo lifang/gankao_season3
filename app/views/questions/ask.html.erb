@@ -2,7 +2,8 @@
 <input type="hidden" id="current_page" value="ask" />
 <div class="m_content">
   <div class="mc_box">
-    <%=render 'menu'%>
+    <%=render :partial => '/questions/menu' %>
+    <%=render :partial => '/questions/ask_question' %>
     <div class="mc_menu_box">
       <%if @myasks.any?%>
         <% @myasks.each_with_index do |aq, index| %>
@@ -28,7 +29,7 @@
         <%end%>
         <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
       <% else %>
-      <h1 class="noAnswer">您还没提问哦,<a style="text-decoration: underline;" href="/questions/answered?category=<%= params[:category]%>">去提问</a></h1>
+      <h1 class="noAnswer">您还没提问过哦。</h1>
       <%end %>
     </div>
   </div>

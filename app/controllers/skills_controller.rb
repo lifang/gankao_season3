@@ -12,7 +12,7 @@ class SkillsController < ApplicationController
     name, simplify_con, s.id from skills s inner join
     users u on u.id=s.user_id where category_id=#{category} 
     and s.status=#{Skill::PASS[:YES]} and s.types=#{@types}
-    order by readed_num desc",:per_page => 4, :page => params[:page])
+    order by readed_num desc",:per_page => 10, :page => params[:page])
   end
 
 
@@ -56,7 +56,7 @@ class SkillsController < ApplicationController
     s.created_at,name,simplify_con,s.id from skills s inner join
     users u on u.id=s.user_id where category_id=#{params[:category]} 
     and s.status=#{Skill::PASS[:YES]} and skill_title like '%#{session[:pras].strip}%'
-    order by readed_num desc",:per_page => 4, :page => params[:page])
+    order by readed_num desc",:per_page => 10, :page => params[:page])
     render :index
   end
 

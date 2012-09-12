@@ -25,7 +25,12 @@
           <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();" class="noTest_btn">开始前测</a>
         </div>
       </div>
-    </div>      
+    </div>
+    <% if cookies[:first_login] == "1" %>
+      <%= render :partial=>'/common/gide_tab' %>
+    <% end
+    cookies.delete(:first_login)
+  %>
   <% end %>
 </div>
 <div class="plan_tab"></div>

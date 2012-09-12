@@ -2,17 +2,8 @@
 <input type="hidden" id="current_page" value="answered" />
 <div class="m_content">
   <div class="mc_box">
-    <%=render 'menu'%>
-    <div class="askQuestion">
-      <span class="askQuestion_span">亲，来发布你的疑问...</span>
-      <%= form_for :user_question, :url=>"/questions/ask_question?category="+params[:category] do |f|%>
-        <%= f.text_area :description, :class=>"askQuestion_textarea" %>
-        <span class="askQuestion_number">200</span>
-        <%= f.submit "发布", :class=>"askQuestion_btn", :id=>"askQuestion" %>
-      <%end%>
-      <a href="javascript:void(0)" class="askQuestion_up">收起</a>
-    </div>
-
+    <%=render :partial => '/questions/menu' %>
+    <%=render :partial => '/questions/ask_question' %>
     <div class="mc_menu_box">
       <%if @answered_questions.any?%>
         <% @answered_questions.each_with_index do |aq, index| %>

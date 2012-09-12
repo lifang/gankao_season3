@@ -40,6 +40,7 @@ class LoginsController < ApplicationController
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>user_info["figureurl_1"])
         Sun.first_login(@user.id)
+        cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -87,6 +88,7 @@ class LoginsController < ApplicationController
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["profile_image_url"])
           Sun.first_login(@user.id)
+          cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -130,6 +132,7 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["tinyurl"])
           Sun.first_login(@user.id)
+          cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token

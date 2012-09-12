@@ -43,15 +43,19 @@
     <div class="m_index">
       <div class="m_index_box">
         <div class="m_video">
-          <a href="javascript:void(0);" class="m_video_btn"></a>
+          <a href="javascript:void(0);" class="m_video_btn"></a>          
           <div id="mediaspace_wrapper" style="position: relative; width: 321px; height: 210px; ">
+            <embed src="/assets/index.swf"
+                   allowFullScreen="true" quality="high" width="321" height="210"
+                   align="middle" allowScriptAccess="always" type="application/x-shockwave-flash">              
+            </embed>
           </div>
         </div>
         <div class="index_btn">
           <h1>请进入您要进行备考的频道：</h1>
           <a href="/plans?category=<%= Category::TYPE[:GRADUATE] %>">考研英语频道<span id="span1">在线2000人</span></a>
-          <a href="/plans?category=<%= Category::TYPE[:CET6] %>">六级频道<span id="span2">在线2000人</span></a>
-          <a href="/plans?category=<%= Category::TYPE[:CET4] %>">四级频道<span id="span3">在线2000人</span></a>
+          <a href="/plans?category=<%= Category::TYPE[:CET6] %>">六级英语频道<span id="span2">在线2000人</span></a>
+          <a href="/plans?category=<%= Category::TYPE[:CET4] %>">四级英语频道<span id="span3">在线2000人</span></a>
         </div>
       </div>
     </div>
@@ -59,15 +63,5 @@
       <p>Copyright © 2011-2012 &nbsp;&nbsp;赶考网www.gankao.co&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
-    <!--<script type="text/javascript">
-      jwplayer('mediaspace_wrapper').setup({
-        'flashplayer': '/assets/jwplayer/player.swf',
-        'file': 'videos/2/5.mp4',
-        'controlbar': 'none',
-        'width': '321',
-        'height': '210',
-        'image': "videos/preview.jpg"
-      });
-    </script>-->
   </body>
 </html>
