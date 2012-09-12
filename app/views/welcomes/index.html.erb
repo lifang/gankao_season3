@@ -5,7 +5,6 @@
     <title>赶考</title>    
     <%= stylesheet_link_tag  "style" %>
     <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag "jwplayer/jwplayer.js" %>
 
     <!--[if lt IE 9]>
     <script src="/assets/html5.js"></script>
@@ -63,5 +62,6 @@
       <p>Copyright © 2011-2012 &nbsp;&nbsp;赶考网www.gankao.co&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
+    <%= render :partial => '/common/qq_online' %>
   </body>
 </html>

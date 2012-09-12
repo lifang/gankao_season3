@@ -624,11 +624,11 @@ nav li { float: left; margin: 0 20px;}
 }
 
 .guide_a a { float: right; color: #FFF; margin: 0 10px;}
-.guide01 { position: absolute; top: 143px; left: 401px; z-index:1000;}
-.guide02 { position: absolute; top: 151px; left: 427px; z-index:1000; display: none;}
-.guide03 { position: absolute; top: 240px; left: 161px; z-index:1000; display: none;}
-.guide04 { position: absolute; top: 132px; left: 251px; z-index:1000; display: none;}
-.guide05 { position: absolute; top: 131px; left: 358px; z-index:1000; display: none;}
+.guide01 { position: absolute; top: 60px; left: 240px; z-index:1000;}
+.guide02 { position: absolute; top: 70px; left: 269px; z-index:1000; display: none;}
+.guide03 { position: absolute; top: 108px; left: 0px; z-index:1000; display: none;}
+.guide04 { position: absolute; top: 0px; left: 90px; z-index:1000; display: none;}
+.guide05 { position: absolute; top: -1px; left: 196px; z-index:1000; display: none;}
 
 /*复习计划弹出层*/
 .mask {
@@ -1203,8 +1203,6 @@ nav li { float: left; margin: 0 20px;}
 .exam_next_a { float: right; color: #387580; padding: 5px;}
 
 
-/*main------------------------*/
-.main { padding: 10px 0; overflow: hidden;}
 .m_index { background: #f0efe0; padding: 10px 0;}
 .m_index_box {
     width: 940px;
@@ -1248,3 +1246,14 @@ nav li { float: left; margin: 0 20px;}
 .qrcode p { font-size: 12px; line-height: 24px; text-align: center;}
 .qrcode div { font-size: 0;}
 hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; border-top:1px solid #285d67;}
+
+/*online_qq----*/
+.online_qq {
+    width: 114px;
+	height: 91px;
+	position: fixed;
+	top: 200px;
+	right: -85px;
+	background: url(/assets/online_qq.png) no-repeat;
+}
+.online_qq p { margin: 50px 0 0 35px;}

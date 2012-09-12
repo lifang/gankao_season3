@@ -10,7 +10,7 @@ module Constant
   READ_TIME = {:DEFAULT => 0.5, :QUESTION => 30}
 
   SERVER_PATH = "http://localhost:3001"
-  BACK_SERVER_PATH = "http://localhost:3000"
+  BACK_SERVER_PATH = "http://manage.gankao.co"
 
   GANKAO_GRADUATE_PATH = "http://localhost:3000/graduate"
   GANKAO_CET4_PATH = "http://localhost:3000/cet_four"

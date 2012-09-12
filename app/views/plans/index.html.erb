@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <% if cookies[:first_login] == "1" %>
+    <% if cookies[:user_id] and cookies[:first_login] == "1" %>
       <%= render :partial=>'/common/gide_tab' %>
     <% end
     cookies.delete(:first_login)

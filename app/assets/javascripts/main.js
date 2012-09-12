@@ -252,22 +252,31 @@ $(function(){
 
 //复习计划页面功能介绍
 $(function(){
-	var doc_height = $(document).height();
-	//var doc_width = $(document).width();
-	var win_height = $(window).height();
-	var win_width = $(window).width();
+    if ($(".guideBox").length > 0) {
+        var doc_height = $(document).height();
+        $('.guideMask').show();
+        $('.guideMask').css('height',doc_height);
+        $(".main").css('position', 'relative');
+        var i= 1;
+        $(".guide_next").bind("click",function(){
+            $(this).parents(".guide0"+i).hide().next().show();
+            i++;
+        })
+        $(".guide_out").bind("click",function(){
+            $(this).parents(".guideBox").hide();
+            $(".main").css('position', '');
+            $('.guideMask').hide();
+        })
+    }
+})
 
-    $('.guideMask').css('height',doc_height);
-
-	var i= 1;
-	$(".guide_next").bind("click",function(){
-		    //alert($("this").parents(".guide01"));
-			$(this).parents(".guide0"+i).hide().next().show();
-			i++;
-	})
-	$(".guide_out").bind("click",function(){
-			$(this).parents(".guideBox").hide();
-			$('.guideMask').hide();
-	})
-
+/*在线QQ*/
+$(function(){
+    $('.online_qq').hover(
+  function () {
+    $(this).animate( { right: '0' } , 500 );
+  },
+  function () {
+    $(this).animate( { right: '-85px' } , 500 );
+  });
 })
