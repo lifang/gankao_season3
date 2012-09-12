@@ -37,9 +37,9 @@ module Oauth2Helper
   SINA_CLIENT_ID = "3987186573"
 
   #人人应用信息  wangguanhong@hotmail.com  comdo2010
-  RENREN_CLIENT_ID = "182012"
-  RENREN_API_KEY = "98a6ed88bccc409da12a8abe3ebec3c5"
-  RENREN_API_SECRET = "0d19833c0bc34a27a58786c07ef8d9fb"
+  RENREN_CLIENT_ID = "211598"
+  RENREN_API_KEY = "618f1027bc8146b69f2ffaabe299f685"
+  RENREN_API_SECRET = "85dc7b1dddbb4f17af4dd95dbafda820"
 
   #百度网应用信息
   BAIDU_CLIENT_ID = "251809"
@@ -51,7 +51,7 @@ module Oauth2Helper
   #请求openId
   REQUEST_OPENID_URL="https://graph.qq.com/oauth2.0/me"
   #请求详参
-  APPID="223448"
+  APPID="100302997"
   REQUEST_ACCESS_TOKEN={
     :response_type=>"token",
     :client_id=>APPID,
