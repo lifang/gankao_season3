@@ -26,8 +26,8 @@
                 <item id='8' is_pass='1' repeat_time='0' step='0'/>
                 <item id='100' is_pass='1' repeat_time='0' step='0'/>
                 <item id='101' is_pass='1' repeat_time='0' step='1'/>
-                <item id='102' is_pass='0' repeat_time='0' step='0'/>
-                <item id='103' is_pass='0' repeat_time='0' step='0'/>
+                <item id='102' is_pass='1' repeat_time='0' step='0'/>
+                <item id='103' is_pass='1' repeat_time='0' step='0'/>
                 <item id='104' is_pass='0' repeat_time='0' step='0'/>
             </part>
             <part status='0' type='2'>

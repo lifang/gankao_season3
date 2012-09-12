@@ -62,6 +62,7 @@ function show_tip(style){
 }
 
 function close_pop(){
+    $("#start_tab").hide();
     $(".plan_tab").html("");
     $(".mask").hide();
     //clearInterval(myTime.timeId);

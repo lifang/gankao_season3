@@ -13,8 +13,8 @@
               <a href="/similarities/<%= similarity.id %>/join?category=<%= @category.id %>" target="_blank"
               <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
                    onclick="return already_submit('<%= similarity.id %>','<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>
-                 class="model <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>finish
-                 <% elsif @exam_user_hash[similarity.id] %>underWay<% end %>">练习模式</a>
+                 class="model <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>underWay
+                 <% else %>finish<% end %>">练习模式</a>
               <!--<a href="#" class="model underWay">模考模式</a>-->
             </div>
           </div>

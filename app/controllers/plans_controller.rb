@@ -42,6 +42,7 @@ class PlansController < ApplicationController
       redirect_to "/plans?category=#{@category}"
     else
       @score = cookies[:info].split(",")
+      @user = User.find(cookies[:user_id].to_i) if cookies[:user_id]
     end 
   end
 

@@ -471,7 +471,7 @@ nav li { float: left; margin: 0 20px;}
 .words_func h2 { font-size: 16px;}
 .words_func .fyin { color: #FFF; font-size: 14px; padding: 0 10px;}
 
-.play_audio, .sign, .next, .reset {
+.play_audio, .next, .reset {
     width: 36px;
     height: 36px;
     display: block;
@@ -488,7 +488,7 @@ nav li { float: left; margin: 0 20px;}
     background: url(/assets/icon.png) no-repeat 0 -114px;
 }
 
-.sign {background: url(/assets/icon.png) no-repeat 0 -75px; float: left; cursor: pointer;}
+.sign {float: left; cursor: pointer; text-decoration: underline; color: #E4411E; line-height: 36px; }
 .next {background: url(/assets/icon.png) no-repeat 0 -37px; float: right; cursor: pointer;}
 
 
@@ -659,9 +659,9 @@ nav li { float: left; margin: 0 20px;}
 
 
 /*真题-----------------*/
-.year { display: inline-block;  margin-top: 5px; text-align: center;}
+.year { display: inline-block;  margin-top: 27px; text-align: center;}
 .month { display: inline-block; font-size: 24px;}
-.model { display: block; color: #525161; height: 24px; line-height: 24px; padding: 0 20px; font-size: 16px;}
+.model { display: block; color: #525161; height: 24px; line-height: 24px; padding: 0 20px; font-size: 14px;}
 .model:hover { text-decoration: underline;}
 .finish { background: url(/assets/icon03.png) no-repeat 90px 1px;}
 .underWay { background: url(/assets/icon03.png) no-repeat 90px -19px;}
