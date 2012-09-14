@@ -3,6 +3,7 @@ module Oauth2Helper
   require 'net/http'
   require "uri"
   require 'openssl'
+  require 'net/http/post/multipart'
 
   #支付宝
   PAGE_WAY="https://www.alipay.com/cooperate/gateway.do"
@@ -59,7 +60,7 @@ module Oauth2Helper
     :response_type=>"token",
     :client_id=>APPID,
     :redirect_uri=>"#{Constant::SERVER_PATH}/logins/respond_qq",
-    :scope=>"get_user_info,add_topic",
+    :scope=>"get_user_info,add_topic,add_pic_t,add_share,add_t",
     :state=>"1"
   }
 
@@ -68,7 +69,7 @@ module Oauth2Helper
     :response_type=>"token",
     :client_id=>APPID,
     :redirect_uri=>"#{Constant::SERVER_PATH}/logins/call_back_qq",
-    :scope=>"get_user_info,add_topic",
+    :scope=>"get_user_info,add_topic,add_pic_t,add_share,add_t",
     :state=>"1"
   }
 
@@ -109,8 +110,10 @@ module Oauth2Helper
   def create_get_http(url,route)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    if uri.port==443
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
     request= Net::HTTP::Get.new(route)
     back_res =http.request(request)
     return JSON back_res.body
@@ -166,15 +169,23 @@ module Oauth2Helper
   #新浪微博发送微博
   def sina_send_message(access_token,message)
     response =create_post_http("https://api.weibo.com","/2/statuses/update.json",{"access_token" =>access_token, "status" => message})
-#    file=File.open("#{Rails.root}/public#{Constant::RENREN_IMG}", "rb")
-#    img=file.readlines
-#    file.close
-#    share_log("sina share",img)
-    #    response =create_post_http("https://api.weibo.com","/2/statuses/upload.json",{"access_token" =>access_token, "status" => message,"pic"=>img})
-
   end
-  #
-  #END -------新浪微博API----------
+
+  # 带图片微博
+  def sina_send_pic(access_token,message,img_url)
+    url = URI.parse("https://api.weibo.com/2/statuses/upload.json")
+    File.open("#{Rails.root}/public/#{img_url}") do |jpg|
+      req = Net::HTTP::Post::Multipart.new url.path,{"access_token" =>access_token, "status" => message,"pic" => UploadIO.new(jpg, "image/jpeg", "image.jpg")}
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      info= http.request(req).body
+#      share_log("renren share", response.map{|k,v|  "#{k}=#{v}"}.join('&'))
+#      share_log("sina share", info.to_s)
+      return info
+    end
+   
+  end
 
   #人人获取用户信息
   def renren_get_user(access_token)
@@ -187,10 +198,8 @@ module Oauth2Helper
     other_parms={:type=>"6",:url=>"http://www.gankao.co"} if other_parms.nil?
     query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:v => '1.0'}
     query.merge!(other_parms)
-    response=create_post_http("http://api.renren.com","/restserver.do",sig_renren(query))
-    log=""
-    response.each{|k,v| log += "#{k}=#{v}"}
-    share_log("renren share",log)
+    response=create_post_http("http://api.renren.com","/restserver.do",sig_renren(query)) 
+    share_log("renren share", response.map{|k,v|  "#{k}=#{v}"}.join('&'))
     return response
   end
 
@@ -210,6 +219,14 @@ module Oauth2Helper
     share_log("qq share",data)
   end
 
+  #qq分享
+  def send_share_qq(share_to,user,other_parms=nil)
+    send_parms={:access_token=>user.access_token,:openid=>user.open_id,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json"}
+    send_parms.merge!(other_parms)
+    info=create_post_http("https://graph.qq.com",share_to,send_parms)
+    share_log("qq share",info)
+    return info
+  end
 
   #根据用户类型发送消息
   def send_message(message,user_id)

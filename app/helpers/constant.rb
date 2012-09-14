@@ -21,11 +21,23 @@ module Constant
     :GRADUATE => '2013-01-05'
   }
   #分享图片路径及大小
-  IMG_NAME_SIZE="/gankao_share.png&width=500&height=385"
-  SHARE_WORDS="我正在使用新版赶考网(http://www.gankao.co)复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
+  IMG_NAME_SIZE="/share.png&width=500&height=385"
+  SHARE_WORDS="我正在使用新版（http://www.gankao.co）赶考网复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
+  QQ_WORDS="我正在使用新版赶考网复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
+  SUMMARY="新版赶考包括四级、六级和考研英语三个频道，有历年真题和详细解析，听力、词汇、阅读、写作资料齐全；最重要的是，新版赶考可以测试出你的当前英文水准，并基于此为你定制属于自己的复习计划，怎么样？很酷吧！"
+  SHARE_IMG="share.png"
+  QQ_IMG="100.jpg"
+  COMMENT="新版赶考（http://www.gankao.co），非常给力！！"
+  SHARE_TITLE="全新赶考网闪亮上线，英语在线备考从此无忧。"
 
-  RENREN_IMG="/gankao_share.png"
 
+  #  人人分享配置图片
+  RENREN_IMG={:LOGIN=>{:type=>2,:ugc_id=>6525229578,:user_id=>600942099},2=>{:type=>2,:ugc_id=>6525711626,:user_id=>600942099},
+    3=>{:type=>2,:ugc_id=>6525711625,:user_id=>600942099},4=>{:type=>2,:ugc_id=>6525711624,:user_id=>600942099}
+  }
+
+  RENREN_SHARE={2=>{:type=>2,:ugc_id=>6336084872,:user_id=>600942099},3=>{:type=>2,:ugc_id=>6336082558,:user_id=>601408987},
+    4=>{:type=>2,:ugc_id=>6336077693,:user_id=>601411057}}
 
   #考试时间
   EXAM_DATE = {:CET4 => '2012-12-22', :CET6 => '2012-12-22', :GRADUATE => '2013-01-05'}
