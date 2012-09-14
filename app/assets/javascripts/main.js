@@ -88,29 +88,35 @@ $(function(){
 
 
 function check_vip(category){
+    $("#pay_charge_vip").attr("target", "_blank");
     $('.pay_close').trigger('click');
-    $.ajax({
-        async:true,
-        dataType:'json',
-        type:'post',
-        url:"/logins/check_vip",
-        data:{
-            category:category
-        },
-        success : function(data) {
-            if(data.vip){
-                show_charge('.tishi_tab','.tishi_close');
-                $(".tishi_close").bind('click',function(){
-                    over_pay();
-                })
-                window.open("/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html(),
-                    '_blank','height=750,width=1000,left=200,top=50');
-            }else{
-                var str = (data.time == null || data.time == "") ? "" : "，截止日期是"+data.time;
-                tishi_alert("您已是vip用户"+str);
-            }
-        }
-    });
+    show_charge('.tishi_tab','.tishi_close');
+    $(".tishi_close").bind('click',function(){
+        over_pay();
+    })
+    $("#pay_charge_vip").attr("href", "/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html());
+//    $.ajax({
+//        async:true,
+//        dataType:'json',
+//        type:'post',
+//        url:"/logins/check_vip",
+//        data:{
+//            category:category
+//        },
+//        success : function(data) {
+//            if(data.vip){
+//                show_charge('.tishi_tab','.tishi_close');
+//                $(".tishi_close").bind('click',function(){
+//                    over_pay();
+//                })
+//                window.open("/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html(),
+//                    '_blank','height=750,width=1000,left=200,top=50');
+//            }else{
+//                var str = (data.time == null || data.time == "") ? "" : "，截止日期是"+data.time;
+//                tishi_alert("您已是vip用户"+str);
+//            }
+//        }
+//    });
 }
 
 //带遮罩层的弹出层
@@ -179,6 +185,7 @@ function sun_charge(){
     }
     $('#close_sun').trigger('click');
     show_charge('#tab_sun','#tab_close');
+    $("#sunpay_a_tow").attr("target", "_blank");
     $("#sunpay_a_tow").attr("href","/logins/alipay_sun?category="+$("#sun_category").val()+"&total_fee="+sun_num)
 }
 
@@ -273,10 +280,46 @@ $(function(){
 /*在线QQ*/
 $(function(){
     $('.online_qq').hover(
-  function () {
-    $(this).animate( { right: '0' } , 500 );
-  },
-  function () {
-    $(this).animate( { right: '-85px' } , 500 );
-  });
+        function () {
+            $(this).animate( {
+                right: '0'
+            } , 500 );
+        },
+        function () {
+            $(this).animate( {
+                right: '-85px'
+            } , 500 );
+        });
+})
+
+//nav 单行滚动
+function AutoScroll(obj){
+    $(obj).animate({
+        marginTop:"-42px"
+    },500,function(){
+        $(this).css({
+            marginTop:"0px"
+        }).find("span:first").appendTo(this);
+    });
+}
+$(document).ready(function(){
+    setInterval('AutoScroll(".scrollAD")',10000)
+});
+
+// right_ad自动轮换内容
+$(document).ready(function(){
+    var objStr = ".change ul li";
+    $(objStr + ":not(:first)").css("display","none");
+    setInterval(function(){
+        if(
+            $(objStr + ":last").is(":visible")){
+            $(objStr + ":first").fadeIn("slow").addClass("in");
+            $(objStr + ":last").hide()
+        }
+        else{
+            $(objStr + ":visible").addClass("in");
+            $(objStr + ".in").next().fadeIn("slow");
+            $(objStr + ".in").hide().removeClass("in")
+        }
+    },4000) //每3秒钟切换
 })

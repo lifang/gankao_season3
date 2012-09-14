@@ -39,6 +39,9 @@ function checkIn(category){
         url:"/users/check_in?category="+category,
         type:'post',
         success:function(data){
+            if (data.message != "你今天已经签过到了哦~~~") {
+                $(".addOne").fadeIn("slow").animate({top:'0px'},800).fadeOut("slow");
+            }
             tishi_alert(data.message);
             $(".s_sun").html(data.num);
             $("#checkIn_days").html(data.days);

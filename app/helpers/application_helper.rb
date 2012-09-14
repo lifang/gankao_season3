@@ -17,12 +17,12 @@ module ApplicationHelper
   #判断是否vip、试用用户或普通用户
   def user_role?(user_id)
     unless cookies[:user_id].nil?
-        cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
-        orders = Order.find(:all, :conditions => ["status = #{Order::STATUS[:NOMAL]} and user_id = ?", user_id.to_i])
-        orders.each do |order|
-          this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
-          cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
-        end unless orders.blank?
+      cookies[:user_role] = {:value => "", :path => "/", :secure  => false}
+      orders = Order.find(:all, :conditions => ["status = #{Order::STATUS[:NOMAL]} and user_id = ?", user_id.to_i])
+      orders.each do |order|
+        this_order = "#{order.category_id}=#{Order::USER_ORDER[:VIP]}"
+        cookies[:user_role] = cookies[:user_role].empty? ? this_order : (cookies[:user_role] + "&" + this_order)
+      end unless orders.blank?
     end
   end
 
@@ -86,13 +86,13 @@ module ApplicationHelper
     case category_id.to_i
     when Category::TYPE[:CET4]
       count_down[0] = "四级"
-      count_down[1] = ((Constant::EXAM_DATE[:CET4].to_datetime.to_i-Time.now.to_i)/(3600*24)).round
+      count_down[1] = ((Constant::EXAM_DATE[:CET4].to_datetime.to_i-Time.now.to_date.to_datetime.to_i)/(3600*24)).round
     when Category::TYPE[:CET6]
       count_down[0] = "六级"
-      count_down[1] = ((Constant::EXAM_DATE[:CET6].to_datetime.to_i-Time.now.to_i)/(3600*24)).round
+      count_down[1] = ((Constant::EXAM_DATE[:CET6].to_datetime.to_i-Time.now.to_date.to_datetime.to_i)/(3600*24)).round
     when Category::TYPE[:GRADUATE]
       count_down[0] = "考研"
-      count_down[1] = ((Constant::EXAM_DATE[:GRADUATE].to_datetime.to_i-Time.now.to_i)/(3600*24)).round
+      count_down[1] = ((Constant::EXAM_DATE[:GRADUATE].to_datetime.to_i-Time.now.to_date.to_datetime.to_i)/(3600*24)).round
     end
     return count_down
   end
@@ -112,7 +112,8 @@ module ApplicationHelper
           current_score = user_score_info.show_user_score(current_package, user_plan.days)
           current_percent = ((current_package.to_f/user_plan.days)*100).round
           current_percent = current_percent < 5 ? 5 : current_percent
-          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{pass_score}", "#{current_score}"]
+          end_score = user_score_info.target_score < pass_score ? pass_score : user_score_info.target_score
+          score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{end_score}", "#{current_score}"]
         end
       end
     end
@@ -123,13 +124,19 @@ module ApplicationHelper
   def signin_days(signin_days,category_id)
     hash=Hash.new()
     hash=signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
-    return hash[Category::FLAG[category_id.to_i]].to_i
+    user_sun=Sun.find_by_sql("select id from suns where category_id=#{category_id.to_i} and types=#{Sun::TYPES[:SIGNIN]}
+    and user_id=#{cookies[:user_id].to_i} and TO_DAYS(NOW())-1=TO_DAYS(created_at)")[0]
+    if user_sun
+      return hash[Category::FLAG[category_id.to_i]].to_i
+    else
+      return 0
+    end    
   end
 
   def show_focus
     if cookies[:user_id] and Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
       types=#{Sun::TYPES[:LOGIN_MORE]} and category_id=#{params[:category].to_i}")[0].nil? and
-       user_info and user_info[:login_times].to_i >3
+        user_info and user_info[:login_times].to_i >3
       return true
     else
       return false

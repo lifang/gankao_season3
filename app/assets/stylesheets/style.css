@@ -7,6 +7,7 @@ li { list-style: none;}
 a { text-decoration: none;}
 button {font-family: "微软雅黑"; cursor: pointer; border: none;}
 input {font-family: "微软雅黑";}
+input[type="submit"] { border: none; cursor: pointer;}
 img { border: none;}
 .clear { clear: both;}
 .orange { color: #e4411e;}
@@ -107,16 +108,20 @@ img { border: none;}
 
 
 /*顶部用户登录信息-----------------*/
-.login_info { width: 350px; height: 60px; background: #e4e3ce; position: absolute; top: 0; right: 0;}
+.login_info { width: 360px; height: 60px; background: #e4e3ce; position: absolute; top: 0; right: 0;}
 .bb_radius {
     border-bottom-right-radius: 0.6em;
     border-bottom-left-radius: 0.6em;
 }
-.info_left { float: left; width: 205px;}
+.info_left { float: left; width: 215px;}
 .info_left a { text-decoration: underline;}
-.info_left p { float: left; width: 130px; line-height: 18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.info_left p { float: left; width: 115px; height: 18px; line-height: 18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .user_pic { float: left; margin: 7px 15px 0; _margin: 7px 7px 0;}
 .user_pic img {width: 45px;height:45px;}
+.user_name {
+    padding-left: 25px;
+    background: url(/assets/V.png) no-repeat 0 5px;
+}
 .s_sun {
     display: inline-block;
     height: 17px;
@@ -276,7 +281,7 @@ nav li { float: left; margin: 0 20px;}
 .mc_box { padding: 10px; overflow: hidden;}
 
 /*----广告----*/
-.right_ad { height: 240px; background: #E4E3CE; padding: 0px 2px 0px 3px;  margin-bottom: 5px;}
+.right_ad { width: 125px; height: 300px; overflow: hidden; background: #E4E3CE;}
 
 
 .recommend {
@@ -297,9 +302,10 @@ nav li { float: left; margin: 0 20px;}
 
 
 /*复习计划---------------*/
-.v_message { color: #FFF; font-size: 18px;}
-.v_message a { float: right;}
-.v_message strong { font-weight: bolder; color: #E4411E; text-shadow: 0px 0px 1px #FFFFFF;}
+
+.scrollAD span { color: #FFF; font-size: 18px; display: block;}
+.scrollAD a { float: right;}
+.scrollAD strong { font-weight: bolder; color: #E4411E; text-shadow: 0px 0px 1px #FFFFFF;}
 
 .plan_list {
     width: 230px;
@@ -472,7 +478,7 @@ nav li { float: left; margin: 0 20px;}
 .words_func h2 { font-size: 16px;}
 .words_func .fyin { color: #FFF; font-size: 14px; padding: 0 10px;}
 
-.play_audio, .next, .reset {
+.play_audio, .next, .reset, .back {
     width: 36px;
     height: 36px;
     display: block;
@@ -487,6 +493,13 @@ nav li { float: left; margin: 0 20px;}
     top: 5px;
     right: 10px;
     background: url(/assets/icon.png) no-repeat 0 -114px;
+}
+
+.back {
+	position: absolute;
+	top: 5px;
+	right: 60px;
+	background: url(/assets/icon.png) no-repeat 0 -152px;
 }
 
 .sign {float: left; cursor: pointer; text-decoration: underline; color: #E4411E; line-height: 36px; }
@@ -517,6 +530,21 @@ nav li { float: left; margin: 0 20px;}
 
 .trueFalse { width: 34px; height: 34px; margin: 5px;}
 
+.confirm {
+    height: 32px;
+    padding: 0 15px;
+    border: none;
+    line-height: 32px;
+    background: #397580;
+    box-shadow: 1px 1px 1px rgba(00,000,000,0.3);
+    border-radius: 0.6em;
+    display: block;
+    float: right;
+    color: #fff;
+}
+
+.center_btn { width: 100px; margin: 0 auto; text-align: center;}
+.center_btn button { width: 100px; height: 32px; font-size: 16px;}
 
 .words_con { padding: 5px 10px;}
 .words_ul li { height: 45px; margin: 10px 0;}
@@ -639,12 +667,12 @@ nav li { float: left; margin: 0 20px;}
     z-index: 100;
 }
 .guideMask {
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: url(/assets/guideMask_bg.png) repeat;
-	z-index: 100;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url(/assets/guideMask_bg.png) repeat;
+    z-index: 100;
 }
 .tip_mask {
     width: 530px;
@@ -686,19 +714,19 @@ nav li { float: left; margin: 0 20px;}
 
 .mc_menu li {
     width: 99px;
-	height: 35px;
-	overflow: hidden;
-	margin: 5px 0;
-	line-height: 35px;
-	text-align: center;
-	color: #e4e3ce;
-	float: left;
-	cursor: pointer;
-	border-left: 1px #c32908 solid;
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
+    height: 35px;
+    overflow: hidden;
+    margin: 5px 0;
+    line-height: 35px;
+    text-align: center;
+    color: #e4e3ce;
+    float: left;
+    cursor: pointer;
+    border-left: 1px #c32908 solid;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
 }
 .mc_menu li.hover, .mc_menu li:hover {
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
 }
 .mc_menu li a {
     color: #fff;
@@ -707,19 +735,19 @@ nav li { float: left; margin: 0 20px;}
 /*----------------技巧专用s----------------*/
 .mc_menu00 li {
     width: 75px;
-	height: 35px;
-	overflow: hidden;
-	margin: 5px 0;
-	line-height: 35px;
-	text-align: center;
-	color: #e4e3ce;
-	float: left;
-	cursor: pointer;
-	border-left: 1px #c32908 solid;
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
+    height: 35px;
+    overflow: hidden;
+    margin: 5px 0;
+    line-height: 35px;
+    text-align: center;
+    color: #e4e3ce;
+    float: left;
+    cursor: pointer;
+    border-left: 1px #c32908 solid;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
 }
 .mc_menu00 li.hover, .mc_menu00 li:hover {
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
 }
 .mc_menu00 li a {
     color: #fff;
@@ -747,50 +775,50 @@ nav li { float: left; margin: 0 20px;}
 .askQuestion { overflow: hidden; padding: 0 112px 0 10px; position: relative;}
 .askQuestion_span {
     width: 420px;
-	height: 28px;
-	display: block;
-	text-indent: -999px;
-	overflow: hidden;
-	background: url(/assets/askQuestion_span_bg.png) no-repeat;
-	border: 1px #cfceb7 solid;
-	border-radius: 0.6em;
-	cursor: text;
-	position: absolute;
-	top: 0;
-	left: 10px;
+    height: 28px;
+    display: block;
+    text-indent: -999px;
+    overflow: hidden;
+    background: url(/assets/askQuestion_span_bg.png) no-repeat;
+    border: 1px #cfceb7 solid;
+    border-radius: 0.6em;
+    cursor: text;
+    position: absolute;
+    top: 0;
+    left: 10px;
 }
 .askQuestion_textarea {
     width: 410px;
-	display: block;
-	height: 28px;
-	border: 1px #C2B19F solid;
-	line-height: 28px;
-	border-radius: 0.6em;
-	padding: 0 5px;
-	font-size: 12px;
-	color: #387580;
-	font-family: "微软雅黑";
-	margin-bottom: 10px;
+    display: block;
+    height: 28px;
+    border: 1px #C2B19F solid;
+    line-height: 28px;
+    border-radius: 0.6em;
+    padding: 0 5px;
+    font-size: 12px;
+    color: #387580;
+    font-family: "微软雅黑";
+    margin-bottom: 10px;
 }
 .askQuestion_btn {
     width: 45px;
-	height: 20px;
-	line-height: 20px;
-	background: #525161;
-	text-align: center;
-	color: #e4e3ce;
-	border-radius: 0.2em;
-	display: block;
-	font-size: 11px;
-	float: right;
-	margin: 0 10px;
-	display: none;
+    height: 20px;
+    line-height: 20px;
+    background: #525161;
+    text-align: center;
+    color: #e4e3ce;
+    border-radius: 0.2em;
+    display: block;
+    font-size: 11px;
+    float: right;
+    margin: 0 10px;
+    display: none;
 }
 .askQuestion_up {
-	float: right;
-	line-height: 20px;
-	color: #666;
-	font-size: 11px;
+    float: right;
+    line-height: 20px;
+    color: #666;
+    font-size: 11px;
     display: none;
 }
 .askQuestion_number { color: #C2B19F; position:absolute; right: 114px; bottom: 32px; display: none;}
@@ -975,7 +1003,7 @@ nav li { float: left; margin: 0 20px;}
 .flag { background: url(/assets/flag.png) no-repeat; }
 .in_true { background: url(/assets/in_true.png) no-repeat;}
 
-.pro_textarea { width: 300px; height: 100px; padding: 10px; margin-left: 100px;}
+.pro_textarea { width: 300px; height: 100px; padding: 10px; margin-left: 100px;font-size: 12px; color: #525161;}
 .pro_btn { display: block; margin: 20px 0 10px 330px; padding: 2px 10px; background: #e4411e; color: #e4e3ce;}
 .other_h { font-size: 14px; line-height: 28px; color: #387580;}
 
@@ -1018,11 +1046,17 @@ nav li { float: left; margin: 0 20px;}
 .pay_way_one { background: url(/assets/pay_h.jpg) no-repeat 0 0;}
 .pay_way_two { background: url(/assets/pay_h.jpg) no-repeat 0 -30px;}
 
-.pay_con_one, .pay_con_two { background: #38747f; border-radius: 0.6em; border: 2px  #FFFFFF solid; position: relative;}
-.pay_con_one { height: 160px;}
-.pay_con_two { height: 100px;}
-.pcon_bg { position: absolute; top: 25px; left: 10px;}
-.pay_a_one, .pay_a_tow { width: 120px; height: 35px; display: block; position: absolute; }
+.pay_con_one, .pay_con_two { border-radius: 0.6em; border: 2px  #FFFFFF solid; position: relative;}
+.pay_con_one { height: 160px; background: #38747f url(/assets/zfb_bg.jpg) no-repeat 10px 26px;}
+.pay_con_two { height: 100px; background: #38747f url(/assets/sqm_bg.jpg) no-repeat 10px 26px;}
+.paySun {
+    border-radius: 0.6em;
+    border: 2px  #FFFFFF solid;
+    position: relative;
+    height: 100px;
+    background: #38747f url(/assets/paySun_bg.jpg) no-repeat 11px 24px;
+}
+.pay_a_one, .pay_a_tow { width: 120px; height: 35px; display: block; position: absolute;z-index: 100;}
 .pay_a_one {top: 66px; right: 28px;}
 .pay_a_tow { top: 38px; right: 28px;}
 
@@ -1206,37 +1240,37 @@ nav li { float: left; margin: 0 20px;}
 .m_index { background: #f0efe0; padding: 10px 0;}
 .m_index_box {
     width: 940px;
-	height: 540px;
-	margin: 0 auto;
-	background: url(/assets/m_index_bg.png) no-repeat 0 0;
-	position: relative;
+    height: 540px;
+    margin: 0 auto;
+    background: url(/assets/m_index_bg.png) no-repeat 0 0;
+    position: relative;
 }
 .m_video { width: 326px; height: 212px; margin: 146px 0 0 63px; _margin: 146px 0 0 31px; float: left; }
 .m_video_btn {
     width: 162px;
-	height: 162px;
-	display: block;
-	background: url(/assets/m_video_btn.png) no-repeat;
-	position: absolute;
-	top: 168px;
-	left: 143px;
+    height: 162px;
+    display: block;
+    background: url(/assets/m_video_btn.png) no-repeat;
+    position: absolute;
+    top: 168px;
+    left: 143px;
 
 }
 .index_text { margin-left: 65px; float: left;}
 .index_btn { position: absolute; right: 5px; bottom: 127px; overflow: hidden; _width: 500px; _right: 12px;}
 .index_btn h1 { font-size: 16px; line-height: 36px; padding-left: 5px;}
 .index_btn a {
-	color: #e7debe;
-	background: url(/assets/index_btn.png) no-repeat 0 -68px;
-	margin: 0 2px;
-	text-align: center;
-	padding: 5px;
-	font-size: 22px;
-	font-weight: bolder;
-	display: inline-block;
-	position: relative;
-	width: 155px;
-	height: 52px;
+    color: #e7debe;
+    background: url(/assets/index_btn.png) no-repeat 0 -68px;
+    margin: 0 2px;
+    text-align: center;
+    padding: 5px;
+    font-size: 22px;
+    font-weight: bolder;
+    display: inline-block;
+    position: relative;
+    width: 155px;
+    height: 52px;
 }
 .index_btn a:hover { background: url(/assets/index_btn.png) no-repeat 0 0;}
 .index_btn a span { position: absolute; right: 15px; bottom: 10px; font-size: 10px; font-weight:100;}
@@ -1249,10 +1283,10 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 
 .online_qq {
     width: 114px;
-	height: 91px;
-	position: fixed;
-	top: 200px;
-	right: -85px;
-	background: url(/assets/online_qq.png) no-repeat;
+    height: 91px;
+    position: fixed;
+    top: 200px;
+    right: -85px;
+    background: url(/assets/online_qq.png) no-repeat;
 }
 .online_qq p { margin: 50px 0 0 35px;}

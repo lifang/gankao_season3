@@ -10,7 +10,7 @@
         <h1><%= @skill.skill_title %></h1>
         <div class="singlemeta center">
           <span>分类： <%= params[:category].to_i == Category::TYPE[:GRADUATE] ?
-                Skill::GRADUATE_SKILL_NAME[@skill.types] : Skill::CET_SKILL_NAME[@skill.types]%> %></span>
+                Skill::GRADUATE_SKILL_NAME[@skill.types] : Skill::CET_SKILL_NAME[@skill.types] %></span>
           <span>时间：<%= @skill.created_at.strftime("%Y-%m-%d %H:%M") %></span><span>作者: <%= @skill.user.name %></span></div>
         <input type="hidden" value="<%= category_id %>" id="category" />
         <input type="hidden" value="<%= @skill.types %>" id="con_t" />

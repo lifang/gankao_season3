@@ -3,6 +3,7 @@ class LearnController < ApplicationController
   layout 'main'
   require 'rexml/document'
   include REXML
+  include Oauth2Helper
   before_filter :sign?
 
   respond_to :html, :xml, :json, :js
@@ -11,7 +12,7 @@ class LearnController < ApplicationController
     plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
     cookies[:can_open] = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
-    if cookies[:can_open]
+    if is_vip?(params[:category]) or cookies[:can_open]
       cookies[:category] = params[:category]
       cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
       items = params[:items].split(",") if params[:items]
@@ -26,7 +27,7 @@ class LearnController < ApplicationController
       else
         @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
       end
-      @items_str = items.join(",")      
+      @items_str = items.join(",")
       cookies[:current_id] = items[0].split("-")[0] if items[0]
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -187,8 +188,7 @@ class LearnController < ApplicationController
         elem = "#{cookies[:current_id]}-1-#{step}"
         rewrite_xml_item(plan, xml, xpath, nil, 1, step)
       end
-    end
-    if params[:flag] == "false"
+    else
       elem = "#{cookies[:current_id]}-2-#{step}"
       rewrite_xml_item(plan, xml, xpath, nil, 2, nil)
     end
@@ -283,9 +283,12 @@ class LearnController < ApplicationController
     ids = params[:ids].split(",")
     type = cookies[:type].to_i
     xpath = "//part[@type='#{type}']//item[@id='#{cookies[:current_id]}']"
+    node = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath]
+    current_item = "#{node.attributes['id']}-#{node.attributes['repeat_time']}-#{node.attributes['step']}"
+
     rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     ids = ids - [cookies[:current_id]]
-    items = items - [items[0]]
+    items = items - [current_item]
     pass_status(plan, xml, "part") if items.blank?
     @current_step = params[:current_step]
     @items_str = items.join(",")
@@ -321,12 +324,12 @@ class LearnController < ApplicationController
     node = xml.elements[xpath]
     if node.nil?
       pass_status(plan, xml, "all")
-      send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
-        cookies[:user_id].to_i)
       if cookies[:is_new] == "plan"
         plan.update_plan
         ActionLog.study_plan_log(cookies[:user_id].to_i)
-      end
+        send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
+        cookies[:user_id].to_i)
+      end      
       return true
     end
     return false
@@ -354,7 +357,7 @@ class LearnController < ApplicationController
   end
 
   def sentence_words(str)
-    return str.gsub(/"/," ").gsub(/:/," ").gsub(/;/," ").gsub(/\?/," ").gsub(/!/," ").gsub(/,/," ").gsub(/\./," ").gsub(/  /," ").split(" ")
+    return str.gsub(/"/," ").split(" ")
   end
 
   #----Start-------听写过程--------Start----

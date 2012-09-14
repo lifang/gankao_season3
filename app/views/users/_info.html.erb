@@ -2,11 +2,11 @@
   <div  class="login_info bb_radius">
     <div class="info_left">
       <div class="user_pic"><img src="<%= info[:img_url].nil? ? User::DEFAULT_COVER : info[:img_url] %>" /></div>
-      <p id="name"><%= info[:name] %></p>
+      <p id="name" <% if is_vip?(params[:category_id]) %>class="user_name"<% end %>><%= info[:name] %></p>
       <p id="schoolName"><%= info[:school] %></p>
       <p><% if params[:category] %><span class="s_sun"><%= info[:num] %></span><% end %>
-        <% if cookies[:user_id] and is_nomal?(params[:category]) %>
-          <a href="#" onclick="show_charge('#payment_sun','#close_sun')">获得小太阳</a>
+        <% if params[:category] and cookies[:user_id] and is_nomal?(params[:category]) %>
+          <a href="javascript:void(0);" onclick="show_charge('#payment_sun','#close_sun')">获得小太阳</a>
         <% end %>
       </p>
     </div>
