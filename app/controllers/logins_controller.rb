@@ -32,8 +32,8 @@ class LoginsController < ApplicationController
       expires_in=meters[1].split("=")[1].to_i
       openid=params[:open_id]
       unless openid
-        redirect_to "/"
-        return false
+        flash[:share_notice]="网络繁忙，稍后重试"
+        throw_error
       end
       @user= User.find_by_open_id(openid)
       if @user.nil?
@@ -44,8 +44,9 @@ class LoginsController < ApplicationController
         @user=User.create(:code_type=>'qq',:name=>user_info["nickname"], :username=>user_info["nickname"],
           :open_id=>openid , :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>user_info["figureurl_1"])
         Sun.first_login(@user.id)
+        other_parms={:title=>Constant::QQ_WORDS,:url=>Constant::SERVER_PATH,:comment=>Constant::COMMENT,:summary=>Constant::SUMMARY,:images=>"#{Constant::SERVER_PATH+"/"+Constant::QQ_IMG}",:site=>Constant::SERVER_PATH}
+        send_share_qq("/share/add_share",@user,other_parms)
         cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
-        send_message_qq(Constant::SHARE_WORDS,@user,{:richtype=>1,:richval=>"url=#{Constant::SERVER_PATH+Constant::IMG_NAME_SIZE}"})
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -53,6 +54,7 @@ class LoginsController < ApplicationController
         end
       end
       @user.increment!(:login_times)
+      #       send_message_qq(Constant::SHARE_WORDS,@user,{:richtype=>1,:richval=>"url=#{Constant::SERVER_PATH+Constant::IMG_NAME_SIZE}"})
       cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
@@ -71,7 +73,6 @@ class LoginsController < ApplicationController
 
 
   def request_sina
-    cookies.delete(:oauth2_url_generate)
     redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_sina&response_type=token"
   end
 
@@ -85,8 +86,8 @@ class LoginsController < ApplicationController
         expires_in=params[:expires_in].to_i
         response = sina_get_user(access_token,uid)
         unless response["id"]
-          redirect_to "/"
-          return false
+          flash[:share_notice]="网络繁忙，稍后重试"
+          throw_error
         end
         @user=User.find_by_code_id_and_code_type("#{response["id"]}","sina")
         if @user.nil?
@@ -94,15 +95,15 @@ class LoginsController < ApplicationController
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["profile_image_url"])
           Sun.first_login(@user.id)
+          #          sina_send_message(@user.access_token,Constant::SHARE_WORDS)
+          sina_send_pic(@user.access_token,Constant::SHARE_WORDS,Constant::SHARE_IMG)
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
-          sina_send_message(@user.access_token,Constant::SHARE_WORDS)
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
             @user.update_attributes(:access_token=>access_token,:end_time=>Time.now+expires_in.seconds)
           end
         end
-        
         @user.increment!(:login_times)
         user_role?(@user.id)
         cookies[:first] = {:value => "1", :path => "/", :secure  => false}
@@ -121,6 +122,7 @@ class LoginsController < ApplicationController
 
 
   def request_renren
+    cookies.delete(:oauth2_url_generate)
     redirect_to "http://graph.renren.com/oauth/authorize?response_type=token&client_id=#{Oauth2Helper::RENREN_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/respond_renren"
   end
 
@@ -132,16 +134,17 @@ class LoginsController < ApplicationController
         expires_in=params[:expires_in].to_i
         response = renren_get_user(access_token)[0]
         unless response["uid"]
-          redirect_to "/"
-          return false
+          flash[:share_notice]="网络繁忙，稍后重试"
+          throw_error
         end
         @user=User.find_by_code_id_and_code_type("#{response["uid"]}","renren")
         if @user.nil?
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["tinyurl"])
           Sun.first_login(@user.id)
+          renren_send_message(@user.access_token,Constant::SHARE_WORDS,Constant::RENREN_IMG[:LOGIN])
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
-          renren_send_message(@user.access_token,Constant::SHARE_WORDS,{:type=>2,:ugc_id=>6525229578,:user_id=>600942099})
+          #          renren_send_message(@user.access_token,Constant::SHARE_WORDS,{:type=>2,:ugc_id=>6525229578,:user_id=>600942099})
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -289,7 +292,8 @@ class LoginsController < ApplicationController
         #发送微博
         access_token=params[:access_token]
         content=cookies[:sharecontent].split('@!')
-        ret = sina_send_message(access_token, content[1])
+        #        ret = sina_send_message(access_token, content[1])
+        ret =sina_send_pic(access_token,content[1],"#{content[0].to_i}.png")
         type=Sun::TYPES[:SINASHARE].to_i
         @return_message = "微博发送失败，网络繁忙，请稍后再试" if ret["error_code"]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
@@ -312,7 +316,7 @@ class LoginsController < ApplicationController
         #发送微博
         access_token=params[:access_token]
         content=cookies[:sharecontent].split('@!')
-        ret = renren_send_message(access_token, content[1])
+        ret = renren_send_message(access_token, content[1],Constant::RENREN_IMG[content[0].to_i])
         type=Sun::TYPES[:RENRENSHARE].to_i
         @return_message = "分享失败，网络繁忙，请稍后再试" if ret[:error_code]
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type)if @return_message.nil?
@@ -329,15 +333,23 @@ class LoginsController < ApplicationController
   end
 
   def call_back_qq
-    if cookies[:oauth2_url_generate]
+    if cookies[:share_oauth]
       begin
-        cookies.delete(:oauth2_url_generate)
+        cookies.delete("share_oauth")
         #发送微博
-        access_token=params["access_token"]
-        openid=params[:open_id]
+        access_token=params["?access_token"]
+        uri = URI.parse("https://graph.qq.com")
+        http = Net::HTTP.new(uri.host, uri.port)
+        if uri.port==443
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        request= Net::HTTP::Get.new("/oauth2.0/me?access_token=#{access_token}")
+        open_id =http.request(request).body.split("openid")[1].gsub(/[^0-9|^A-Z|^a-z]/i,"")
         content=cookies[:sharecontent].split('@!')
         type=Sun::TYPES[:QQSHARE].to_i
-        ret = share_tencent_weibo(access_token,openid,content[1])
+        other_parms={:title=>Constant::SHARE_TITLE,:url=>Constant::SERVER_PATH,:comment=>content[1],:summary=>Constant::SUMMARY,:images=>"#{Constant::SERVER_PATH}/#{content[0].to_i}.png",:site=>Constant::SERVER_PATH}
+        ret =send_share(access_token,open_id,other_parms)
         @return_message = "分享失败，网络繁忙，请稍后再试" if ret[:errcode].to_i!=0
         @return_message=update_user_suns(cookies[:user_id].to_i,content[0].to_i,type) if @return_message.nil?
         flash[:share_notice]=@return_message
@@ -347,80 +359,19 @@ class LoginsController < ApplicationController
         render :inline => "<script>window.opener.location.reload();window.close();</script>"
       end
     else
-      cookies[:oauth2_url_generate]="replace('#','?')"
+      cookies[:share_oauth]="replace('#','?')"
       render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
     end
   end
 
 
-  #发送微博和关注微博
-  def call_back_and_focus_sina
-    if cookies[:oauth2_url_generate]
-      begin
-        cookies.delete(:oauth2_url_generate)
-        uid=params[:uid]
-        #发送微博
-        access_token=params[:access_token]
-        content=cookies[:sharecontent].split('@!')
-        ret = sina_send_message(access_token, content[1])
-        return_message = "微博发送失败，请重新尝试" if ret["error_code"]      
-        return_message= focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)  if return_message.nil?
-        response = sina_get_user(access_token,uid)
-        request_weibo(access_token,response["id"],"关注失败，请登录微博查看")
-        flash[:share_notice]=return_message
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-      rescue
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-      end
-    else
-      cookies[:oauth2_url_generate]="replace('#','?')"
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
-    end
-  end
-  #关注人人和发送新鲜事
-  def call_back_and_focus_renren
-    if cookies[:oauth2_url_generate]
-      begin
-        cookies.delete(:oauth2_url_generate)
-        #发送人人新鲜事
-        access_token=params[:access_token]
-        content=cookies[:sharecontent].split('@!')
-        ret = renren_send_message(access_token, content[1])
-        @return_message = "分享失败，请重新尝试" if ret[:error_code]      
-        focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i)  if @return_message.nil?
-        #加人人好友
-        redirect_to "http://widget.renren.com/dialog/friends?target_id=#{Oauth2Helper::RENREN_ID}&app_id=163813&redirect_uri=#{Constant::SERVER_PATH}"
-      rescue
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-      end
-    else
-      cookies[:oauth2_url_generate]="replace('#','?')"
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
-    end
-  end
-
-  def call_back_and_focus_qq
-    if cookies[:oauth2_url_generate]
-      begin
-        cookies.delete(:oauth2_url_generate)
-        #发送微博
-        access_token=params["access_token"]
-        open_id=params[:open_id]
-        content=cookies[:sharecontent].split('@!')
-        info=share_tencent_weibo(access_token,open_id,content[1])
-        @return_message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
-        #送5个太阳
-        @return_message=focus_and_share_sun(cookies[:user_id].to_i,content[0].to_i) if @return_message.nil?  #分享成功
-        info=focus_tencent_weibo(access_token,open_id)
-        flash[:share_notice]=@return_message
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-      rescue
-        render :inline => "<script>window.opener.location.reload();window.close();</script>"
-      end
-    else
-      cookies[:oauth2_url_generate]="replace('#','?')"
-      render :inline=>"<script type='text/javascript'>window.location.href=window.location.toString().replace('#','?');</script>"
-    end
+  #其他分享qq登录
+  def send_share(access_token,open_id,other_parms=nil)
+    send_parms={:access_token=>access_token,:openid=>open_id,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json"}
+    send_parms.merge!(other_parms)
+    info=create_post_http("https://graph.qq.com","/share/add_share",send_parms)
+    share_log("qq  share",info)
+    return info
   end
 
 

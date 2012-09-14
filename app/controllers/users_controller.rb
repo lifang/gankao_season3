@@ -93,32 +93,34 @@ class UsersController < ApplicationController
     @web= params[:web].to_s
     category=params[:category].to_i
     level=case category
-    when 2 then "英语4级"
-    when 3 then "英语6级"
+    when 2 then "英语四级"
+    when 3 then "英语六级"
     else "考研英语"
     end
-    message="我在赶考网复习"+level+",来自链接:"+Constant::SERVER_PATH+"/users/#{cookies[:user_id]}/share_back?category=#{category}  #{Time.now.strftime(("%Y-%m-%d-%H-%M-%S"))}"
+    message="我在赶考网复习"+level+"，（#{Constant::SERVER_PATH}/users/#{cookies[:user_id]}/share_back?category=#{category}），非常给力！"
     #获取用户
     user=User.find_by_id_and_code_type(cookies[:user_id],@web)
     if user and user.access_token and (user.end_time-Time.now>0)
       if @web=="sina"
         type=Sun::TYPES[:SINASHARE].to_i
-        ret = sina_send_message(user.access_token, message)
+#        ret = sina_send_message(user.access_token, message)
+        ret =sina_send_pic(user.access_token,message,"#{category}.png")
         @message = "微博发送失败，网络繁忙，请稍后再试" if ret["error_code"]
       elsif @web=="renren"
         type=Sun::TYPES[:RENRENSHARE].to_i
-        ret = renren_send_message(user.access_token, message)
+        ret = renren_send_message(user.access_token,message,Constant::RENREN_IMG[category ])
         @message = "分享失败，网络繁忙，请稍后再试" if ret[:error_code]
       elsif @web=="qq"
         type=Sun::TYPES[:QQSHARE].to_i
-        ret = share_tencent_weibo(user.access_token,user.open_id,message)
+        other_parms={:title=>Constant::SHARE_TITLE,:url=>Constant::SERVER_PATH,:comment=>message,:summary=>Constant::SUMMARY,:images=>"#{Constant::SERVER_PATH}/#{category}.png",:site=>Constant::SERVER_PATH}
+        ret=send_share_qq("/share/add_share",user,other_parms)
         @message = "分享失败，网络繁忙，请稍后再试" if ret[:errcode].to_i!=0
       end
       @message=update_user_suns(user,category,type) if @message.nil?
       flash[:share_notice]=@message
       render :inline => "<script>window.opener.location.reload();window.close();</script>"
     else
-      cookies[:sharecontent]="#{category}@!#{@message}"
+      cookies[:sharecontent]="#{category}@!#{message}"
       if params[:web].to_s=="sina"
         redirect_to "https://api.weibo.com/oauth2/authorize?client_id=#{Oauth2Helper::SINA_CLIENT_ID}&redirect_uri=#{Constant::SERVER_PATH}/logins/call_back_sina&response_type=token"
       elsif params[:web].to_s=="renren"
@@ -147,24 +149,24 @@ class UsersController < ApplicationController
   def share_reasons
     category=params[:category].to_i
     user=User.find(cookies[:user_id].to_i)
-    reason="我正在使用赶考网#{Category::TYPE_INFO[category]}频道（#{Constant::SERVER_PATH}）复习，资料太全面啦，非常不错"
+    reason="我正在使用赶考网#{Category::TYPE_INFO[category]}频道（#{Constant::SERVER_PATH}）复习，资料太全面啦，非常给力"
     if user and user.access_token and (user.end_time-Time.now>0)
       if user.code_type=="sina"
-        ret = sina_send_message(user.access_token, reason)
+#        ret = sina_send_message(user.access_token, reason)
+        ret =sina_send_pic(user.access_token,reason,"#{category}.png")
         message ="微博发送失败，请重新尝试" if ret["error_code"] #送5个太阳
         request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
         message= focus_and_share_sun(user.id,category)  if message.nil? #分享成功
       elsif user.code_type=="renren"
-        ret = renren_send_message(user.access_token, reason)
+        ret = renren_send_message(user.access_token, reason,Constant::RENREN_SHARE[category])
         message = "分享失败，请重新尝试" if ret[:error_code]
         message=focus_and_share_sun(user.id,category)  if message.nil?  #分享成功
       elsif user.code_type=="qq"
-        info=share_tencent_weibo(user.access_token,user.open_id,reason)
-        share_log("qq share","#{user.access_token}--#{user.open_id}")
-        share_log("qq share",info)
+        other_parms={:title=>Constant::SHARE_TITLE,:url=>Constant::SERVER_PATH,:comment=>reason,:summary=>Constant::SUMMARY,:images=>"#{Constant::SERVER_PATH}/#{category}.png",:site=>Constant::SERVER_PATH}
+        info=send_share_qq("/share/add_share",user,other_parms)
         message="腾讯微博分享失败，请重新尝试" if info["ret"].to_i!=0
         message= focus_and_share_sun(user.id,category)  if message.nil?  #分享成功  送5个太阳
-        info=focus_tencent_weibo(user.access_token,user.open_id)
+        focus_tencent_weibo(user.access_token,user.open_id)
       end
     end
     respond_to do |format|

@@ -1,0 +1,28 @@
+renren share------#<File:0x2902f38>----20120914 15:18:09
+renren share------#<Net::HTTP::Post::Multipart:0x29028d8>----20120914 15:18:09
+renren share------<html>
+<head><title>400 The plain HTTP request was sent to HTTPS port</title></head>
+<body bgcolor="white">
+<center><h1>400 Bad Request</h1></center>
+<center>The plain HTTP request was sent to HTTPS port</center>
+<hr><center>tnginx/1.0.1_r1</center>
+</body>
+</html>
+----20120914 15:18:10
+renren share------#<File:0x289edc8>----20120914 15:18:36
+renren share----------20120914 15:18:36
+renren share------<html>
+<head><title>400 The plain HTTP request was sent to HTTPS port</title></head>
+<body bgcolor="white">
+<center><h1>400 Bad Request</h1></center>
+<center>The plain HTTP request was sent to HTTPS port</center>
+<hr><center>tnginx/1.0.1_r1</center>
+</body>
+</html>
+----20120914 15:18:37
+renren share------#<File:0x280e558>----20120914 15:19:14
+renren share------#<File:0x27d5f48>----20120914 15:20:40
+renren share------#<File:0x27cf708>----20120914 15:22:44
+renren share------#<File:0x29d35e8>----20120914 15:25:46
+renren share------#<File:0x2a05df0>----20120914 15:26:51
+renren share------#<File:0x2970480>----20120914 15:28:26
