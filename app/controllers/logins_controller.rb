@@ -46,6 +46,7 @@ class LoginsController < ApplicationController
         Sun.first_login(@user.id)
         other_parms={:title=>Constant::QQ_WORDS,:url=>Constant::SERVER_PATH,:comment=>Constant::COMMENT,:summary=>Constant::SUMMARY,:images=>"#{Constant::SERVER_PATH+"/"+Constant::QQ_IMG}",:site=>Constant::SERVER_PATH}
         send_share_qq("/share/add_share",@user,other_parms)
+        cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
       else
         ActionLog.login_log(@user.id)
         if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -96,6 +97,7 @@ class LoginsController < ApplicationController
           Sun.first_login(@user.id)
           #          sina_send_message(@user.access_token,Constant::SHARE_WORDS)
           sina_send_pic(@user.access_token,Constant::SHARE_WORDS,Constant::SHARE_IMG)
+          cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token
@@ -141,6 +143,8 @@ class LoginsController < ApplicationController
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["tinyurl"])
           Sun.first_login(@user.id)
           renren_send_message(@user.access_token,Constant::SHARE_WORDS,Constant::RENREN_IMG[:LOGIN])
+          cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
+          #          renren_send_message(@user.access_token,Constant::SHARE_WORDS,{:type=>2,:ugc_id=>6525229578,:user_id=>600942099})
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token

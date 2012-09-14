@@ -2,6 +2,7 @@
 module Constant
   #项目文件目录
   PUBLIC_PATH = "#{Rails.root}/public"
+  BACK_PUBLIC_PATH = "#{Rails.root}/public"
 
   WORD_TIME = {1 => 15, 2 => 15, 3 => 15}
   SENTENCE_TIME = {:READ => 1, :COMBIN => 2}
@@ -9,7 +10,8 @@ module Constant
   READ_TIME = {:DEFAULT => 0.5, :QUESTION => 30}
 
   SERVER_PATH = "http://localhost:3001"
-  BACK_SERVER_PATH = "http://localhost:3000"
+  BACK_SERVER_PATH = "http://manage.gankao.co"
+
   GANKAO_GRADUATE_PATH = "http://localhost:3000/graduate"
   GANKAO_CET4_PATH = "http://localhost:3000/cet_four"
   GANKAO_CET6_PATH = "http://localhost:3000/cet_six"

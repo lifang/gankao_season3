@@ -5,12 +5,12 @@
         <% if answer.is_right %><span class="flag tooltip" title="最佳答案">最佳答案</span><% end %>
         <div class="us_pic"><img src="<%= answer.img_url.nil? ? User::DEFAULT_COVER : answer.img_url %>"/></div>
         <h3><%= answer.user_name %></h3>
-        <p><%= answer.created_at.strftime("%Y-%m-%d") %></p>
-        <p><%= answer.created_at.strftime("%H:%M") %></p>
+        
       </div>
       <div class="answer_box an_bgTrue">
         <span class="an_icon03"></span>
         <p><%= answer.answer %></p>
+        <span class="problem_time"><%= answer.created_at.strftime("%Y-%m-%d") %>   <%= answer.created_at.strftime("%H:%M") %></span>
       </div>
       <div class="clear"></div>
     </div>

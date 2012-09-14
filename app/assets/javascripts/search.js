@@ -27,14 +27,14 @@ $(function(){
 
 
 $(function(){
-   //问题页面提示时 title和description检验
-   $("#askQuestion").click(function(){
-      var description = $("#user_question_description").val();
-      if($.trim(description).length == 0 || $.trim(description).length >250){
-          tishi_alert("请填写补充的内容，不能为空，且不能超过250个字符。")
-          return false;
-      }
-   });
+    //问题页面提示时 title和description检验
+    $("#askQuestion").click(function(){
+        var description = $("#user_question_description").val();
+        if($.trim(description).length == 0 || $.trim(description).length >250){
+            tishi_alert("请填写补充的内容，不能为空，且不能超过250个字符。")
+            return false;
+        }
+    });
 });
 
 //答疑
@@ -70,6 +70,16 @@ $(function(){
 function check_answer(question_id) {
     if ($.trim($("#answer_text_" + question_id).val()).length == 0 ||
         $.trim($("#answer_text_" + question_id).val()).length > 200) {
+        tishi_alert("请填写回答的内容，不能为空，且不能超过200个字符。")
+        return false;
+    }
+    return true;
+}
+
+//检查发布的问题的字数
+function check_question_content() {
+    if ($.trim($("#askQuestion").val()).length == 0 ||
+        $.trim($("#askQuestion").val()).length > 200) {
         tishi_alert("请填写回答的内容，不能为空，且不能超过200个字符。")
         return false;
     }

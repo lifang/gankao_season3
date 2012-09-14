@@ -8,14 +8,13 @@
           <div class="problem_box">
             <span class="an_icon01"></span>
             <p><span class="orange"></span><%= @user_question.description %></p>
+            <span class="problem_time"><%= @user_question.created_at.strftime("%Y-%m-%d") %>   <%= @user_question.created_at.strftime("%H:%M") %></span>
           </div>
           <div class="userProblem_box">
             <div class="us_pic">
               <img src="<%= (@user_question.user.nil? or @user_question.user.img_url.nil?) ? User::DEFAULT_COVER : @user_question.user.img_url %>"/>
             </div>
             <h3><%= @user_question.user.name if @user_question.user %></h3>
-            <p><%= @user_question.created_at.strftime("%Y-%m-%d") %></p>
-            <p><%= @user_question.created_at.strftime("%H:%M") %></p>
           </div>
           <div class="clear"></div>
         </div>
@@ -31,6 +30,7 @@
             <div class="answer_box an_bgTrue">
               <span class="an_icon03"></span>
               <p><%= answer.answer %></p>
+              <span class="problem_time"><%= answer.created_at.strftime("%Y-%m-%d") %>   <%= answer.created_at.strftime("%H:%M") %></span>
             </div>
             <div class="clear"></div>
           </div>

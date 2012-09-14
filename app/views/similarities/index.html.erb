@@ -14,8 +14,8 @@
               <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
                    onclick="return already_submit('<%= similarity.id %>','<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')" <% end %>
                  class="model <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>underWay
-                 <% else %>finish<% end %>">练习模式</a>
-              <!--<a href="#" class="model underWay">模考模式</a>-->
+                 <% elsif @exam_user_hash[similarity.id] %>finish<% end %>">练习模式</a>
+              <a href="javascript:void(0);" onclick="javascript:tishi_alert('即将上线，敬请期待...');" class="model">模考模式</a>
             </div>
           </div>
         <% else %>
@@ -23,8 +23,8 @@
             <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
             <div class="pl_text">
               <a href="javascript:void(0);" onclick="javascript:show_charge('#sim_login_tab','.close_tab');"
-                 class="model finish">练习模式</a>
-              <!--<a href="#" class="model underWay">模考模式</a>-->
+                 class="model">练习模式</a>
+              <a href="javascript:void(0);" onclick="javascript:tishi_alert('即将上线，敬请期待...');" class="model">模考模式</a>
             </div>
           </div>
         <% end %>

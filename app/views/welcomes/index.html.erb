@@ -5,7 +5,6 @@
     <title>赶考</title>    
     <%= stylesheet_link_tag  "style" %>
     <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag "jwplayer/jwplayer.js" %>
 
     <!--[if lt IE 9]>
     <script src="/assets/html5.js"></script>
@@ -17,7 +16,19 @@
       DD_belatedPNG.fix('*');
     </script>
     <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-26018499-1']);
+      _gaq.push(['_setDomainName', 'gankao.co']);
+      _gaq.push(['_trackPageview']);
 
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   </head>
   <body>
     <div class="wraper">
@@ -31,35 +42,26 @@
     <div class="m_index">
       <div class="m_index_box">
         <div class="m_video">
-          <a href="#" class="m_video_btn"></a>
+          <a href="javascript:void(0);" class="m_video_btn"></a>          
           <div id="mediaspace_wrapper" style="position: relative; width: 321px; height: 210px; ">
+            <embed src="/assets/index.swf"
+                   allowFullScreen="true" quality="high" width="321" height="210"
+                   align="middle" allowScriptAccess="always" type="application/x-shockwave-flash">              
+            </embed>
           </div>
         </div>
-        <div class="index_text"><img src="/assets/index_text.png"/></div>
         <div class="index_btn">
           <h1>请进入您要进行备考的频道：</h1>
-          <br/>
-          <button onclick="window.location.href='/plans?category=<%= Category::TYPE[:GRADUATE] %>'">考研英语频道</button>
-          <button onclick="window.location.href='/plans?category=<%= Category::TYPE[:CET6] %>'">六级频道</button>
-          <button onclick="window.location.href='/plans?category=<%= Category::TYPE[:CET4] %>'">四级频道</button>
+          <a href="/plans?category=<%= Category::TYPE[:GRADUATE] %>">考研英语频道<span id="span1">在线2000人</span></a>
+          <a href="/plans?category=<%= Category::TYPE[:CET6] %>">六级英语频道<span id="span2">在线2000人</span></a>
+          <a href="/plans?category=<%= Category::TYPE[:CET4] %>">四级英语频道<span id="span3">在线2000人</span></a>
         </div>
-
       </div>
-
     </div>
     <div class="footer">
       <p>Copyright © 2011-2012 &nbsp;&nbsp;赶考网www.gankao.co&nbsp;&nbsp;版权所有&nbsp;&nbsp;苏ICP备11024201</p>
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
-    <!--<script type="text/javascript">
-      jwplayer('mediaspace_wrapper').setup({
-        'flashplayer': '/assets/jwplayer/player.swf',
-        'file': 'videos/2/5.mp4',
-        'controlbar': 'none',
-        'width': '321',
-        'height': '210',
-        'image': "videos/preview.jpg"
-      });
-    </script>-->
+    <%= render :partial => '/common/qq_online' %>
   </body>
 </html>

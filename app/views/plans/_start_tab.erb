@@ -9,6 +9,9 @@
   //关闭开始练习框
   function start_study() {
     $("#start_tab").hide();
-    local_save_start();  
+    local_save_start();
+    if ($("#player").length > 0) {
+      flowplayer('player').play();
+    }
   }
 </script>

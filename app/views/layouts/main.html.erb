@@ -16,6 +16,19 @@
       DD_belatedPNG.fix('*');
     </script>
     <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-26018499-1']);
+      _gaq.push(['_setDomainName', 'gankao.co']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   </head>
   <body>
     <div class="wraper">
@@ -35,12 +48,16 @@
         <div class="clear"></div>
         <nav class="border_radius">
           <!--<marquee direction="up" scrollAmount="1" height="42" onmouseout="start()" onmouseover="stop()">-->
-          <% if cookies[:user_id] and is_nomal?(params[:category]) %>
-            <span class="v_message">立刻升级为高级用户，即刻享有 <em><%= Constant::SCOLL_WORD[params[:category].to_i] %></em> 复习效果保障服务。
+          <% if cookies[:user_id].nil? %>
+            <span class="v_message">亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
+              <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
+            </span>
+          <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
+            <span class="v_message">立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
               <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
           <% end %><br/><br/>
-    <!--  <span  class="v_message">点击将英语<%#= Constant::FAST_PATH[params[:category].to_i][0] %>添加到桌面快捷方式。
-        <a href="<%#= Constant::FAST_PATH[params[:category].to_i][1] %>">添加快捷方式</a></span>-->
+<!--  <span  class="v_message">点击将英语<%#= Constant::FAST_PATH[params[:category].to_i][0] %>添加到桌面快捷方式。
+  <a href="<%#= Constant::FAST_PATH[params[:category].to_i][1] %>">添加快捷方式</a></span>-->
           <!--</marquee>-->
         </nav>
       </div>
@@ -66,7 +83,7 @@
           </div>
         </div>
         <div class="middle">
-          <% unless is_has_plan? %>
+          <% if cookies[:user_id] and !is_has_plan? %>
             <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行
               <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">前测</a>吧！
             </div>
@@ -76,7 +93,6 @@
         <div class="right">
           <div class="qrcode">
             <div><img src="/assets/qrcode.png" /></div>
-            <p>赶考微信，扫描加好友</p>
           </div>
           <div class="right_fx_box">
             <div class="right_fx">
@@ -93,21 +109,8 @@
               alimama_width=120;
               alimama_height=240;
             </script>
-            <script src="http://a.alimama.cn/inf.js" type="text/javascript">
-            </script>
-
-          </div>
-          <div class="right_ad">
-            <script type="text/javascript">
-              alimama_pid="mm_32461315_3337046_10822995";
-              alimama_width=120;
-              alimama_height=240;
-            </script>
-            <script src="http://a.alimama.cn/inf.js" type="text/javascript">
-            </script>
-
-          </div>
-          <div class="clear"></div>
+            <script src="http://a.alimama.cn/inf.js" type="text/javascript"></script>
+          </div>         
         </div>
       </div>
     </div>
@@ -116,6 +119,7 @@
     </div>
     <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
     <div class="mask" style="display: none;"></div>
+    <div class="guideMask" style="display: none;"></div>
     <% if cookies[:user_id] and is_nomal?(params[:category]) %>
       <%= render :partial => '/users/charge_vip' %>
       <%= render :partial => '/users/charge_sun' %>
@@ -127,5 +131,6 @@
         tishi_alert('<%= flash[:share_notice] %>')
       </script>
     <% end %>
+    <%= render :partial => '/common/qq_online' %>
   </body>
 </html>

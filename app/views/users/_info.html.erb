@@ -29,12 +29,4 @@
   </div>
 <% else %>
   <%= render :partial=>'layouts/login_tab' %>
-  <div class="onlineUsers">在线人数:<span class="orange">10000</span>人</div>
-  <script type="text/javascript">
-    $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+1000);
-    setInterval(function(){
-      $(".onlineUsers .orange").html( Math.floor(Math.random()*1000)+1000);
-    }, 3600000);
-  </script>
-  <div class="clear"></div>
 <% end %>

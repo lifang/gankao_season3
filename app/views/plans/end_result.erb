@@ -7,7 +7,9 @@
   <div class="mc_box">
     <div class="plan_box">
       <div class="plan_top">
-        <div class="user_pic_fs"><img src="<%= (@user.nil? or @user.img_url.nil?) ? "/assets/user_pic.jpg" : @user.img_url %>" /></div>
+        <div class="user_pic_fs">
+          <img src="<%= (@user.nil? or @user.img_url.nil?) ? "/assets/user_pic.jpg" : @user.img_url %>" width="65" height="65" />
+        </div>
         <h1 class="fenshu_h1">当前估分：<span><%=@score[-1] %></span></h1>
         <h1 class="fenshu_h1">当前估分：<span id="current_score"><%=@score[-1] %></span></h1>
 

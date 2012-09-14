@@ -217,3 +217,66 @@ function share_reason(){
         });
     }
 }
+
+//答疑页面-----我要提问按钮
+$(function(){
+    $(".askQuestion_span").bind("click",function(){
+        $(this).hide();
+        $(".askQuestion_textarea").animate({
+            height: "80px"
+        }, 500);
+        $(".askQuestion_btn").show();
+        $(".askQuestion_up").show();
+        $(".askQuestion_number").show();
+    })
+    $(".askQuestion_up").bind("click",function(){
+        $(".askQuestion_span").show();
+        $(".askQuestion_textarea").css("height","28px")
+        $(".askQuestion_btn").hide();
+        $(this).hide();
+        $(".askQuestion_number").hide();
+    })
+})
+
+//随机生成在线人数
+$(function(){
+    $(".index_btn #span1").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    $(".index_btn #span2").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    setInterval(function(){
+        $(".index_btn #span1").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+        $(".index_btn #span2").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+        $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    }, 3600000);
+})
+
+//复习计划页面功能介绍
+$(function(){
+    if ($(".guideBox").length > 0) {
+        var doc_height = $(document).height();
+        $('.guideMask').show();
+        $('.guideMask').css('height',doc_height);
+        $(".main").css('position', 'relative');
+        var i= 1;
+        $(".guide_next").bind("click",function(){
+            $(this).parents(".guide0"+i).hide().next().show();
+            i++;
+        })
+        $(".guide_out").bind("click",function(){
+            $(this).parents(".guideBox").hide();
+            $(".main").css('position', '');
+            $('.guideMask').hide();
+        })
+    }
+})
+
+/*在线QQ*/
+$(function(){
+    $('.online_qq').hover(
+  function () {
+    $(this).animate( { right: '0' } , 500 );
+  },
+  function () {
+    $(this).animate( { right: '-85px' } , 500 );
+  });
+})
