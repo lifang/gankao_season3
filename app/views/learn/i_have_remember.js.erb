@@ -14,15 +14,24 @@ window.ids = "<%= @ids_str %>";
   })
 <% elsif @items_str.empty? %>
   window.clearInterval(local_timer);
-  <% if @current_step == "word" %>
-    $("#pass #text1").html("恭喜你完成了单词部分的练习。");
-    $("#pass #text2").html("下面句子训练包含了对阅读理解、写作、语法等方面综合能力的训练，分两步完成，继续努力。");
-  <% elsif @current_step == "sentence" %>
-    $("#pass #text1").html("恭喜你完成了句子部分的练习。");
-    $("#pass #text2").html("下面听力训练，继续努力。");
-  <% elsif @current_step == "linsten" %>
-    $("#pass #text1").html("恭喜你完成了听力部分的练习。");
-    $("#pass #text2").html("下面阅读部分训练，继续努力。");
+  <% if @status == true %>
+    <% if cookies[:is_new] == "review" %>
+      $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + (new Number($(".pl_l_bg").attr("id")) -1).toString() + "的复习任务，赶紧开始今天的学习计划吧，继续努力哦。");
+    <% else %>
+      $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + $(".pl_l_bg").attr("id") + "，离成功又近了一步，下一个任务包已经为您解锁了，继续努力哦。");
+    <% end %>
+    show_tip("#all_pass");
+  <% else %>
+    <% if @current_step == "word" %>
+      $("#pass #text1").html("恭喜你完成了单词部分的练习。");
+      $("#pass #text2").html("下面句子训练包含了对阅读理解、写作、语法等方面综合能力的训练，分两步完成，继续努力。");
+    <% elsif @current_step == "sentence" %>
+      $("#pass #text1").html("恭喜你完成了句子部分的练习。");
+      $("#pass #text2").html("下面听力训练，请准备好耳机，继续努力哦。");
+    <% elsif @current_step == "linsten" %>
+      $("#pass #text1").html("恭喜你完成了听力部分的练习。");
+      $("#pass #text2").html("下面阅读部分训练，继续努力。");
+    <% end %>
+    show_tip("#pass");
   <% end %>
-  show_tip("#pass");
 <% end %>

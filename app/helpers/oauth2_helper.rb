@@ -3,7 +3,7 @@ module Oauth2Helper
   require 'net/http'
   require "uri"
   require 'openssl'
-  require 'net/http/post/multipart'
+  #require 'net/http/post/multipart'
 
   #支付宝
   PAGE_WAY="https://www.alipay.com/cooperate/gateway.do"

@@ -126,17 +126,17 @@ module ApplicationHelper
     hash=signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
     user_sun=Sun.find_by_sql("select id from suns where category_id=#{category_id.to_i} and types=#{Sun::TYPES[:SIGNIN]}
     and user_id=#{cookies[:user_id].to_i} and TO_DAYS(NOW())-1=TO_DAYS(created_at)")[0]
-    if user_sun
+    if !user_sun.nil? and !user_sun.id.nil?
       return hash[Category::FLAG[category_id.to_i]].to_i
     else
       return 0
     end    
   end
 
-  def show_focus
+  def show_focus(user_infos)
     if cookies[:user_id] and Sun.find_by_sql("select * from suns where user_id=#{cookies[:user_id].to_i} and
       types=#{Sun::TYPES[:LOGIN_MORE]} and category_id=#{params[:category].to_i}")[0].nil? and
-        user_info and user_info[:login_times].to_i >3
+        user_infos and user_infos[:login_times].to_i >3
       return true
     else
       return false

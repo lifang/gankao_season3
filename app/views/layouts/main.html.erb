@@ -44,7 +44,8 @@
             <% end %>
           </a>
         </h1>
-        <%=render :partial=>'users/info', :object=>user_info %>
+        <% user_infos = user_info %>
+        <%=render :partial=>'users/info', :object=>user_infos %>
         <div class="clear"></div>
         <nav class="border_radius">
           <div class="scrollAD">
@@ -63,15 +64,11 @@
       </div>
       <div class="main">
         <div class="left">
-          <div class="countDown">
-            <p>距<%= from_kaoyan(params[:category])[0] %>还有：</p>
-            <h1><%= from_kaoyan(params[:category])[1] %><span>天</span></h1>
-          </div>
           <div class="checkIn_box">
             <div class="checkIn_img"><a onclick="checkIn(<%= params[:category] %>)" href="javascript:void(0);"><img src="/assets/checkIn.png" /></a></div>
             <div class="checkIn_sun"><span class="addOne"><img src="/assets/1.png"/></span></div>
-            <p><% if cookies[:user_id] and user_info %>
-                *你已经连续签到<span id="checkIn_days"><%= signin_days(user_info[:signin_days],params[:category]) %></span>天
+            <p><% if cookies[:user_id] and user_infos %>
+                *你已经连续签到<span id="checkIn_days"><%= signin_days(user_infos[:signin_days],params[:category]) %></span>天
               <% else %>
                 *每天签到奖励1个小太阳
               <% end %>
@@ -84,16 +81,20 @@
         </div>
         <div class="middle">
           <% if cookies[:user_id] and !is_has_plan? %>
-            <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行
-              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">前测</a>吧！
+            <div class="recommend">你还没有制定复习方案，赶快为你制定一个个性化的
+              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">复习方案</a>吧！
             </div>
           <% end %>
           <%= yield %>
         </div>
         <div class="right">
-          <div class="qrcode">
-            <div><img src="/assets/qrcode.png" /></div>
+          <div class="countDown">
+            <p>距<%= from_kaoyan(params[:category])[0] %>还有：</p>
+            <h1><%= from_kaoyan(params[:category])[1] %><span>天</span></h1>
           </div>
+          <div class="progress_list">
+            <%= render :partial => '/common/right_ad' %>
+          </div> 
           <div class="right_fx_box">
             <div class="right_fx">
               <a class="fx_qq tooltip" href="javascript:void(0);" onclick ="window.open('/users/share?web=qq&category=<%= params[:category] %>', '_blank', 'height=480,width=510,left=300,top=150');" title="分享到腾讯微博">腾讯微博</a>
@@ -102,9 +103,7 @@
             </div>
             <p class="right_fx_p">推荐好友获取小太阳</p>
           </div>          
-          <div class="right_ad">
-            <%= render :partial => '/common/right_ad' %>
-          </div>         
+                  
         </div>
         <div class="clear"></div>
       </div>
@@ -112,7 +111,7 @@
     <div class="footer">
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
-    <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
+    <%= render :partial => 'users/details', :object => user_infos if cookies[:user_id] and user_infos %>
     <div class="mask" style="display: none;"></div>
     <div class="guideMask" style="display: none;"></div>
     <% if cookies[:user_id] and is_nomal?(params[:category]) %>
@@ -120,7 +119,7 @@
       <%= render :partial => '/users/charge_sun' %>
     <% end %>
     <%= render :partial => '/layouts/inside_test' unless @plan_list %>
-    <%= render :partial=>'users/focus' if show_focus %>
+    <%= render :partial=>'users/focus' if show_focus(user_infos) %>
     <% if flash[:share_notice] %>
       <script type="text/javascript">
         tishi_alert('<%= flash[:share_notice] %>')

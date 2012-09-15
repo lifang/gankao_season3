@@ -5,6 +5,11 @@
   <div class="ts_text" id="text2"></div>
   <div class="btn_center"><button class="b_btn" onclick="next()">继续下一步</button></div>
 </div>
+<div id="all_pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text">恭喜今天的任务全部掌握！</div>
+  <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
+</div>
 <% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
   <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
   <div class="pt_title">

@@ -1,23 +1,31 @@
 <div class="payment" id="payment_vip" style="display: none">
   <span class="close pay_close" >关闭</span>
-  <div class="pay_title">亲，升级高级用户您将获得如下特权：<br/>
-    1）您在本系统的任何操作都不需要再消耗小太阳；<br/>
-    2）如果您通过本网站复习计划无法达到您设定的目标分数（四六级最低425，考研最低55），本站全额退款；<br/>
+  <div class="pay_title">
+    <div class="pay_xy">
+      <h2>高级用户特权</h2>
+      <div class="pay_list">1）考生姓名前将加<span class="hguan">皇冠</span>标识以区别于普通用户；</div>
+      <div class="pay_list">2）赶考网功能完全开放，不再有任何功能限制；</div>
+      <div class="pay_list">3）考生学习过程中不再需要消耗小太阳（赶考网虚拟币）；</div>
+      <div class="pay_list">
+        4）享受赶考网的保过服务，即考生通过本站定制的复习计划无法达到设定的目标分数（大学英语四级目标分数最低为425分），
+        赶考网承诺将全额退款；
+      </div>
+    </div>
   </div>
   <div class="pay_box">
-    <h1 class="pay_way_one">开通方式一：</h1>
+    <h1 class="pay_way_h">开通高级会员：</h1>
     <div class="pay_con_one">
-      <div class="pay_price"><h1 id="pay_fee"><%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %></h1>元</div>
-      <a href="javascript:void(0);" class="pay_a_one" 
+      <div class="pay_price"><h1><%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %></h1>元</div>
+      <a href="javascript:void(0);" class="pay_a_btn"
          id="pay_charge_vip" onclick="javascript:check_vip(<%= params[:category].to_i %>);" >&nbsp;</a>
     </div>
     <span class="orange">温馨提示：支付宝充值免手续费</span>
+    <!--
     <h1 class="pay_way_two">开通方式二：</h1>
     <div class="pay_con_two">
       <input name="" type="text" class="pay_input" id="invit_code" />
-      <a href="javascript:void(0)" class="pay_a_tow" onclick="accredit('<%= params[:category] %>')"></a>
-      
-    </div>
+      <a href="javascript:void(0)" class="pay_a_tow" onclick="accredit('<%#= params[:category] %>')"></a>      
+    </div>-->
   </div>
 </div>
 <div class="tab tishi_tab" style="display:none">

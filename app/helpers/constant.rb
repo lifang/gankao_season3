@@ -9,7 +9,7 @@ module Constant
   LISTEN_TIME = {:PER => 1.5}
   READ_TIME = {:DEFAULT => 0.5, :QUESTION => 30}
 
-  TOTAL_PATH = "gankao.co"
+  TOTAL_PATH = "http://gankao.co"
   SERVER_PATH = "http://localhost:3001"
   BACK_SERVER_PATH = "http://manage.gankao.co"
 

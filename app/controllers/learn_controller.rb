@@ -198,7 +198,7 @@ class LearnController < ApplicationController
     else
       items = (items - [items[0]]).push(elem)
     end
-    pass_status(plan, xml, "part") if items.blank?
+    xml = pass_status(plan, xml, "part") if items.blank?
     @status = is_part_pass?(plan, xml)
     @items_str = items.join(",")
     @flag = params[:flag]
@@ -225,7 +225,7 @@ class LearnController < ApplicationController
     else
       items = (items - [items[0]]).push(items[0])
     end
-    pass_status(plan, xml, "part") if items.blank?
+    xml = pass_status(plan, xml, "part") if items.blank?
     @status = is_part_pass?(plan, xml)
     @flag = params[:flag]
     @items_str = items.join(",")
@@ -247,7 +247,7 @@ class LearnController < ApplicationController
       items = (items - [items[0]]).push(items[0])
     end
     if items.blank?
-      pass_status(plan, xml, "part")
+      xml = pass_status(plan, xml, "part")
     end
     @status = is_part_pass?(plan, xml)
     @flag = params[:flag]
@@ -269,7 +269,7 @@ class LearnController < ApplicationController
     else
       items = (items - [items[0]]).push(items[0])
     end
-    pass_status(plan, xml, "part") if items.blank?
+    xml = pass_status(plan, xml, "part") if items.blank?
     @status = is_part_pass?(plan, xml)
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -290,6 +290,7 @@ class LearnController < ApplicationController
     ids = ids - [cookies[:current_id]]
     items = items - [current_item]
     pass_status(plan, xml, "part") if items.blank?
+    @status = is_part_pass?(plan, xml)
     @current_step = params[:current_step]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -316,6 +317,7 @@ class LearnController < ApplicationController
     f = File.new(Constant::PUBLIC_PATH + plan.plan_url,"w+")
     f.write("#{xml.to_s.force_encoding('UTF-8')}")
     f.close
+    return xml
   end
 
   def is_part_pass?(plan, xml)

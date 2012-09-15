@@ -10,11 +10,13 @@ input {font-family: "微软雅黑";}
 input[type="submit"] { border: none; cursor: pointer;}
 img { border: none;}
 .clear { clear: both;}
-.orange { color: #e4411e;}
+.orange { color: #ff6600;}
 .gray { color: #b9bab5;}
 .red { color: #F00;}
+.yellow { color: #cc9933;}
 .center {text-align: center;}
 .float_left { float: left;}
+.float_right { float: right;}
 .fontSize_10 { font-size: 10px;}
 .fontSize_20 { font-size: 20px;}
 
@@ -231,12 +233,20 @@ nav li { float: left; margin: 0 20px;}
 .left { width: 230px;}
 .middle { width: 564px; margin: 0 10px;}
 
-.countDown { width:85px; height: 88px; margin-right: 5px; background: #e4411e; float: left; color: #e4e3ce;}
-.countDown p { width: 72px; margin: 10px auto 0 auto;}
-.countDown h1 { text-align: center; font-size: 36px; color: #FFF;}
+.countDown {
+    width:125px;
+	height: 88px;
+	background: #e4411e;
+	color: #e4e3ce;
+	margin-bottom: 10px;
+	overflow: hidden;
+	font-size: 14px;
+}
+.countDown p { text-align: center; margin-top: 10px;}
+.countDown h1 { text-align: center; font-size: 45px; color: #FFF;}
 .countDown h1 span { font-size: 12px; color: #e4e3ce;}
 
-.checkIn_box { width: 140px; height: 88px; background: #387580; position: relative; float: left;}
+.checkIn_box { width: 230px; height: 88px; background: #387580; position: relative; float: left;}
 .checkIn_img { width: 96px; height: 39px; padding-top: 15px; margin: 0 auto; cursor: pointer;}
 .checkIn_sun {
     width: 40px;
@@ -606,6 +616,7 @@ nav li { float: left; margin: 0 20px;}
     box-shadow:0px 1px 1px #a2c2c3;
     text-indent: 0;
 }
+.drag_ul li.hover { color: #e4e4e2;}
 .drag_ul li:hover { background: #f8f8f8;}
 
 .drag_dl { padding: 5px; color: #387580;}
@@ -1039,57 +1050,55 @@ nav li { float: left; margin: 0 20px;}
     position: absolute;
     z-index:900;
 }
-.pay_title { padding: 10px 20px; border-radius: 0.3em; color: #e3e2ce; font-size: 14px; line-height: 24px; background: #3e94a4; }
+.pay_title {
+    padding: 10px 30px 10px 50px;
+	border-radius: 0.3em;
+	color: #fff; font-size: 14px;
+	line-height: 24px;
+	background: #3e94a4;
+}
+.pay_title h1 { font-size: 20px; line-height: 32px; text-align: center;}
+.pay_title h2 { font-size: 16px; line-height: 32px; margin-top: 15px;}
+
+.hguan { padding: 0 5px 0 22px; background: url(/assets/V.png) no-repeat 0 center;}
 
 .pay_box { padding: 10px 20px 30px 20px;}
-.pay_way_one, .pay_way_two { width: 180px; height: 30px; margin: 10px 0; text-indent: -999px; overflow: hidden;}
-.pay_way_one { background: url(/assets/pay_h.jpg) no-repeat 0 0;}
-.pay_way_two { background: url(/assets/pay_h.jpg) no-repeat 0 -30px;}
+.pay_way_h{ width: 180px; height: 30px; margin: 10px 0; overflow: hidden; color: #3E94A4; font-size: 20px;}
 
-.pay_con_one, .pay_con_two { border-radius: 0.6em; border: 2px  #FFFFFF solid; position: relative;}
-.pay_con_one { height: 160px; background: #38747f url(/assets/zfb_bg.jpg) no-repeat 10px 26px;}
-.pay_con_two { height: 100px; background: #38747f url(/assets/sqm_bg.jpg) no-repeat 10px 26px;}
+.pay_con_one, .pay_con_two { border-radius: 0.6em; border: 2px  #FFFFFF solid; position: relative; height: 100px;}
+.pay_con_one { background: #38747f url(/assets/zfb_bg.jpg) no-repeat 10px -5px;}
+/*.pay_con_two { background: #38747f url(../images/sqm_bg.jpg) no-repeat 10px 26px;}*/
+.pay_a_btn { width: 120px; height: 35px; display: block; position: absolute; top: 36px; right: 28px;}
+
+.pay_price {
+    position: absolute;
+	top: 1px;
+	left: 350px;
+	width: 95px;
+	height: 95px;
+	line-height: 95px;
+	text-align: center;
+	color: #e3e2ce;
+}
+.pay_price h1 { display: inline-block; font-size: 36px;}
+.pay_input {
+    position: absolute;
+	top: 38px;
+	left: 171px;
+	height: 32px;
+	line-height: 32px;
+	width: 284px;
+	border: none;
+	padding: 0 5px;
+}
+
+/*小太阳支付*/
 .paySun {
     border-radius: 0.6em;
     border: 2px  #FFFFFF solid;
     position: relative;
     height: 100px;
     background: #38747f url(/assets/paySun_bg.jpg) no-repeat 11px 24px;
-}
-.pay_a_one, .pay_a_tow { width: 120px; height: 35px; display: block; position: absolute;z-index: 100;}
-.pay_a_one {top: 66px; right: 28px;}
-.pay_a_tow { top: 38px; right: 28px;}
-
-.pay_price {
-    position: absolute;
-    top: 33px;
-    left: 350px;
-    width: 95px;
-    height: 95px;
-    line-height: 95px;
-    text-align: center;
-    color: #e3e2ce;
-}
-.pay_price h1 { display: inline-block; font-size: 36px;}
-.pay_input {
-    position: absolute;
-    top: 38px;
-    left: 171px;
-    height: 32px;
-    line-height: 32px;
-    width: 284px;
-    border: none;
-    padding: 0 5px;
-}
-
-/*小太阳支付*/
-.pay_way_sun {
-    width: 180px;
-    height: 30px;
-    margin: 10px 0;
-    text-indent: -999px;
-    overflow: hidden;
-    background: url(/assets/pay_h.jpg) no-repeat 0 -60px;
 }
 .paySun_input {
     position: absolute;
@@ -1101,7 +1110,21 @@ nav li { float: left; margin: 0 20px;}
     border: none;
     padding: 0 5px;
 }
-.huode_sun { float: right; text-decoration: underline;}
+
+.pay_list { line-height: 32px; overflow: hidden; padding-left: 10px; border-bottom: 1px #e4e4e4 dashed;}
+.pay_list p { float: left;}
+.pay_list .s_sun { margin-top: 8px;}
+.pay_list .pay_sign {
+    background: #38747F;
+	color: #FFF;
+	width: 50px;
+	height: 25px;
+	text-align: center;
+	line-height: 25px;
+	margin: 5px 5px 0 5px;
+	border-radius: 0.6em;
+	float: right;
+}
 
 /*充值提示*/
 .zhezhao { width:100%; height: 100%; left:0; position:absolute; top:0; background:#000; opacity:0.5; filter:alpha(opacity=50); z-index:920;}
@@ -1290,3 +1313,12 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
     background: url(/assets/online_qq.png) no-repeat;
 }
 .online_qq p { margin: 50px 0 0 35px;}
+
+/*进步榜单------*/
+.progress_list { width: 125px; background: #E4E3CE; padding-bottom: 10px; margin-bottom: 10px;}
+.progress_list h1 { font-size: 16px; line-height: 40px; text-align: center; background: #387580; color: #E4E3CE;}
+.progress_list table {}
+.progress_list table tr { height: 30px; border-bottom: 1px #dbdac4 solid; display: block; padding: 2px 0;}
+.progress_list table td { text-align: center; width: 38px;}
+.progress_list table tr.frist_tr { height: 20px;}
+.progress_list table td.frist_td { padding-right: 15px;}

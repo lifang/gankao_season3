@@ -81,24 +81,26 @@
   function click_word(id){
     _words.push(id);
     document.getElementById("current").innerHTML += ""+$("#_w_"+id).html()+" ";
-    //$("#current").html($("#current").html() +" "+ $("#_w_"+id).html() + " ");
-    $("#_w_"+id).hide();
+    $("#_w_"+id).attr("class", "hover");
+    $("#_w_"+id).attr("onclick", "javascript:void(0)");
   }
 
   function redo(){
     $("#current").html("");
-    $("#select li").show();
+    var lis = $("#select li");
+    for (var i=0; i<lis.length; i++) {
+      $(lis[i]).attr("class", "");
+      $(lis[i]).attr("onclick", "javascript:click_word("+i+")");
+    }
   }
 
   function hedui(){
     $("#hedui_a").attr("onclick", "javascipt:void(0)");
     var right = $("#SID").attr("value").replace(/"/g," ");
     if($.trim(right) == $.trim($("#current").html())){
-      //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);
       jude('/learn/jude_sentence','true','false');
     }else{
-      //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);
       jude('/learn/jude_sentence','false','false');
     }
@@ -106,13 +108,11 @@
 
   function next_step(){
     $("#next_btn_ok").attr("onclick", "");
-    //clearInterval(myTime.timeId);
     window.clearInterval(local_timer);
     $("#read").hide();
     $("#combin").fadeIn(1000);
     local_start_time = <%= @result[:combin_time] %>;
     local_save_start();
-    //myTime.start(<%#= @result[:combin_time] %>)
   }
 
   function callback(){
@@ -132,7 +132,8 @@
   function back_one() {
     if(_words.length==0)return;
     var w = _words.pop();
-    $("#_w_"+w).show();
+    $("#_w_"+w).attr("class", "");
+    $("#_w_"+w).attr("onclick", "javascript:click_word("+w+")");
     var current = $("#current").html().split(" ");
     current.pop();
     current.pop();
