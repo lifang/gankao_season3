@@ -28,7 +28,6 @@ class LearnController < ApplicationController
       end
       @items_str = items.join(",")      
       cookies[:current_id] = items[0].split("-")[0] if items[0]
-      cookies[:type]=0
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
         @result = operate_word(items)
@@ -532,9 +531,11 @@ class LearnController < ApplicationController
     correct_ids=params[:correct_ids].split(",")
     correct_ids.each do |i|
       item=items[ids.index(i)]
+      p item
       xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{item.split("-")[0]}']"
       ids = ids - [i]
       items = items - [item]
+      p xml
       rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     end
     wrong_items=items[0..(4-correct_ids.length)]
