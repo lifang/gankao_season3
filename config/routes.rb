@@ -58,7 +58,7 @@ GankaoSeason3::Application.routes.draw do
     end
     collection do
       get :share,:kaoyan_share
-      post :update_users,:check_in,:share_reasons
+      post :update_users,:check_in,:share_reasons, :xieyi
     end
   end
 

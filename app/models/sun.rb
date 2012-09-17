@@ -45,7 +45,7 @@ class Sun < ActiveRecord::Base
         where category_id=#{category} and user_id=#{user_id} and types=#{TYPES[:OPEN_CET6]}")
     end
     current = xml.elements["root/plan/current"].text.to_i
-    if current == count
+    if current <= count
       can_open = true
     elsif current > count
       sun = Sun.find_by_sql("select ifnull(sum(num), 0) num from suns where category_id=#{category} and user_id=#{user_id}")[0]

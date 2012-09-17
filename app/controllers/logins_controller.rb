@@ -54,7 +54,6 @@ class LoginsController < ApplicationController
         end
       end
       @user.increment!(:login_times)
-      #       send_message_qq(Constant::SHARE_WORDS,@user,{:richtype=>1,:richval=>"url=#{Constant::SERVER_PATH+Constant::IMG_NAME_SIZE}"})
       cookies[:first] = {:value => "1", :path => "/", :secure  => false}
       cookies[:user_id] ={:value =>@user.id, :path => "/", :secure  => false}
       cookies[:user_name] ={:value =>@user.username, :path => "/", :secure  => false}
@@ -95,7 +94,6 @@ class LoginsController < ApplicationController
             :name=>response["screen_name"], :username=>response["screen_name"], :access_token=>access_token,
             :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["profile_image_url"])
           Sun.first_login(@user.id)
-          #          sina_send_message(@user.access_token,Constant::SHARE_WORDS)
           sina_send_pic(@user.access_token,Constant::SHARE_WORDS,Constant::SHARE_IMG)
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
         else
@@ -144,7 +142,6 @@ class LoginsController < ApplicationController
           Sun.first_login(@user.id)
           renren_send_message(@user.access_token,Constant::SHARE_WORDS,Constant::RENREN_IMG[:LOGIN])
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
-          #          renren_send_message(@user.access_token,Constant::SHARE_WORDS,{:type=>2,:ugc_id=>6525229578,:user_id=>600942099})
         else
           ActionLog.login_log(@user.id)
           if @user.access_token.nil? || @user.access_token=="" || @user.access_token!=access_token

@@ -3,8 +3,7 @@ $(function(){
     $("#btnSearch").bind('click',function(){
         if($("#keywords").val()==""){
             tishi_alert('请输入关键字!');
-        }
-        else{
+        } else{
             window.location="/questions/show_result?keywords="+$("#keywords").val()+"&category="+category;
         }
     });
@@ -30,8 +29,8 @@ $(function(){
     //问题页面提示时 title和description检验
     $("#askQuestion").click(function(){
         var description = $("#user_question_description").val();
-        if($.trim(description).length == 0 || $.trim(description).length >250){
-            tishi_alert("请填写补充的内容，不能为空，且不能超过250个字符。")
+        if($.trim(description).length == 0 || $.trim(description).length >200){
+            tishi_alert("请填写补充的内容，不能为空，且不能超过200个字符。")
             return false;
         }
     });
@@ -41,6 +40,7 @@ $(function(){
 $(function(){
     $('.problem_box').click(
         function () {
+            $(this).parent().parent().siblings().children('.load').slideUp("show");
             var current_id = $(this).attr("id").replace("problem_", "");
             var current_answer_div = $("#answer_" + current_id);
             if (current_answer_div.attr("class") == "load") {
@@ -62,8 +62,7 @@ $(function(){
                 });
                 return false;
             }
-        }
-        )
+        });
 })
 
 //答疑的我要回答检查

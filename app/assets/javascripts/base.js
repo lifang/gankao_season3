@@ -21,7 +21,8 @@ function dispatch(category){
             ids : window.ids,
             category : category
         }
-    })
+    });
+    return false;
 }
 function jude(url, flag, redirct){
     window.clearInterval(local_timer);

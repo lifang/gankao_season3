@@ -10,7 +10,9 @@ class ApplicationController < ActionController::Base
     elsif request.url == Constant::CET6_PATH
       redirect_to Constant::SERVER_PATH + "/plans?category=#{Category::TYPE[:CET6]}"
     elsif request.url == Constant::GRADUATE_PATH
-        redirect_to Constant::SERVER_PATH + "/plans?category=#{Category::TYPE[:GRADUATE]}"
+      redirect_to Constant::SERVER_PATH + "/plans?category=#{Category::TYPE[:GRADUATE]}"
+    elsif request.url == Constant::TOTAL_PATH
+      redirect_to Constant::SERVER_PATH
     end
   end
 end

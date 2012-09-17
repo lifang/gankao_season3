@@ -44,34 +44,30 @@
             <% end %>
           </a>
         </h1>
-        <%=render :partial=>'users/info', :object=>user_info %>
+        <% user_infos = user_info %>
+        <%=render :partial=>'users/info', :object=>user_infos %>
         <div class="clear"></div>
         <nav class="border_radius">
-          <!--<marquee direction="up" scrollAmount="1" height="42" onmouseout="start()" onmouseover="stop()">-->
-          <% if cookies[:user_id].nil? %>
-            <span class="v_message">亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
-              <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
-            </span>
-          <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
-            <span class="v_message">立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
-              <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
-          <% end %><br/><br/>
-<!--  <span  class="v_message">点击将英语<%#= Constant::FAST_PATH[params[:category].to_i][0] %>添加到桌面快捷方式。
-  <a href="<%#= Constant::FAST_PATH[params[:category].to_i][1] %>">添加快捷方式</a></span>-->
-          <!--</marquee>-->
+          <div class="scrollAD">
+            <% if cookies[:user_id].nil? %>
+              <span>亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
+                <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
+              </span>
+            <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
+              <span>立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
+                <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
+            <% end %>
+            <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
+          </div>
         </nav>
       </div>
       <div class="main">
         <div class="left">
-          <div class="countDown">
-            <p>距<%= from_kaoyan(params[:category])[0] %>还有：</p>
-            <h1><%= from_kaoyan(params[:category])[1] %><span>天</span></h1>
-          </div>
           <div class="checkIn_box">
             <div class="checkIn_img"><a onclick="checkIn(<%= params[:category] %>)" href="javascript:void(0);"><img src="/assets/checkIn.png" /></a></div>
-            <span class="checkIn_sun"><img src="/assets/sun.png" /></span>
-            <p><% if cookies[:user_id] and user_info %>
-                *你已经连续签到<span id="checkIn_days"><%= signin_days(user_info[:signin_days],params[:category]) %></span>天
+            <div class="checkIn_sun"><span class="addOne"><img src="/assets/1.png"/></span></div>
+            <p><% if cookies[:user_id] and user_infos %>
+                *你已经连续签到<span id="checkIn_days"><%= signin_days(user_infos[:signin_days],params[:category]) %></span>天
               <% else %>
                 *每天签到奖励1个小太阳
               <% end %>
@@ -84,16 +80,20 @@
         </div>
         <div class="middle">
           <% if cookies[:user_id] and !is_has_plan? %>
-            <div class="recommend">你还没有进行前测，无法为你生成个性化复习方案，赶快进行
-              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">前测</a>吧！
+            <div class="recommend">你还没有复习方案，赶快为你制定一个属于自己的
+              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">复习计划</a>吧！
             </div>
           <% end %>
           <%= yield %>
         </div>
         <div class="right">
-          <div class="qrcode">
-            <div><img src="/assets/qrcode.png" /></div>
+          <div class="countDown">
+            <p>距<%= from_kaoyan(params[:category])[0] %>还有：</p>
+            <h1><%= from_kaoyan(params[:category])[1] %><span>天</span></h1>
           </div>
+          <div class="progress_list">
+            <%= render :partial => '/common/right_ad' %>
+          </div> 
           <div class="right_fx_box">
             <div class="right_fx">
               <a class="fx_qq tooltip" href="javascript:void(0);" onclick ="window.open('/users/share?web=qq&category=<%= params[:category] %>', '_blank', 'height=480,width=510,left=300,top=150');" title="分享到腾讯微博">腾讯微博</a>
@@ -101,23 +101,16 @@
               <a href="javascript:void(0);" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');" class="fx_sina tooltip" title="分享到新浪微博">新浪微博</a>
             </div>
             <p class="right_fx_p">推荐好友获取小太阳</p>
-          </div>
-          <div class="clear"></div>
-          <div class="right_ad">
-            <script type="text/javascript">
-              alimama_pid="mm_32461315_3337046_10822992";
-              alimama_width=120;
-              alimama_height=240;
-            </script>
-            <script src="http://a.alimama.cn/inf.js" type="text/javascript"></script>
-          </div>         
+          </div>          
+                  
         </div>
+        <div class="clear"></div>
       </div>
     </div>
     <div class="footer">
       <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
     </div>
-    <%= render :partial => 'users/details', :object => user_info if cookies[:user_id] and user_info %>
+    <%= render :partial => 'users/details', :object => user_infos if cookies[:user_id] and user_infos %>
     <div class="mask" style="display: none;"></div>
     <div class="guideMask" style="display: none;"></div>
     <% if cookies[:user_id] and is_nomal?(params[:category]) %>
@@ -125,7 +118,7 @@
       <%= render :partial => '/users/charge_sun' %>
     <% end %>
     <%= render :partial => '/layouts/inside_test' unless @plan_list %>
-    <%= render :partial=>'users/focus' if show_focus %>
+    <%= render :partial=>'users/focus' if show_focus(user_infos) %>
     <% if flash[:share_notice] %>
       <script type="text/javascript">
         tishi_alert('<%= flash[:share_notice] %>')

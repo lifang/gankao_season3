@@ -39,9 +39,33 @@ function checkIn(category){
         url:"/users/check_in?category="+category,
         type:'post',
         success:function(data){
+            if (data.message != "你今天已经签过到了哦~~~") {
+                $(".addOne").fadeIn("slow").animate({top:'0px'},800).fadeOut("slow");
+            }
             tishi_alert(data.message);
             $(".s_sun").html(data.num);
             $("#checkIn_days").html(data.days);
         }
     });
+}
+
+//保过协议用户信息验证
+function check_xieyi() {
+    if ($.trim($("#charge_name").val()) == "" || $("#charge_name").val().length > 20) {
+        tishi_alert("请正确填写您的姓名，且长度不能超过20个字符。");
+        return false;
+    }
+    if ($.trim($("#charge_card").val()) == "" || $("#charge_card").val().length > 20) {
+        tishi_alert("请正确填写您的身份证，且长度不能超过20个字符。");
+        return false;
+    }
+    if ($.trim($("#alipay_num").val()) == "" || $("#alipay_num").val().length > 200) {
+        tishi_alert("请正确填写您的支付宝账号，以方便我们汇款，长度不能超过200个字符。");
+        return false;
+    }
+    if ($.trim($("#charge_name").val()) != $.trim($("#charge_name1").val())) {
+        tishi_alert("'甲方（姓名）'与考生名称不一致，请填写一致");
+        return false;
+    }
+    return true;
 }

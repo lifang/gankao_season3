@@ -6,12 +6,17 @@
 </div>
 <% if @result[:step].to_i == 1 %>
   <div id="read" class="mc_box">
+    <div class="words_func">
+      <h2>请仔细看句子（本句将在后续题目中使用）。</h2>
+    </div>
     <div class="words_con">
       <div class="w_question"><%= @result[:sentence].en_mean %></div>
       <div class="w_question"><%= @result[:sentence].ch_mean %></div>
     </div>
     <div class="words_func">
-      <a onclick="next_step()" title="下一步" class="next tooltip">Next</a>
+      <div class="center_btn">
+        <button id="next_btn_ok" onclick="javascript:next_step();" class="confirm">我看好了</button>
+      </div>
     </div>
   </div>
   <div id="combin" class="mc_box" style="display:none">
@@ -19,6 +24,7 @@
     <div class="words_func">
       <h2>请点击单词组成完整句子。</h2>
       <input type="hidden" id="SID" value="<%= @result[:sentence].en_mean %>" />
+      <a href="javascript:void(0)" title="退一格" onclick="javascript:back_one();" class="back">退一格</a>
       <a onclick="redo()" title="点击撤销" class="reset tooltip">撤销</a>
     </div>
     <div class="words_con">
@@ -44,6 +50,7 @@
     <div class="words_func">
       <h2>请点击单词组成完整句子。</h2>
       <input type="hidden" id="SID" value="<%= @result[:sentence].en_mean %>" />
+      <a href="javascript:void(0)" title="退一格" onclick="javascript:back_one();" class="back">退一格</a>
       <a onclick="redo()" title="点击撤销" class="reset tooltip">撤销</a>
     </div>
     <div class="words_con">
@@ -66,42 +73,46 @@
 <% end %>
 <div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
+  var _words = [];
   $(document).ready(function(){
     $("#read .words_con").fadeTo(<%= @result[:time]*1000 %>, 0.3);
   })
 
   function click_word(id){
-    $("#current").html($("#current").html() +" "+ $("#_w_"+id).html() );
-    $("#_w_"+id).hide();
+    _words.push(id);
+    document.getElementById("current").innerHTML += ""+$("#_w_"+id).html()+" ";
+    $("#_w_"+id).attr("class", "hover");
+    $("#_w_"+id).attr("onclick", "javascript:void(0)");
   }
 
   function redo(){
     $("#current").html("");
-    $("#select li").show();
+    var lis = $("#select li");
+    for (var i=0; i<lis.length; i++) {
+      $(lis[i]).attr("class", "");
+      $(lis[i]).attr("onclick", "javascript:click_word("+i+")");
+    }
   }
 
   function hedui(){
     $("#hedui_a").attr("onclick", "javascipt:void(0)");
-    var right = $("#SID").attr("value").replace(/"/g," ").replace(/:/g," ").replace(/;/g," ").replace(/\?/g," ").replace(/!/g," ").replace(/,/g," ").replace(/\./g," ").replace(/  /g," ");
+    var right = $("#SID").attr("value").replace(/"/g," ");
     if($.trim(right) == $.trim($("#current").html())){
-      //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);
       jude('/learn/jude_sentence','true','false');
     }else{
-      //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);
       jude('/learn/jude_sentence','false','false');
     }
   }
 
   function next_step(){
-    //clearInterval(myTime.timeId);
+    $("#next_btn_ok").attr("onclick", "");
     window.clearInterval(local_timer);
     $("#read").hide();
     $("#combin").fadeIn(1000);
     local_start_time = <%= @result[:combin_time] %>;
     local_save_start();
-    //myTime.start(<%#= @result[:combin_time] %>)
   }
 
   function callback(){
@@ -116,5 +127,20 @@
   function next_sentence_a() {
     $("#next_sentence_a").attr('onclick', 'javascipt:void(0)');
     jude('/learn/jude_sentence','false','true');
+  }
+
+  function back_one() {
+    if(_words.length==0)return;
+    var w = _words.pop();
+    $("#_w_"+w).attr("class", "");
+    $("#_w_"+w).attr("onclick", "javascript:click_word("+w+")");
+    var current = $("#current").html().split(" ");
+    current.pop();
+    current.pop();
+    if(current.length==0){
+      $("#current").html("");
+    }else{
+      $("#current").html(""+current.join(" ")+" ");
+    }
   }
 </script>

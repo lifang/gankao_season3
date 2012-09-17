@@ -8,16 +8,14 @@
   <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
-    <% if @result[:step] == 1 %>     
+    <% if @result[:step] == 1 %>
       <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
       <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
       <h1><%= @result[:word].name.strip.gsub(/[0-9]/,"") %></h1>
       <span class="fyin">[ <%= @result[:word].phonetic %> ]</span>
       <input id="SID" type="hidden" value="<%= @result[:word].ch_mean %>" />
     <% else %>
-      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
-      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
-      <h1><%= @result[:word].ch_mean %></h1>      
+      <h1><%= @result[:word].ch_mean %></h1>
       <input id="SID" type="hidden" value="<%= @result[:word].name.strip.gsub(/[0-9]/,"") %>" />
     <% end %>
   </div>
@@ -43,26 +41,25 @@
 </div>
 <div class="tip_mask" style="display: none;"></div>
 <script type="text/javascript">
-
-  $(function(){
-    
-    $f("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
-      clip: {       
-        url: '<%= Constant::BACK_SERVER_PATH %><%= @result[:word].enunciate_url %>',
-        autoPlay: false
+<% if @result[:step] == 1 %>
+    $(function(){
+      $f("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        clip: {
+          url: '<%= Constant::BACK_SERVER_PATH %><%= @result[:word].enunciate_url %>',
+          autoPlay: false
+        }
+      });
+      if (getCookie("first_study") != "1") {
+        flowplayer('player').play();
       }
+      $("#playAudio").click(function(){
+        flowplayer('player').play();
+      });
     });
-    if (getCookie("first_study") != "1") {
-      flowplayer('player').play();
-    }
-    $("#playAudio").click(function(){
-      flowplayer('player').play();
-    });
-  });
-  
+<% end %>
   $(document).ready(function(){
     $(".words_ul li").click(function(){
-      if($("#SID").attr("value") == $("#I"+this.id).html()){
+      if($("#SID").attr("value").replace(/</g, "&lt;").replace(/>/g, "&gt;") == $("#I"+this.id).html()){
         //clearInterval(myTime.timeId);
         window.clearInterval(local_timer);
         jude("/learn/jude_word","true","false");

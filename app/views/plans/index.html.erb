@@ -11,27 +11,25 @@
       <%= render :partial => "sprint_practice" %>
     <% end %>
   <% else %>
+    <h1 class="mc_title"></h1>
     <div class="mc_box">
-      <div class="noTest">
-        <div class="r_text">
-          <h1>为什么要前测？</h1>
-          <p>为了帮助你更好的安排复习，我们会生成一份完全
-            个性化的复习方案，了解你当前的水平是最基础的步骤，
-            前测可以帮助我们了解你的水平 ，所以在前测时请不
-            要参考书本、网络或是请教别人。
-          </p>
+      <% (0..9).each do |i| %>
+        <div class="plan_list" style="cursor: pointer;" onclick="javascript:generate_flash_div('#start_tab_ts');">
+          <h1 class="pl_fk pl_d_bg"><span class="pl_img"><img src="/assets/suo.png"/></span>任务<%= i+1 %></h1>
+          <div class="pl_text">
+            <span>单词(0)&nbsp;&nbsp;&nbsp;词组(0)&nbsp;&nbsp;&nbsp;短语(0)</span>
+            <p>估计耗时：0分钟</p>
+          </div>
         </div>
-        <div class="btn_div">
-          <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();" class="noTest_btn">开始前测</a>
-        </div>
-      </div>
+      <% end %>
     </div>
-    <% if cookies[:user_id] and cookies[:first_login] == "1" %>
-      <%= render :partial=>'/common/gide_tab' %>
-    <% end
-    cookies.delete(:first_login)
+  <%# if cookies[:user_id] and cookies[:first_login] == "1" %>
+  <%#= render :partial=>'/common/gide_tab' %>
+  <%# end
+  cookies.delete(:first_login)
   %>
   <% end %>
 </div>
 <div class="plan_tab"></div>
 <%= render :partial=>'/plans/start_tab' %>
+<%= render :partial=>'/plans/start_tab_ts' %>

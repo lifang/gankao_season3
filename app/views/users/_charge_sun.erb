@@ -1,18 +1,29 @@
 <input type="hidden" value="<%= params[:category] %>" id="sun_category" />
 <div class="payment" id="payment_sun" style="display: none">
   <span class="close" id="close_sun">关闭</span>
-  <div class="pay_title">1）已经兑换的小太阳不能完全使用可以联系客户退款。<br/>
-    2）如在充值过程中遇到故障，请及时咨询在线客服。<br/>
-  3）1个小太阳=1元 </div>
-  <div class="pay_box">
-    <h1 class="pay_way_sun">开通方式一：</h1>
-    <div class="pay_con_two">
-      <div class="pcon_bg"><img src="/assets/paySun_bg.jpg" /></div>
-      <input name=""  id="sun_fee"  class="paySun_input" />
-       <a href="javascript:void(0)" class="pay_a_tow" id="sunpay_a_tow" target="_blank" onclick="sun_charge()"></a>
+  <div class="pay_title">
+    <h1>你将通过一下方式获得小太阳：</h1>
+    <div class="pay_list"><p>1）赶考每日签到。</p>
+      <a href="javascript:void(0)" onclick="checkIn(<%= params[:category] %>)" class="pay_sign">签到</a>
+      <span class="s_sun">+1</span>
     </div>
-    <span class="orange">温馨提示：支付宝充值免手续费</span>
-    <a href="#" class="huode_sun">如何获得更多小太阳</a>
+    <div class="pay_list">2）把赶考分享给好友。
+      <a href="javascript:void(0);" class="pay_sign" onclick="window.open('/users/share?web=renren&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=100');">人人</a>
+      <a href="javascript:void(0);" class="pay_sign" onclick ="window.open('/users/share?web=qq&category=<%= params[:category] %>', '_blank', 'height=480,width=510,left=300,top=150');">腾讯</a>
+      <a href="javascript:void(0);" class="pay_sign" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');">新浪</a>
+      <span class="s_sun">+5</span></div>
+    <div class="pay_list">3）发表原创技巧。<a href="/skills?category=<%= params[:category] %>" class="pay_sign">发表</a><span class="s_sun">+2</span></div>
+    <div class="pay_list">4）回答问题。<a href="/questions/unanswered?category=<%= params[:category] %>" class="pay_sign">去回答</a><span class="s_sun">+2</span></div>
+    <div class="pay_list">5）系统纠错。<span class="s_sun">+2</span></div>
+    <div class="pay_list">6）充值小太阳。</div>
+  </div>
+  <div class="pay_box">
+    <h1 class="pay_way_sun">充值小太阳：</h1>
+    <div class="paySun">
+      <input name=""  id="sun_fee"  class="paySun_input" />
+      <a href="javascript:void(0);" class="pay_a_btn" id="sunpay_a_tow" onclick="sun_charge()"></a>
+    </div>
+    <span class="orange">温馨提示：支付宝充值免手续费<span class="float_right">一个小太阳等于一元</span></span>
   </div>
 </div>
 
