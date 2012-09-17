@@ -9,8 +9,12 @@ class ExamUsersController < ApplicationController
       @paper_id = eu.paper_id
       @paper = Paper.find(@paper_id)
       @paper_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}"
+      puts "------------------------------"
+      puts @paper_js_url
       @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+      puts @answer_js_url
       s_url = ExamUser.find(params[:id]).answer_sheet_url
+      puts s_url
       sheet_url = "#{Constant::PUBLIC_PATH}#{s_url}"
       sheet_url = create_sheet(sheet_outline,params[:id]) unless (s_url && File.exist?(sheet_url))
       @sheet_url = sheet_url

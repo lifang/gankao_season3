@@ -103,7 +103,7 @@ class UsersController < ApplicationController
     if user and user.access_token and (user.end_time-Time.now>0)
       if @web=="sina"
         type=Sun::TYPES[:SINASHARE].to_i
-#        ret = sina_send_message(user.access_token, message)
+        #        ret = sina_send_message(user.access_token, message)
         ret =sina_send_pic(user.access_token,message,"#{category}.png")
         @message = "微博发送失败，网络繁忙，请稍后再试" if ret["error_code"]
       elsif @web=="renren"
@@ -152,7 +152,7 @@ class UsersController < ApplicationController
     reason="我正在使用赶考网#{Category::TYPE_INFO[category]}频道（#{Constant::SERVER_PATH}）复习，资料太全面啦，非常给力"
     if user and user.access_token and (user.end_time-Time.now>0)
       if user.code_type=="sina"
-#        ret = sina_send_message(user.access_token, reason)
+        #        ret = sina_send_message(user.access_token, reason)
         ret =sina_send_pic(user.access_token,reason,"#{category}.png")
         message ="微博发送失败，请重新尝试" if ret["error_code"] #送5个太阳
         request_weibo(user.access_token,user.code_id,"关注失败，请登录微博查看")
@@ -173,6 +173,29 @@ class UsersController < ApplicationController
       format.json {
         render :json=>{:message=>message}
       }
+    end
+  end
+
+  #保过协议
+  def xieyi
+    @name = params[:charge_name]
+    @id_card = params[:charge_card]
+    @alipay_num = params[:alipay_num]
+    respond_to do |format|
+      format.pdf do
+        pdf = WickedPdf.new.pdf_from_string( render_to_string(
+          :pdf => "agreement",
+          :templete => "/xieyi.pdf.erb",
+          :layout => false
+        )
+        )
+        puts
+        #save_path = Rails.root.join('pdfs','agreement.pdf')
+        #File.open("#{Rails.root}/agreement.pdf", 'wb') do |file|
+        #  file << pdf
+        #end
+        #send_file(save_path)
+      end
     end
   end
   

@@ -304,19 +304,23 @@ $(document).ready(function(){
 
 //右侧排行榜
 $(function(){
-    var current_date = new Date();   
-    var date = (new Date(2012, current_date.getMonth(), current_date.getDate()) - new Date(2012,8,13))/(3600*24*1000);
-    var arr = [235, 197, 324, 289, 377, 312, 263, 303, 202, 398];
-    var score_arr = [5, 5, 4, 4,  4, 4, 5, 4, 6, 3];
-    var s_start_mu = [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
-    var new_score = [];
-    
-    for (var i=0; i<score_arr.length; i++) {
-        var current_score = score_arr[i] * (s_start_mu[i] + date - Math.floor(Math.random()*2));
-        new_score.push(current_score + arr[i]);
-    }
-    var tds = $(".progress_list table .find_tr td");
-    for (var j=0; j<10; j++) {
-        tds[(j+1)*3-1].innerHTML = new_score[j];
+    if ($(".progress_list").length > 0) {
+        var current_date = new Date();
+        var date = (new Date(2012, current_date.getMonth(), current_date.getDate()) - new Date(2012,8,13))/(3600*24*1000);
+        var arr = [235, 197, 324, 289, 377, 312, 263, 303, 202, 398];
+        var score_arr = [5, 5, 4, 4,  4, 4, 5, 4, 6, 3];
+        var s_start_mu = [18, 16, 14, 12, 10, 8, 6, 4, 2, 0];
+        var new_score = [];
+
+        for (var i=0; i<score_arr.length; i++) {
+            var current_score = score_arr[i] * (s_start_mu[i] + date - Math.floor(Math.random()*2));
+            new_score.push(current_score + arr[i]);
+        }
+        var tds = $(".progress_list table .find_tr td");
+        for (var j=0; j<10; j++) {
+            if (tds[(j+1)*3-1] != null || tds[(j+1)*3-1] != undefined) {
+                tds[(j+1)*3-1].innerHTML = new_score[j];
+            }
+        }
     }
 });

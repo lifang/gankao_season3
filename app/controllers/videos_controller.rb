@@ -4,7 +4,7 @@ class VideosController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    category=params[:category_id].nil? ? 2 : params[:category_id]
+    category=params[:category].nil? ? 2 : params[:category]
     @schedules=Schedule.find_by_sql("select id,name from schedules where category_id=#{category}")
   end
 

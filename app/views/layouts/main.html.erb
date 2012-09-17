@@ -58,7 +58,6 @@
                 <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
             <% end %>
             <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
-            <span><%= Constant::TAOBAO_URL[params[:category].to_i][0] %><a href="<%= Constant::TAOBAO_URL[params[:category].to_i][1] %>" target="_blank">了解更多</a></span>
           </div>
         </nav>
       </div>
@@ -81,8 +80,8 @@
         </div>
         <div class="middle">
           <% if cookies[:user_id] and !is_has_plan? %>
-            <div class="recommend">你还没有制定复习方案，赶快为你制定一个个性化的
-              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">复习方案</a>吧！
+            <div class="recommend">你还没有复习方案，赶快为你制定一个属于自己的
+              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">复习计划</a>吧！
             </div>
           <% end %>
           <%= yield %>
