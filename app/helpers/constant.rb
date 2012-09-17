@@ -8,6 +8,7 @@ module Constant
   SENTENCE_TIME = {:READ => 1, :COMBIN => 2}
   LISTEN_TIME = {:PER => 1.5}
   READ_TIME = {:DEFAULT => 0.5, :QUESTION => 30}
+  TRANSLATE_TIME={:PER=>60}
 
   SERVER_PATH = "http://localhost:3001"
   BACK_SERVER_PATH = "http://manage.gankao.co"

@@ -578,14 +578,36 @@ nav li { float: left; margin: 0 20px;}
     box-shadow:0px 1px 1px #a2c2c3;
     text-indent: 0;
 }
-.drag_ul li:hover { background: #f8f8f8;}
+.drag_ul li.hover, .drag_ul button.hover { color: #e4e4e2;}
+.drag_ul li:hover, .drag_ul button:hover { background: #f8f8f8;}
 
 .drag_dl { padding: 5px; color: #387580;}
 .drag_dl dt { height: 32px; line-height: 32px;}
-.drag_dl dd { height: 32px; line-height: 32px; background: #FFF; border-radius: 0.6em;}
+.drag_dl dd {
+    min-height: 32px;
+    line-height: 32px;
+    background: #FFF;
+    border-radius: 0.6em;
+    padding: 0 32px 0 5px;
+    position: relative;
+}
+
+.drag_dl_dui, .drag_dl_cuo  {
+    float: right;
+    width: 32px;
+    height: 32px;
+    display: block;
+    text-indent: -999px;
+    overflow: hidden; 
+    position: absolute;
+    top: 0;
+    right:0;
+}
+.drag_dl_dui{ background: url(/assets/duicuo.png) no-repeat 0 bottom;}
+.drag_dl_cuo { background: url(/assets/duicuo.png) no-repeat 0 0; cursor: pointer;}
 
 .drag_juzi { padding: 5px; color: #387580;}
-.drag_juzi p { padding-left: 30px; height: 32px; line-height: 32px; font-size: 14px; cursor: move;}
+.drag_juzi p { padding-left: 30px; line-height: 32px; font-size: 14px; cursor: move;}
 .drag_juzi p:hover { text-decoration: underline;}
 
 .question_list { margin: 10px 0;}
@@ -639,12 +661,12 @@ nav li { float: left; margin: 0 20px;}
     z-index: 100;
 }
 .guideMask {
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: url(/assets/guideMask_bg.png) repeat;
-	z-index: 100;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url(/assets/guideMask_bg.png) repeat;
+    z-index: 100;
 }
 .tip_mask {
     width: 530px;
@@ -686,19 +708,19 @@ nav li { float: left; margin: 0 20px;}
 
 .mc_menu li {
     width: 99px;
-	height: 35px;
-	overflow: hidden;
-	margin: 5px 0;
-	line-height: 35px;
-	text-align: center;
-	color: #e4e3ce;
-	float: left;
-	cursor: pointer;
-	border-left: 1px #c32908 solid;
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
+    height: 35px;
+    overflow: hidden;
+    margin: 5px 0;
+    line-height: 35px;
+    text-align: center;
+    color: #e4e3ce;
+    float: left;
+    cursor: pointer;
+    border-left: 1px #c32908 solid;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
 }
 .mc_menu li.hover, .mc_menu li:hover {
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
 }
 .mc_menu li a {
     color: #fff;
@@ -707,19 +729,19 @@ nav li { float: left; margin: 0 20px;}
 /*----------------技巧专用s----------------*/
 .mc_menu00 li {
     width: 75px;
-	height: 35px;
-	overflow: hidden;
-	margin: 5px 0;
-	line-height: 35px;
-	text-align: center;
-	color: #e4e3ce;
-	float: left;
-	cursor: pointer;
-	border-left: 1px #c32908 solid;
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
+    height: 35px;
+    overflow: hidden;
+    margin: 5px 0;
+    line-height: 35px;
+    text-align: center;
+    color: #e4e3ce;
+    float: left;
+    cursor: pointer;
+    border-left: 1px #c32908 solid;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 0;
 }
 .mc_menu00 li.hover, .mc_menu00 li:hover {
-	background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
+    background: url(/assets/mc_menu_bg.png) repeat-x 0 -36px;
 }
 .mc_menu00 li a {
     color: #fff;
@@ -747,50 +769,50 @@ nav li { float: left; margin: 0 20px;}
 .askQuestion { overflow: hidden; padding: 0 112px 0 10px; position: relative;}
 .askQuestion_span {
     width: 420px;
-	height: 28px;
-	display: block;
-	text-indent: -999px;
-	overflow: hidden;
-	background: url(/assets/askQuestion_span_bg.png) no-repeat;
-	border: 1px #cfceb7 solid;
-	border-radius: 0.6em;
-	cursor: text;
-	position: absolute;
-	top: 0;
-	left: 10px;
+    height: 28px;
+    display: block;
+    text-indent: -999px;
+    overflow: hidden;
+    background: url(/assets/askQuestion_span_bg.png) no-repeat;
+    border: 1px #cfceb7 solid;
+    border-radius: 0.6em;
+    cursor: text;
+    position: absolute;
+    top: 0;
+    left: 10px;
 }
 .askQuestion_textarea {
     width: 410px;
-	display: block;
-	height: 28px;
-	border: 1px #C2B19F solid;
-	line-height: 28px;
-	border-radius: 0.6em;
-	padding: 0 5px;
-	font-size: 12px;
-	color: #387580;
-	font-family: "微软雅黑";
-	margin-bottom: 10px;
+    display: block;
+    height: 28px;
+    border: 1px #C2B19F solid;
+    line-height: 28px;
+    border-radius: 0.6em;
+    padding: 0 5px;
+    font-size: 12px;
+    color: #387580;
+    font-family: "微软雅黑";
+    margin-bottom: 10px;
 }
 .askQuestion_btn {
     width: 45px;
-	height: 20px;
-	line-height: 20px;
-	background: #525161;
-	text-align: center;
-	color: #e4e3ce;
-	border-radius: 0.2em;
-	display: block;
-	font-size: 11px;
-	float: right;
-	margin: 0 10px;
-	display: none;
+    height: 20px;
+    line-height: 20px;
+    background: #525161;
+    text-align: center;
+    color: #e4e3ce;
+    border-radius: 0.2em;
+    display: block;
+    font-size: 11px;
+    float: right;
+    margin: 0 10px;
+    display: none;
 }
 .askQuestion_up {
-	float: right;
-	line-height: 20px;
-	color: #666;
-	font-size: 11px;
+    float: right;
+    line-height: 20px;
+    color: #666;
+    font-size: 11px;
     display: none;
 }
 .askQuestion_number { color: #C2B19F; position:absolute; right: 114px; bottom: 32px; display: none;}
@@ -1206,37 +1228,37 @@ nav li { float: left; margin: 0 20px;}
 .m_index { background: #f0efe0; padding: 10px 0;}
 .m_index_box {
     width: 940px;
-	height: 540px;
-	margin: 0 auto;
-	background: url(/assets/m_index_bg.png) no-repeat 0 0;
-	position: relative;
+    height: 540px;
+    margin: 0 auto;
+    background: url(/assets/m_index_bg.png) no-repeat 0 0;
+    position: relative;
 }
 .m_video { width: 326px; height: 212px; margin: 146px 0 0 63px; _margin: 146px 0 0 31px; float: left; }
 .m_video_btn {
     width: 162px;
-	height: 162px;
-	display: block;
-	background: url(/assets/m_video_btn.png) no-repeat;
-	position: absolute;
-	top: 168px;
-	left: 143px;
+    height: 162px;
+    display: block;
+    background: url(/assets/m_video_btn.png) no-repeat;
+    position: absolute;
+    top: 168px;
+    left: 143px;
 
 }
 .index_text { margin-left: 65px; float: left;}
 .index_btn { position: absolute; right: 5px; bottom: 127px; overflow: hidden; _width: 500px; _right: 12px;}
 .index_btn h1 { font-size: 16px; line-height: 36px; padding-left: 5px;}
 .index_btn a {
-	color: #e7debe;
-	background: url(/assets/index_btn.png) no-repeat 0 -68px;
-	margin: 0 2px;
-	text-align: center;
-	padding: 5px;
-	font-size: 22px;
-	font-weight: bolder;
-	display: inline-block;
-	position: relative;
-	width: 155px;
-	height: 52px;
+    color: #e7debe;
+    background: url(/assets/index_btn.png) no-repeat 0 -68px;
+    margin: 0 2px;
+    text-align: center;
+    padding: 5px;
+    font-size: 22px;
+    font-weight: bolder;
+    display: inline-block;
+    position: relative;
+    width: 155px;
+    height: 52px;
 }
 .index_btn a:hover { background: url(/assets/index_btn.png) no-repeat 0 0;}
 .index_btn a span { position: absolute; right: 15px; bottom: 10px; font-size: 10px; font-weight:100;}
@@ -1249,10 +1271,10 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 
 .online_qq {
     width: 114px;
-	height: 91px;
-	position: fixed;
-	top: 200px;
-	right: -85px;
-	background: url(/assets/online_qq.png) no-repeat;
+    height: 91px;
+    position: fixed;
+    top: 200px;
+    right: -85px;
+    background: url(/assets/online_qq.png) no-repeat;
 }
 .online_qq p { margin: 50px 0 0 35px;}

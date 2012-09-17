@@ -16,11 +16,13 @@
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
     <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate") %>");
     <% end %>
     generate_flash_div(".plan_tab");
-    local_start_time = <%= @result[:time] %>;    
+    local_start_time = <%= @result[:time] %>;
     if (getCookie("first_study") != "1") {
-      local_save_start();
+    local_save_start();
     }
     <% id_arr = @ids_str.split(",") %>
     $(".t_number").html("<%= cookies[:complete_item].to_i - id_arr.length %> / <%= cookies[:complete_item].to_s %>");
@@ -30,4 +32,4 @@
 <% else %>
   tishi_alert("您的小太阳个数不够打开一个任务包了哦，呜呜~~~~~");
 <% end %>
- delCookie("first_study");
+delCookie("first_study");
