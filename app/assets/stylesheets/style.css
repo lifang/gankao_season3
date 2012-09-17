@@ -616,15 +616,37 @@ nav li { float: left; margin: 0 20px;}
     box-shadow:0px 1px 1px #a2c2c3;
     text-indent: 0;
 }
-.drag_ul li.hover { color: #e4e4e2;}
-.drag_ul li:hover { background: #f8f8f8;}
+
+.drag_ul li.hover, .drag_ul button.hover { color: #e4e4e2;}
+.drag_ul li:hover, .drag_ul button:hover { background: #f8f8f8;}
 
 .drag_dl { padding: 5px; color: #387580;}
 .drag_dl dt { height: 32px; line-height: 32px;}
-.drag_dl dd { height: 32px; line-height: 32px; background: #FFF; border-radius: 0.6em;}
+.drag_dl dd {
+    min-height: 32px;
+    line-height: 32px;
+    background: #FFF;
+    border-radius: 0.6em;
+    padding: 0 32px 0 5px;
+    position: relative;
+}
+
+.drag_dl_dui, .drag_dl_cuo  {
+    float: right;
+    width: 32px;
+    height: 32px;
+    display: block;
+    text-indent: -999px;
+    overflow: hidden; 
+    position: absolute;
+    top: 0;
+    right:0;
+}
+.drag_dl_dui{ background: url(/assets/duicuo.png) no-repeat 0 bottom;}
+.drag_dl_cuo { background: url(/assets/duicuo.png) no-repeat 0 0; cursor: pointer;}
 
 .drag_juzi { padding: 5px; color: #387580;}
-.drag_juzi p { padding-left: 30px; height: 32px; line-height: 32px; font-size: 14px; cursor: move;}
+.drag_juzi p { padding-left: 30px; line-height: 32px; font-size: 14px; cursor: move;}
 .drag_juzi p:hover { text-decoration: underline;}
 
 .question_list { margin: 10px 0;}
@@ -1319,6 +1341,7 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
     right: -85px;
     background: url(/assets/online_qq.png) no-repeat;
 }
+
 .online_qq p { margin: 50px 0 0 35px;}
 
 /*进步榜单------*/
@@ -1329,3 +1352,4 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 .progress_list table td { text-align: center; width: 38px;}
 .progress_list table tr.frist_tr { height: 20px;}
 .progress_list table td.frist_td { padding-right: 15px;}
+

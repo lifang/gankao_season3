@@ -29,6 +29,7 @@ class LearnController < ApplicationController
       end
       @items_str = items.join(",")
       cookies[:current_id] = items[0].split("-")[0] if items[0]
+      cookies[:type]=0
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
         @result = operate_word(items)
@@ -38,6 +39,8 @@ class LearnController < ApplicationController
         @result = operate_hearing
       when UserPlan::CHAPTER_TYPE_NUM[:READ]
         @result = operate_reading
+      when UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE]
+        @result = operate_translate(items)
       end      
     end
   end
@@ -516,4 +519,43 @@ class LearnController < ApplicationController
   end
 
   #-----End------听写过程------End------
+
+
+  #---start 翻译拖拽--start
+  def operate_translate(items)
+    item_ids=items[0..4].inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
+    sentences=PracticeSentence.find_by_sql("select id,ch_mean,en_mean from practice_sentences where id in (#{item_ids})")
+    time=sentences[0..4].inject(0) { |time,item|  time+sentence_words(item.en_mean).length }
+    return  {:type => cookies[:type], :time =>time,:sentence =>sentences}
+  end
+
+  def jude_translate
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    items =  params[:items].split(",")
+    ids = params[:ids].split(",")
+    correct_ids=params[:correct_ids].split(",")
+    correct_ids.each do |i|
+      item=items[ids.index(i)]
+      xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{item.split("-")[0]}']"
+      ids = ids - [i]
+      items = items - [item]
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+    end
+    wrong_items=items[0..(4-correct_ids.length)]
+    ids[0..(4-correct_ids.length)].each do |id|
+      wrong_items.each do |wrong| 
+        if id==wrong.split("-")[0]
+          items=(items-[wrong]).push(wrong)
+          ids=(ids-[id]).push(id)
+        end
+      end
+    end
+    pass_status(plan, xml, "part") if items.blank?
+    @status = is_part_pass?(plan, xml)
+    @items_str = items.join(",")
+    @ids_str = ids.join(",")
+    @redirct = params[:redirct]
+  end
+
 end

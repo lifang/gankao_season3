@@ -16,6 +16,8 @@
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
     <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate") %>");
     <% end %>
     generate_flash_div(".plan_tab");
     local_start_time = <%= @result[:time] %>;
