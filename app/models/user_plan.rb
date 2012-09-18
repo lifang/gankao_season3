@@ -503,9 +503,9 @@ class UserPlan < ActiveRecord::Base
       when CHAPTER_TYPE_NUM[:LINSTEN]
         PracticeSentence::TYPES[:LINSTEN]
       when CHAPTER_TYPE_NUM[:TRANSLATE]
-        PracticeSentence::TYPES[:TRANSLATE]
+        PracticeSentence::TYPES[:SENTENCE]
       else
-        PracticeSentence::TYPES[:DICTATION]
+        PracticeSentence::TYPES[:LINSTEN]
       end
       infos = PracticeSentence.find(:all, :select => "id", :conditions => ["types = ? and level = ?",
           sql_type, level])

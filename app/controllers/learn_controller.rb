@@ -28,6 +28,7 @@ class LearnController < ApplicationController
         @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
       end
       @items_str = items.join(",")
+      cookies[:modulus]=2
       cookies[:current_id] = items[0].split("-")[0] if items[0]
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
@@ -332,7 +333,7 @@ class LearnController < ApplicationController
         plan.update_plan
         ActionLog.study_plan_log(cookies[:user_id].to_i)
         send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
-        cookies[:user_id].to_i)
+          cookies[:user_id].to_i)
       end      
       return true
     end
@@ -536,11 +537,9 @@ class LearnController < ApplicationController
     correct_ids=params[:correct_ids].split(",")
     correct_ids.each do |i|
       item=items[ids.index(i)]
-      p item
       xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{item.split("-")[0]}']"
       ids = ids - [i]
       items = items - [item]
-      p xml
       rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     end
     wrong_items=items[0..(4-correct_ids.length)]

@@ -12,7 +12,6 @@
 <div class="mc_box">
   <div class="words_func">
     <h2>把正确的英语拖到中文下面，全部正确后将自动跳转。</h2>
-    <a href="#" title="点击重做" class="reset tooltip">重置</a>
   </div>
   <div class="words_con">
     <% sentences=@result[:sentence]%>
@@ -53,9 +52,11 @@
           }
         }
       })
+      $( ".drag_juzi p" ).draggable({ containment: ".mc_box" });
       $(".drag_juzi p").draggable({
         helper: "clone"
       });
+      
       function count_correct(){
         var correct_ids=[];
         for( var i=0;i<$(".drag_dl_dui").length;i++){
@@ -63,6 +64,7 @@
         }
         return correct_ids.join(",");
       }
+
       function delete_answer(drag,id){
         var t_number=$(".t_number").html().split("/");
         $(".t_number").html((parseInt(t_number[0])-1)+"/"+t_number[1])
@@ -70,10 +72,13 @@
         $(".drag_dl").find("#"+id).html("");
         $(".drag_juzi").find("#"+drag).css("display","");
       }
+
       function callback(){
-        show_tip("#timeup");
-        load_translate('/learn/jude_translate',count_correct(),"true")
+        show_tip("#read_timeup");
+        $( ".drag_juzi p" ).draggable({ disabled: true });
+        $(".drag_dl_cuo").attr("onclick","");
       }
+
       function load_translate(url,correct_ids,redirct){
         window.clearInterval(local_timer);
         $.ajax({
@@ -91,4 +96,9 @@
       }
     </script>
   </div>
+</div>
+<div id="read_timeup" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_face.png" /></div>
+  <div class="ts_text">没时间了！</div>
+  <div class="btn_center"><button onclick="load_translate('/learn/jude_translate',count_correct(),'true')" class="b_btn">直接下题</button></div>
 </div>
