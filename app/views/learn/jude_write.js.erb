@@ -12,12 +12,9 @@ window.ids = "<%= @ids_str %>";
   }
   })
 <% elsif @items_str.empty? && @status == false %>
-  setCookie("learn_step",1);
   window.clearInterval(local_timer);
-  $("#pass #text1").html("Congratulations!");
-  $("#pass #text2").html("You have completed the part1");
-  $("#pass .b_btn").html("enter part2");
-  window.items = "";
-  window.ids = "";
-  show_tip("#pass");
+  $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + $(".pl_l_bg").attr("id") + "，要坚持每天二十道真题才能保证学习质量哦，继续努力哦。");
+  show_tip("#all_pass");
+<% else%>
+  show_tip("#write_tip");
 <% end %>

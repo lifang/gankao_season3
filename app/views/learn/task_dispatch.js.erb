@@ -17,17 +17,27 @@
     <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
     <% when UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] %>
-      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate") %>");
+      <% if cookies[:learn_step].to_i==1 %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate_one") %>");
+      <% else %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate") %>");
+      <% end %>
+    <% when UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/listen_write") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:WRITE] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/write") %>");
     <% end %>
     generate_flash_div(".plan_tab");
     local_start_time = <%= @result[:time] %>;
-    if (getCookie("first_study") != "1") {
-    local_save_start();
-    }
+    <% if @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
+      if (getCookie("first_study") != "1") {
+      local_save_start();
+      }
+    <% end %>
     <% id_arr = @ids_str.split(",") %>
     $(".t_number").html("<%= cookies[:complete_item].to_i - id_arr.length %> / <%= cookies[:complete_item].to_s %>");
     if (getCookie("first_study") == "1") {
-      generate_flash_div("#start_tab");
+    generate_flash_div("#start_tab");
     }
   <% else %>
     tishi_alert("恭喜您已经完成所有的任务啦！");

@@ -288,7 +288,7 @@ nav li { float: left; margin: 0 20px;}
 .m_content { background: #e4e3ce; min-height: 691px;}
 .mc_title { height: 42px; line-height: 42px; font-size: 18px; padding-left: 20px;}
 
-.mc_box { padding: 10px; overflow: hidden;}
+.mc_box { padding: 10px; overflow: hidden;z-index: 299;}
 
 /*----广告----*/
 .right_ad { width: 125px; height: 300px; overflow: hidden; background: #E4E3CE;}
@@ -481,7 +481,7 @@ nav li { float: left; margin: 0 20px;}
 }
 
 .hover_on { border: 2px #387580 solid; padding: 2px; border-radius: 0.6em;}
-
+.plan_write { width: 530px; border-radius: 0.6em; background: #b0d3d4; position: absolute; z-index: 299;}
 .words_func { padding: 5px 10px; position: relative; overflow: hidden;}
 .words_func h1, .words_func h2 { color: #387580; height: 36px; line-height: 36px;}
 .words_func h1 { font-size: 24px;}

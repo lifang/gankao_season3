@@ -9,4 +9,6 @@ class WelcomesController < ApplicationController
     
   end
 
+
+ 
 end

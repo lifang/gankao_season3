@@ -55,7 +55,7 @@ class PlansController < ApplicationController
     score=plans[:TARGET_SCORE].nil? ? params[:target_score].to_i : plans[:TARGET_SCORE].to_i
     paras={:category_id=>category,:user_id=>cookies[:user_id],:all_start_level=>scores.join(","),:start_score=>t_score,:target_score=>score}
     plans.merge!(:DAYS=>UserPlan.package_level(category))
-   @plan_score = plans[:TARGET_SCORE] if (plans[:TARGET_SCORE] and plans[:TARGET_SCORE] > UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[category]}"])
+    @plan_score = plans[:TARGET_SCORE] if (plans[:TARGET_SCORE] and plans[:TARGET_SCORE] > UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[category]}"])
     @user_plan=[js_hash(plans),js_hash(paras),User.find(cookies[:user_id])]
     respond_to do |format|
       format.js

@@ -152,13 +152,8 @@ module Oauth2Helper
       params={ :access_token=>access_token,:screen_name=>Oauth2Helper::WEIBO_NAME,:uid=>Oauth2Helper::WEIBO_ID}
       action="/2/friendships/create.json"
       add_info=create_post_http(weibo_url,action,params)
-      if add_info["following"]
-        data="成功"
-      end
-    else
-      data="失败"
     end
-    share_log("qq微博 guanzhu",data)
+    share_log("sina guanzhu",add_info+"=========="+user_info)
   end
 
   #新浪微博获取用户信息
@@ -216,7 +211,7 @@ module Oauth2Helper
     else
       data= "qq user #{user.id}  send success"
     end
-    share_log("qq share",data)
+    share_log("qq shuoshuo",data+"====#{user.id}")
   end
 
   #qq分享
@@ -224,7 +219,7 @@ module Oauth2Helper
     send_parms={:access_token=>user.access_token,:openid=>user.open_id,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json"}
     send_parms.merge!(other_parms)
     info=create_post_http("https://graph.qq.com",share_to,send_parms)
-    share_log("qq share",info)
+    share_log("qq share",info+"====#{user.id}")
     return info
   end
 
@@ -272,7 +267,8 @@ module Oauth2Helper
   def focus_tencent_weibo(access_token,openid)
     send_parms={:oauth_consumer_key=>Oauth2Helper::APPID,:access_token=>access_token,:openid=>openid,
       :format=>"json",:scope=>"all",:oauth_version=>"2.a",:name=>Oauth2Helper::WEIBO_NAME}
-    return create_post_http("https://open.t.qq.com","/api/friends/add",send_parms)
+    info=create_post_http("https://open.t.qq.com","/api/friends/add",send_parms)
+    share_log("qq share",info)
   end
 
   #发送腾讯微博
