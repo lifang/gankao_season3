@@ -2,45 +2,40 @@
 module Constant
   #项目文件目录
   PUBLIC_PATH = "#{Rails.root}/public"
-  BACK_PUBLIC_PATH = "#{Rails.root}/public"
 
-  WORD_TIME = {1 => 15, 2 => 15, 3 => 30}
-  SENTENCE_TIME = {:READ => 1, :COMBIN => 3}
+  WORD_TIME = {1 => 15, 2 => 15, 3 => 15}
+  SENTENCE_TIME = {:READ => 1, :COMBIN => 2}
   LISTEN_TIME = {:PER => 1.5}
   READ_TIME = {:DEFAULT => 0.5, :QUESTION => 30}
-  TRANSLATE_TIME={:PER=>60}
 
-  TOTAL_PATH = "http://gankao.co"
-  SERVER_PATH = "http://localhost:3001"
+  SERVER_PATH = "http://test.gankao.co"
   BACK_SERVER_PATH = "http://manage.gankao.co"
-
-  GANKAO_GRADUATE_PATH = "http://localhost:3000/graduate"
-  GANKAO_CET4_PATH = "http://localhost:3000/cet_four"
-  GANKAO_CET6_PATH = "http://localhost:3000/cet_six"
-
-  #根据设定的日期判断用户的学习周期
+  GANKAO_GRADUATE_PATH = "http://pass.gankao.co/graduate"
+  GANKAO_CET4_PATH = "http://pass.gankao.co/cet_four"
+  GANKAO_CET6_PATH = "http://pass.gankao.co/cet_six"
+  
   DEAD_LINE = {
-    :CET4 => '2012-11-15',
-    :CET6 => '2012-10-15',
+    :CET4 => '2012-12-01',
+    :CET6 => '2012-12-01',
     :GRADUATE => '2013-01-05'
   }
   #分享图片路径及大小
   IMG_NAME_SIZE="/share.png&width=500&height=385"
-  SHARE_WORDS="我正在使用新版（http://www.gankao.co）赶考网复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
-  QQ_WORDS="我正在使用新版赶考网复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
+ SHARE_WORDS="用新版赶考网英语四级频道复习，四级必过，还免费的，太给力了，还有六级和考研频道，快来围观吧 http://www.gankao.co"
+   QQ_WORDS="我正在使用新版赶考网复习，看起来不错，有四级、六级和考研英语，大家赶快来围观~~~"
   SUMMARY="新版赶考包括四级、六级和考研英语三个频道，有历年真题和详细解析，听力、词汇、阅读、写作资料齐全；最重要的是，新版赶考可以测试出你的当前英文水准，并基于此为你定制属于自己的复习计划，怎么样？很酷吧！"
   SHARE_IMG="share.png"
   QQ_IMG="100.jpg"
   COMMENT="新版赶考（http://www.gankao.co），非常给力！！"
-  SHARE_TITLE="全新赶考网闪亮上线，英语在线备考从此无忧。"
+ SHARE_TITLE="全新赶考网闪亮上线，英语在线备考从此无忧。"
 
-
-  #  人人分享配置图片
+ #  人人分享配置图片
   RENREN_IMG={:LOGIN=>{:type=>2,:ugc_id=>6525229578,:user_id=>600942099},2=>{:type=>2,:ugc_id=>6525711626,:user_id=>600942099},
     3=>{:type=>2,:ugc_id=>6525711625,:user_id=>600942099},4=>{:type=>2,:ugc_id=>6525711624,:user_id=>600942099}
   }
 
-  RENREN_SHARE={2=>{:type=>2,:ugc_id=>6336084872,:user_id=>600942099},3=>{:type=>2,:ugc_id=>6336082558,:user_id=>601408987},
+
+ RENREN_SHARE={2=>{:type=>2,:ugc_id=>6336084872,:user_id=>600942099},3=>{:type=>2,:ugc_id=>6336082558,:user_id=>601408987},
     4=>{:type=>2,:ugc_id=>6336077693,:user_id=>601411057}}
 
   #考试时间
@@ -49,11 +44,11 @@ module Constant
   DATE_LONG=90
 
   #四级路由
-  CET4_PATH = "http://cet4.gankao.co/"
+  CET4_PATH = "http://cet4.gankao.co"
   #六级路由
-  CET6_PATH = "http://cet4.gankao.co/"
+  CET6_PATH = "http://cet6.gankao.co"
   #考研路由
-  GRADUATE_PATH = "http://graduate.gankao.co/"
+  GRADUATE_PATH = "http://graduate.gankao.co"
   #快捷方式路由
   FAST_PATH = {
     2 => ["英语四级频道", "#{SERVER_PATH}/CET4.url"],
@@ -68,13 +63,4 @@ module Constant
     4 => "考研英语不低于55分",
   }
 
-  #通栏url
-  TAOBAO_URL = {
-    2 => ["四级：亚马逊提供最全四级复习参考资料，更有超低价的开学特惠专区",
-      "http://s.click.taobao.com/t_11?e=%2BtSC5ziSlHJDn0pr%2F9njawAmde2OYPBcsA40bHP9WXzM5l7ADIqa9j15g63WZyiOeIAcouggP%2BknP8NA%2BKI%2F7RKFKdxFsMSktAW9ToqRp5KWvvkPws5oagfkIt%2Bvy08XVmzKXy73q3ynBEAHlraQ%2FVNEgotWKi0xnCgxuYergB8b1fX452DIPT2ZplRLxQ9jEZwAgtkzKBwvisnRpY1uuto%2ByZNts1S6GqUkSSxj45wf%2BoqZiU69trWr8si0BNMnTnugFefO6VP6pPxbDCNvghwHoN5HFT7SYv6nh%2BXNXxPToo0Pe8b7w1AC2wLehLlu8XCozADMiuO6JgZa7Gc%3D&p=mm_32461315_3337046_10827937"],
-    3 => ["六级：亚马逊提供最全六级复习参考资料，更有超低价的开学特惠专区",
-      "http://s.click.taobao.com/t_11?e=%2BtSC5ziSlHJDn0pr%2F9njawAmde2OYPBcsA40bHP9WXzM5l7ADIqa9j15g63WZyiOeIAcouggP%2BknP8NA%2BKI%2F7RKFKd%2FJw4%2BYbQ18gWZSLaXeP%2F8R4nV8pEuyuwUa2vnYe4Aufz%2FEkR2jJ6uHQteR9Dj5YkeBzAVYNC2DBxJC51Pg1CsbYyJHr8gtdF0b%2BwCqQfPYOtIcmWROEDyuRFlveSVozf5Zz0Ixy%2F20Q7nxz9nF5f%2FVNPn0ah9rrmmPQwnlZAQRryB8md7zddGt6LcWIK5oAaZzepWOsAStYpi7qL9w0bI4I1lCKJJ6lRgRGgMsDHWvF%2FWEYsCsnjt8aAk%3D&p=mm_32461315_3337046_10828645"],
-    4 => ["考研：亚马逊提供最全考研复习参考资料，更有超低价的开学特惠专区",
-      "http://s.click.taobao.com/t_11?e=%2BtSC5ziSlHJDn0pr%2F9njawAmde2OYPBcsA40bHP9WXzM5l7ADIqa9j15g63WZyiOeIAcouggP%2BknP8NA%2BKI%2F7RKFKd%2FJw4%2BYbQ18gWZSLaXeP%2F8R4nV8pEuyuwUa2vnYe4Aufz%2FEkR2jJ6uHQteR9Dj5YkeBzAVYNC2DBxJC51Pg1CsbYyJHr8gtdF0b%2BwCqQfPYOtIcmWROEDyuRFlveSVozf5Zz0Ixy%2F20Q7nxz9nF5f%2FVNPn0ah9rrmmPQwnlZAQRryB8md7zddGt6LcWIK5oAaZzepWOsAStYpi7qL9w0bI4I1lCKJJ6lRgRGgMsDHWvF%2FWEYsCsnjt8aAmEbHDwL93K%2BhVJPiygx2kvJi%2FjQ9A0uClPKqXZyY3aaCqNgwDqsb1wtdQl%2FV%2F8eOM8IuAFvxBTlXzYDF3z%2FBTRrPz6gY2Grw4PcT6Tkd07%2F3VNpnGorIr52U1CJcAUtr1SlRqwKCGy5sZ0YK3F8FAdxXHRq8vI3bNyoQ6dL1MNpYoZDQ2HM4xevREpULFmhSXoSs7ZK%2Fnk8n2inz4UliN4QsNhWHRUIYj%2Ft1CEr%2BAZdR3wKNp59MNySeWYsc617%2B4bvMyWRNSwW4ozAYC%2FXRt5otC%2B9OH0lsc8H5fyhQhbMQgofQSAxDtG9odFD2IwoxwZfD%2BM0J9WfO93X5c%3D&p=mm_32461315_3337046_10828658"]
-  }
 end

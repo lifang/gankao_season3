@@ -1,0 +1,21 @@
+---四级
+四级词汇 1
+四级听力 2
+---六级
+
+/*复习指南 schedule_id为3*/
+ /*新东方英语六级模拟考试精讲 schedule_id为4*/
+ /*新东方英语六级听力精讲 schedule_id为5*/
+/*新东方英语六级写作精讲 schedule_id为6*/
+/*新东方英语六级阅读精讲  schedule_id为7*/
+/*新东方英语六级综合精讲 schedule_id为8 */
+/*语法10日速成 schedule_id为9*/
+
+
+--考研
+/*2009考研英语词汇课程 schedule_id为10*/
+/*2009年考研英语阅读基础 schedule_id为11*/
+/*考研英语宫东风春季长难句班(全套) schedule_id为12*/
+/*考研英语写作核心词汇 schedule_id为13*/
+ /*考研英语写作强化课程 schedule_id为14*/
+/*考研英语阅读强化课程 schedule_id为15*/

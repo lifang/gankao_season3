@@ -140,7 +140,7 @@ class LoginsController < ApplicationController
           @user=User.create(:code_id=>response["uid"],:code_type=>'renren',:name=>response["name"], :username=>response["name"],
             :access_token=>access_token, :end_time=>Time.now+expires_in.seconds, :from => User::U_FROM[:WEB],:img_url=>response["tinyurl"])
           Sun.first_login(@user.id)
-          renren_send_message(@user.access_token,Constant::SHARE_WORDS,Constant::RENREN_IMG[:LOGIN])
+          renren_send_message(@user.access_token,Constant::SHARE_WORDS)
           cookies[:first_login] = {:value => "1", :path => "/", :secure  => false}
         else
           ActionLog.login_log(@user.id)
