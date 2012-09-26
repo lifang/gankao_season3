@@ -50,7 +50,7 @@ img { border: none;}
 .b_btn {
     padding: 5px 15px;
     border-radius: 0.6em;
-    box-shadow: 0px 4px 2px rgba(102,102,102,0.6);
+    box-shadow: 1px 1px 4px rgba(102,102,102,0.6);
     text-align: center;
     font-size: 14px;
     display: block;
@@ -235,12 +235,12 @@ nav li { float: left; margin: 0 20px;}
 
 .countDown {
     width:125px;
-	height: 88px;
-	background: #e4411e;
-	color: #e4e3ce;
-	margin-bottom: 10px;
-	overflow: hidden;
-	font-size: 14px;
+    height: 88px;
+    background: #e4411e;
+    color: #e4e3ce;
+    margin-bottom: 10px;
+    overflow: hidden;
+    font-size: 14px;
 }
 .countDown p { text-align: center; margin-top: 10px;}
 .countDown h1 { text-align: center; font-size: 45px; color: #FFF;}
@@ -506,10 +506,10 @@ nav li { float: left; margin: 0 20px;}
 }
 
 .back {
-	position: absolute;
-	top: 5px;
-	right: 60px;
-	background: url(/assets/icon.png) no-repeat 0 -152px;
+    position: absolute;
+    top: 5px;
+    right: 60px;
+    background: url(/assets/icon.png) no-repeat 0 -152px;
 }
 
 .sign {float: left; cursor: pointer; text-decoration: underline; color: #E4411E; line-height: 36px; }
@@ -832,6 +832,8 @@ nav li { float: left; margin: 0 20px;}
     color: #387580;
     font-family: "微软雅黑";
     margin-bottom: 10px;
+    overflow-y: auto;
+    overflow-x:hidden;
 }
 .askQuestion_btn {
     width: 45px;
@@ -854,7 +856,14 @@ nav li { float: left; margin: 0 20px;}
     font-size: 11px;
     display: none;
 }
-.askQuestion_number { color: #C2B19F; position:absolute; right: 114px; bottom: 32px; display: none;}
+.askQuestion_number { 
+    color: #C2B19F;
+    position:absolute;
+    right: 114px;
+    background: #FFF;
+    bottom: 32px;
+    display: none;
+}
 
 
 /*知识库文章---*/
@@ -1074,10 +1083,10 @@ nav li { float: left; margin: 0 20px;}
 }
 .pay_title {
     padding: 10px 30px 10px 50px;
-	border-radius: 0.3em;
-	color: #fff; font-size: 14px;
-	line-height: 24px;
-	background: #3e94a4;
+    border-radius: 0.3em;
+    color: #fff; font-size: 11px;
+    line-height: 24px;
+    background: #3e94a4;
 }
 .pay_title h1 { font-size: 20px; line-height: 32px; text-align: center;}
 .pay_title h2 { font-size: 16px; line-height: 32px; margin-top: 15px;}
@@ -1085,7 +1094,7 @@ nav li { float: left; margin: 0 20px;}
 .hguan { padding: 0 5px 0 22px; background: url(/assets/V.png) no-repeat 0 center;}
 
 .pay_box { padding: 10px 20px 30px 20px;}
-.pay_way_h{ width: 180px; height: 30px; margin: 10px 0; overflow: hidden; color: #3E94A4; font-size: 20px;}
+.pay_way_h{ height: 30px; margin: 10px 0; overflow: hidden; color: #3E94A4; font-size: 20px;}
 
 .pay_con_one, .pay_con_two { border-radius: 0.6em; border: 2px  #FFFFFF solid; position: relative; height: 100px;}
 .pay_con_one { background: #38747f url(/assets/zfb_bg.jpg) no-repeat 10px -5px;}
@@ -1094,24 +1103,24 @@ nav li { float: left; margin: 0 20px;}
 
 .pay_price {
     position: absolute;
-	top: 1px;
-	left: 350px;
-	width: 95px;
-	height: 95px;
-	line-height: 95px;
-	text-align: center;
-	color: #e3e2ce;
+    top: 1px;
+    left: 350px;
+    width: 95px;
+    height: 95px;
+    line-height: 95px;
+    text-align: center;
+    color: #e3e2ce;
 }
 .pay_price h1 { display: inline-block; font-size: 36px;}
 .pay_input {
     position: absolute;
-	top: 38px;
-	left: 171px;
-	height: 32px;
-	line-height: 32px;
-	width: 284px;
-	border: none;
-	padding: 0 5px;
+    top: 38px;
+    left: 171px;
+    height: 32px;
+    line-height: 32px;
+    width: 284px;
+    border: none;
+    padding: 0 5px;
 }
 
 /*小太阳支付*/
@@ -1138,14 +1147,14 @@ nav li { float: left; margin: 0 20px;}
 .pay_list .s_sun { margin-top: 8px;}
 .pay_list .pay_sign {
     background: #38747F;
-	color: #FFF;
-	width: 50px;
-	height: 25px;
-	text-align: center;
-	line-height: 25px;
-	margin: 5px 5px 0 5px;
-	border-radius: 0.6em;
-	float: right;
+    color: #FFF;
+    width: 50px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    margin: 5px 5px 0 5px;
+    border-radius: 0.6em;
+    float: right;
 }
 
 /*充值提示*/
@@ -1159,11 +1168,12 @@ nav li { float: left; margin: 0 20px;}
 .chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 
 /*支付协议---------*/
-.pay_xy { background: #FFF; height: 300px; overflow-y: auto; color: #38747F; padding: 10px;}
-.pay_xy input[type="text"] { border: none; border-bottom: 1px #38747F solid; padding: 0 10px;}
-.pay_table { margin: 10px 0; border: 1px #21555f solid;}
-.pay_table td { padding: 2px 5px;}
+.pay_xy { background: #FFF; height: 200px; overflow-y: auto; color: #38747F; padding: 10px;}
+.pay_xy input[type="text"] { border: none; border-bottom: 1px #38747F solid; padding: 0 10px;background: none;}
+.pay_table { margin: 10px 0; border: 1px #21555f solid;background: #f2f2f2;}
+.pay_table td { padding: 0px 5px;}
 .pay_div { line-height: 32px; text-indent: 24px; margin: 10px 0;}
+.yz_img { margin-left: 80px;}
 
 /*------关注gz_tab----------*/
 .gz_tab {

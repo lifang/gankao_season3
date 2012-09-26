@@ -37,7 +37,7 @@
         <tr>
           <td align="right">支付宝账号：</td>
           <td><input name="alipay_num" id="alipay_num" type="text" /></td>
-          <td colspan="2" rowspan="2">印证</td>
+          <td colspan="2" rowspan="2"><img src="/assets/yz.png" class="yz_img" /></td>
         </tr>
       </table>
       <div class="pay_div">
@@ -62,7 +62,7 @@
   </div>
 
   <div class="pay_box">
-    <h1 class="pay_way_h">开通高级会员：</h1>
+    <h1 class="pay_way_h">开通高级会员享受保过服务：</h1>
     <div class="pay_con_one">
       <div class="pay_price"><h1 id="pay_fee"><%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %></h1>元</div>
       <a href="javascript:void(0);" class="pay_a_btn"
