@@ -10,10 +10,11 @@
         <h1><%= @skill.skill_title %></h1>
         <div class="singlemeta center">
           <span>分类： <%= params[:category].to_i == Category::TYPE[:GRADUATE] ?
-                Skill::GRADUATE_SKILL_NAME[@skill.types] : Skill::CET_SKILL_NAME[@skill.types] %></span>
+              Skill::GRADUATE_SKILL_NAME[@skill.types] : Skill::CET_SKILL_NAME[@skill.types] %></span>
           <span>时间：<%= @skill.created_at.strftime("%Y-%m-%d %H:%M") %></span><span>作者: <%= @skill.user.name %></span></div>
         <input type="hidden" value="<%= category_id %>" id="category" />
         <input type="hidden" value="<%= @skill.types %>" id="con_t" />
+
         <div class="share">
           <ul>
             <li>分享到：</li>
@@ -25,12 +26,15 @@
             </div>
             <script type="text/javascript" >
               var jiathis_config={
-                url:"www.gankao.co",
-                summary:"",
-                title:"我的技巧我做主 英语技巧",
+                siteNum:3,
+                sm:"qzone,tsina,renren",
+                url:"http://<%= request.url %>",
+                summary:"新版赶考网上线了，更新，更全的技巧分享，英语考试不在是问题。",
+                title:"赶考网-<%= @skill.skill_title %> #<%= Category::TYPE_INFO[params[:category].to_i] %>#",
+                boldNum:3,
                 pic:"<%= Constant::SERVER_PATH %>/skill.png",
                 ralateuid:{
-                  "tsina":"gankao2011"
+                  "tsina":"2359288352"
                 },
                 appkey:{
                   "tsina":"3987186573",
@@ -39,7 +43,7 @@
               }
             </script>
             <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1340246517443536" charset="utf-8"></script>
-            
+
             <!-- JiaThis Button END -->
             <li class="like" onclick="like_one('<%= @skill.id %>')"><em ><%= @skill.like_num %></em></li>
           </ul>
@@ -49,7 +53,7 @@
         </div>
 
       </div>
-      
+
       <%= handle_paginate(params[:page], @skill_infos.length) %>
     </div>
     <div class="clear"></div>

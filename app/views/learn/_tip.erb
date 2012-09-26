@@ -41,7 +41,7 @@
     }
 <% else %>
     function next (item){
-      $(item).attr('onclick', 'javascipt:void(0)');
+      <%#*$(item).attr('onclick', 'javascipt:void(0)');%>
       dispatch('<%= cookies[:category] %>');
     }
 <% end %>

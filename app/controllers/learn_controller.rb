@@ -7,7 +7,7 @@ class LearnController < ApplicationController
   before_filter :sign?
 
   respond_to :html, :xml, :json, :js
-  
+
   def task_dispatch
     plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
@@ -16,7 +16,7 @@ class LearnController < ApplicationController
       cookies[:category] = params[:category]
       cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
       items = params[:items].split(",") if params[:items]
-      if items.nil? or items.blank?      
+      if items.nil? or items.blank?
         return if (info = willdo_part_infos(plan, xml)).nil?
         cookies[:type] = info[:type].to_i
         cookies[:complete_item] = info[:complete_item]
@@ -39,8 +39,17 @@ class LearnController < ApplicationController
       when UserPlan::CHAPTER_TYPE_NUM[:READ]
         @result = operate_reading
       when UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE]
-        @result = operate_translate(items)
-      end      
+        if cookies[:learn_step].to_i==1
+          cookies[:item_ids]=nil
+          @result = operate_translate_one
+        else
+          @result = operate_translate(items)
+        end
+      when UserPlan::CHAPTER_TYPE_NUM[:DICTATION]
+        @result=operate_listen
+      when UserPlan::CHAPTER_TYPE_NUM[:WRITE]
+        @result=operate_write
+      end
     end
   end
 
@@ -61,8 +70,8 @@ class LearnController < ApplicationController
     all_length = node.get_elements("item").nil? ? 0 : node.get_elements("item").length
     return all_length
   end
-  
-  
+
+
   #取出当前part的items 并组装 [id-repeat_time-step]
   def willdo_part_infos(plan, xml)
     review = willdo_review_infos(plan, xml)
@@ -88,7 +97,7 @@ class LearnController < ApplicationController
       :ids => node.elements.each("item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"){}.inject(Array.new) { |arr, a| arr.push("#{a.attributes['id']}-#{a.attributes['repeat_time']}-#{a.attributes['step']}") } }
   end
 
-  def operate_word(items)    
+  def operate_word(items)
     result = nil
     repeat = items[0].split("-")[1]
     step = items[0].split("-")[2].to_i + 1
@@ -298,7 +307,7 @@ class LearnController < ApplicationController
     @ids_str = ids.join(",")
     @redirct = "true"
   end
-  
+
   def rewrite_xml_item(plan, xml, xpath, is_pass, repeat_time, step)
     element = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath]
     element.add_attribute("is_pass", UserPlan::PLAN_STATUS[:FINISHED]) if is_pass == UserPlan::PLAN_STATUS[:FINISHED]
@@ -333,13 +342,13 @@ class LearnController < ApplicationController
         ActionLog.study_plan_log(cookies[:user_id].to_i)
         send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，距离成功又进一步，加油！(*^__^*) ……",
         cookies[:user_id].to_i)
-      end      
+      end
       return true
     end
     return false
   end
 
-  
+
 
   def study_it
     @result = nil
@@ -356,7 +365,23 @@ class LearnController < ApplicationController
       @result = {
         :sentence => PracticeSentence.find(cookies[:current_id])
       }
+    elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE]
+      if cookies[:learn_step].to_i==1
+        @result = {
+          :sentence => PracticeSentence.find(cookies[:current_id])
+        }
+      else
+        @result = {
+          :sentence => PracticeSentence.find_by_sql("select id,ch_mean,en_mean from practice_sentences where id in (#{cookies[:item_ids]})")
+        }
+
+      end
+    elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:DICTATION]
+      @result = {
+        :sentence => PracticeSentence.find(cookies[:current_id])
+      }
     end
+
     return @result
   end
 
@@ -364,197 +389,144 @@ class LearnController < ApplicationController
     return str.gsub(/"/," ").split(" ")
   end
 
+  
   #----Start-------听写过程--------Start----
-  def listen
-    #获取用户信息和xml路径和类别
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], params[:category]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-    #  获取听写数据
-    @source=listen_write_source(xml)
-    if @source.nil?
-      render :text=>"今天题目已经答完"
-    end
+  def operate_listen
+    sentence=PracticeSentence.find(cookies[:current_id])
+    time=sentence_words(sentence.en_mean).length
+    return  {:type => cookies[:type], :time =>time*10,:sentence =>sentence}
   end
 
-  def next_sentence
-    type = params[:type]
-    id = params[:id]
-    is_correct=params[:is_correct]
-    is_answer=params[:is_answer]
-    @index=params[:index].to_i
-    @listen_ids=params[:ids].split(",").to_a
-    p @listen_ids
-    #题目类型  5为听写
-    part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s
-    #获取用户xml路径
-    plan = UserPlan.where(["user_id = ? and category_id = ?", cookies[:user_id], params[:category]]).first
-    xml = REXML::Document.new(File.open(Constant::PUBLIC_PATH + plan.plan_url)) if plan
-    current=xml.elements["root/plan/current"].text.to_i
-    #处理句子更改状态,根据类型不同进行不同的操作
-    if is_answer=='true'
-      xml_and_index=handle_sentences(xml,current,type,id,is_correct,@index,part_type,@listen_ids)
-      xml=xml_and_index[:xml]
-      #写入xml
-      write_xml(xml,x_url)
-      @index=xml_and_index[:index]
-      @listen_ids=xml_and_index[:ids]
-      p @listen_ids
-    end
-    p @index
-    p @index<@listen_ids.length-1?@index+1:0
-    p !(@listen_ids.empty?)
-    if !(@listen_ids.empty?)
-      @index=@index<@listen_ids.length-1?@index+1:0
-      next_id=@listen_ids[@index]
-      #获取新数据
-      source=listen_write_by_id(xml,type,current,next_id,part_type)
-      render :partial=>'/learn/listen_write',:object=>source
+  def jude_listen
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    items =  params[:items].split(",")
+    ids = params[:ids].split(",")
+    xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{cookies[:current_id]}']"
+    if params[:flag] == "true"
+      ids = ids - [items[0].split("-")[0]]
+      items = items - [items[0]]
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     else
-      #更改当前句子部分的status的值 type为plan或review current为当前包
-      change_part_status(xml,type,current,part_type)
-      write_xml(xml,x_url)
-      #继续查找句子数据,如果没有 表示今天句子任务已经完成
-      listen_source=listen_write_source(xml)
-      if !(listen_source.nil?)
-        render :partial=>'/learn/listen_write',:object=>listen_source
-      else
-        render :text=>"答题完成"
-      end
+      items = (items - [items[0]]).push(items[0])
     end
-  end
-
-  #获取听写句子的数据，复习或计划
-  def listen_write_source(xml)
-    part_type=UserPlan::CHAPTER_TYPE_NUM[:DICTATION].to_s #听写为5
-    #获取当前正在做的计划包
-    current=xml.root.elements["plan"].elements["current"].text.to_i
-    p ("root/review/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
-    #复习的句子
-    review_listen_sentences=[]
-    #复习个数
-    review_sum=0
-    #获取复习听的句子
-    review_listen_sentences=xml.
-      get_elements("root/review/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
-
-    review_sum=review_listen_sentences.length
-
-    #计划要学的句子
-    plan_listen_sentences=[]
-    plan_sum=0
-    plan_listen_sentences=xml.
-      get_elements("root/plan/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
-    plan_sum = plan_listen_sentences.length #新学听写总数
-    #如果没有数据
-    if  review_sum!=0 || plan_sum!=0
-      if review_sum>0
-        #获取第一个复习的听写句子
-        xml_sentence,web_type = review_listen_sentences[0],"review"
-      else
-        if plan_sum > 0
-          #获取第一个新学的听写句子
-          xml_sentence,web_type = plan_listen_sentences[0],"plan"
-        else
-          return nil
-        end
-      end
-      @listen_ids=get_ids(xml,web_type,current,part_type)
-      p @listen_ids.to_s.gsub(/([\[\]])/i,"")
-      @index=0
-      listen_sentence=PracticeSentence.find(xml_sentence.attributes["id"])
-      return {:listen_sentence=>listen_sentence,:web_type=>web_type}
-    else
-      return nil
-    end
-  end
-  #通过id查询句子 type为review或plan current为当前包数
-  def listen_write_by_id(xml,web_type,current,id,part_type)
-    source=xml.get_elements("root/#{web_type}/_#{current}/part[@type='#{part_type}']/item[@id='#{id}']")[0]
-    listen_sentence=PracticeSentence.find(source.attributes["id"].to_i)
-    return {:listen_sentence=>listen_sentence,:web_type=>web_type}
-  end
-  #处理句子 id 当前做的题目id is_correct答题正确和错误 index当前题目在总题目中的索引 ids当前所有题目的id
-  def handle_sentences(xml,current,type,id,is_correct,index,part_type,ids)
-    #找到句子
-    sentence=xml.elements["root/#{type}/_#{current}/part[@type='#{part_type}']/item[@id='#{id}']"]
-
-    #如果答对了就修改step+1和is_pass='1'
-    if is_correct=='true'
-      #获取repeat_time,如果不为0，则减一,不修改step和is_pass
-      repeat_time=sentence.attributes["repeat_time"].to_i
-      if repeat_time==0
-        #改step和is_pass
-        step=sentence.attributes["step"].to_i+1
-        sentence.add_attribute("step",step.to_s)
-        sentence.add_attribute("is_pass",UserPlan::PLAN_STATUS[:FINISHED].to_s)
-        #从ids中删除已经答对的 ,index-1
-        ids.delete(id)
-        index=index-1
-      else
-        #只改repeat_time
-        repeat_time=repeat_time-1
-        sentence.add_attribute("repeat_time",repeat_time.to_s)
-      end
-      #答错，修改repeat_time=1
-    else
-      sentence.add_attribute("repeat_time",'1')
-    end
-    return {:xml=>xml,:index=>index,:ids=>ids}
-  end
-  #获取句子的id,type为review或plan current为当前包数 part_type为题目类型
-  def get_ids(xml,type,current,part_type)
-    items=xml.get_elements("root/#{type}/_#{current}/part[@type='#{part_type}']/item[@is_pass='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']")
-    ids=[]
-    items.each do |i|
-      ids<<i.attributes["id"].to_i
-    end
-    return ids
-  end
-  #更改part的status  part_type为xml部分的类型 --听写 5
-  def change_part_status(xml,type,current,part_type)
-    part=xml.elements["root/#{type}/_#{current}/part[@type='#{part_type}']"]
-    part.add_attribute("status",'1')
-    return xml
+    xml = pass_status(plan, xml, "part") if items.blank?
+    @status = false
+    @flag = params[:flag]
+    @items_str = items.join(",")
+    @ids_str = ids.join(",")
+    @redirct = params[:redirct]
   end
 
   #-----End------听写过程------End------
 
+  
 
-  #---start 翻译拖拽--start
+  #---------------start 翻译拖拽--------------------start
+  
   def operate_translate(items)
     item_ids=items[0..4].inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
     sentences=PracticeSentence.find_by_sql("select id,ch_mean,en_mean from practice_sentences where id in (#{item_ids})")
     time=sentences[0..4].inject(0) { |time,item|  time+sentence_words(item.en_mean).length }
-    return  {:type => cookies[:type], :time =>time,:sentence =>sentences}
+    return  {:type => cookies[:type], :time =>time*2,:sentence =>sentences}
   end
 
   def jude_translate
-    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
-    xml = plan.plan_list_xml
+    #    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    #    xml = plan.plan_list_xml
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
     correct_ids=params[:correct_ids].split(",")
     correct_ids.each do |i|
       item=items[ids.index(i)]
-      xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{item.split("-")[0]}']"
       ids = ids - [i]
       items = items - [item]
-      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     end
     wrong_items=items[0..(4-correct_ids.length)]
     ids[0..(4-correct_ids.length)].each do |id|
-      wrong_items.each do |wrong| 
+      wrong_items.each do |wrong|
         if id==wrong.split("-")[0]
           items=(items-[wrong]).push(wrong)
           ids=(ids-[id]).push(id)
         end
       end
     end
-    pass_status(plan, xml, "part") if items.blank?
-    @status = is_part_pass?(plan, xml)
+    @status = false
     @items_str = items.join(",")
     @ids_str = ids.join(",")
     @redirct = params[:redirct]
   end
+
+  #单个翻译
+  def operate_translate_one
+    sentence=PracticeSentence.find(cookies[:current_id])
+    time=sentence_words(sentence.en_mean).length
+    return  {:type => cookies[:type], :time =>time*8,:sentence =>sentence}
+  end
+
+  def jude_translate_one
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    items =  params[:items].split(",")
+    ids = params[:ids].split(",")
+    xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{cookies[:current_id]}']"
+    if params[:flag] == "true"
+      ids = ids - [items[0].split("-")[0]]
+      items = items - [items[0]]
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+    else
+      items = (items - [items[0]]).push(items[0])
+    end
+    xml = pass_status(plan, xml, "part") if items.blank?
+    @status = false
+    @flag = params[:flag]
+    @items_str = items.join(",")
+    @ids_str = ids.join(",")
+    @redirct = params[:redirct]
+  end
+  #---------------end 翻译拖拽--------------------end
+
+  #---------------start 写作--------------------start
+  def operate_write
+    tractate_url=Constant::BACK_PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
+    xml=list_xml(tractate_url)
+    context=xml.elements["/root/description/p"].text
+    list_words=context.gsub(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/," ").split(" ")
+    words =[]
+    (0..5).each do |i|
+       words << list_words.delete(list_words.max_by {|word|  word.length })
+    end
+    return  {:type => cookies[:type], :time =>900,:sentence =>words.join(" "),:context=>context}
+  end
+
+  def list_xml(url)
+    file=File.open (url)
+    doc = Document.new(file)
+    file.close
+    return doc
+  end
+
+  def jude_write
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    items =  params[:items].split(",")
+    ids = params[:ids].split(",")
+    xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{cookies[:current_id]}']"
+    if params[:flag] == "true"
+      ids = ids - [items[0].split("-")[0]]
+      items = items - [items[0]]
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+    else
+      items = (items - [items[0]]).push(items[0])
+    end
+    xml = pass_status(plan, xml, "part") if items.blank?
+    @status = false
+    @flag = params[:flag]
+    @items_str = items.join(",")
+    @ids_str = ids.join(",")
+    @redirct = params[:redirct]
+  end
+
+  #---------------end 翻译拖拽--------------------end
 
 end

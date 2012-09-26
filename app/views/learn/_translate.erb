@@ -7,12 +7,11 @@
   <h1>翻译练习</h1>
   <div class="pt_time">00:00:00</div>
   <span class="t_number">2/20</span>
-  <span class="close">关闭</span>
+  <span class="close" onclick="close_pop()" >关闭</span>
 </div>
 <div class="mc_box">
   <div class="words_func">
     <h2>把正确的英语拖到中文下面，全部正确后将自动跳转。</h2>
-    <a href="#" title="点击重做" class="reset tooltip">重置</a>
   </div>
   <div class="words_con">
     <% sentences=@result[:sentence]%>
@@ -49,13 +48,16 @@
             $(this).append('<span class="drag_dl_cuo tooltip" onclick="delete_answer('+ $(this).attr("drag")+','+ this.id+')" title="删除重做">错误</span>')
           }
           if ($(".drag_dl_dui").length==$(".drag_dl dd").length){
+            tishi_alert("Congratulations,Loading next group!")
             load_translate('/learn/jude_translate',count_correct(),"true")
           }
         }
       })
+      $( ".drag_juzi p" ).draggable({ containment: ".plan_tab" });
       $(".drag_juzi p").draggable({
         helper: "clone"
       });
+      
       function count_correct(){
         var correct_ids=[];
         for( var i=0;i<$(".drag_dl_dui").length;i++){
@@ -63,6 +65,7 @@
         }
         return correct_ids.join(",");
       }
+
       function delete_answer(drag,id){
         var t_number=$(".t_number").html().split("/");
         $(".t_number").html((parseInt(t_number[0])-1)+"/"+t_number[1])
@@ -70,10 +73,13 @@
         $(".drag_dl").find("#"+id).html("");
         $(".drag_juzi").find("#"+drag).css("display","");
       }
+
       function callback(){
-        show_tip("#timeup");
-        load_translate('/learn/jude_translate',count_correct(),"true")
+        show_tip("#read_timeup");
+        $( ".drag_juzi p" ).draggable({ disabled: true });
+        $(".drag_dl_cuo").attr("onclick","");
       }
+
       function load_translate(url,correct_ids,redirct){
         window.clearInterval(local_timer);
         $.ajax({
@@ -89,6 +95,30 @@
           }
         })
       }
+      function next_translate(){
+        $("#pass").css("display","none");
+        $.ajax({
+          async:true,
+          dataType:'script',
+          url:"/learn/task_dispatch?category=<%= cookies[:category] %>",
+          type:'post'
+        })
+      }
     </script>
   </div>
+</div>
+<div id="read_timeup" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_face.png" /></div>
+  <div class="ts_text">Time is up！</div>
+    <div class="btn_center_double">
+    <button onclick="setCookie('item_ids',ids.split(',').slice(0,5).join(','));send_message('/learn/study_it')" class="b_btn">学习一下</button>
+    <button onclick="load_translate('/learn/jude_translate',count_correct(),'true')" class="b_btn">next group</button>
+  </div>
+</div>
+<div id="pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center"><button class="b_btn" onclick="next_translate()">继续下一步</button></div>
 </div>

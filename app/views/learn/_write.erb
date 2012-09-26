@@ -1,0 +1,137 @@
+<div class="pt_title">
+  <h1>阅读练习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number">2/20</span>
+  <span class="close" onclick="close_pop()">关闭</span>
+</div>
+<div class="mc_box">
+  <div class="words_func">
+    <h2>根据下面的词汇，写一篇不少于二百字的英语短文</h2>
+  </div>
+  <div class="w_question"><%= @result[:sentence] %></div>
+  <div class="words_func"><a href="#" class="lookText" title="您可以有3次机会偷看原文" onclick="show_context(this,0)">查看原文(3)</a>
+    <a href="#" class="heduiText" onclick="show_context(this,1)" title="您可以核对三次是否通过">核对(3)</a></div>
+  <div class="words_con">
+    <textarea name="" cols="" rows="" class="answer_textarea" id="answer_textarea"></textarea>
+  </div>
+  <div class="words_func">
+    <a onclick="next(this)" title="下一步" class="next tooltip" >Next</a>
+  </div>
+</div>
+<script type="text/javascript">
+  setCookie("check_see","3_3");
+  function show_context(e,index){
+    var times=getCookie("check_see").split("_");
+    var chance=parseInt(times[index])-1;
+    times[index]=chance;
+    setCookie("check_see",times.join("_"));
+    if (chance<0){
+      $(e).attr("onclick","");
+      if (index==0){
+        $(e).attr("title","您偷看的机会用完了哦！");
+        $(e).html("查看原文(0)");
+      }else{
+        $(e).attr("title","您核对的机会用完了哦！");
+        $(e).html("核对(0)");
+      }
+    }else{
+      if (index==0){
+        $(e).html("查看原文("+ chance+")");
+        $(e).attr("title","您可以有"+ chance+"次机会偷看");
+        $("#old_article").css("height",$(".plan_tab").height());
+        $("#old_article").css("display","");
+      }else{
+        $(e).html("核对("+ chance+")");
+        $(e).attr("title","您可以有"+ chance+"次机会核对");
+        if (chance==0){
+          $("#write_tip .close").attr("onclick","");
+        }
+        if (check_model()=="true"){
+          jude('/learn/jude_write',check_model(),'false');
+        }else{
+          show_tip("#write_tip");
+        }
+      }
+    }
+  }
+
+  function modify_str(str){
+    return str.replace(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/g," ").toLowerCase();
+  }
+
+  function check_model(){
+    var need_write=$(".w_question").html().split(" ");
+    var user_answer=$("#answer_textarea").val();
+    var done_words=[]
+    for(var i=0;i<need_write.length;i++){
+      if (user_answer.indexOf(need_write[i])>=0){
+        done_words.push(need_write[i])
+      }
+    }
+    var flag="false";
+    if (user_answer==""){
+      $("#write_tip #text2").html("您没有作答");
+    }else{
+      var context =modify_str(user_answer).split(" ").length;
+     
+      if (context>200 && done_words.length==$(".w_question").html().split(" ").length){
+        flag="true"
+      }
+    }
+    if (flag=="true"){
+      $("#write_tip #text2").html("您共完成"+context+'个单词');
+      $("#write_tip .ts_img").attr("src","/assets/s_face.png");
+      $("#write_tip #text1").html("完成了！");
+    }else{
+      $("#write_tip #text2").html("您共完成"+context+'个单词，包含特定单词 '+done_words.join(" ")+"");
+      $("#write_tip .ts_img").attr("src","/assets/c_face.png");
+      $("#write_tip #text1").html("没完成！");
+    }
+    return flag
+  }
+
+
+  function next (item){
+    $(item).attr('onclick', 'javascipt:void(0)');
+    jude('/learn/jude_word',"false",'true');
+  }
+
+  function callback(){
+    jude('/learn/jude_write',check_model(),'false');
+    $("#write_tip #text1").html("时间到了！");
+
+  }
+</script>
+<div id="old_article" style="display:none; z-index:990;top: 0;left:0;" class="plan_write">
+  <div class="pt_title">
+    <h1>原文</h1>
+    <span class="close" onclick="$('#old_article').css('display','none')">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="words_con">
+      <div class="text_con">
+        <p>
+          <%= @result[:context].gsub("[]","") %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="write_tip" class="tishi_box" style="display: none">
+  <span class="close" onclick="$('#write_tip').css('display','none')" >关闭</span>
+  <div class="ts_img"><img src="assets/c_face.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center_double">
+    <button onclick=' $("#old_article").css("height",$(".plan_tab").height());$("#old_article").css("display","");' class="b_btn">查看范文</button>
+    <button onclick="next(this)" class="b_btn">直接下题</button>
+  </div>
+</div>
+
+<div id="all_pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text">恭喜今天的任务全部掌握！</div>
+  <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
+</div>

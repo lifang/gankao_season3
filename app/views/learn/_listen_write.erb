@@ -1,43 +1,79 @@
-<%
-@listen_sentence=listen_write[:listen_sentence]
-@web_type=listen_write[:web_type]
-%>
-<%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
-<%=javascript_include_tag "listen_write"%>
-<input type="hidden" id="global_sentence_en_mean" value="<%= @listen_sentence.en_mean.gsub("\"","").strip%>"></input>
-<script type="text/javascript">
-  var listen_sentence=$("#global_sentence_en_mean").val();
-  var listen_ids="<%=@listen_ids.to_s.gsub(/([\[\]\ ])/i,"")%>"
-  var id= "<%=@listen_sentence.id%>";
-  var index="<%=@index%>";
-  var web_type = "<%= @web_type %>";
-  var url="<%=Constant::SERVER_PATH.concat(@listen_sentence.enunciate_url.to_s)%>";
-  var count = 1;//答题次数-最大为3
-  var answer_mark = false; //记录题目是否做对
-  var is_answer=false;
-</script>
-<div class="plan_tab">
-  <div class="pt_title">
-    <h1>听力练习</h1>
-    <div class="pt_time">无限制&nbsp;&nbsp;</div>
-    <span class="t_number"><%=@index+1%>/<%=@listen_ids.length%></span>
-    <span class="close">关闭</span>
+<%=javascript_include_tag "flowplayer/flowplayer-3.2.6.min.js"%>
+<div class="pt_title">
+  <h1>听力练习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number">2/20</span>
+  <span class="close" onclick="close_pop()">关闭</span>
+</div>
+<div class="mc_box">
+  <div class="words_func">
+    <h2>听录音，在下面写入你听到的内容。</h2>
+    <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; ">
+    </div>
+    <a id="listen_playAudio" href="#" title="播放音频"  class="play_audio tooltip" onclick="listen_play()">播放音频</a>
   </div>
-  <div class="mc_box">
-    <div class="words_func">
-      <h2>听录音，在下面写入你听到的内容。</h2>
-      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; ">
-      </div>
-      <a id="playAudio" href="#" title="播放音频"  class="play_audio tooltip">播放音频</a>
-    </div>
-    <div class="words_con">
-      <textarea id="ls_answer" name="" cols="" rows="" class="answer_textarea"></textarea>
-      <div class="trueFalse"><img src="/assets/true.png" /></div>
-    </div>
-
-    <div class="words_func">
-      <a id="checkAnswer" href="#"  title="点击核对正确答案" class="hedui tooltip">核对</a>
-      <a id="nextQuestion" href="#"   title="下一步"  class="next tooltip">Next</a>
-    </div>
+  <div class="words_con">
+    <textarea name="" cols="" rows="" id="answer_textarea" class="answer_textarea"></textarea>
+  </div>
+  <div class="words_func">
+    <a onclick="check()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+    <a onclick="next_listen(this)" id="next_sentence_a" title="跳过" class="next tooltip">Next</a>
   </div>
 </div>
+<%= render :partial=>"/learn/tip" %>
+<input type="hidden" id="en_mean" value="<%= @result[:sentence].en_mean%>"></input>
+<script type="text/javascript">
+  flowplayer("player", "assets/flowplayer/flowplayer-3.2.7.swf", {
+    clip: {
+      url: '<%= Constant::BACK_SERVER_PATH %><%= @result[:sentence].enunciate_url %>',
+      autoPlay : false,
+      // when music starts grab song's metadata and display it using content plugin
+      onStart: function(song) {
+        if (flowplayer('player').getState()!=-1){
+          window.clearInterval(local_timer);
+          local_save_start();
+        }
+      }
+    }
+  })
+
+  function next_listen(item){
+    window.clearInterval(local_timer);
+    $(item).attr('onclick', 'javascipt:void(0)');
+    jude('/learn/jude_listen','false','true');
+  }
+
+  function listen_play(){
+    flowplayer('player').play();
+  }
+
+  if (getCookie("first_study") != "1") {
+    flowplayer('player').play();
+  }
+  function callback(){
+    show_tip("#timeup");
+    jude('/learn/jude_listen','false','false');
+  }
+
+  function modify_str(str){
+    return str.replace(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/g,"").toLowerCase();
+  }
+  function check(){
+    var answer=$("#answer_textarea").val();
+    if (answer==""||answer.length==0){
+      tishi_alert("请填入您听到的原句");
+      return false;
+    }
+    $("#check_btn").attr("onclick", "javascipt:void(0)");
+    var en_mean=modify_str($("#en_mean").val());
+    var user_mean=modify_str(answer);
+    var flag="true";
+    for(var i=0;i<en_mean.length;i++){
+      if (en_mean[i]!=user_mean[i]){
+        flag="false"
+      }
+    }
+    jude('/learn/jude_listen',flag,'false');
+  }
+
+</script>
