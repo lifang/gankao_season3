@@ -29,7 +29,6 @@ class LearnController < ApplicationController
       end
       @items_str = items.join(",")
       cookies[:current_id] = items[0].split("-")[0] if items[0]
-      cookies[:type]=0
       case cookies[:type].to_i
       when UserPlan::CHAPTER_TYPE_NUM[:WORD]
         @result = operate_word(items)
@@ -332,7 +331,7 @@ class LearnController < ApplicationController
       if cookies[:is_new] == "plan"
         plan.update_plan
         ActionLog.study_plan_log(cookies[:user_id].to_i)
-        send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
+        send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，距离成功又进一步，加油！(*^__^*) ……",
         cookies[:user_id].to_i)
       end      
       return true

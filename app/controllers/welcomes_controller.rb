@@ -6,7 +6,7 @@ class WelcomesController < ApplicationController
   end
 
   def fast_icon
-    
+    render :text => 8
   end
 
 end

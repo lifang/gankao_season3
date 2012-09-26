@@ -67,5 +67,20 @@ function check_xieyi() {
         tishi_alert("'甲方（姓名）'与考生名称不一致，请填写一致");
         return false;
     }
-    return true;
+    $.ajax({
+        async:true,
+        url:"/users/xieyi",
+        type:'post',
+        data: {
+            charge_name : $("#charge_name").val(),
+            charge_card : $("#charge_card").val(),
+            alipay_num : $("#alipay_num").val(),
+            pay_category : $("#pay_category").val()
+        },
+        success:function(data){
+            tishi_alert("赶考网在线备考保过协议签订成功，确认支付后下载保过协议");
+            $("#agreement_link").attr("href", data.agreement_url);
+            $("#agreement_link").attr("target", "_blank");
+        }
+    });
 }

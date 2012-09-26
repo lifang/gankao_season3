@@ -1,4 +1,4 @@
-<% if cookies[:can_open] %>
+<% if is_vip?(params[:category]) or cookies[:can_open] %>
   <% if @result %>
     window.items = "<%= @items_str %>";
     window.ids = "<%= @ids_str %>";

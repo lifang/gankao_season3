@@ -13,8 +13,6 @@
     </div>
   </div>-->
   <div class="pay_title">
-    <%= form_for :xieyi, :method => "post", :url => "/users/xieyi",
-      :html => {:onsubmit => "return check_xieyi()"}, :remote => "true" do |f| %>
     <div class="pay_xy">
       <h1>赶考网在线备考保过协议</h1>
       <table width="100%" class="pay_table">
@@ -31,34 +29,44 @@
         <tr>
           <td align="right">身份证：</td>
           <td><input name="charge_card" id="charge_card" type="text" /></td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" rowspan="4"><img src="/assets/yz.png" class="yz_img"/></td>
         </tr>
         <tr>
           <td align="right">支付宝账号：</td>
           <td><input name="alipay_num" id="alipay_num" type="text" /></td>
-          <td colspan="2" rowspan="2">印证</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input type="hidden" name="pay_category" id="pay_category" value="<%= params[:category] %>" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
         </tr>
       </table>
-      <div class="pay_div">
-        为帮助考生顺利通过大学英语四级考试（CET4），经苏州协创软件技术有限公司旗下赶考网（以下简称赶考网） 与
+      <div class="pay_div">为帮助考生顺利通过大学<% if params[:category].to_i == Category::TYPE[:CET4] %>英语四级考试（CET4）
+        <% elsif params[:category].to_i == Category::TYPE[:CET6] %>英语六级考试（CET6）<% else %>考研英语<% end %>
+        ，经苏州协创软件技术有限公司旗下赶考网（以下简称赶考网） 与
         <input name="charge_name1" id="charge_name1" type="text" />考生（以下简称考生）达成如下协议：</div>
       <h2 class="red">高级用户特权</h2>
       <div class="pay_list red">1）考生姓名前将加<span class="hguan">皇冠</span>标识以区别于普通用户；</div>
       <div class="pay_list red">2）赶考网功能完全开放，不再有任何功能限制；</div>
       <div class="pay_list red">3）考生学习过程中不再需要消耗小太阳（赶考网虚拟币）；</div>
-      <div class="pay_list red">4）享受赶考网的保过服务，即考生通过本站定制的复习计划无法达到设定的目标分数（大学英语四级目标分数最低为425分），赶考网承诺将全额退款；</div>
+      <div class="pay_list red">4）享受赶考网的保过服务，即考生通过本站定制的复习计划无法达到设定的目标分数
+        （大学<%= Category::TYPE_INFO[params[:category].to_i] %>目标分数最低为
+        <%= UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[params[:category].to_i]}"] %>分），赶考网承诺将全额退款；</div>
 
       <h2>保过说明</h2>
       <div class="pay_list">1）考生须在完成赶考网定制的复习计划的前提下，才能申请未达目标退款请求；</div>
-      <div class="pay_list">2）考生退款请将本协议、身份证复印件、四级成绩单以及支付宝账号发送至tuikuan@gankao.co，赶考网会在15个工作日内完成退款。</div>
+      <div class="pay_list">2）考生退款请将本协议、身份证复印件、考试成绩单以及支付宝账号发送至tuikuan@gankao.co，赶考网会在15个工作日内完成退款。</div>
 
       <h2>其他</h2>
-      <div class="pay_list">1）本协议将以PDF加密格式格式保存，请考生妥善保管，任何企图破解协议或者伪造协议的行为，赶考网都将保留追究权利。</div>
-      <div class="pay_list">2）本协议使用范围为2012年12月大学英语四级考试（CET4），退款截止期为2013年6月1日。</div>
-      <div class="btn_center"><button type="submit" class="b_btn">确定</button></div>
+      <div class="pay_list">1）本协议将以PDF格式保存，并对应唯一的防伪串号，请考生妥善保管，任何企图破解协议或者伪造协议的行为，赶考网都将保留追究权利。</div>
+      <div class="pay_list">2）本协议使用范围为2012年12月大学<% if params[:category].to_i == Category::TYPE[:CET4] %>英语四级考试（CET4）
+        <% elsif params[:category].to_i == Category::TYPE[:CET6] %>英语六级考试（CET6）<% else %>考研英语<% end %>，退款截止期为2013年6月1日。</div>
     </div>
-    <% end %>
+    <div>*付款结束过系统会自动生成你的保过协议并提供下载</div>
+    <div class="btn_center"><button type="button" onclick="check_xieyi()" class="b_btn">确定</button></div>
   </div>
 
   <div class="pay_box">
@@ -73,7 +81,7 @@
     <h1 class="pay_way_two">开通方式二：</h1>
     <div class="pay_con_two">
       <input name="" type="text" class="pay_input" id="invit_code" />
-      <a href="javascript:void(0)" class="pay_a_tow" onclick="accredit('<%#= params[:category] %>')"></a>      
+      <a href="javascript:void(0)" class="pay_a_tow" onclick="accredit('<%#= params[:category] %>')"></a>
     </div>-->
   </div>
 </div>
@@ -82,5 +90,7 @@
   <p>赶考网会员充值,完成付款后请根据你的情况点击下面的按钮：</p>
   <div class="btn_center_double">
     <a class="b_btn" target="_blank" href="/logins/alipay_exercise?category=<%= params[:category] %>&total_fee=<%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %>">重新支付</a>
-    <button class="b_btn" onclick="over_pay()">完成充值</button></div>
+    <button class="b_btn" onclick="over_pay()">完成充值</button>
+  </div>
+  <p><a id="agreement_link" href="javascript:tishi_alert('您尚未签署赶考网在线备考保过协议。');"><em>下载赶考网在线备考保过协议</em></a></p>
 </div>

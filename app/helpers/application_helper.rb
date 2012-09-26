@@ -185,5 +185,13 @@ module ApplicationHelper
     end
     return is_has_plan
   end
+
+  #生成防伪串号
+  def generate_agreement_num
+    current_time = Time.now.strftime("%m%d%H%M%S").split("")
+    other_num = ('a'..'z').to_a + ('A'..'Z').to_a
+    1.upto(8) {current_time << other_num[rand(other_num.length)]}
+    return current_time.shuffle.join("")
+  end
   
 end

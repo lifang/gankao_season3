@@ -17,7 +17,7 @@ GankaoSeason3::Application.routes.draw do
 
   resource :welcomes do
     collection do
-      get :fast_icon
+      post :fast_icon
     end
   end
 
@@ -28,9 +28,10 @@ GankaoSeason3::Application.routes.draw do
     end
   end
 
+  match 'testcet4' => 'plans#testcet4'
   resources :plans do
     collection do
-      get :end_result, :retest
+      get :end_result, :retest, :testcet4
       post :show_chapter,:create_plan,:init_plan,:update_user, :show_result
     end
   end

@@ -1,9 +1,10 @@
 #encoding: utf-8
 class PlansController < ApplicationController
   layout 'main'
-  before_filter :sign?, :except => ["index", "end_result", "show_result"]
+  before_filter :sign?, :except => ["index", "end_result", "show_result", "testcet4"]
   
   def index
+    cookies[:user_id]=24
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info
@@ -118,6 +119,10 @@ class PlansController < ApplicationController
   def retest
     cookies[:retest] = {:value => true, :path => "/", :secure  => false}
     redirect_to "/plans?category=#{params[:category]}"
+  end
+
+  def testcet4
+    redirect_to "/plans?category=#{Category::TYPE[:CET4]}&testcet4=1"
   end
 
 end
