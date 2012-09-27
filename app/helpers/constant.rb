@@ -2,6 +2,7 @@
 module Constant
   #项目文件目录
   PUBLIC_PATH = "#{Rails.root}/public"
+  BACK_PUBLIC_PATH = "#{Rails.root}/public"
 
   WORD_TIME = {1 => 15, 2 => 15, 3 => 15}
   SENTENCE_TIME = {:READ => 1, :COMBIN => 2}
@@ -11,6 +12,7 @@ module Constant
   TRANSLATE = {:ONE => 2, :TWO => 10} #翻译
   WRITE = {:PRE => 900}
 
+  TOTAL_PATH = "http://gankao.co"
   SERVER_PATH = "http://test.gankao.co"
   BACK_SERVER_PATH = "http://manage.gankao.co"
   GANKAO_GRADUATE_PATH = "http://pass.gankao.co/graduate"
@@ -58,7 +60,7 @@ module Constant
     3 => ["英语四级频道", "#{SERVER_PATH}/CET6.url"],
     4 => ["英语考研频道", "#{SERVER_PATH}/KAOYAN.url"]
   }
-  TOTAL_PATH = "http://gankao.co"
+  
 
   #游动文字
   SCOLL_WORD = {

@@ -470,30 +470,35 @@ class UserPlan < ActiveRecord::Base
         tiku_hash[p.attributes["type"].to_i] = p
       }
       tomorrow_task_plan.each { |k, v|
-        if tiku_hash[k].nil? #当题库中是否存在今天要学的内容
-         tiku_info = get_new_tiku(k, 1, v)
-          new_tiku = tiku_info[0]
-          plan_xml.root.elements["tiku"].add_element("part", {"type" => k, "lv" => "#{tiku_info[1]}", "item" => new_tiku.join(",")})
-          tiku_hash[k] = plan_xml.root.elements["tiku"].elements["part[@type='#{k}']"]
-        end
-        tomorrow_task[k] = []
-        already_items = tiku_hash[k].attributes["item"].split(",")
-        if already_items.any? and already_items.length >= v
-          proof_code(already_items, v).each {|i|
-            tomorrow_task[k] << i
-          }
-          tiku_hash[k].attributes["item"] = (already_items - tomorrow_task[k]).join(",")
+        if k == CHAPTER_TYPE_NUM[:SIMILAR]
+          next_plan.elements["part[@type='#{k}']"].add_element("item", {"id" => 0, "num" => "v"})
         else
-          tomorrow_task[k] = already_items
-          tiku_hash[k].attributes["lv"] = tiku_hash[k].attributes["lv"].to_i + 1
-          tiku_info = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i, (v-already_items.length))
-          new_tiku = tiku_info[0]
-          tiku_hash[k].attributes["lv"] = tiku_info[1]
-          proof_code(new_tiku, (v - already_items.length)).each {|i|
-            tomorrow_task[k] << i
-          }
-          tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
+          if tiku_hash[k].nil? #当题库中是否存在今天要学的内容
+            tiku_info = get_new_tiku(k, 1, v)
+            new_tiku = tiku_info[0]
+            plan_xml.root.elements["tiku"].add_element("part", {"type" => k, "lv" => "#{tiku_info[1]}", "item" => new_tiku.join(",")})
+            tiku_hash[k] = plan_xml.root.elements["tiku"].elements["part[@type='#{k}']"]
+          end
+          tomorrow_task[k] = []
+          already_items = tiku_hash[k].attributes["item"].split(",")
+          if already_items.any? and already_items.length >= v
+            proof_code(already_items, v).each {|i|
+              tomorrow_task[k] << i
+            }
+            tiku_hash[k].attributes["item"] = (already_items - tomorrow_task[k]).join(",")
+          else
+            tomorrow_task[k] = already_items
+            tiku_hash[k].attributes["lv"] = tiku_hash[k].attributes["lv"].to_i + 1
+            tiku_info = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i, (v-already_items.length))
+            new_tiku = tiku_info[0]
+            tiku_hash[k].attributes["lv"] = tiku_info[1]
+            proof_code(new_tiku, (v - already_items.length)).each {|i|
+              tomorrow_task[k] << i
+            }
+            tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
+          end
         end
+        
       }
       update_new_package(next_plan, tomorrow_task)
     end
@@ -537,7 +542,7 @@ class UserPlan < ActiveRecord::Base
         PracticeSentence::TYPES[:LINSTEN]
       when CHAPTER_TYPE_NUM[:TRANSLATE]
         PracticeSentence::TYPES[:LINSTEN]
-      else
+      else CHAPTER_TYPE_NUM[:DICTATION]
         PracticeSentence::TYPES[:LINSTEN]
       end
       infos = PracticeSentence.find(:all, :select => "id", :conditions => ["types = ? and level >= ? and level <= ? ",
