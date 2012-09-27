@@ -79,13 +79,13 @@
     }
     if (flag=="true"){
       $("#write_tip #text2").html("您共完成"+context+'个单词');
-      $("#write_tip .ts_img").attr("src","/assets/s_face.png");
+      $("#write_tip .ts_img img").attr("src","/assets/s_face.png");
       $("#write_tip #text1").html("完成了！");
     }else{
       if (user_answer !=""){
         $("#write_tip #text2").html("您共完成"+context+'个单词，包含特定单词 '+done_words.join(" ")+"");
       }
-      $("#write_tip .ts_img").attr("src","/assets/c_face.png");
+      $("#write_tip .ts_img img").attr("src","/assets/c_face.png");
       $("#write_tip #text1").html("没完成！");
     }
     return flag

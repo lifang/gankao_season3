@@ -28,7 +28,7 @@
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/write") %>");
     <% when UserPlan::CHAPTER_TYPE_NUM[:SIMILAR] %>
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/tip") %>");
-      $("#all_pass .ts_text").html("下一个任务包已经为您解锁了，但您需要再做<%=@result[:time]  %>道真题，继续努力哦。");
+      $("#all_pass .ts_text").html("您需要再做<%=@result[:time]  %>道真题下一个任务包才会为您解锁，继续努力哦。");
       show_tip("#all_pass");
     <% end %>
     generate_flash_div(".plan_tab");
