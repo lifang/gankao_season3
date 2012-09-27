@@ -21,9 +21,11 @@
       local_start_time = <%= @result[:qtime] %>;
       local_save_start();
       //myTime.start(<%#= @result[:qtime] %>);
+      hide_read_tip();
     }else{
+      $(".btn_center button").attr("onclick", "javascript:void(0)");
       jude_read(flag,'true');
     }
-    hide_read_tip();
+    
   }
 </script>

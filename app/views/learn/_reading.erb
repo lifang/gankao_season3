@@ -117,8 +117,7 @@
   $(document).ready(function(){
     $("#_1").addClass("readH");
     start();
-    $(".words_con div a").click(function(){
-      //clearInterval(myTime.timeId);
+    $(".words_con .question_list a").click(function(){
       window.clearInterval(local_timer);
       if($(this).html() == $("#SID_"+current_q).attr("value")){
         isright = true;
@@ -145,6 +144,9 @@
         ids : window.ids,
         flag : flag,
         redirct : redirct
+      },
+      success : function(data) {
+        hide_read_tip();
       }
     })
   }
