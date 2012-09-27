@@ -13,10 +13,10 @@ development:
   encoding: utf8
   reconnect: false
   database: exam_app
-  pool: 3
-  username: root
+  pool: 5
+  username: gankao_season3
   password: comdo2012
-  host: localhost
+  host: 192.168.0.250
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

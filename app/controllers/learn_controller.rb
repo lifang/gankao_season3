@@ -547,16 +547,15 @@ class LearnController < ApplicationController
 
   #---------------end 翻译拖拽--------------------end
 
-  def operate_similar(ids)
+  def operate_similar(id)
     plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
-    ids.split(",").each do |id|
-      xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{id}']"
-      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
-    end
+    xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{id}']"
+    rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     pass_status(plan, xml, "part")
     is_part_pass?(plan, xml)
-    return {:type => cookies[:type],:time=>12}
+    num= xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath].attributes["num"]
+    return {:type => cookies[:type],:time=>num}
   end
 
 end
