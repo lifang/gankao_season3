@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <description>
+        <p>We all know that environment is so important to ourselves and our future generations.[]
+        Natural resources have been depleted in an unprecedented scale.[]
+        The environment has been polluted in a way that never happened before.[]
+        It is certain that the world and all the living organism on it are going straight to hell.[]
+        But why those in power, no matter how loud they speak out environmental protection, very few of them really care.[]
+        We all know that environment is so important to ourselves and our future generations.[]
+        Natural resources have been depleted in an unprecedented scale.[]
+        The environment has been polluted in a way that never happened before.[]
+        It is certain that the world and all the living organism on it are going straight to hell.[]
+        But why those in power, no matter how loud they speak out environmental protection, very few of them really care.
+        </p>
+    </description>
+    <questions>
+        <question id='1'>
+            <title>1+1=?</title>
+            <options>1[]2[]3[]4</options>
+            <answer>2</answer>
+        </question>
+        <question id='2'>
+            <title>1+1=?</title>
+            <options>1[]2[]3[]4</options>
+            <answer>2</answer>
+        </question>
+    </questions>
+</root>

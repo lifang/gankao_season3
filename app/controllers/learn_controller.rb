@@ -11,7 +11,7 @@ class LearnController < ApplicationController
   def task_dispatch
     plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
-    cookies[:can_open] = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
+    cookies[:can_open] = true#Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
     if is_vip?(params[:category]) or cookies[:can_open]
       cookies[:category] = params[:category]
       cookies[:modulus] = UserScoreInfo.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i).modulus
@@ -506,7 +506,7 @@ class LearnController < ApplicationController
 
   #---------------start 写作--------------------start
   def operate_write
-    tractate_url=Constant::PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
+    tractate_url=Constant::BACK_PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
     xml=list_xml(tractate_url)
     context=xml.elements["/root/description/p"].text
     list_words=context.gsub(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/," ").split(" ")

@@ -497,8 +497,7 @@ class UserPlan < ActiveRecord::Base
             }
             tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
           end
-        end
-        
+        end        
       }
       update_new_package(next_plan, tomorrow_task)
     end
