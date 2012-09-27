@@ -441,7 +441,7 @@ class LearnController < ApplicationController
     sentences=PracticeSentence.find_by_sql("select id,ch_mean,en_mean from practice_sentences where id in (#{item_ids})")
     time=sentences[0..4].inject(0) { |time,item|  time+sentence_words(item.en_mean).length }
     return  {:type => cookies[:type], 
-      :time =>(time * Constant::DICTATION[:ONE] * cookies[:modulus].to_f).to_i,
+      :time =>(time * Constant::TRANSLATE[:ONE] * cookies[:modulus].to_f).to_i,
       :sentence =>sentences}
   end
 
@@ -478,7 +478,7 @@ class LearnController < ApplicationController
     sentence=PracticeSentence.find(cookies[:current_id])
     time=sentence_words(sentence.en_mean).length
     return  {:type => cookies[:type], 
-      :time =>(time * Constant::DICTATION[:TWO] * cookies[:modulus].to_f).to_i,
+      :time =>(time * Constant::TRANSLATE[:TWO] * cookies[:modulus].to_f).to_i,
       :sentence =>sentence}
   end
 

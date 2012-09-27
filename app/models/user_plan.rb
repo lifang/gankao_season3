@@ -25,7 +25,7 @@ class UserPlan < ActiveRecord::Base
   PER_ITEMS = {:WORD => 100, :SENTENCE => 100, :LISTEN => 10, :READ => 6, :WRITE => 6, :TRANSLATE => 10,:DICTATION => 10}  #单位 秒
 
   LEVEL_COUNT = {:WORD => 100, :SENTENCE => 100, :LINSTEN => 10, :READ => 6,
-    :TRANSLATE => 10, :DICTATION => 10, :WRITE => 6}  #各种练习每个level的个数
+    :TRANSLATE => 100, :DICTATION => 10, :WRITE => 6}  #各种练习每个level的个数
 
   
   #根据前测与用户期望 计算需要达到的等级
@@ -471,7 +471,7 @@ class UserPlan < ActiveRecord::Base
       }
       tomorrow_task_plan.each { |k, v|
         if k == CHAPTER_TYPE_NUM[:SIMILAR]
-          next_plan.elements["part[@type='#{k}']"].add_element("item", {"id" => 0, "num" => "v", "is_pass" => "#{PLAN_STATUS[:UNFINISHED]}"})
+          next_plan.elements["part[@type='#{k}']"].add_element("item", {"id" => 0, "num" => "#{v}", "is_pass" => "#{PLAN_STATUS[:UNFINISHED]}"})
         else
           if tiku_hash[k].nil? #当题库中是否存在今天要学的内容
             tiku_info = get_new_tiku(k, 1, v)
@@ -508,13 +508,13 @@ class UserPlan < ActiveRecord::Base
     next_plan.each_element { |part|
       part.delete_attribute("num")
       part.add_attribute("status", "#{PLAN_STATUS[:UNFINISHED]}")
-      if !tomorrow_task[part.attributes["type"].to_i].nil? and tomorrow_task[part.attributes["type"].to_i].any?
+      if tomorrow_task[part.attributes["type"].to_i].any?
         tomorrow_task[part.attributes["type"].to_i].each {|i|
           part.add_element("item", {"id" => i, "is_pass" => "#{PLAN_STATUS[:UNFINISHED]}", "repeat_time" => "0", "step" => "0"})
         }
       else
         next_plan.delete_element(part)
-      end
+      end unless tomorrow_task[part.attributes["type"].to_i].nil?
     }
   end
 
@@ -531,6 +531,8 @@ class UserPlan < ActiveRecord::Base
       end_level = case type
       when CHAPTER_TYPE_NUM[:SENTENCE]
         practice_num/LEVEL_COUNT[:SENTENCE] + level
+      when CHAPTER_TYPE_NUM[:TRANSLATE]
+        practice_num/LEVEL_COUNT[:SENTENCE] + level
       else
         practice_num/LEVEL_COUNT[:LINSTEN] + level
       end
@@ -540,7 +542,7 @@ class UserPlan < ActiveRecord::Base
       when CHAPTER_TYPE_NUM[:LINSTEN]
         PracticeSentence::TYPES[:LINSTEN]
       when CHAPTER_TYPE_NUM[:TRANSLATE]
-        PracticeSentence::TYPES[:LINSTEN]
+        PracticeSentence::TYPES[:SENTENCE]
       else CHAPTER_TYPE_NUM[:DICTATION]
         PracticeSentence::TYPES[:LINSTEN]
       end
