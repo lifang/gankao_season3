@@ -1,31 +1,52 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
     <plan>
-        <current>43</current>
+        <current>38</current>
         <info>
             <chapter1 days='26' linsten='8' sentence='8' word='12'/>
             <chapter2 days='12' dictation='30' read='6' translate='10'/>
             <chapter3 days='7' similarity='39' write='10'/>
         </info>
         
-        
-        
-        <_43 status='0'>
-            <part status='1' type='6'>
-                <item id='2330' is_pass='1' repeat_time='0' step='0'/>
+        <_38 status='0'>
+            
+            <part status='0' type='4'>
+                <item id='200' is_pass='0' repeat_time='0' step='0'/>
+                <item id='151' is_pass='0' repeat_time='0' step='0'/>
             </part>
-            <part status='0' type='7'>
-                <item id='0' is_pass='0' num='39'/>
+            <part status='0' type='5'>
+                <item id='2340' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2341' is_pass='0' repeat_time='0' step='0'/>
             </part>
-        </_43>
-        <_44 status='0'>
+        </_38>
+        <_13 status='0'>
             <part num='10' type='6'/>
-            <part num='39' type='7'/>
-        </_44>
-        <_45 status='0'>
+            <part num='39' type='6'/>
+        </_13>
+        <_14 status='0'>
             <part num='10' type='6'/>
-            <part num='39' type='7'/>
-        </_45>
+            <part num='39' type='6'/>
+        </_14>
+        <_15 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_15>
+        <_16 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_16>
+        <_17 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_17>
+        <_18 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_18>
+        <_19 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_19>
         <_20 status='0'>
             <part num='10' type='6'/>
             <part num='39' type='6'/>
@@ -84,26 +105,29 @@
         </_33>
     </plan>
     <review>
-      
-        <_43 status='1'>
-            <part repeat_time='0' status='1' type='6'>
-                <item id='2330' is_pass='1' repeat_time='0' step='0'/>
+        <_38 status='0'>
+            <part repeat_time='0' status='1' type='4'>
+                <item id='1' is_pass='1' repeat_time='0' step='1'/>
+                <item id='9' is_pass='1' repeat_time='0' step='1'/>
+                <item id='14' is_pass='1' repeat_time='0' step='1'/>
+                <item id='38' is_pass='1' repeat_time='0' step='1'/>
+                <item id='46' is_pass='1' repeat_time='0' step='1'/>
+                <item id='50' is_pass='1' repeat_time='0' step='1'/>
             </part>
-            <part repeat_time='0' status='1' type='7'>
-                <item id='0' is_pass='1' num='39'/>
+            <part repeat_time='0' status='0' type='5'>
+                <item id='2330' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2331' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2332' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2333' is_pass='0' repeat_time='0' step='0'/>
             </part>
-        </_43>
+        </_38>
     </review>
     <tiku>
         <part item='' lv='2' type='0'/>
         <part item='' lv='2' type='1'/>
         <part item='' lv='2' type='2'/>
         <part item='' lv='5' type='3'/>
-        <part item='101,103,104,107,111,114,115,118,123,124,128,129,131,133,136,137,139,140,141,144,146,1
-48,149,150,153,156,158,159,161,164,166,167,170,171,172,174,175,176,179,180,182,185,186,187,
-188,190,191,194,196,199' lv='2' type='4'/>
+        <part item='101,103,104,107,111,114,115,118,123,124,128,129,131,133,136,137,139,140,141,144,146,148,149,150,153,156,158,159,161,164,166,167,170,171,172,174,175,176,179,180,182,185,186,187,188,190,191,194,196,199' lv='2' type='4'/>
         <part item='' lv='5' type='5'/>
-        <part item='' lv='10' type='6'/>
-        <part item='' lv='4' type='7'/>
     </tiku>
 </root>
