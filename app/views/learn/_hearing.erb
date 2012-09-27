@@ -30,7 +30,13 @@
     flowplayer("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
       clip: {
         url: '<%= Constant::BACK_SERVER_PATH %><%= @result[:listen].enunciate_url %>',
-        autoPlay: false
+        autoPlay: false,
+        onStart: function(song) {
+          if (flowplayer('player').getState()!=-1){
+            window.clearInterval(local_timer);
+            local_save_start();
+          }
+        }
       }
     });
     if (getCookie("first_study") != "1") {
