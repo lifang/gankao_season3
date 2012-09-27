@@ -69,11 +69,13 @@
       }
     }
     var flag="false";
-    if (user_answer==""){
+    alert(user_answer=="");
+    alert(user_answer==" ");
+    if (user_answer ==""){
+      alert(2);
       $("#write_tip #text2").html("您没有作答");
     }else{
       var context =modify_str(user_answer).split(" ").length;
-     
       if (context>200 && done_words.length==$(".w_question").html().split(" ").length){
         flag="true"
       }

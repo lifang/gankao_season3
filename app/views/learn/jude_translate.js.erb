@@ -14,9 +14,9 @@ window.ids = "<%= @ids_str %>";
 <% elsif @items_str.empty? && @status == false %>
   setCookie("learn_step",1);
   window.clearInterval(local_timer);
-  $("#pass #text1").html("Congratulations!");
-  $("#pass #text2").html("You have completed the part1");
-  $("#pass .b_btn").html("enter part2");
+  $("#pass #text1").html("恭喜");
+  $("#pass #text2").html("您已完成翻译选择");
+  $("#pass .b_btn").html("进入汉译英");
   window.items = "";
   window.ids = "";
   show_tip("#pass");

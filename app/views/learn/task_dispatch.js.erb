@@ -28,6 +28,9 @@
       $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/write") %>");
     <% end %>
     generate_flash_div(".plan_tab");
+    <% if  @result[:type].to_i==UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] && cookies[:learn_step].to_i!=1 %>
+      $(".plan_tab").css("margin-top","10px");
+    <% end %>
     local_start_time = <%= @result[:time] %>;
     <% if @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
       if (getCookie("first_study") != "1") {

@@ -19,7 +19,6 @@ window.ids = "<%= @ids_str %>";
   window.items = "";
   window.ids = "";
   show_tip("#pass");
-  delCookie("learn_step");
 <% elsif @items_str.empty? && @status == true %>
   window.clearInterval(local_timer);
   <% if cookies[:is_new] == "review" %>

@@ -31,6 +31,12 @@ window.ids = "<%= @ids_str %>";
     <% elsif @current_step == "linsten" %>
       $("#pass #text1").html("恭喜你完成了听力部分的练习。");
       $("#pass #text2").html("下面阅读部分训练，继续努力。");
+    <% elsif @current_step == "translate_one" %>
+      $("#pass #text1").html("恭喜你完成了翻译部分的练习。");
+      $("#pass #text2").html("下面听写部分训练，继续努力。");
+    <% elsif @current_step == "write" %>
+      $("#pass #text1").html("恭喜你完成了听写部分的练习。");
+      $("#pass #text2").html("下面写作部分训练，继续努力。");
     <% end %>
     show_tip("#pass");
   <% end %>
