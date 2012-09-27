@@ -181,21 +181,32 @@ class UsersController < ApplicationController
     @name = params[:charge_name]
     @id_card = params[:charge_card]
     @alipay_num = params[:alipay_num]
-    respond_to do |format|
-      format.pdf do
-        pdf = WickedPdf.new.pdf_from_string( render_to_string(
-          :pdf => "agreement",
-          :templete => "/xieyi.pdf.erb",
-          :layout => false
-        )
-        )
-        puts
-        #save_path = Rails.root.join('pdfs','agreement.pdf')
-        #File.open("#{Rails.root}/agreement.pdf", 'wb') do |file|
-        #  file << pdf
-        #end
-        #send_file(save_path)
+    @pay_category = params[:pay_category]
+    @agreement_num = generate_agreement_num
+    agreement = Agreement.find_by_category_id_and_user_id(@pay_category.to_i, cookies[:user_id].to_i)
+    unless agreement
+      pdf = render_to_string(
+        :pdf => "agreement",
+        :templete => "/xieyi.pdf.erb",
+        :layout => false
+      )
+      dir = "#{Rails.root}/public/pdfs"
+      Dir.mkdir(dir) unless File.directory?(dir)
+      unless File.directory?(dir + "/" + Time.now.strftime("%Y-%m"))
+        Dir.mkdir(dir + "/" + Time.now.strftime("%Y-%m"))
       end
+      file_name = "/" + Time.now.strftime("%Y-%m") + "/agreement_"+ @pay_category +"_" + cookies[:user_id] + ".pdf"
+      f = File.new(dir + file_name, 'wb')
+      f.write("#{pdf.force_encoding('UTF-8')}}")
+      f.close
+      Agreement.create(:category_id => @pay_category.to_i, :user_id => cookies[:user_id].to_i, :name => @name,
+        :id_card => @id_card, :alipay => @alipay_num, :agreement_url => "/pdfs" + file_name, :code => @agreement_num)
+    end
+    agreement_url = agreement.nil? ? "/pdfs" + file_name : agreement.agreement_url
+    respond_to do |format|
+      format.json {
+        render :json => {:agreement_url => agreement_url}
+      }
     end
   end
   

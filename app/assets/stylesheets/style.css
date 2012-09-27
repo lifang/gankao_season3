@@ -1168,11 +1168,19 @@ nav li { float: left; margin: 0 20px;}
 .chongx_btn { width: 88px; height: 31px; background: url(/assets/chongx_btn.png) no-repeat; border: none; cursor: pointer; margin: 0 5px;}
 
 /*支付协议---------*/
-.pay_xy { background: #FFF; height: 200px; overflow-y: auto; color: #38747F; padding: 10px;}
-.pay_xy input[type="text"] { border: none; border-bottom: 1px #38747F solid; padding: 0 10px;background: none;}
-.pay_table { margin: 10px 0; border: 1px #21555f solid;background: #f2f2f2;}
+.pay_xy { background: #FFF; height: 200px; overflow-y: auto; color: #38747F; padding: 10px; }
+.pay_xy input[type="text"] {
+    border: none;
+	border-bottom: 1px #38747F solid;
+	padding: 0 10px;
+	background: none;
+	font-size: 11px;
+	color: #CCC;
+}
+.pay_table { margin: 10px 0; border: 1px #21555f solid; background: #f2f2f2;}
 .pay_table td { padding: 0px 5px;}
-.pay_div { line-height: 32px; text-indent: 24px; margin: 10px 0;}
+.pay_div { line-height: 18px; text-indent: 24px; margin: 10px 0;}
+
 .yz_img { margin-left: 80px;}
 
 /*------关注gz_tab----------*/

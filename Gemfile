@@ -7,7 +7,7 @@ gem 'rails', '3.1.2'
 
 gem 'mysql2','0.3.10'
 
-gem "mongrel", "~> 1.2.0.pre2"
+#gem "mongrel", "~> 1.2.0.pre2"
 gem 'will_paginate', '3.0.pre2'
 # Gems used only for assets and not required
 # in production environments by default.
@@ -19,7 +19,8 @@ gem 'gchartrb', '0.8'
 gem 'jquery-rails'
 gem 'mechanize', '2.0.1'
 gem 'hpricot', '0.8.4'
-#gem 'wicked_pdf', '0.7.9'
+gem 'wicked_pdf', '0.7.9'
+gem 'wkhtmltopdf-binary', '0.9.9.1'
 #gem 'multipart-post','1.1.5'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

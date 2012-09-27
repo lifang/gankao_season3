@@ -33,3 +33,17 @@
 <div class="plan_tab"></div>
 <%= render :partial=>'/plans/start_tab' %>
 <%= render :partial=>'/plans/start_tab_ts' %>
+<% if params[:testcet4] == "1" and cookies[:user_id].nil? %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      show_mask('.mask');
+      generate_flash_div("#inside_test_frame");
+      $('.close').bind('click',function(){
+        $('.mask').hide();
+        $('#inside_test_frame').hide();
+        window.location.href="/plans?category=<%= params[:category] %>";
+        return false;
+      })
+    });
+  </script>
+<% end %>

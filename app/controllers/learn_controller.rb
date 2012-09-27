@@ -351,7 +351,7 @@ class LearnController < ApplicationController
       if cookies[:is_new] == "plan"
         plan.update_plan
         ActionLog.study_plan_log(cookies[:user_id].to_i)
-        send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
+        send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，距离成功又进一步，加油！(*^__^*) ……",
           cookies[:user_id].to_i)
       end
       return true
@@ -404,7 +404,9 @@ class LearnController < ApplicationController
   def operate_listen
     sentence=PracticeSentence.find(cookies[:current_id])
     time=sentence_words(sentence.en_mean).length
-    return  {:type => cookies[:type], :time =>time*10,:sentence =>sentence}
+    return  {:type => cookies[:type], 
+      :time =>(time * Constant::DICTATION[:PRE] * cookies[:modulus].to_f).to_i,
+      :sentence =>sentence}
   end
 
   def jude_listen
@@ -438,7 +440,9 @@ class LearnController < ApplicationController
     item_ids=items[0..4].inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
     sentences=PracticeSentence.find_by_sql("select id,ch_mean,en_mean from practice_sentences where id in (#{item_ids})")
     time=sentences[0..4].inject(0) { |time,item|  time+sentence_words(item.en_mean).length }
-    return  {:type => cookies[:type], :time =>time*2,:sentence =>sentences}
+    return  {:type => cookies[:type], 
+      :time =>(time * Constant::DICTATION[:ONE] * cookies[:modulus].to_f).to_i,
+      :sentence =>sentences}
   end
 
   def jude_translate
@@ -473,7 +477,9 @@ class LearnController < ApplicationController
   def operate_translate_one
     sentence=PracticeSentence.find(cookies[:current_id])
     time=sentence_words(sentence.en_mean).length
-    return  {:type => cookies[:type], :time =>time*8,:sentence =>sentence}
+    return  {:type => cookies[:type], 
+      :time =>(time * Constant::DICTATION[:TWO] * cookies[:modulus].to_f).to_i,
+      :sentence =>sentence}
   end
 
   def jude_translate_one
@@ -508,7 +514,7 @@ class LearnController < ApplicationController
     (0..5).each do |i|
       words << list_words.delete(list_words.max_by {|word|  word.length })
     end
-    return  {:type => cookies[:type], :time =>900,:sentence =>words.join(" "),:context=>context}
+    return  {:type => cookies[:type], :time => Constant::WRITE[:PRE], :sentence =>words.join(" "),:context=>context}
   end
 
   def list_xml(url)

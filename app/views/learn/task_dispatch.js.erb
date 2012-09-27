@@ -1,4 +1,4 @@
-<% if cookies[:can_open] %>
+<% if is_vip?(params[:category]) or cookies[:can_open] %>
   <% if @result %>
     window.items = "<%= @items_str %>";
     window.ids = "<%= @ids_str %>";
@@ -36,7 +36,7 @@
       $(".plan_tab").css("margin-top","10px");
     <% end %>
     local_start_time = <%= @result[:time] %>;
-    <% if @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
+    <% if @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:DICTATION] and @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
       if (getCookie("first_study") != "1") {
       local_save_start();
       }

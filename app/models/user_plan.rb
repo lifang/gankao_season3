@@ -468,7 +468,7 @@ class UserPlan < ActiveRecord::Base
             tomorrow_task[k] << i
           }
           plan_xml.root.elements["tiku"].add_element("part", {"type" => k, "lv" => "1",
-              "item" => (new_tiku - tomorrow_task[k]).join(",")})          
+              "item" => (new_tiku - tomorrow_task[k]).join(",")})
         end       
       }
       update_new_package(next_plan, tomorrow_task)

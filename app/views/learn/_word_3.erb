@@ -8,10 +8,10 @@
   <%= render :partial => "learn/tip" %>
   <div class="words_func">
     <h2>读下面的句子，填入本次任务包里面学习的单词。</h2>
-    <input type="hidden" id="SID" value="<%= @result[:word].name %>" />
+    <input type="hidden" id="SID" value="<%= @result[:word].name.strip.gsub(/[0-9]/,"") %>" />
   </div>
   <div class="words_con">
-    <% leving_word = leving_word(@result[:sentence], @result[:word].name.strip) %>
+    <% leving_word = leving_word(@result[:sentence], @result[:word].name.strip.gsub(/[0-9]/,"")) %>
     <div class="w_question"><%= @result[:sentence].gsub("#{leving_word}", "_______").
                       gsub("#{leving_word.capitalize}", "_______") %></div>
     <input name="" type="text" class="answer_input" />
