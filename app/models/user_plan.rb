@@ -17,12 +17,15 @@ class UserPlan < ActiveRecord::Base
     :TRANSLATE => "translate", :DICTATION => "dictation", :WRITE => "write"}#单词、句子、听力、阅读、翻译、听写、写作
   CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
   CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
-    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6}#单词、句子、听力、阅读、翻译、听写、写作
-  REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次数
+    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6, :SIMILARITY => 7}#单词、句子、听力、阅读、翻译、听写、写作、真题
+  REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次
   PLAN_STATUS = {:FINISHED => 1, :UNFINISHED => 0}
 
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
   PER_ITEMS = {:WORD => 100, :SENTENCE => 100, :LISTEN => 10, :READ => 6, :WRITE => 6, :TRANSLATE => 10,:DICTATION => 10}  #单位 秒
+
+  LEVEL_COUNT = {:WORD => 100, :SENTENCE => 100, :LINSTEN => 10, :READ => 6,
+    :TRANSLATE => 10, :DICTATION => 10, :WRITE => 6}  #各种练习每个level的个数
 
   
   #根据前测与用户期望 计算需要达到的等级
@@ -271,7 +274,8 @@ class UserPlan < ActiveRecord::Base
     user_plan = UserPlan.find_by_category_id_and_user_id(category_id,user_id)    
     UserPlan.transaction do
       user_plan = UserPlan.create(:category_id => category_id, :user_id => user_id, :days => data_info[:DAYS]) unless user_plan
-      user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level, user_plan.return_chapter_data(data_info)),
+      user_plan.create_plan_url(user_plan.xml_content(user_score_info.get_start_level,
+          user_plan.return_chapter_data(data_info, category_id), category_id),
         "/" + category_id.to_s + "_" + user_plan.id.to_s)
     end
     return user_plan
@@ -285,85 +289,107 @@ class UserPlan < ActiveRecord::Base
   end
 
   #返回各个部分的时间
-  def return_chapter_data(data_info)
-    first_chapter = ((data_info[:ONE].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil
-    second_chapter = ((data_info[:TWO].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil
-    third_chapter = data_info[:DAYS] - first_chapter - second_chapter
-    word_avg = (data_info[:WORD].to_f/first_chapter).ceil
+  def return_chapter_data(data_info, category_id)
+    first_chapter = ((data_info[:ONE].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil    
+    second_chapter = ((data_info[:TWO].to_f/data_info[:ALL].to_i)*data_info[:DAYS]).ceil    
+    third_chapter = data_info[:DAYS] - first_chapter - second_chapter    
+    word_avg = (data_info[:WORD].to_f/first_chapter).ceil    
     sentence_avg = (data_info[:SENTENCE].to_f/first_chapter).ceil
-    listen_avg = (data_info[:LISTEN].to_f/first_chapter).ceil
     read_avg = (data_info[:READ].to_f/second_chapter).ceil
-    translate_avg = (data_info[:TRANSLATE].to_f/second_chapter).ceil
-    dictation_avg = (data_info[:DICTATION].to_f/second_chapter).ceil
-    write_avg = (data_info[:WRITE].to_f/third_chapter).ceil
     similarity_avg = PAPER_NUM/third_chapter
-    return { :first_chapter => first_chapter, :second_chapter => second_chapter, :third_chapter => third_chapter,
-      :word_avg => word_avg, :sentence_avg => sentence_avg, :listen_avg => listen_avg, :read_avg => read_avg,
-      :translate_avg => translate_avg, :dictation_avg => dictation_avg, :write_avg => write_avg,
-      :similarity_avg => similarity_avg }
+    if category_id == Category::TYPE[:GRADUATE]
+      write_avg = (data_info[:WRITE].to_f/second_chapter).ceil
+      chapter_info = { :first_chapter => first_chapter, :second_chapter => second_chapter, :third_chapter => third_chapter,
+        :word_avg => word_avg, :sentence_avg => sentence_avg, :read_avg => read_avg,  :write_avg => write_avg,
+        :similarity_avg => similarity_avg }
+    else
+      listen_avg = (data_info[:LISTEN].to_f/first_chapter).ceil      
+      translate_avg = (data_info[:TRANSLATE].to_f/second_chapter).ceil
+      dictation_avg = (data_info[:DICTATION].to_f/second_chapter).ceil
+      write_avg = (data_info[:WRITE].to_f/third_chapter).ceil
+      chapter_info = { :first_chapter => first_chapter, :second_chapter => second_chapter, :third_chapter => third_chapter,
+        :word_avg => word_avg, :sentence_avg => sentence_avg, :listen_avg => listen_avg, :read_avg => read_avg,
+        :translate_avg => translate_avg, :dictation_avg => dictation_avg, :write_avg => write_avg,
+        :similarity_avg => similarity_avg }
+    end
+    return chapter_info
   end
 
   #创建xml文件 tiku_hash = get_start_level, chapter_info = return_chapter_data
-  def xml_content(tiku_hash, chapter_info)
-    task_info = self.return_task(tiku_hash, chapter_info)
+  def xml_content(tiku_hash, chapter_info, category_id)
+    task_info = self.return_task(tiku_hash, chapter_info, category_id)
     content = "<?xml version='1.0' encoding='UTF-8'?>"
-    content += <<-XML
-      <root>
-        <plan>
-            <current>1</current>
-            <info>
-                <chapter1 word='#{chapter_info[:word_avg]}' sentence='#{chapter_info[:sentence_avg]}' linsten='#{chapter_info[:listen_avg]}' days='#{chapter_info[:first_chapter]}' />
-                <chapter2 read='#{chapter_info[:read_avg]}' translate='#{chapter_info[:translate_avg]}' dictation='#{chapter_info[:dictation_avg]}' days='#{chapter_info[:second_chapter]}' />
-                <chapter3 write='#{chapter_info[:write_avg]}' similarity='#{chapter_info[:similarity_avg]}'  days='#{chapter_info[:third_chapter]}' />
-            </info>
-            <_1 status='0'>
-    XML
+    if category_id == Category::TYPE[:GRADUATE]
+      chapter1 = "<chapter1 word='#{chapter_info[:word_avg]}' sentence='#{chapter_info[:sentence_avg]}' days='#{chapter_info[:first_chapter]}' />"
+      chapter2 = "<chapter2 read='#{chapter_info[:read_avg]}' write='#{chapter_info[:write_avg]}' days='#{chapter_info[:second_chapter]}' />"
+      chapter3 = "<chapter3 similarity='#{chapter_info[:similarity_avg]}'  days='#{chapter_info[:third_chapter]}' />"
+    else
+      chapter1 = "<chapter1 word='#{chapter_info[:word_avg]}' sentence='#{chapter_info[:sentence_avg]}' linsten='#{chapter_info[:listen_avg]}' days='#{chapter_info[:first_chapter]}' />"
+      chapter2 = "<chapter2 read='#{chapter_info[:read_avg]}' translate='#{chapter_info[:translate_avg]}' dictation='#{chapter_info[:dictation_avg]}' days='#{chapter_info[:second_chapter]}' />"
+      chapter3 = "<chapter3 write='#{chapter_info[:write_avg]}' similarity='#{chapter_info[:similarity_avg]}'  days='#{chapter_info[:third_chapter]}' />"
+    end
+    content += "<root><plan><current>1</current><info>#{chapter1}#{chapter2}#{chapter3}</info><_1 status='0'>"
+    
     part1 = "<part type='#{CHAPTER_TYPE_NUM[:WORD]}' status='0'>#{task_info[:word_info]}</part>" unless task_info[:word_info].empty?
     part2 = "<part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' status='0'>#{task_info[:sentence_info]}</part>" unless task_info[:sentence_info].empty?
-    part3 = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' status='0'>#{task_info[:listen_info]}</part>" unless task_info[:sentence_info].empty?
-    content += "#{part1}#{part2}#{part3}</_1>"
+    if category_id == Category::TYPE[:GRADUATE]
+      content += "#{part1}#{part2}</_1>"
+    else
+      part3 = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' status='0'>#{task_info[:listen_info]}</part>" unless task_info[:listen_info].empty?
+      content += "#{part1}#{part2}#{part3}</_1>"
+    end
     word = "<part type='#{CHAPTER_TYPE_NUM[:WORD]}' num='#{chapter_info[:word_avg]}'/>" if chapter_info[:word_avg] > 0
     sentence = "<part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' num='#{chapter_info[:sentence_avg]}'/>" if chapter_info[:sentence_avg] > 0
-    listen = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>" if chapter_info[:listen_avg] > 0
     read = "<part type='#{CHAPTER_TYPE_NUM[:READ]}' num='#{chapter_info[:read_avg]}'/>" if chapter_info[:read_avg] > 0
-    translate = "<part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>" if chapter_info[:translate_avg] > 0
-    dictation = "<part type='#{CHAPTER_TYPE_NUM[:DICTATION]}' num='#{chapter_info[:dictation_avg]}'/>" if chapter_info[:dictation_avg] > 0
     write = "<part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:write_avg]}'/>" if chapter_info[:write_avg] > 0
-    similarity = "<part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:similarity_avg]}'/>" if chapter_info[:similarity_avg] > 0
+    similarity = "<part type='#{CHAPTER_TYPE_NUM[:SIMILARITY]}' num='#{chapter_info[:similarity_avg]}'/>" if chapter_info[:similarity_avg] > 0
+    if category_id != Category::TYPE[:GRADUATE]
+      listen = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>" if chapter_info[:listen_avg] > 0
+      translate = "<part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>" if chapter_info[:translate_avg] > 0
+      dictation = "<part type='#{CHAPTER_TYPE_NUM[:DICTATION]}' num='#{chapter_info[:dictation_avg]}'/>" if chapter_info[:dictation_avg] > 0
+    end
     (2..chapter_info[:first_chapter].to_i).each {|i|
-      content += "<_#{i} status='0'>#{word}#{sentence}#{listen}</_#{i}>"
+      content += ((category_id == Category::TYPE[:GRADUATE]) ? "<_#{i} status='0'>#{word}#{sentence}</_#{i}>" : "<_#{i} status='0'>#{word}#{sentence}#{listen}</_#{i}>")
     }
     ((chapter_info[:first_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:second_chapter].to_i)).each{|i|
-      content += "<_#{i} status='0'>#{read}#{translate}#{dictation}</_#{i}>"
+      content += ((category_id == Category::TYPE[:GRADUATE]) ? "<_#{i} status='0'>#{read}#{write}</_#{i}>" : "<_#{i} status='0'>#{read}#{translate}#{dictation}</_#{i}>")
     }
-    ((chapter_info[:second_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:third_chapter].to_i)).each{|i|
-      content += "<_#{i} status='0'>#{write}#{similarity}</_#{i}>"
+    ((chapter_info[:first_chapter].to_i+chapter_info[:second_chapter].to_i+1)..(chapter_info[:first_chapter].to_i+chapter_info[:second_chapter].to_i+chapter_info[:third_chapter].to_i)).each{|i|
+      content += ((category_id == Category::TYPE[:GRADUATE]) ? "<_#{i} status='0'>#{similarity}</_#{i}>" : "<_#{i} status='0'>#{write}#{similarity}</_#{i}>")
     }
+    tiku_listen = (category_id == Category::TYPE[:GRADUATE]) ? "" : "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' lv='#{tiku_hash[:levels][2]}' item='#{task_info[:leave_listen].join(",")}'/>"
     content += <<-XML
         </plan>
         <review></review>
         <tiku>
           <part type='#{CHAPTER_TYPE_NUM[:WORD]}' lv='#{tiku_hash[:levels][0]}' item='#{task_info[:leave_word].join(",")}'/>
           <part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' lv='#{tiku_hash[:levels][1]}' item='#{task_info[:leave_sentence].join(",")}'/>
-          <part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' lv='#{tiku_hash[:levels][2]}' item='#{task_info[:leave_listen].join(",")}'/>
+          #{tiku_listen}
         </tiku>
       </root>
     XML
+    
     return content
   end
   
   #返回默认第一个任务，以及剩下的题库的单词 tiku_hash = get_start_level, chapter_info = return_chapter_data
-  def return_task(tiku_hash, chapter_info)
+  def return_task(tiku_hash, chapter_info, category_id)
     word_list = proof_code(tiku_hash[:word], chapter_info[:word_avg])
     sentence_list = proof_code(tiku_hash[:practice_sentences], chapter_info[:sentence_avg])
-    listen_list = proof_code(tiku_hash[:listens], chapter_info[:listen_avg])
     word_info, sentence_info, listen_info = "", "", ""
     word_list.each { |w| word_info += "<item id='#{w}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
     sentence_list.each { |s| sentence_info += "<item id='#{s}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
-    listen_list.each { |l| listen_info += "<item id='#{l}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
-    return {:word_info => word_info, :sentence_info => sentence_info, :listen_info => listen_info,
-      :leave_word => tiku_hash[:word] - word_list, :leave_sentence  => tiku_hash[:practice_sentences] - sentence_list,
-      :leave_listen => tiku_hash[:listens] - listen_list}
+    if category_id != Category::TYPE[:GRADUATE]
+      listen_list = proof_code(tiku_hash[:listens], chapter_info[:listen_avg])
+      listen_list.each { |l| listen_info += "<item id='#{l}' is_pass='#{PLAN_STATUS[:UNFINISHED]}' repeat_time='0' step='0' />" }
+      task_info = {:word_info => word_info, :sentence_info => sentence_info, :listen_info => listen_info,
+        :leave_word => tiku_hash[:word] - word_list, :leave_sentence  => tiku_hash[:practice_sentences] - sentence_list,
+        :leave_listen => tiku_hash[:listens] - listen_list}
+    else
+      task_info = {:word_info => word_info, :sentence_info => sentence_info,
+        :leave_word => tiku_hash[:word] - word_list, :leave_sentence  => tiku_hash[:practice_sentences] - sentence_list}
+    end    
+    return task_info
   end
   
   #写文件
@@ -415,7 +441,7 @@ class UserPlan < ActiveRecord::Base
         end if part.attributes["status"] == "#{PLAN_STATUS[:FINISHED]}"
       }
       plan_xml.root.elements["review"].delete_element(current_review) unless current_review.has_elements?
-    end    
+    end
     current_task = plan_xml.root.elements["plan"].elements["_#{current_day}"]
     if current_task.attributes["status"] == "#{PLAN_STATUS[:FINISHED]}"
       current_task.each_element { |p|
@@ -444,32 +470,30 @@ class UserPlan < ActiveRecord::Base
         tiku_hash[p.attributes["type"].to_i] = p
       }
       tomorrow_task_plan.each { |k, v|
-        unless tiku_hash[k].nil? #当题库中存在今天要学的内容
-          tomorrow_task[k] = []
-          already_items = tiku_hash[k].attributes["item"].split(",")
-          if already_items.any? and already_items.length >= v
-            proof_code(already_items, v).each {|i|
-              tomorrow_task[k] << i
-            }
-            tiku_hash[k].attributes["item"] = (already_items - tomorrow_task[k]).join(",")
-          else
-            tomorrow_task[k] = already_items
-            tiku_hash[k].attributes["lv"] = tiku_hash[k].attributes["lv"].to_i + 1
-            new_tiku = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i)
-            proof_code(new_tiku, (v - already_items.length)).each {|i|
-              tomorrow_task[k] << i
-            }
-            tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
-          end
-        else #当今天需要学习的内容题库中没有，特别是阶段转换时
-          new_tiku = get_new_tiku(k, 1)
-          tomorrow_task[k] = []
-          proof_code(new_tiku, v).each {|i|
+        if tiku_hash[k].nil? #当题库中是否存在今天要学的内容
+         tiku_info = get_new_tiku(k, 1, v)
+          new_tiku = tiku_info[0]
+          plan_xml.root.elements["tiku"].add_element("part", {"type" => k, "lv" => "#{tiku_info[1]}", "item" => new_tiku.join(",")})
+          tiku_hash[k] = plan_xml.root.elements["tiku"].elements["part[@type='#{k}']"]
+        end
+        tomorrow_task[k] = []
+        already_items = tiku_hash[k].attributes["item"].split(",")
+        if already_items.any? and already_items.length >= v
+          proof_code(already_items, v).each {|i|
             tomorrow_task[k] << i
           }
-          plan_xml.root.elements["tiku"].add_element("part", {"type" => k, "lv" => "1",
-              "item" => (new_tiku - tomorrow_task[k]).join(",")})
-        end       
+          tiku_hash[k].attributes["item"] = (already_items - tomorrow_task[k]).join(",")
+        else
+          tomorrow_task[k] = already_items
+          tiku_hash[k].attributes["lv"] = tiku_hash[k].attributes["lv"].to_i + 1
+          tiku_info = get_new_tiku(k, tiku_hash[k].attributes["lv"].to_i, (v-already_items.length))
+          new_tiku = tiku_info[0]
+          tiku_hash[k].attributes["lv"] = tiku_info[1]
+          proof_code(new_tiku, (v - already_items.length)).each {|i|
+            tomorrow_task[k] << i
+          }
+          tiku_hash[k].attributes["item"] = (new_tiku - tomorrow_task[k]).join(",")
+        end
       }
       update_new_package(next_plan, tomorrow_task)
     end
@@ -486,33 +510,41 @@ class UserPlan < ActiveRecord::Base
         }
       else
         next_plan.delete_element(part)
-      end      
+      end
     }
   end
 
   #取新的题库
-  def get_new_tiku(type, level)
+  def get_new_tiku(type, level, practice_num)
     items = []
     if type == CHAPTER_TYPE_NUM[:WORD]
-      infos = Word.find(:all, :select => "id", :conditions => ["level = ?", level])
-    elsif type == CHAPTER_TYPE_NUM[:READ]
-      infos = Tractate.find(:all, :select => "id", :conditions => ["level = ?", level])
+      end_level = practice_num/LEVEL_COUNT[:WORD] + level
+      infos = Word.find(:all, :select => "id", :conditions => ["level >= ? and level <= ?", level, end_level])
+    elsif type == CHAPTER_TYPE_NUM[:READ] or type == CHAPTER_TYPE_NUM[:WRITE]
+      end_level = practice_num/LEVEL_COUNT[:READ] + level
+      infos = Tractate.find(:all, :select => "id", :conditions => ["level >= ? and level <= ?", level, end_level])
     else
+      end_level = case type
+      when CHAPTER_TYPE_NUM[:SENTENCE]
+        practice_num/LEVEL_COUNT[:SENTENCE] + level
+      else
+        practice_num/LEVEL_COUNT[:LINSTEN] + level
+      end
       sql_type = case type
       when CHAPTER_TYPE_NUM[:SENTENCE]
         PracticeSentence::TYPES[:SENTENCE]
       when CHAPTER_TYPE_NUM[:LINSTEN]
         PracticeSentence::TYPES[:LINSTEN]
       when CHAPTER_TYPE_NUM[:TRANSLATE]
-        PracticeSentence::TYPES[:SENTENCE]
+        PracticeSentence::TYPES[:LINSTEN]
       else
         PracticeSentence::TYPES[:LINSTEN]
       end
-      infos = PracticeSentence.find(:all, :select => "id", :conditions => ["types = ? and level = ?",
-          sql_type, level])
+      infos = PracticeSentence.find(:all, :select => "id", :conditions => ["types = ? and level >= ? and level <= ? ",
+          sql_type, level, end_level])
     end
     items = infos.collect { |i| i.id }
-    return items
+    return [items, end_level]
   end
 
   #新建复习节点

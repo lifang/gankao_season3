@@ -15,8 +15,8 @@ development:
   database: exam_app
   pool: 3
   username: root
-  password: comdo2012
-  host: localhost
+  password: comdo1qaz2wsx
+  host: 116.255.202.122
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
