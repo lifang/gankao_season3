@@ -506,7 +506,7 @@ class LearnController < ApplicationController
 
   #---------------start 写作--------------------start
   def operate_write
-    tractate_url=Constant::PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
+    tractate_url=Constant::BACK_PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
     xml=list_xml(tractate_url)
     context=xml.elements["/root/description/p"].text
     list_words=context.gsub(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/," ").split(" ")
