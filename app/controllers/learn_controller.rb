@@ -548,7 +548,6 @@ class LearnController < ApplicationController
   #---------------end 翻译拖拽--------------------end
 
   def operate_similar(ids)
-    p "========"
     plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
     xml = plan.plan_list_xml
     ids.split(",").each do |id|
