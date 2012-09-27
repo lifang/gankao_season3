@@ -69,10 +69,7 @@
       }
     }
     var flag="false";
-    alert(user_answer=="");
-    alert(user_answer==" ");
     if (user_answer ==""){
-      alert(2);
       $("#write_tip #text2").html("您没有作答");
     }else{
       var context =modify_str(user_answer).split(" ").length;
@@ -85,7 +82,9 @@
       $("#write_tip .ts_img").attr("src","/assets/s_face.png");
       $("#write_tip #text1").html("完成了！");
     }else{
-      $("#write_tip #text2").html("您共完成"+context+'个单词，包含特定单词 '+done_words.join(" ")+"");
+      if (user_answer !=""){
+        $("#write_tip #text2").html("您共完成"+context+'个单词，包含特定单词 '+done_words.join(" ")+"");
+      }
       $("#write_tip .ts_img").attr("src","/assets/c_face.png");
       $("#write_tip #text1").html("没完成！");
     }
@@ -95,7 +94,7 @@
 
   function next (item){
     $(item).attr('onclick', 'javascipt:void(0)');
-    jude('/learn/jude_word',"false",'true');
+    jude('/learn/jude_write',"false",'true');
   }
 
   function callback(){
@@ -135,5 +134,5 @@
 <div id="all_pass" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/c_good.png" /></div>
   <div class="ts_text">恭喜今天的任务全部掌握！</div>
-  <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
+  <div class="btn_center"><button class="b_btn" onclick="dispatch(<%= params[:category] %>)">确定</button></div>
 </div>

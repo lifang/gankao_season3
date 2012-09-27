@@ -17,7 +17,7 @@ class UserPlan < ActiveRecord::Base
     :TRANSLATE => "translate", :DICTATION => "dictation", :WRITE => "write"}#单词、句子、听力、阅读、翻译、听写、写作
   CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
   CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
-    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6}#单词、句子、听力、阅读、翻译、听写、写作
+    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6,:SIMILAR =>7}#单词、句子、听力、阅读、翻译、听写、写作
   REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次数
   PLAN_STATUS = {:FINISHED => 1, :UNFINISHED => 0}
 

@@ -59,6 +59,8 @@ class LearnController < ApplicationController
       when UserPlan::CHAPTER_TYPE_NUM[:WRITE]
         cookies[:learn_step]=nil
         @result=operate_write
+      when UserPlan::CHAPTER_TYPE_NUM[:SIMILAR]
+        @result=operate_similar(@ids_str)
       end
     end
   end
@@ -344,12 +346,9 @@ class LearnController < ApplicationController
     current = xml.elements["//current"].text
     xpath = "//#{cookies[:is_new]}//_#{current}[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']//part[@status='#{UserPlan::PLAN_STATUS[:UNFINISHED]}']"
     node = xml.elements[xpath]
-    p node
     if node.nil?
       pass_status(plan, xml, "all")
-      p "===="
       if cookies[:is_new] == "plan"
-        p "====="
         plan.update_plan
         ActionLog.study_plan_log(cookies[:user_id].to_i)
         send_message("我在赶考网完成了我#{Category::TYPE_INFO[plan.category_id]}第#{current}个学习任务，又进步喽，(*^__^*) ……",
@@ -541,5 +540,18 @@ class LearnController < ApplicationController
   end
 
   #---------------end 翻译拖拽--------------------end
+
+  def operate_similar(ids)
+    p "========"
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    ids.split(",").each do |id|
+      xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{id}']"
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+    end
+    pass_status(plan, xml, "part")
+    is_part_pass?(plan, xml)
+    return {:type => cookies[:type],:time=>12}
+  end
 
 end
