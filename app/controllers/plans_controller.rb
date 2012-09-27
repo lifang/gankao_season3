@@ -4,7 +4,7 @@ class PlansController < ApplicationController
   before_filter :sign?, :except => ["index", "end_result", "show_result", "testcet4"]
   
   def index
-    cookies[:user_id]=1
+    cookies[:user_id]=2
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info

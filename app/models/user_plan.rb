@@ -471,7 +471,7 @@ class UserPlan < ActiveRecord::Base
       }
       tomorrow_task_plan.each { |k, v|
         if k == CHAPTER_TYPE_NUM[:SIMILAR]
-          next_plan.elements["part[@type='#{k}']"].add_element("item", {"id" => 0, "num" => "v"})
+          next_plan.elements["part[@type='#{k}']"].add_element("item", {"id" => 0, "num" => "v", "is_pass" => "#{PLAN_STATUS[:UNFINISHED]}"})
         else
           if tiku_hash[k].nil? #当题库中是否存在今天要学的内容
             tiku_info = get_new_tiku(k, 1, v)
@@ -508,7 +508,7 @@ class UserPlan < ActiveRecord::Base
     next_plan.each_element { |part|
       part.delete_attribute("num")
       part.add_attribute("status", "#{PLAN_STATUS[:UNFINISHED]}")
-      if tomorrow_task[part.attributes["type"].to_i].any?
+      if !tomorrow_task[part.attributes["type"].to_i].nil? and tomorrow_task[part.attributes["type"].to_i].any?
         tomorrow_task[part.attributes["type"].to_i].each {|i|
           part.add_element("item", {"id" => i, "is_pass" => "#{PLAN_STATUS[:UNFINISHED]}", "repeat_time" => "0", "step" => "0"})
         }
