@@ -17,8 +17,8 @@ class UserPlan < ActiveRecord::Base
     :TRANSLATE => "translate", :DICTATION => "dictation", :WRITE => "write"}#单词、句子、听力、阅读、翻译、听写、写作
   CHAPTER = {:cha1 => "基础", :cha2 => "综合", :cha3 => "冲刺"} #三个阶段的名称
   CHAPTER_TYPE_NUM = {:WORD => 0, :SENTENCE => 1, :LINSTEN => 2, :READ => 3,
-    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6, :SIMILARITY => 7}#单词、句子、听力、阅读、翻译、听写、写作、真题
-  REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次
+    :TRANSLATE => 4, :DICTATION => 5, :WRITE => 6,:SIMILAR =>7}#单词、句子、听力、阅读、翻译、听写、写作
+  REPEAT_TIME = {:WORD => [1, 0, 2, 1], :OTHER => [2, 0]} #每个练习的重复间隔时间和重复次数
   PLAN_STATUS = {:FINISHED => 1, :UNFINISHED => 0}
 
   PER_TIME = {:WORD => 60, :SENTENCE => 60, :LISTEN => 30, :READ => 300, :WRITE => 300, :TRANSLATE => 60,:DICTATION => 60}  #单位 秒
@@ -342,7 +342,7 @@ class UserPlan < ActiveRecord::Base
     sentence = "<part type='#{CHAPTER_TYPE_NUM[:SENTENCE]}' num='#{chapter_info[:sentence_avg]}'/>" if chapter_info[:sentence_avg] > 0
     read = "<part type='#{CHAPTER_TYPE_NUM[:READ]}' num='#{chapter_info[:read_avg]}'/>" if chapter_info[:read_avg] > 0
     write = "<part type='#{CHAPTER_TYPE_NUM[:WRITE]}' num='#{chapter_info[:write_avg]}'/>" if chapter_info[:write_avg] > 0
-    similarity = "<part type='#{CHAPTER_TYPE_NUM[:SIMILARITY]}' num='#{chapter_info[:similarity_avg]}'/>" if chapter_info[:similarity_avg] > 0
+    similarity = "<part type='#{CHAPTER_TYPE_NUM[:SIMILAR]}' num='#{chapter_info[:similarity_avg]}'/>" if chapter_info[:similarity_avg] > 0
     if category_id != Category::TYPE[:GRADUATE]
       listen = "<part type='#{CHAPTER_TYPE_NUM[:LINSTEN]}' num='#{chapter_info[:listen_avg]}'/>" if chapter_info[:listen_avg] > 0
       translate = "<part type='#{CHAPTER_TYPE_NUM[:TRANSLATE]}' num='#{chapter_info[:translate_avg]}'/>" if chapter_info[:translate_avg] > 0

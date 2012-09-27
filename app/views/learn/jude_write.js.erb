@@ -13,7 +13,7 @@ window.ids = "<%= @ids_str %>";
   })
 <% elsif @items_str.empty? && @status == false %>
   window.clearInterval(local_timer);
-  $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + $(".pl_l_bg").attr("id") + "，要坚持每天二十道真题才能保证学习质量哦，继续努力哦。");
+  $("#all_pass .ts_text").html("太棒了，你已经完成了任务写作部分的任务，要坚持每天二十道真题才能保证学习质量哦，继续努力哦。");
   show_tip("#all_pass");
 <% else%>
   show_tip("#write_tip");

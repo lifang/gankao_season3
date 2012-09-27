@@ -18,8 +18,9 @@ window.ids = "<%= @ids_str %>";
   $("#pass .b_btn").html("enter");
   window.items = "";
   window.ids = "";
-  show_tip("#pass");
   delCookie("learn_step");
+  alert(getCookie("learn_step"));
+  show_tip("#pass");
 <% elsif @items_str.empty? && @status == true %>
   window.clearInterval(local_timer);
   <% if cookies[:is_new] == "review" %>

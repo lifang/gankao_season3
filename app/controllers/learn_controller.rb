@@ -43,12 +43,24 @@ class LearnController < ApplicationController
           cookies[:item_ids]=nil
           @result = operate_translate_one
         else
-          @result = operate_translate(items)
+          items=items.reject {|i|  i.split("-")[2].to_i != 0 }
+          unless items.blank?
+            @items_str = items.join(",")
+            @ids_str = items.inject(Array.new) { |arr,item| arr.push(item.split("-")[0]) }.join(",")
+            @result = operate_translate(items)
+          else
+            cookies[:learn_step]=1
+            @result = operate_translate_one
+          end
         end
       when UserPlan::CHAPTER_TYPE_NUM[:DICTATION]
+        cookies[:learn_step]=nil
         @result=operate_listen
       when UserPlan::CHAPTER_TYPE_NUM[:WRITE]
+        cookies[:learn_step]=nil
         @result=operate_write
+      when UserPlan::CHAPTER_TYPE_NUM[:SIMILAR]
+        @result=operate_similar(@ids_str)
       end
     end
   end
@@ -120,7 +132,7 @@ class LearnController < ApplicationController
         :repeat => repeat,
         :time => (Constant::WORD_TIME[step] * cookies[:modulus].to_f).to_i,
         :word => word,
-        :sentence => WordSentence.find_by_word_id(cookies[:current_id]).description
+        :sentence => WordSentence.find_by_word_id(cookies[:current_id]).nil? ? "" : WordSentence.find_by_word_id(cookies[:current_id]).description
       }
     end
     return result
@@ -296,7 +308,6 @@ class LearnController < ApplicationController
     xpath = "//part[@type='#{type}']//item[@id='#{cookies[:current_id]}']"
     node = xml.elements["//#{cookies[:is_new]}//_#{xml.elements['//current'].text}"+xpath]
     current_item = "#{node.attributes['id']}-#{node.attributes['repeat_time']}-#{node.attributes['step']}"
-
     rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
     ids = ids - [cookies[:current_id]]
     items = items - [current_item]
@@ -374,7 +385,6 @@ class LearnController < ApplicationController
         @result = {
           :sentence => PracticeSentence.find_by_sql("select id,ch_mean,en_mean from practice_sentences where id in (#{cookies[:item_ids]})")
         }
-
       end
     elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:DICTATION]
       @result = {
@@ -413,7 +423,7 @@ class LearnController < ApplicationController
       items = (items - [items[0]]).push(items[0])
     end
     xml = pass_status(plan, xml, "part") if items.blank?
-    @status = false
+    @status = is_part_pass?(plan, xml)
     @flag = params[:flag]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -436,15 +446,17 @@ class LearnController < ApplicationController
   end
 
   def jude_translate
-    #    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
-    #    xml = plan.plan_list_xml
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
     items =  params[:items].split(",")
     ids = params[:ids].split(",")
     correct_ids=params[:correct_ids].split(",")
     correct_ids.each do |i|
+      xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{i}']"
       item=items[ids.index(i)]
       ids = ids - [i]
       items = items - [item]
+      rewrite_xml_item(plan, xml, xpath, nil, nil, 1)
     end
     wrong_items=items[0..(4-correct_ids.length)]
     ids[0..(4-correct_ids.length)].each do |id|
@@ -484,7 +496,7 @@ class LearnController < ApplicationController
       items = (items - [items[0]]).push(items[0])
     end
     xml = pass_status(plan, xml, "part") if items.blank?
-    @status = false
+    @status =is_part_pass?(plan, xml)
     @flag = params[:flag]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -494,7 +506,7 @@ class LearnController < ApplicationController
 
   #---------------start 写作--------------------start
   def operate_write
-    tractate_url=Constant::BACK_PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
+    tractate_url=Constant::PUBLIC_PATH+Tractate.find(cookies[:current_id]).tractate_url
     xml=list_xml(tractate_url)
     context=xml.elements["/root/description/p"].text
     list_words=context.gsub(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/," ").split(" ")
@@ -526,7 +538,7 @@ class LearnController < ApplicationController
       items = (items - [items[0]]).push(items[0])
     end
     xml = pass_status(plan, xml, "part") if items.blank?
-    @status = false
+    @status = is_part_pass?(plan, xml)
     @flag = params[:flag]
     @items_str = items.join(",")
     @ids_str = ids.join(",")
@@ -534,5 +546,17 @@ class LearnController < ApplicationController
   end
 
   #---------------end 翻译拖拽--------------------end
+
+  def operate_similar(ids)
+    plan = UserPlan.find_by_category_id_and_user_id(cookies[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    ids.split(",").each do |id|
+      xpath = "//part[@type='#{cookies[:type]}']//item[@id='#{id}']"
+      rewrite_xml_item(plan, xml, xpath, UserPlan::PLAN_STATUS[:FINISHED], nil, nil)
+    end
+    pass_status(plan, xml, "part")
+    is_part_pass?(plan, xml)
+    return {:type => cookies[:type],:time=>12}
+  end
 
 end

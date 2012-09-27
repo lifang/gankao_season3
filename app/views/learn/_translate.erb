@@ -48,7 +48,7 @@
             $(this).append('<span class="drag_dl_cuo tooltip" onclick="delete_answer('+ $(this).attr("drag")+','+ this.id+')" title="删除重做">错误</span>')
           }
           if ($(".drag_dl_dui").length==$(".drag_dl dd").length){
-            tishi_alert("Congratulations,Loading next group!")
+            tishi_alert("全部做对，加载下一组")
             load_translate('/learn/jude_translate',count_correct(),"true")
           }
         }
@@ -109,10 +109,10 @@
 </div>
 <div id="read_timeup" class="tishi_box" style="display: none">
   <div class="ts_img"><img src="assets/c_face.png" /></div>
-  <div class="ts_text">Time is up！</div>
-    <div class="btn_center_double">
+  <div class="ts_text">没时间了！</div>
+  <div class="btn_center_double">
     <button onclick="setCookie('item_ids',ids.split(',').slice(0,5).join(','));send_message('/learn/study_it')" class="b_btn">学习一下</button>
-    <button onclick="load_translate('/learn/jude_translate',count_correct(),'true')" class="b_btn">next group</button>
+    <button onclick="load_translate('/learn/jude_translate','','true')" class="b_btn">下一组</button>
   </div>
 </div>
 <div id="pass" class="tishi_box" style="display: none">
