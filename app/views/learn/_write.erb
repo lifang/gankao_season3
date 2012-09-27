@@ -136,3 +136,10 @@
   <div class="ts_text">恭喜今天的任务全部掌握！</div>
   <div class="btn_center"><button class="b_btn" onclick="dispatch(<%= params[:category] %>)">确定</button></div>
 </div>
+<div id="pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center"><button class="b_btn" onclick="window.location.reload()">确定</button></div>
+</div>

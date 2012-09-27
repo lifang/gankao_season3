@@ -15,6 +15,10 @@ window.ids = "<%= @ids_str %>";
   window.clearInterval(local_timer);
   $("#all_pass .ts_text").html("太棒了，你已经完成了任务写作部分的任务，需要完成真题哦，继续努力哦。");
   show_tip("#all_pass");
+  <% elsif @items_str.empty? && @status == true %>
+  window.clearInterval(local_timer);
+  $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + $(".pl_l_bg").attr("id") + "，离成功又近了一步，下一个任务包已经为您解锁了，继续努力哦。");
+  show_tip("#pass");
 <% else%>
   show_tip("#write_tip");
 <% end %>
