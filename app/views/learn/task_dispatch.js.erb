@@ -33,7 +33,7 @@
     <% end %>
     generate_flash_div(".plan_tab");
     <% if  @result[:type].to_i==UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] && cookies[:learn_step].to_i!=1 %>
-      $(".plan_tab").css("margin-top","10px");
+      $(".plan_tab").css("top","10px");
     <% end %>
     local_start_time = <%= @result[:time] %>;
     <% if @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:DICTATION] and @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>

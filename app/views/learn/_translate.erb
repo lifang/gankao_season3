@@ -48,7 +48,7 @@
             $(this).append('<span class="drag_dl_cuo tooltip" onclick="delete_answer('+ $(this).attr("drag")+','+ this.id+')" title="删除重做">错误</span>')
           }
           if ($(".drag_dl_dui").length==$(".drag_dl dd").length){
-            tishi_alert("全部做对，加载下一组")
+            tishi_alert("全部做对，下一组")
             load_translate('/learn/jude_translate',count_correct(),"true")
           }
         }
