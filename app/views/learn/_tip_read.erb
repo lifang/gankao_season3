@@ -13,6 +13,18 @@
   <div class="ts_text">没时间了！</div>
   <div class="btn_center"><button onclick="next()" class="b_btn">直接下题</button></div>
 </div>
+<div id="pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center"><button class="b_btn" onclick="next_step_dispatch()">继续下一步</button></div>
+</div>
+<div id="all_pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text">恭喜今天的任务全部掌握！</div>
+  <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
+</div>
 <script type="text/javascript">
   function next(){
     if(current_q < question_num - 1){
@@ -23,9 +35,15 @@
       //myTime.start(<%#= @result[:qtime] %>);
       hide_read_tip();
     }else{
-      $(".btn_center button").attr("onclick", "javascript:void(0)");
+      $("#read_right .btn_center button").attr("onclick", "javascript:void(0)");
+      $("#read_wrong .btn_center button").attr("onclick", "javascript:void(0)");
+      $("#read_timeup .btn_center button").attr("onclick", "javascript:void(0)");
       jude_read(flag,'true');
     }
     
+  }
+  function next_step_dispatch(){
+    window.clearInterval(local_timer);
+    dispatch('<%= cookies[:category] %>');
   }
 </script>

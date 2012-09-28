@@ -2,13 +2,18 @@
 <%= javascript_include_tag "base" %>
 <%= javascript_include_tag "countdown" %>
 <div class="mc_box">
-  <% total_time = @plan_list[:read]* 50 + @plan_list[:translate] + @plan_list[:dictation].to_i
+  <%
+  if @user_plan.category_id == Category::TYPE[:GRADUATE]
+    total_time = @plan_list[:read]* 50 + @plan_list[:write].to_i
+  else
+    total_time = @plan_list[:read]* 50 + @plan_list[:translate] + @plan_list[:dictation].to_i
+  end
   current_practice = @plan_list[:current] - @plan_list[:cha1_days]
   current_page = (current_practice%10 > 0) ? (current_practice/10 + 1) : current_practice/10
   (1..@plan_list[:cha2_days]).each do |i| %>
     <div class="plan_list" <% if (i > (current_page -1) * 10) and (i < current_page * 10 + 1) %>style="display: block;"
          <% else %>style="display: none;"<% end %>>
-      <% class_name = current_practice > i ? "pl_m_bg" : (current_practice == i ? "pl_l_bg" : "pl_d_bg") %>
+         <% class_name = current_practice > i ? "pl_m_bg" : (current_practice == i ? "pl_l_bg" : "pl_d_bg") %>
       <h1 class="pl_fk <%= class_name %>" id="<%= i %>" <%if current_practice == i%> onclick="start_practice('<%= params[:category] %>')"<% end %>>
         <span class="pl_img">
           <% if current_practice > i %>
@@ -21,8 +26,13 @@
         </span>任务<%= i + @plan_list[:cha1_days] %>
       </h1>
       <div class="pl_text">
-        <span>阅读(<%= @plan_list[:read] %>)&nbsp;&nbsp;&nbsp;
-          翻译(<%= @plan_list[:translate] %>)<br/>听写(<%= @plan_list[:dictation] %>)</span>
+        <% if @user_plan.category_id == Category::TYPE[:GRADUATE] %>
+          <span>阅读(<%= @plan_list[:read] %>)&nbsp;&nbsp;&nbsp;
+            写作(<%= @plan_list[:write] %>)<br/>&nbsp;</span>
+        <% else %>
+          <span>阅读(<%= @plan_list[:read] %>)&nbsp;&nbsp;&nbsp;
+            翻译(<%= @plan_list[:translate] %>)<br/>听写(<%= @plan_list[:dictation] %>)</span>
+        <% end %>
         <p>估计耗时：<%= total_time %>分钟</p>
       </div>
     </div>

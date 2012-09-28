@@ -4,14 +4,13 @@ class PlansController < ApplicationController
   before_filter :sign?, :except => ["index", "end_result", "show_result", "testcet4"]
   
   def index
-    cookies[:user_id]=1
     category = (params[:category].nil? or params[:category].empty?) ? 2 : params[:category].to_i
     @user_score_info = UserScoreInfo.find_by_category_id_and_user_id(category, cookies[:user_id].to_i) if cookies[:user_id]
     if @user_score_info
       @user_plan = UserPlan.find_by_category_id_and_user_id(category, cookies[:user_id].to_i)
       if @user_plan
         #显示计划列表
-        @plan_list = @user_plan.get_plan_list
+        @plan_list = @user_plan.get_plan_list(category)
       end
     end
   end
@@ -19,7 +18,7 @@ class PlansController < ApplicationController
   #显示部分
   def show_chapter
     @user_plan = UserPlan.find(params[:plan_id].to_i)
-    @plan_list = @user_plan.get_plan_list
+    @plan_list = @user_plan.get_plan_list(@user_plan.category_id)
     @chapter_num = params[:chapter_num].to_i
     @direction = params[:direction]
     respond_to do |format|

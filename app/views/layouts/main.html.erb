@@ -69,7 +69,7 @@
             <div class="checkIn_img" onclick="checkIn(<%= params[:category] %>)" >签到</div>
             <div class="checkIn_sun"><span class="addOne"><img src="/assets/1.png" /></span></div>
             <div class="checkIn_text"><% if cookies[:user_id] and user_infos %>
-                *你已经连续签到&nbsp;<%= signin_days(user_infos[:signin_days],params[:category]) %>&nbsp;天
+                *你已经连续签到&nbsp;<span id="checkIn_days"><%= signin_days(user_infos[:signin_days],params[:category]) %></span>&nbsp;天
               <% else %>
                 *每天签到奖励1个小太阳
               <% end %></div>

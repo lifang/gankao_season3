@@ -20,8 +20,13 @@
         </span>任务<%= i %>
       </h1>
       <div class="pl_text">
+        <% if @user_plan.category_id == Category::TYPE[:GRADUATE] %>
+        <span>单词(<%= @plan_list[:word] %>)&nbsp;&nbsp;&nbsp;
+          句子(<%= @plan_list[:sentence] %>)<br/>&nbsp;</span>
+        <% else %>
         <span>单词(<%= @plan_list[:word] %>)&nbsp;&nbsp;&nbsp;
           句子(<%= @plan_list[:sentence] %>)<br/>听力(<%= @plan_list[:linsten] %>)</span>
+        <% end %>
         <p>估计耗时：<%= total_time %>分钟</p>
       </div>
     </div>

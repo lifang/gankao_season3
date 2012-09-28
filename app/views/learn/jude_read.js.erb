@@ -13,7 +13,12 @@ window.ids = "<%= @ids_str %>";
   })
 <% elsif @items_str.empty? && @status == false %>
   window.clearInterval(local_timer);
-  $("#pass #text1").html("恭喜你完成了听力部分的练习。");
+  $("#pass #text1").html("恭喜你完成了阅读部分的练习。");
+  <% if cookies[:category].to_i == Category::TYPE[:GRADUATE] %>
+  $("#pass #text2").html("下面是写作练习，继续努力。");
+  <% else %>
+  $("#pass #text2").html("下面是翻译的练习，分两步完成，继续努力。");
+  <% end %>
   show_tip("#pass");
 <% elsif @items_str.empty? && @status == true %>
   window.clearInterval(local_timer);

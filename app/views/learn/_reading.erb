@@ -1,7 +1,8 @@
 <style type="text/css">
   .readH {
-    font-weight: bold;
-    font-size: 19px;
+    /*font-weight: bold;
+    font-size: 19px;*/
+    color :goldenrod;
   }
 </style>
 <div class="pt_title">
@@ -28,7 +29,7 @@
     <a onclick="next_step()" title="下一步" class="next tooltip">Next</a>
   </div>
 </div>
-<%= render :partial => "learn/tip" %>
+<%#= render :partial => "learn/tip" %>
 <%= render :partial => "learn/tip_read" %>
 <% @result[:questions].each_with_index do |question, index| %>
   <div id="_q_<%= index %>" class="mc_box" style="display:none">

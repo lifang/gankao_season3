@@ -35,14 +35,10 @@
   <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
 </div>
 <script type="text/javascript">
-<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:READ] %>
-    function next (){
-      jude_read(flag,'true');
-    }
-<% else %>
-    function next (item){
-      <%#*$(item).attr('onclick', 'javascipt:void(0)');%>
-      dispatch('<%= cookies[:category] %>');
-    }
-<% end %>
+
+  function next (item){
+  <%#*$(item).attr('onclick', 'javascipt:void(0)');%>
+    window.clearInterval(local_timer);
+    dispatch('<%= cookies[:category] %>');
+  }
 </script>
