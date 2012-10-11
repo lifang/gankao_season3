@@ -176,10 +176,13 @@ class LoginsController < ApplicationController
         data="升级成功"
         order=Order.first(:conditions=>"user_id=#{cookies[:user_id]} and category_id=#{code.category_id} and status=#{Order::STATUS[:NOMAL]}")
         if order.nil?
-          Order.create(:user_id=>cookies[:user_id],:category_id=>code.category_id,:pay_type=>Order::PAY_TYPES[:LICENSE],
+          Order.create(:user_id=>cookies[:user_id].to_i,:category_id=>code.category_id,:pay_type=>Order::PAY_TYPES[:LICENSE],
             :out_trade_no=>"#{cookies[:user_id]}_#{Time.now.strftime("%Y%m%d%H%M%S")}#{Time.now.to_i}",
             :status=>Order::STATUS[:NOMAL],:remark=>"邀请码升级vip",:start_time=>Time.now,:types=>Order::TYPES[:ACCREDIT],
             :end_time=>Time.now+Constant::DATE_LONG.days)
+          code.user_id = cookies[:user_id].to_i
+          code.save
+          user_role?(cookies[:user_id].to_i)
         else
           str = order.end_time.nil? ? "" : "，截止日期是#{order.end_time.strftime("%Y-%m-%d")}"
           data = "您已是vip用户#{str}"

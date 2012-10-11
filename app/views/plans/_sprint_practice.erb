@@ -10,7 +10,7 @@
     <div class="plan_list" <% if (i > (current_page -1) * 10) and (i < current_page * 10 + 1) %>style="display: block;"
          <% else %>style="display: none;"<% end %>>
          <% class_name = current_practice > i ? "pl_m_bg" : (current_practice == i ? "pl_l_bg" : "pl_d_bg") %>
-      <h1 class="pl_fk <%= class_name %>" id="<%= i %>" <%if current_practice == i%> onclick="start_practice('<%= params[:category] %>')"<% end %>>
+      <h1 class="pl_fk <%= class_name %>" id="<%= i + @plan_list[:cha1_days] + @plan_list[:cha2_days] %>" <%if current_practice == i%> onclick="start_practice('<%= params[:category] %>')"<% end %>>
         <span class="pl_img">
           <% if current_practice > i %>
             <img src="/assets/dui.png"/>

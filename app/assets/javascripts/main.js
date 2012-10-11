@@ -110,7 +110,7 @@ function show_charge(outer_div,close_btn){
 
 
 function accredit(category){
-    if($("#invit_code").val()==""||$("#invit_code").val()==null){
+    if($("#invit_code").val()==""||$("#invit_code").val()==null||$.trim($("#invit_code").val()) == '请输入激活码'){
         tishi_alert("请输入邀请码");
         return false;
     }
@@ -126,7 +126,8 @@ function accredit(category){
         success : function(data) {
             $("#invit_code").val("");
             if (data.message=="升级成功"){
-                window.location.reload();
+                tishi_alert("恭喜您成为高级会员。");
+                window.setTimeout(function(){window.location.reload();}, 2000);
             } else {
                 tishi_alert(data.message);
             }

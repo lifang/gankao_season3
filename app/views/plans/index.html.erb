@@ -47,3 +47,30 @@
     });
   </script>
 <% end %>
+<% if params[:pay] == "1" %>
+  <% if cookies[:user_id].nil? %>
+    <div class="tab login_tab" id="sim_login_tab">
+      <div class="tab_loginArea">
+        <h1>请先登录</h1>
+        <%= render :partial=>"/layouts/login_nav" %>
+      </div>
+    </div>
+    <%= render :partial => '/users/charge_vip' %>
+    <script type="text/javascript">
+      generate_flash_div('#sim_login_tab');
+    </script>
+  <% end %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      if ($("#payment_vip").length > 0) {
+        show_mask('.mask');
+        generate_flash_div('#payment_vip');
+        $('.pay_close').bind('click',function(){
+          $('#payment_vip').css('display','none');
+          $('.mask').css('display','none');
+          window.location.href="/plans?category=<%= params[:category] %>";
+        })
+      }
+    })
+  </script>
+<% end %>

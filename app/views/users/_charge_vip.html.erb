@@ -14,40 +14,12 @@
   </div>-->
   <div class="pay_title">
     <div class="pay_xy">
-      <h1>赶考网在线备考保过协议</h1>
-      <table width="100%" class="pay_table">
-        <tr>
-          <td align="right">防伪串号：</td>
-          <td colspan="3"></td>
-        </tr>
-        <tr>
-          <td align="right">甲方（姓名）：</td>
-          <td><input name="charge_name" id="charge_name" type="text" /></td>
-          <td>乙方：</td>
-          <td>苏州协创软件技术有限公司</td>
-        </tr>
-        <tr>
-          <td align="right">身份证：</td>
-          <td><input name="charge_card" id="charge_card" type="text" /></td>
-          <td colspan="2" rowspan="4"><img src="/assets/yz.png" class="yz_img"/></td>
-        </tr>
-        <tr>
-          <td align="right">支付宝账号：</td>
-          <td><input name="alipay_num" id="alipay_num" type="text" /></td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td><input type="hidden" name="pay_category" id="pay_category" value="<%= params[:category] %>" /></td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-      </table>
+      <h1>赶考网在线备考保过协议</h1>      
       <div class="pay_div">为帮助考生顺利通过大学<% if params[:category].to_i == Category::TYPE[:CET4] %>英语四级考试（CET4）
         <% elsif params[:category].to_i == Category::TYPE[:CET6] %>英语六级考试（CET6）<% else %>考研英语<% end %>
         ，经苏州协创软件技术有限公司旗下赶考网（以下简称赶考网） 与
-        <input name="charge_name1" id="charge_name1" type="text" />考生（以下简称考生）达成如下协议：</div>
+        <input name="charge_name1" id="charge_name1" type="text" value="请填写您的姓名" onfocus="javascript:if ($.trim(this.value) == '请填写您的姓名') this.value='';end"
+               onblur="javascript:if ($.trim(this.value) == '') this.value='请填写您的姓名';else show_xy_bun(); end"/>考生（以下简称考生）达成如下协议：</div>
       <h2 class="red">高级用户特权</h2>
       <div class="pay_list red">1）考生姓名前将加<span class="hguan">皇冠</span>标识以区别于普通用户；</div>
       <div class="pay_list red">2）赶考网功能完全开放，不再有任何功能限制；</div>
@@ -64,9 +36,47 @@
       <div class="pay_list">1）本协议将以PDF格式保存，并对应唯一的防伪串号，请考生妥善保管，任何企图破解协议或者伪造协议的行为，赶考网都将保留追究权利。</div>
       <div class="pay_list">2）本协议使用范围为2012年12月大学<% if params[:category].to_i == Category::TYPE[:CET4] %>英语四级考试（CET4）
         <% elsif params[:category].to_i == Category::TYPE[:CET6] %>英语六级考试（CET6）<% else %>考研英语<% end %>，退款截止期为2013年6月1日。</div>
+      <table width="100%" class="pay_table">
+        <tr>
+          <td align="right">防伪串号：</td>
+          <td colspan="3"></td>
+        </tr>
+        <tr>
+          <td align="right">甲方（姓名）：</td>
+          <td><input name="charge_name" id="charge_name" type="text" value="请填写您的姓名"
+                     onfocus="javascript:if ($.trim(this.value) == '请填写您的姓名') this.value='';end"
+                     onblur="javascript:if ($.trim(this.value) == '') this.value='请填写您的姓名';else show_xy_bun(); end" /></td>
+          <td>乙方：</td>
+          <td>苏州协创软件技术有限公司</td>
+        </tr>
+        <tr>
+          <td align="right">身份证：</td>
+          <td><input name="charge_card" id="charge_card" type="text" value="请填写您的身份证"
+                     onfocus="javascript:if ($.trim(this.value) == '请填写您的身份证') this.value='';end"
+                     onblur="javascript:if ($.trim(this.value) == '') this.value='请填写您的身份证';else show_xy_bun(); end" /></td>
+          <td colspan="2" rowspan="4"><img src="/assets/yz.png" class="yz_img"/></td>
+        </tr>
+        <tr>
+          <td align="right">支付宝账号：</td>
+          <td><input name="alipay_num" id="alipay_num" type="text" value="请填写您的支付宝密码"
+                     onfocus="javascript:if ($.trim(this.value) == '请填写您的支付宝密码') this.value='';end"
+                     onblur="javascript:if ($.trim(this.value) == '') this.value='请填写您的支付宝密码';else show_xy_bun(); end" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input type="hidden" name="pay_category" id="pay_category" value="<%= params[:category] %>" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
     </div>
+
     <div>*付款结束过系统会自动生成你的保过协议并提供下载</div>
-    <div class="btn_center"><button type="button" onclick="check_xieyi()" class="b_btn">确定</button></div>
+    <div class="btn_center">
+      <button id="xy_btn" type="button" onclick="check_xieyi()" disabled="disabled" class="b_btn_g">我填好了</button>
+    </div>
   </div>
 
   <div class="pay_box">

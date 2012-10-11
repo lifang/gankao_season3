@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   end
 
   add_index "action_logs", ["category_id"], :name => "index_action_logs_on_category_id"
-  add_index "action_logs", ["types"], :name => "index_action_logs_on_type"
+  add_index "action_logs", ["types"], :name => "index_action_logs_on_types"
   add_index "action_logs", ["user_id"], :name => "index_action_logs_on_user_id"
 
   create_table "adverts", :force => true do |t|
@@ -102,31 +102,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   end
 
   add_index "collections", ["user_id"], :name => "index_collections_on_user_id"
-
-  create_table "competes", :force => true do |t|
-    t.integer "user_id"
-    t.date    "created_at"
-    t.integer "price"
-    t.string  "remark"
-    t.integer "category_id"
-  end
-
-  add_index "competes", ["category_id"], :name => "index_competes_on_category_id"
-  add_index "competes", ["user_id"], :name => "index_competes_on_user_id"
-
-  create_table "courses", :force => true do |t|
-    t.string "title"
-    t.text   "description"
-    t.date   "created_at"
-  end
-
-  add_index "courses", ["title"], :name => "index_courses_on_title"
-
-  create_table "discriminates", :force => true do |t|
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "exam_raters", :force => true do |t|
     t.datetime "created_at"
@@ -211,27 +186,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   add_index "examinations", ["is_paper_open"], :name => "index_examinations_on_is_paper_open"
   add_index "examinations", ["is_score_open"], :name => "index_examinations_on_is_score_open"
 
-  create_table "feedbacks", :force => true do |t|
-    t.integer  "user_id"
-    t.boolean  "status"
-    t.text     "description"
-    t.string   "answer"
-    t.datetime "created_at"
-    t.integer  "category_id"
-  end
-
-  add_index "feedbacks", ["category_id"], :name => "index_feedbacks_on_category_id"
-  add_index "feedbacks", ["status"], :name => "index_feedbacks_on_status"
-  add_index "feedbacks", ["user_id"], :name => "index_feedbacks_on_user_id"
-
-  create_table "inside_tests", :force => true do |t|
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "inside_tests", ["email"], :name => "index_inside_tests_on_email"
-
   create_table "invite_codes", :force => true do |t|
     t.string   "code"
     t.datetime "created_at"
@@ -245,6 +199,7 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   end
 
   add_index "invite_codes", ["code"], :name => "index_invite_codes_on_code"
+  add_index "invite_codes", ["created_at"], :name => "index_invite_codes_on_created_at"
   add_index "invite_codes", ["user_id"], :name => "index_invite_codes_on_user_id"
   add_index "invite_codes", ["vicegerent_id"], :name => "index_invite_codes_on_vicegerent_id"
 
@@ -266,15 +221,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   end
 
   add_index "model_roles", ["role_id"], :name => "index_model_roles_on_role_id"
-
-  create_table "notes", :force => true do |t|
-    t.integer  "user_id",    :null => false
-    t.string   "note_url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "notes", ["user_id"], :name => "index_notes_on_user_id"
 
   create_table "notices", :force => true do |t|
     t.integer  "category_id"
@@ -312,18 +258,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   add_index "orders", ["pay_type"], :name => "index_orders_on_pay_type"
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
 
-  create_table "paper_blocks", :force => true do |t|
-    t.integer  "paper_id",    :null => false
-    t.string   "title"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "time"
-    t.string   "start_time"
-  end
-
-  add_index "paper_blocks", ["paper_id"], :name => "index_paper_blocks_on_paper_id"
-
   create_table "papers", :force => true do |t|
     t.integer  "category_id",                           :null => false
     t.string   "title"
@@ -344,21 +278,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   add_index "papers", ["category_id"], :name => "index_papers_on_category_id"
   add_index "papers", ["status"], :name => "index_papers_on_status"
   add_index "papers", ["types"], :name => "index_papers_on_types"
-
-  create_table "phone_words", :force => true do |t|
-    t.string   "name"
-    t.integer  "category_id"
-    t.string   "ch_mean"
-    t.integer  "types"
-    t.string   "phonetic"
-    t.string   "enunciate_url"
-    t.integer  "level"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "phone_words", ["category_id"], :name => "index_phone_words_on_category_id"
-  add_index "phone_words", ["name"], :name => "index_phone_words_on_name"
 
   create_table "plan_tasks", :force => true do |t|
     t.integer  "study_plan_id"
@@ -412,20 +331,14 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
     t.datetime "updated_at"
     t.text     "complete_title"
     t.integer  "status"
-    t.integer  "question_type"
     t.string   "description"
+    t.integer  "question_type"
   end
 
   add_index "problems", ["category_id"], :name => "index_problems_on_category_id"
   add_index "problems", ["question_type"], :name => "index_problems_on_question_type"
   add_index "problems", ["status"], :name => "index_problems_on_status"
   add_index "problems", ["types"], :name => "index_problems_on_types"
-
-  create_table "proofs", :force => true do |t|
-    t.string  "text"
-    t.integer "user_id", :null => false
-    t.boolean "checked"
-  end
 
   create_table "question_answers", :force => true do |t|
     t.integer  "user_id"
@@ -451,7 +364,7 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
 
   create_table "questions", :force => true do |t|
     t.integer "problem_id",                    :null => false
-    t.text    "description"
+    t.string  "description"
     t.text    "answer"
     t.integer "correct_type",   :default => 0
     t.text    "analysis"
@@ -517,15 +430,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   end
 
   add_index "schedules", ["category_id"], :name => "index_schedules_on_category_id"
-
-  create_table "score_levels", :force => true do |t|
-    t.integer "examination_id", :null => false
-    t.string  "key"
-    t.string  "value"
-  end
-
-  add_index "score_levels", ["examination_id"], :name => "index_score_levels_on_examination_id"
-  add_index "score_levels", ["key"], :name => "index_score_levels_on_key"
 
   create_table "skills", :force => true do |t|
     t.integer  "types"
@@ -603,14 +507,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
 
   add_index "user_action_logs", ["user_id"], :name => "index_user_action_logs_on_user_id"
 
-  create_table "user_beliefs", :force => true do |t|
-    t.integer "user_id"
-    t.date    "created_at"
-    t.integer "belief"
-  end
-
-  add_index "user_beliefs", ["user_id"], :name => "index_user_beliefs_on_user_id"
-
   create_table "user_category_relations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "category_id"
@@ -623,24 +519,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   add_index "user_category_relations", ["status"], :name => "index_user_category_relations_on_status"
   add_index "user_category_relations", ["types"], :name => "index_user_category_relations_on_types"
   add_index "user_category_relations", ["user_id"], :name => "index_user_category_relations_on_user_id"
-
-  create_table "user_plan_relations", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "study_plan_id"
-    t.datetime "created_at"
-    t.datetime "ended_at"
-    t.integer  "num"
-    t.boolean  "status"
-    t.boolean  "is_activity",   :default => false
-  end
-
-  add_index "user_plan_relations", ["created_at"], :name => "index_user_plan_relations_on_created_at"
-  add_index "user_plan_relations", ["ended_at"], :name => "index_user_plan_relations_on_ended_at"
-  add_index "user_plan_relations", ["is_activity"], :name => "index_user_plan_relations_on_is_activity"
-  add_index "user_plan_relations", ["num"], :name => "index_user_plan_relations_on_num"
-  add_index "user_plan_relations", ["status"], :name => "index_user_plan_relations_on_status"
-  add_index "user_plan_relations", ["study_plan_id"], :name => "index_user_plan_relations_on_study_plan_id"
-  add_index "user_plan_relations", ["user_id"], :name => "index_user_plan_relations_on_user_id"
 
   create_table "user_plans", :force => true do |t|
     t.integer  "category_id"
@@ -691,26 +569,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   add_index "user_score_infos", ["category_id"], :name => "index_user_score_infos_on_category_id"
   add_index "user_score_infos", ["user_id"], :name => "index_user_score_infos_on_user_id"
 
-  create_table "user_word_relations", :force => true do |t|
-    t.datetime "created_at"
-    t.integer  "user_id"
-    t.text     "nomal_ids"
-    t.text     "recite_ids"
-    t.integer  "category_id"
-    t.datetime "login_time"
-    t.integer  "all_study_time"
-    t.string   "practice_url"
-    t.integer  "study_role"
-    t.string   "timer"
-  end
-
-  add_index "user_word_relations", ["all_study_time"], :name => "index_user_word_relations_on_all_study_time"
-  add_index "user_word_relations", ["category_id"], :name => "index_user_word_relations_on_category_id"
-  add_index "user_word_relations", ["login_time"], :name => "index_user_word_relations_on_login_time"
-  add_index "user_word_relations", ["practice_url"], :name => "index_user_word_relations_on_practice_url"
-  add_index "user_word_relations", ["study_role"], :name => "index_user_word_relations_on_study_role"
-  add_index "user_word_relations", ["user_id"], :name => "index_user_word_relations_on_user_id"
-
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "username"
@@ -721,11 +579,11 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
     t.string   "encrypted_password"
     t.integer  "status",             :default => 0
     t.string   "active_code"
+    t.string   "code_id"
+    t.string   "code_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "school"
-    t.string   "code_id"
-    t.string   "code_type"
     t.string   "belief_url"
     t.string   "open_id"
     t.string   "cert"
@@ -739,8 +597,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
     t.string   "img_url"
   end
 
-  add_index "users", ["code_id"], :name => "index_users_on_code_id"
-  add_index "users", ["code_type"], :name => "index_users_on_code_type"
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["from"], :name => "index_users_on_from"
   add_index "users", ["name"], :name => "index_users_on_name"
@@ -766,16 +622,6 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
   end
 
   add_index "videos", ["schedule_id"], :name => "index_videos_on_schedule_id"
-
-  create_table "word_discriminate_relations", :force => true do |t|
-    t.integer  "word_id"
-    t.integer  "discriminate_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "word_discriminate_relations", ["discriminate_id"], :name => "index_word_discriminate_relations_on_discriminate_id"
-  add_index "word_discriminate_relations", ["word_id"], :name => "index_word_discriminate_relations_on_word_id"
 
   create_table "word_question_relations", :force => true do |t|
     t.integer  "word_id"
@@ -808,8 +654,10 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
     t.string   "phonetic"
     t.string   "enunciate_url"
     t.integer  "level"
+    t.integer  "info_tmp"
   end
 
+  add_index "words", ["category_id"], :name => "index_words_on_category_id"
   add_index "words", ["level"], :name => "index_words_on_level"
   add_index "words", ["name"], :name => "index_words_on_name"
 

@@ -12,12 +12,15 @@ module Constant
   TRANSLATE = {:ONE => 2, :TWO => 10} #翻译
   WRITE = {:PRE => 900}
 
-  TOTAL_PATH = "http://gankao.co"
+  TOTAL_PATH = "http://gankao.co/"
   SERVER_PATH = "http://test.gankao.co"
   BACK_SERVER_PATH = "http://manage.gankao.co"
   GANKAO_GRADUATE_PATH = "http://pass.gankao.co/graduate"
   GANKAO_CET4_PATH = "http://pass.gankao.co/cet_four"
   GANKAO_CET6_PATH = "http://pass.gankao.co/cet_six"
+  PAY_GRADUATE_PATH = "http://payky.gankao.co/"
+  PAY_CET4_PATH = "http://paycet4.gankao.co/"
+  PAY_CET6_PATH = "http://paycet6.gankao.co/"
   
   DEAD_LINE = {
     :CET4 => '2012-12-01',

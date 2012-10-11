@@ -2,10 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>赶考</title>
+    <title>来赶考网，四级必过、六级刷分、考研高分！</title>
+    <meta name="keywords" content="英语四级,英语六级,考研英语" />
     <%= javascript_include_tag "application" %>
     <%= stylesheet_link_tag    "style" %>
     <%= stylesheet_link_tag    "public" %>
+    <%= javascript_include_tag "cookie" %>
     <!--[if lt IE 9]>
     <script src="/assets/html5.js"></script>
     <![endif]-->
@@ -31,6 +33,15 @@
     </script>
   </head>
   <body>
+    <% if cookies[:shortcut].nil? && cookies[:sc_time] != "3" %>
+      <div class="shortcut">
+        <span class="x" onclick="javascript:close_shortcut()">关闭</span>
+        <ul>
+          <!--<li><a href="javascript:void(0);" class="kuaijie_a">下载快捷方式</a></li>-->
+          <li><a href="javascript:void(0);" onclick="javascript:addfavorite();" class="favorite_a">添加到收藏夹</a></li>
+        </ul>
+      </div>
+    <% end %>
     <div class="wraper">
       <div class="header">
         <h1 class="logo">
@@ -49,15 +60,22 @@
         <div class="clear"></div>
         <nav class="border_radius">
           <div class="scrollAD">
-            <% if cookies[:user_id].nil? %>
-              <span>亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
-                <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
+            <% if params[:category].to_i == Category::TYPE[:GRADUATE] %>
+              <% if cookies[:user_id].nil? %>
+                <span>亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
+                  <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
+                </span>
+              <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
+                <span>立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
+                  <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
+              <% end %>
+              <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
+            <% else %>
+              <span>2012年10月31日前升级高级用户，即有机会得到新ipad一台，1000个名额，抢光为止哦！
+                <a href="/pay?category=<%= params[:category] %>">我要升级</a>
+                <a href="http://page.renren.com/600942099/note/874714982" target="_blank">详情</a>
               </span>
-            <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
-              <span>立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
-                <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
             <% end %>
-            <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
           </div>
         </nav>
       </div>
@@ -65,17 +83,21 @@
         <div class="left">
           <div class="checkIn_box">
             <div class="checkIn_date"><%= Time.now.strftime("%Y年%m月%d日") %></div>
-            <h1 class="checkIn_week"><%= Time.now.strftime("%a") %></h1>
+            <h1 class="checkIn_week"><%= Time.now.strftime("%A") %></h1>
             <div class="checkIn_img" onclick="checkIn(<%= params[:category] %>)" >签到</div>
             <div class="checkIn_sun"><span class="addOne"><img src="/assets/1.png" /></span></div>
-            <div class="checkIn_text"><% if cookies[:user_id] and user_infos %>
-                *你已经连续签到&nbsp;<span id="checkIn_days"><%= signin_days(user_infos[:signin_days],params[:category]) %></span>&nbsp;天
-              <% else %>
-                *每天签到奖励1个小太阳
-              <% end %></div>
+            <div class="checkIn_text" style="display: none;">*你已经连续签到&nbsp;<span id="checkIn_days"></span>&nbsp;天</div>
           </div>
-
           <div class="clear"></div>
+          
+          <div class="key">
+            <div class="key_box">
+              <input name="invit_code" type="text" id="invit_code" value="请输入激活码"
+                     onfocus="javascript:if ($.trim(this.value) == '请输入激活码') this.value=''; end"
+                     onblur="javascript:if($.trim(this.value) == '') this.value='请输入激活码'; end" />
+              <button onclick="accredit('<%= params[:category] %>')">确认</button>
+            </div>
+          </div>
           <div class="path_box">
             <%= render :partial => '/layouts/score_line' %>
           </div>

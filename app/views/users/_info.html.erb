@@ -2,7 +2,7 @@
   <div  class="login_info bb_radius">
     <div class="info_left">
       <div class="user_pic"><img src="<%= info[:img_url].nil? ? User::DEFAULT_COVER : info[:img_url] %>" /></div>
-      <p id="name" <% if is_vip?(params[:category_id]) %>class="user_name"<% end %>><%= info[:name] %></p>
+      <p id="name" <% if params[:category] and is_vip?(params[:category]) %>class="user_name"<% end %>><%= info[:name] %></p>
       <p id="schoolName"><%= info[:school] %></p>
       <% if params[:category] and cookies[:user_id] and is_nomal?(params[:category]) %>
         <p><span class="s_sun"><%= info[:num] %></span>
@@ -17,7 +17,7 @@
       <li><a href="/logins/logout" class="u_exit">退出</a></li>
     </ul>
     <% if cookies[:first] == "1" %>
-      <% if params[:category] %>
+      <% if params[:category] and is_nomal?(params[:category]) %>
         <div class="s_sun_mess">
           <p>昨天获得<%= info[:yestoday_suns] %>个太阳</p>
           <p>今天请再接再厉</p>

@@ -2,7 +2,7 @@
   .readH {
     /*font-weight: bold;
     font-size: 19px;*/
-    color :goldenrod;
+    font-weight: bold;
   }
 </style>
 <div class="pt_title">
@@ -44,7 +44,7 @@
       <% if index < @result[:questions].length - 1 %>
         <a onclick="next_q()" title="下一道" class="next tooltip">Next</a>
       <% else %>
-        <a onclick="next_read()" title="下一题" class="next tooltip">Next</a>
+        <a id="next_r_btn" onclick="next_read()" title="下一题" class="next tooltip">Next</a>
       <% end %>
     </div>
   </div>
@@ -102,8 +102,10 @@
   }
   //下一篇阅读
   function next_read(){
+    window.clearInterval(local_timer);
     flag = false;
     jude_read(flag,'true');
+    $("#next_r_btn").attr("onclick", "javascript:void(0)");
   }
 
   function callback(){

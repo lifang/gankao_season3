@@ -68,3 +68,32 @@ function tishi_alert(str){
     body.append(div);
     show_flash_div();
 }
+
+//加入收藏夹
+function addfavorite() {
+    var ua = navigator.userAgent.toLowerCase();
+    var isWebkit = (ua.indexOf('webkit') != - 1);
+    var isMac = (ua.indexOf('mac') != - 1);
+    if (document.all){
+        window.external.addFavorite('http://www.gankao.co','赶考网');
+        tishi_alert("您已经成功将赶考网添加到收藏夹。");
+    } else if (window.sidebar) {
+        window.sidebar.addPanel('赶考网', 'http://www.gankao.co', "");
+        tishi_alert("您已经成功将赶考网添加到收藏夹。");
+    } else if (isWebkit || isMac) {
+        var str = (isMac ? 'Command/Cmd' : 'CTRL') + ' + D';
+        tishi_alert((str) ? '请按' + str + '来收藏此页。' : str);
+    }    
+}
+
+//关闭收藏夹
+function close_shortcut() {
+    var sc_time = getCookie("sc_time");
+    if (sc_time == null) {
+        setCookie("sc_time", "1", 2592000000, '/');
+    } else {
+        setCookie("sc_time", ""+(new Number(sc_time) + 1).toString(), 2592000000, '/');
+    }
+    setCookie("shortcut", "1", 172800000, '/');
+    $(".shortcut").remove();
+}

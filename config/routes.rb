@@ -29,6 +29,7 @@ GankaoSeason3::Application.routes.draw do
   end
 
   match 'testcet4' => 'plans#testcet4'
+  match 'pay' => 'plans#pay'
   resources :plans do
     collection do
       get :end_result, :retest, :testcet4

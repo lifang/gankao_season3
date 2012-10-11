@@ -153,7 +153,6 @@ module Oauth2Helper
       action="/2/friendships/create.json"
       add_info=create_post_http(weibo_url,action,params)
     end
-    share_log("sina guanzhu",add_info+"=========="+user_info)
   end
 
   #新浪微博获取用户信息
@@ -175,8 +174,6 @@ module Oauth2Helper
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       info= http.request(req).body
-#      share_log("renren share", response.map{|k,v|  "#{k}=#{v}"}.join('&'))
-#      share_log("sina share", info.to_s)
       return info
     end
    
@@ -194,7 +191,6 @@ module Oauth2Helper
     query = {:access_token => "#{access_token}",:comment=>"#{message}",:format => 'JSON',:method => 'share.share',:v => '1.0'}
     query.merge!(other_parms)
     response=create_post_http("http://api.renren.com","/restserver.do",sig_renren(query)) 
-    share_log("renren share", response.map{|k,v|  "#{k}=#{v}"}.join('&'))
     return response
   end
 
@@ -211,7 +207,6 @@ module Oauth2Helper
     else
       data= "qq user #{user.id}  send success"
     end
-    share_log("qq shuoshuo",data+"====#{user.id}")
   end
 
   #qq分享
@@ -219,7 +214,6 @@ module Oauth2Helper
     send_parms={:access_token=>user.access_token,:openid=>user.open_id,:oauth_consumer_key=>Oauth2Helper::APPID,:format=>"json"}
     send_parms.merge!(other_parms)
     info=create_post_http("https://graph.qq.com",share_to,send_parms)
-    share_log("qq share",info+"====#{user.id}")
     return info
   end
 
@@ -268,7 +262,6 @@ module Oauth2Helper
     send_parms={:oauth_consumer_key=>Oauth2Helper::APPID,:access_token=>access_token,:openid=>openid,
       :format=>"json",:scope=>"all",:oauth_version=>"2.a",:name=>Oauth2Helper::WEIBO_NAME}
     info=create_post_http("https://open.t.qq.com","/api/friends/add",send_parms)
-    share_log("qq share",info)
   end
 
   #发送腾讯微博

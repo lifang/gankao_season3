@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+    <plan>
+        <current>7</current>
+        <info>
+            <chapter1 days='6' linsten='90' sentence='17' word='17'/>
+            <chapter2 days='15' dictation='40' read='6' translate='40'/>
+            <chapter3 days='9' similarity='30' write='9'/>
+        </info>
+        
+        <_7 status='0'>
+            <part status='0' type='3'><item id='105' is_pass='0' repeat_time='0' step='0'/><item id='99' is_pass='0' repeat_time='0' step='0'/><item id='130' is_pass='0' repeat_time='0' step='0'/><item id='128' is_pass='0' repeat_time='0' step='0'/><item id='101' is_pass='0' repeat_time='0' step='0'/><item id='10' is_pass='0' repeat_time='0' step='0'/></part>
+            <part status='0' type='4'><item id='63' is_pass='0' repeat_time='0' step='0'/><item id='61' is_pass='0' repeat_time='0' step='0'/><item id='66' is_pass='0' repeat_time='0' step='0'/><item id='31' is_pass='0' repeat_time='0' step='0'/><item id='49' is_pass='0' repeat_time='0' step='0'/><item id='64' is_pass='0' repeat_time='0' step='0'/><item id='25' is_pass='0' repeat_time='0' step='0'/><item id='84' is_pass='0' repeat_time='0' step='0'/><item id='74' is_pass='0' repeat_time='0' step='0'/><item id='72' is_pass='0' repeat_time='0' step='0'/><item id='81' is_pass='0' repeat_time='0' step='0'/><item id='53' is_pass='0' repeat_time='0' step='0'/><item id='39' is_pass='0' repeat_time='0' step='0'/><item id='9' is_pass='0' repeat_time='0' step='0'/><item id='96' is_pass='0' repeat_time='0' step='0'/><item id='83' is_pass='0' repeat_time='0' step='0'/><item id='79' is_pass='0' repeat_time='0' step='0'/><item id='35' is_pass='0' repeat_time='0' step='0'/><item id='65' is_pass='0' repeat_time='0' step='0'/><item id='86' is_pass='0' repeat_time='0' step='0'/><item id='12' is_pass='0' repeat_time='0' step='0'/><item id='80' is_pass='0' repeat_time='0' step='0'/><item id='28' is_pass='0' repeat_time='0' step='0'/><item id='78' is_pass='0' repeat_time='0' step='0'/><item id='98' is_pass='0' repeat_time='0' step='0'/><item id='77' is_pass='0' repeat_time='0' step='0'/><item id='59' is_pass='0' repeat_time='0' step='0'/><item id='87' is_pass='0' repeat_time='0' step='0'/><item id='6' is_pass='0' repeat_time='0' step='0'/><item id='46' is_pass='0' repeat_time='0' step='0'/><item id='75' is_pass='0' repeat_time='0' step='0'/><item id='82' is_pass='0' repeat_time='0' step='0'/><item id='27' is_pass='0' repeat_time='0' step='0'/><item id='47' is_pass='0' repeat_time='0' step='0'/><item id='56' is_pass='0' repeat_time='0' step='0'/><item id='29' is_pass='0' repeat_time='0' step='0'/><item id='16' is_pass='0' repeat_time='0' step='0'/><item id='62' is_pass='0' repeat_time='0' step='0'/><item id='21' is_pass='0' repeat_time='0' step='0'/><item id='69' is_pass='0' repeat_time='0' step='0'/></part>
+            <part status='0' type='5'><item id='2344' is_pass='0' repeat_time='0' step='0'/><item id='2342' is_pass='0' repeat_time='0' step='0'/><item id='2301' is_pass='0' repeat_time='0' step='0'/><item id='2308' is_pass='0' repeat_time='0' step='0'/><item id='2348' is_pass='0' repeat_time='0' step='0'/><item id='2309' is_pass='0' repeat_time='0' step='0'/><item id='2304' is_pass='0' repeat_time='0' step='0'/><item id='2330' is_pass='0' repeat_time='0' step='0'/><item id='2306' is_pass='0' repeat_time='0' step='0'/><item id='2307' is_pass='0' repeat_time='0' step='0'/><item id='2315' is_pass='0' repeat_time='0' step='0'/><item id='2338' is_pass='0' repeat_time='0' step='0'/><item id='2316' is_pass='0' repeat_time='0' step='0'/><item id='2320' is_pass='0' repeat_time='0' step='0'/><item id='2303' is_pass='0' repeat_time='0' step='0'/><item id='2312' is_pass='0' repeat_time='0' step='0'/><item id='2305' is_pass='0' repeat_time='0' step='0'/><item id='2341' is_pass='0' repeat_time='0' step='0'/><item id='2323' is_pass='0' repeat_time='0' step='0'/><item id='2337' is_pass='0' repeat_time='0' step='0'/><item id='2310' is_pass='0' repeat_time='0' step='0'/><item id='2332' is_pass='0' repeat_time='0' step='0'/><item id='2313' is_pass='0' repeat_time='0' step='0'/><item id='2333' is_pass='0' repeat_time='0' step='0'/><item id='2326' is_pass='0' repeat_time='0' step='0'/><item id='2336' is_pass='0' repeat_time='0' step='0'/><item id='2311' is_pass='0' repeat_time='0' step='0'/><item id='2339' is_pass='0' repeat_time='0' step='0'/><item id='2340' is_pass='0' repeat_time='0' step='0'/><item id='2327' is_pass='0' repeat_time='0' step='0'/><item id='2317' is_pass='0' repeat_time='0' step='0'/><item id='2347' is_pass='0' repeat_time='0' step='0'/><item id='2329' is_pass='0' repeat_time='0' step='0'/><item id='2345' is_pass='0' repeat_time='0' step='0'/><item id='2346' is_pass='0' repeat_time='0' step='0'/><item id='2300' is_pass='0' repeat_time='0' step='0'/><item id='2331' is_pass='0' repeat_time='0' step='0'/><item id='2322' is_pass='0' repeat_time='0' step='0'/><item id='2343' is_pass='0' repeat_time='0' step='0'/><item id='2321' is_pass='0' repeat_time='0' step='0'/></part>
+        </_7>
+        <_8 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_8>
+        <_9 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_9>
+        <_10 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_10>
+        <_11 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_11>
+        <_12 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_12>
+        <_13 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_13>
+        <_14 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_14>
+        <_15 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_15>
+        <_16 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_16>
+        <_17 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_17>
+        <_18 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_18>
+        <_19 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_19>
+        <_20 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_20>
+        <_21 status='0'>
+            <part num='6' type='3'/>
+            <part num='40' type='4'/>
+            <part num='40' type='5'/>
+        </_21>
+    </plan>
+    <review>
+        
+        <_7 status='0'>
+            <part repeat_time='1' status='0' type='0'>
+                <item id='5036' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5533' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7921' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6339' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9760' is_pass='0' repeat_time='0' step='0'/>
+                <item id='8918' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6616' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7085' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11054' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7228' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11358' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5165' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6975' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6318' is_pass='0' repeat_time='0' step='0'/>
+                <item id='8340' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11315' is_pass='0' repeat_time='0' step='0'/>
+                <item id='8169' is_pass='0' repeat_time='0' step='0'/>
+            </part>
+        <part repeat_time='0' status='0' type='0'>
+                <item id='4813' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5081' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5503' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5973' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6057' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6531' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7216' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7278' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7720' is_pass='0' repeat_time='0' step='0'/>
+                <item id='8658' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9764' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11068' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11072' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11607' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11616' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5550' is_pass='0' repeat_time='0' step='0'/>
+                <item id='11848' is_pass='0' repeat_time='0' step='0'/>
+            </part><part repeat_time='0' status='0' type='1'>
+                <item id='701' is_pass='0' repeat_time='0' step='0'/>
+                <item id='709' is_pass='0' repeat_time='0' step='0'/>
+                <item id='712' is_pass='0' repeat_time='0' step='0'/>
+                <item id='715' is_pass='0' repeat_time='0' step='0'/>
+                <item id='720' is_pass='0' repeat_time='0' step='0'/>
+                <item id='722' is_pass='0' repeat_time='0' step='0'/>
+                <item id='724' is_pass='0' repeat_time='0' step='0'/>
+                <item id='727' is_pass='0' repeat_time='0' step='0'/>
+                <item id='729' is_pass='0' repeat_time='0' step='0'/>
+                <item id='735' is_pass='0' repeat_time='0' step='0'/>
+                <item id='745' is_pass='0' repeat_time='0' step='0'/>
+                <item id='751' is_pass='0' repeat_time='0' step='0'/>
+                <item id='766' is_pass='0' repeat_time='0' step='0'/>
+                <item id='775' is_pass='0' repeat_time='0' step='0'/>
+                <item id='780' is_pass='0' repeat_time='0' step='0'/>
+                <item id='888' is_pass='0' repeat_time='0' step='0'/>
+                <item id='885' is_pass='0' repeat_time='0' step='0'/>
+            </part><part repeat_time='0' status='0' type='2'>
+                <item id='2390' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2391' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2392' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2393' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2394' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2395' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2396' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2397' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2398' is_pass='0' repeat_time='0' step='0'/>
+                <item id='2399' is_pass='0' repeat_time='0' step='0'/>
+            </part></_7>
+    <_8 status='0'><part repeat_time='1' status='0' type='0'>
+                <item id='4923' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6793' is_pass='0' repeat_time='0' step='0'/>
+                <item id='10602' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9910' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6819' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7416' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9161' is_pass='0' repeat_time='0' step='0'/>
+                <item id='10526' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9488' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6751' is_pass='0' repeat_time='0' step='0'/>
+                <item id='5367' is_pass='0' repeat_time='0' step='0'/>
+                <item id='6349' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9369' is_pass='0' repeat_time='0' step='0'/>
+                <item id='10815' is_pass='0' repeat_time='0' step='0'/>
+                <item id='9688' is_pass='0' repeat_time='0' step='0'/>
+                <item id='10304' is_pass='0' repeat_time='0' step='0'/>
+                <item id='7295' is_pass='0' repeat_time='0' step='0'/>
+            </part></_8></review>
+    <tiku>
+        <part item='4720,4804,4829,4902,4943,5193,5209,5440,5536,5543,5566,5660,5739,5856,5893,5910,5997,6014,6061,6084,6104,6233,6275,6417,6439,6450,6631,6664,6780,6890,6899,6928,6965,6969,6988,7029,7045,7053,7176,7233,7395,7415,7557,7579,7701,7722,7777,7885,8039,8085,8278,8299,8439,8502,8508,8534,8548,8560,8572,8659,8875,8883,9173,9196,9230,9286,9388,9521,9721,9724,9766,9785,9803,9835,9880,9901,9995,9999,10040,10062,10205,10548,10688,10785,10903,10912,11109,11130,11133,11167,11172,11482,11773,11834,11844,11880,12026,12036' lv='61' type='0'/>
+        <part item='801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,886,887,889,890,891,892,893,894,895,896,897,898,899,900' lv='9' type='1'/>
+        <part item='' lv='10' type='2'/>
+    <part item='1,2,3,4,5,6,97,98,100,102,127,129,131,132,7,8,9,11,12,103,104,106,107,108,133,134,135,136,137,138' lv='2' type='3'/><part item='1,2,3,4,5,7,8,10,11,13,14,15,17,18,19,20,22,23,24,26,30,32,33,34,36,37,38,40,41,42,43,44,45,48,50,51,52,54,55,57,58,60,67,68,70,71,73,76,85,88,89,90,91,92,93,94,95,97,99,100' lv='1' type='4'/><part item='2302,2314,2318,2319,2324,2325,2328,2334,2335,2349' lv='5' type='5'/></tiku>
+</root>

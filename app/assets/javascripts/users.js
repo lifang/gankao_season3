@@ -45,6 +45,8 @@ function checkIn(category){
             tishi_alert(data.message);
             $(".s_sun").html(data.num);
             $("#checkIn_days").html(data.days);
+            $(".checkIn_text").show();
+            window.setTimeout(function(){$(".checkIn_text").hide();}, 3000);
         }
     });
 }
@@ -83,4 +85,15 @@ function check_xieyi() {
             $("#agreement_link").attr("target", "_blank");
         }
     });
+}
+
+//显示协议确定按钮
+function show_xy_bun() {
+    if ($.trim($("#charge_name").val()) != "请填写您的姓名" && $.trim($("#charge_name").val()) != "" &&
+        $.trim($("#charge_card").val()) != "请填写您的身份证" && $.trim($("#charge_card").val()) != "" &&
+        $.trim($("#alipay_num").val()) != "请填写您的支付宝密码" && $.trim($("#alipay_num").val()) != "" &&
+        $.trim($("#charge_name1").val()) != "请填写您的姓名" && $.trim($("#charge_name1").val()) != "") {
+          $("#xy_btn").removeAttr("disabled");
+          $("#xy_btn").removeClass("b_btn_g").addClass("b_btn");
+    }
 }
