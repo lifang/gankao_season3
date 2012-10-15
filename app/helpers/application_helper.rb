@@ -193,5 +193,11 @@ module ApplicationHelper
     1.upto(8) {current_time << other_num[rand(other_num.length)]}
     return current_time.shuffle.join("")
   end
+
+  #查看用户是否有生成保过协议
+  def user_agreement(category_id)
+    return Agreement.find(:first, :select => "agreement_url",
+      :conditions => ["category_id = ? and user_id = ?", category_id.to_i, cookies[:user_id].to_i])
+  end
   
 end
