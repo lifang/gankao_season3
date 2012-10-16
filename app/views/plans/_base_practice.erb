@@ -13,7 +13,7 @@
     <div class="plan_list" <% if (i > (current_page -1) * 10) and (i < current_page * 10 + 1) %>style="display: block;"
          <% else %>style="display: none;"<% end %>>
          <% class_name = @plan_list[:current] > i ? "pl_m_bg" : (@plan_list[:current] == i ? "pl_l_bg" : "pl_d_bg") %>
-      <h1 class="pl_fk <%= class_name %>" id="<%= i %>" <%if @plan_list[:current] == i%> onclick="start_practice('<%= params[:category] %>')"<% end %>>
+      <h1 class="pl_fk <%= class_name %>" id="<%= i %>" <%if @plan_list[:current] == i%> onclick="start_practice('<%= @user_plan.category_id %>')"<% end %>>
         <span class="pl_img">
           <% if @plan_list[:current] > i %>
             <img src="/assets/dui.png"/>
