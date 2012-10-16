@@ -72,3 +72,12 @@ function start_practice(category_id) {
     dispatch(category_id);
 }
 
+//生成倒计时得太阳的框
+function gen_fif_div(style) {
+    var win_width = jQuery(window).width();
+    var z_layer_width = jQuery(style).width();
+    jQuery(style).css('top', 40);
+    jQuery(style).css('left',(win_width-z_layer_width)/2);
+    jQuery(style).css('display','block');
+
+}

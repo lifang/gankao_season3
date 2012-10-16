@@ -1417,29 +1417,43 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 .key { width: 230px; padding: 10px 0; background: #387580; margin-top: 10px;}
 .key_box {
     width: 194px;
-	height: 32px;
-	padding: 3px;
-	margin: 0 auto;
-	background: #1da4bd;
-	border-radius: 0.6em;
-	overflow: hidden;
+    height: 32px;
+    padding: 3px;
+    margin: 0 auto;
+    background: #1da4bd;
+    border-radius: 0.6em;
+    overflow: hidden;
 }
 .key_box input {
     border-radius: 0.6em 0 0 0.6em;
-	border: none;
-	width: 143px;
-	height: 32px;
-	line-height: 32px;
-	padding: 0 5px;
-	background: #29616b;
-	color: #31c5e1;
-	float: left;
+    border: none;
+    width: 143px;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 5px;
+    background: #29616b;
+    color: #31c5e1;
+    float: left;
 }
 .key_box button {
     background: #fff6d5;
-	color: #387580;
-	width: 41px;
-	height: 32px;
-	line-height: 32px;
-	border-radius: 0 0.6em 0.6em 0;
+    color: #387580;
+    width: 41px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 0 0.6em 0.6em 0;
+}
+
+.pt_tishi {
+    text-align: center;
+    width: 530px;
+    font-size: 20px;
+    color: #387580;
+    line-height: 50px;
+    text-shadow: 1px 1px 1px #f7f6f0;
+    font-weight: bolder;
+    background: #e4e3ce;
+    border-radius: 0.6em;
+    position: absolute;
+    z-index:299;
 }
