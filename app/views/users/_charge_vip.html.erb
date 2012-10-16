@@ -96,7 +96,6 @@
   </div>
 </div>
 <div class="tab tishi_tab" style="display:none">
-  <span class="close tishi_close">关闭</span>
   <p>赶考网会员充值,完成付款后请根据你的情况点击下面的按钮：</p>
   <div class="btn_center_double">
     <a class="b_btn" target="_blank" href="/logins/alipay_exercise?category=<%= params[:category] %>&total_fee=<%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %>">重新支付</a>

@@ -1,5 +1,5 @@
 <%= render :partial => "/questions/answers", :object => unanswers %>
-<%= form_for "question_answer", :html => {:onsubmit => "return check_answer(#{unanswers[0].id})"},
+<%= form_for "question_answer", :html => {:onsubmit => "javascript:return check_answer(#{unanswers[0].id})"},
   :url =>"/questions/save_answer?category=#{unanswers[0].category_id}"  do |f| %>
   <div class="problem_list">
     <%= f.hidden_field :user_question_id, :value => unanswers[0].id %>

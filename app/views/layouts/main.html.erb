@@ -76,6 +76,11 @@
                 <a href="http://page.renren.com/600942099/note/874714982" target="_blank">详情</a>
               </span>
             <% end %>
+            <% if cookies[:user_id] and is_vip?(params[:category]) and user_agreement(params[:category]) %>
+              <span>您与赶考网签署的保过协议可以在这里下载
+                <a href="<%= user_agreement(params[:category]).agreement_url %>" target="_blank">下载</a>
+              </span>
+            <% end %>
           </div>
         </nav>
       </div>
@@ -89,7 +94,7 @@
             <div class="checkIn_text" style="display: none;">*你已经连续签到&nbsp;<span id="checkIn_days"></span>&nbsp;天</div>
           </div>
           <div class="clear"></div>
-          
+
           <div class="key">
             <div class="key_box">
               <input name="invit_code" type="text" id="invit_code" value="请输入激活码"
@@ -132,7 +137,7 @@
       </div>
     </div>
     <div class="footer">
-      <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
+      <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11074394号-1</p>
     </div>
     <%= render :partial => 'users/details', :object => user_infos if cookies[:user_id] and user_infos %>
     <div class="mask" style="display: none;"></div>

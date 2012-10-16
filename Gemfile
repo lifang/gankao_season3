@@ -21,7 +21,7 @@ gem 'mechanize', '2.0.1'
 gem 'hpricot', '0.8.4'
 gem 'wicked_pdf', '0.7.9'
 gem 'wkhtmltopdf-binary', '0.9.9.1'
-#gem 'multipart-post','1.1.5'
+gem 'multipart-post','1.1.5'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
