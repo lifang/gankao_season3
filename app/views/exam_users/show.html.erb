@@ -13,6 +13,9 @@
   <h1><%= @paper.title %></h1>
   <div class="icon_func">
     <div class="float_right">
+      <% unless @plan.nil? %>
+        <span class="icon_course"><a href="#" class="tooltip" onclick="check_similar(<%= category_id %>)" title="完成复习方案中关于真题的任务" >完成任务</a></span>
+      <% end %>
       <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" title="上一题"  name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
       <span class="icon_figure"><font id="global_problem_index"></font> / <font id="global_problem_sum"></font></span>
       <span class="icon_next"><a href="javascript:void(0);" class="tooltip" title="下一题"  name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
@@ -22,7 +25,7 @@
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" title="重做" name="重做" <% if params[:preview] %> onclick="javascript:window.location.reload();" <% else %>onclick="javascript:confirm_redo('<%= params["type"] %>');" <% end %>>重做</a></span>
   </div>
-  <%#= render :partial=>"/common/advert"  %>
+<%#= render :partial=>"/common/advert"  %>
 </div>
 
 <!-- 试题生成入口 generate.js -->

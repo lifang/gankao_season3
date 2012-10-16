@@ -555,4 +555,30 @@ class LearnController < ApplicationController
     return {:type => cookies[:type],:time=>num}
   end
 
+
+  def check_similar
+    plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
+    xml = plan.plan_list_xml
+    inner_chapt=xml.root.elements["plan/current"].text.to_i
+    total_bag= xml.root.elements["plan/info/chapter1"].attributes["days"].to_i+xml.root.elements["plan/info/chapter2"].attributes["days"].to_i
+    each_num=xml.root.elements["plan/info/chapter3"].attributes["similarity"].to_i
+    if total_bag >= inner_chapt
+      data="您还没有真题包"
+    else
+      total_actions=ActionLog.find_by_sql("select sum(total_num) num from action_logs where user_id=#{cookies[:user_id]}
+   and category_id=#{params[:category].to_i} and types=#{ActionLog::TYPES[:PRACTICE]}")[0]
+      if (inner_chapt-total_bag)*each_num <=  total_actions.num.to_i
+        is_part_pass?(plan, xml)
+        data="第#{(inner_chapt+1)<plan.days ? (inner_chapt+1) : plan.days }个包已解锁"
+      else
+        data="您还需要#{(inner_chapt-total_bag)*each_num-total_actions.num.to_i}道真题才能解锁下一个包"
+      end
+    end
+    respond_to do |format|
+      format.json {
+        render :json=>{:message=>data}
+      }
+    end
+  end
+  
 end
