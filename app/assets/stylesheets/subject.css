@@ -101,6 +101,8 @@ form{clear:both;}
 
 .icon_return a { background: url(/assets/icon_func.png) no-repeat -159px 0;}
 .icon_return a:hover { background: url(/assets/icon_func.png) no-repeat -159px -30px;}
+.icon_course a { background: url(/assets/icon_func.png) no-repeat -192px 0;}
+.icon_course a:hover { background: url(/assets/icon_func.png) no-repeat -192px -30px;}
 
 
 .subject_main,.problem_resource { width: 100%; overflow: hidden;}

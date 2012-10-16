@@ -1,28 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
     <plan>
-        <current>38</current>
+        <current>61</current>
         <info>
             <chapter1 days='26' linsten='8' sentence='8' word='12'/>
             <chapter2 days='12' dictation='30' read='6' translate='10'/>
             <chapter3 days='7' similarity='39' write='10'/>
         </info>
         
-        <_38 status='0'>
-            
-            <part status='0' type='4'>
-                <item id='200' is_pass='0' repeat_time='0' step='0'/>
-                <item id='151' is_pass='0' repeat_time='0' step='0'/>
-            </part>
-            <part status='0' type='5'>
-                <item id='2340' is_pass='0' repeat_time='0' step='0'/>
-                <item id='2341' is_pass='0' repeat_time='0' step='0'/>
-            </part>
-        </_38>
-        <_13 status='0'>
-            <part num='10' type='6'/>
-            <part num='39' type='6'/>
-        </_13>
+        
+        
         <_14 status='0'>
             <part num='10' type='6'/>
             <part num='39' type='6'/>
@@ -105,23 +92,7 @@
         </_33>
     </plan>
     <review>
-        <_38 status='0'>
-            <part repeat_time='0' status='1' type='4'>
-                <item id='1' is_pass='1' repeat_time='0' step='1'/>
-                <item id='9' is_pass='1' repeat_time='0' step='1'/>
-                <item id='14' is_pass='1' repeat_time='0' step='1'/>
-                <item id='38' is_pass='1' repeat_time='0' step='1'/>
-                <item id='46' is_pass='1' repeat_time='0' step='1'/>
-                <item id='50' is_pass='1' repeat_time='0' step='1'/>
-            </part>
-            <part repeat_time='0' status='0' type='5'>
-                <item id='2330' is_pass='0' repeat_time='0' step='0'/>
-                <item id='2331' is_pass='0' repeat_time='0' step='0'/>
-                <item id='2332' is_pass='0' repeat_time='0' step='0'/>
-                <item id='2333' is_pass='0' repeat_time='0' step='0'/>
-            </part>
-        </_38>
-    </review>
+   <_61 status='0'><part num='10' repeat_time='0' status='0' type='6'/><part num='39' repeat_time='0' status='0' type='6'/></_61></review>
     <tiku>
         <part item='' lv='2' type='0'/>
         <part item='' lv='2' type='1'/>
