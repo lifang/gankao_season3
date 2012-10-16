@@ -563,7 +563,7 @@ class LearnController < ApplicationController
     total_bag= xml.root.elements["plan/info/chapter1"].attributes["days"].to_i+xml.root.elements["plan/info/chapter2"].attributes["days"].to_i
     each_num=xml.root.elements["plan/info/chapter3"].attributes["similarity"].to_i
     if total_bag >= inner_chapt
-      data="您还没有真题包"
+      data="您的复习方案任务还未到冲刺阶段"
     else
       total_actions=ActionLog.find_by_sql("select sum(total_num) num from action_logs where user_id=#{cookies[:user_id]}
    and category_id=#{params[:category].to_i} and types=#{ActionLog::TYPES[:PRACTICE]}")[0]
