@@ -569,7 +569,7 @@ class LearnController < ApplicationController
    and category_id=#{params[:category].to_i} and types=#{ActionLog::TYPES[:PRACTICE]}")[0]
       if (inner_chapt-total_bag)*each_num <=  total_actions.num.to_i
         is_part_pass?(plan, xml)
-        data="第#{(inner_chapt+1)<plan.days ? (inner_chapt+1) : plan.days }个任务已解锁"
+        data="您第#{inner_chapt}任务已完成，第#{(inner_chapt+1)<plan.days ? (inner_chapt+1) : plan.days }个任务已解锁"
       else
         data="您还需要#{(inner_chapt-total_bag)*each_num-total_actions.num.to_i}道真题才能解锁下一个任务"
       end
