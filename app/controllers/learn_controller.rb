@@ -563,15 +563,15 @@ class LearnController < ApplicationController
     total_bag= xml.root.elements["plan/info/chapter1"].attributes["days"].to_i+xml.root.elements["plan/info/chapter2"].attributes["days"].to_i
     each_num=xml.root.elements["plan/info/chapter3"].attributes["similarity"].to_i
     if total_bag >= inner_chapt
-      data="您还没有真题包"
+      data="您的复习方案任务还未到冲刺阶段"
     else
       total_actions=ActionLog.find_by_sql("select sum(total_num) num from action_logs where user_id=#{cookies[:user_id]}
    and category_id=#{params[:category].to_i} and types=#{ActionLog::TYPES[:PRACTICE]}")[0]
       if (inner_chapt-total_bag)*each_num <=  total_actions.num.to_i
         is_part_pass?(plan, xml)
-        data="第#{(inner_chapt+1)<plan.days ? (inner_chapt+1) : plan.days }个包已解锁"
+        data="您第#{inner_chapt}任务已完成，第#{(inner_chapt+1)<plan.days ? (inner_chapt+1) : plan.days }个任务已解锁"
       else
-        data="您还需要#{(inner_chapt-total_bag)*each_num-total_actions.num.to_i}道真题才能解锁下一个包"
+        data="您还需要#{(inner_chapt-total_bag)*each_num-total_actions.num.to_i}道真题才能解锁下一个任务"
       end
     end
     respond_to do |format|
