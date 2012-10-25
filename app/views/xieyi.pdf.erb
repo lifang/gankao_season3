@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>保过协议</title>
+
+    <style type="text/css">
+      * { padding: 0; margin: 0;}
+      body { font-family: "微软雅黑", "宋体", Arial; color: #333;}
+      h1 { font-size: 18px; text-align: center;}
+      h2 { font-size: 16px; line-height: 32px; margin-top: 15px;}
+      table {}
+      table td { padding: 2px 5px; line-height: 24px;}
+      .red { color: #F00;}
+      .pay_xy { width: 700px; margin: 0 auto; background: #FFF; color: #38747F; padding: 10px; }
+      .pay_xy input[type="text"] {
+        border: none;
+        border-bottom: 1px #38747F solid;
+        padding: 0 10px;
+        background: none;
+        font-size: 11px;
+        color: #CCC;
+      }
+      .pay_table { margin: 10px 0; border: 1px #21555f solid; background: #f2f2f2;}
+      .pay_table td { padding: 0px 5px;}
+      .pay_div { line-height: 18px; text-indent: 24px; margin: 10px 0;}
+
+      .yz_img { margin-left: 80px;}
+      .pay_list { line-height: 32px; overflow: hidden; padding-left: 10px; border-bottom: 1px #e4e4e4 dashed;}
+      .pay_list p { float: left;}
+      .pay_list .s_sun { margin-top: 8px;}
+      .pay_list .pay_sign {
+        background: #38747F;
+        color: #FFF;
+        width: 50px;
+        height: 25px;
+        text-align: center;
+        line-height: 25px;
+        margin: 5px 5px 0 5px;
+        border-radius: 0.6em;
+        float: right;
+      }
+      .hguan { padding: 0 5px 0 22px; background: url(<%= Rails.root %>/app/assets/images/V.png) no-repeat 0 center;}
+
+
+    </style>
+  </head>
+
+  <body>
+    <div class="pay_xy">
+      <h1>赶考网在线备考保过协议</h1>      
+      <div class="pay_div">为帮助考生顺利通过大学<% if @pay_category.to_i == Category::TYPE[:CET4] %>英语四级考试（CET4）
+        <% elsif @pay_category.to_i == Category::TYPE[:CET6] %>英语六级考试（CET6）<% else %>考研英语<% end %>，经苏州协创软件技术有限公司旗下赶考网（以下简称赶考网） 与
+        <%= @name %> 考生（以下简称考生）达成如下协议：</div>
+      <h2 class="red">高级用户特权</h2>
+      <div class="pay_list red">1）考生姓名前将加<span class="hguan">皇冠</span>标识以区别于普通用户；</div>
+      <div class="pay_list red">2）赶考网功能完全开放，不再有任何功能限制；</div>
+      <div class="pay_list red">3）考生学习过程中不再需要消耗小太阳（赶考网虚拟币）；</div>
+      <div class="pay_list red">4）享受赶考网的保过服务，即考生通过本站定制的复习计划无法达到设定的目标分数
+        （大学<%= Category::TYPE_INFO[@pay_category.to_i] %>目标分数最低为
+        <%= UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[@pay_category.to_i]}"] %>分），赶考网承诺将全额退款；</div>
+
+      <h2>保过说明</h2>
+      <div class="pay_list">1）考生须在完成赶考网定制的复习计划的前提下，才能申请未达目标退款请求；</div>
+      <div class="pay_list">2）考生退款请将本协议、身份证复印件、考试成绩单以及支付宝账号发送至tuikuan@gankao.co，赶考网会在15个工作日内完成退款。</div>
+
+      <h2>其他</h2>
+      <div class="pay_list">1）本协议将以PDF格式保存，并对应唯一的防伪串号，请考生妥善保管，任何企图破解协议或者伪造协议的行为，赶考网都将保留追究权利。</div>
+      <div class="pay_list">2）本协议使用范围为2012年12月大学<% if @pay_category.to_i == Category::TYPE[:CET4] %>英语四级考试（CET4）
+        <% elsif @pay_category.to_i == Category::TYPE[:CET6] %>英语六级考试（CET6）<% else %>考研英语<% end %>，退款截止期为2013年6月1日。</div>
+      <table width="100%" class="pay_table">
+        <tr>
+          <td align="right">防伪串号：</td>
+          <td colspan="3"><%= @agreement_num %></td>
+        </tr>
+        <tr>
+          <td align="right">甲方（姓名）：</td>
+          <td><%= @name %></td>
+          <td>乙方：</td>
+          <td>苏州协创软件技术有限公司</td>
+        </tr>
+        <tr>
+          <td align="right">身份证：</td>
+          <td><%= @id_card %></td>
+          <td colspan="2" rowspan="4"><img src="<%= Rails.root %>/app/assets/images/yz.png" class="yz_img"/></td>
+        </tr>
+        <tr>
+          <td align="right">支付宝账号：</td>
+          <td><%= @alipay_num %></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

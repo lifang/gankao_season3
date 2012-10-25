@@ -1,0 +1,10 @@
+<div class="askQuestion">
+  <span class="askQuestion_span">亲，来发布你的疑问...</span>
+  <%= form_for :user_question, :url=>"/questions/ask_question?category=#{params[:category]}",
+    :html => {:onsubmit => "javascript:check_question_content()"} do |f|%>
+    <%= f.text_area :description, :class=>"askQuestion_textarea" %>
+    <span class="askQuestion_number">200</span>
+    <%= f.submit "发布", :class=>"askQuestion_btn", :id=>"askQuestion" %>
+  <%end%>
+  <a href="javascript:void(0)" class="askQuestion_up">收起</a>
+</div>

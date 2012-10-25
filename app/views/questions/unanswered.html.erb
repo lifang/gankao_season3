@@ -1,0 +1,38 @@
+<%=render '/layouts/nav'%>
+<input type="hidden" id="current_page" value="unanswered" />
+<div class="m_content">
+  <div class="mc_box">
+    <%=render :partial => '/questions/menu' %>
+    <%=render :partial => '/questions/ask_question' %>
+    <%if @unanswered_questions.any?%>
+      <div class="mc_menu_box">
+        <%@unanswered_questions.each_with_index do |uaq,index|%>
+          <div class="b_bottom">
+            <div class="problem_list">
+              <div class="problem_box" id="problem_<%= uaq.id %>">
+                <span class="an_icon01"></span>
+                <p><span class="orange"></span><%=uaq.description%></p>
+                <span class="problem_time"><%=uaq.created_at.strftime("%Y-%m-%d")%>   <%=uaq.created_at.strftime("%H:%M")%></span>
+              </div>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="<%= uaq.img_url.nil? ? User::DEFAULT_COVER : uaq.img_url %>"/></div>
+                <h3><%= uaq.user_name %></h3>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div id="answer_<%= uaq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
+              <% if index == 0 %>
+                <%= render :partial => "/questions/unanswers", :object => [uaq, @question_answers, "unanswered"] %>
+              <% end %>
+            </div>
+          </div>
+        <%end%>
+      </div>
+      <%=will_paginate @unanswered_questions,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+
+    <%else%>
+      <div class="mc_menu_box"><h1 class="noAnswer">已经没有新的问题啦。</h1></div>
+    <%end%>
+  </div>
+  <div class="clear"></div>
+</div>

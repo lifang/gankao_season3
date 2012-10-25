@@ -1,0 +1,55 @@
+<% if is_vip?(params[:category]) or cookies[:can_open] %>
+  <% if @result %>
+    window.items = "<%= @items_str %>";
+    window.ids = "<%= @ids_str %>";
+    show_mask(".mask");
+    <% case @result[:type].to_i %>
+    <% when UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
+      <%  if @result[:step].to_i != 3 %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_12") %>");
+      <% else %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/word_3") %>");
+      <% end %>
+    <% when UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/sentence") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/hearing") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:READ] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/reading") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] %>
+      <% if cookies[:learn_step].to_i==1 %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate_one") %>");
+      <% else %>
+        $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/translate") %>");
+      <% end %>
+    <% when UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/listen_write") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:WRITE] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/write") %>");
+    <% when UserPlan::CHAPTER_TYPE_NUM[:SIMILAR] %>
+      $(".plan_tab").html("<%= escape_javascript(render :partial => "/learn/tip") %>");
+      $("#all_pass .ts_text").html("您需要再做<%=@result[:time]  %>道真题下一个任务包才会为您解锁，继续努力哦。");
+      show_tip("#all_pass");
+    <% end %>
+    generate_flash_div(".plan_tab");
+    <% if  @result[:type].to_i==UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] && cookies[:learn_step].to_i!=1 %>
+      $(".plan_tab").css("top","10px");
+    <% end %>
+    local_start_time = <%= @result[:time] %>;
+    <% if @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:DICTATION] and @result[:type].to_i!=UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+      if (getCookie("first_study") != "1") {
+      local_save_start();
+      }
+    <% end %>
+    <% id_arr = @ids_str.split(",") %>
+    $(".t_number").html("<%= cookies[:complete_item].to_i - id_arr.length %> / <%= cookies[:complete_item].to_s %>");
+    if (getCookie("first_study") == "1") {
+    generate_flash_div("#start_tab");
+    }
+  <% else %>
+    tishi_alert("恭喜您已经完成所有的任务啦！");
+  <% end %>
+<% else %>
+  tishi_alert("您的小太阳个数不够打开一个任务包了哦，呜呜~~~~~");
+<% end %>
+delCookie("first_study");

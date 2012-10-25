@@ -1,0 +1,40 @@
+<h1 class="mc_title"><%= UserPlan::CHAPTER[:cha3] %>阶段</h1>
+<%= javascript_include_tag "base" %>
+<%= javascript_include_tag "countdown" %>
+<div class="mc_box">
+  <% total_time = (@user_plan.category_id == Category::TYPE[:GRADUATE]) ? 30 : @plan_list[:write] * 5 + 30
+  current_practice = @plan_list[:current] - @plan_list[:cha1_days] - @plan_list[:cha2_days]
+  current_page = (current_practice%10 > 0) ? (current_practice/10 + 1) : current_practice/10
+  total_page = (@plan_list[:cha3_days]%10 > 0) ? (@plan_list[:cha3_days]/10 + 1) : @plan_list[:cha3_days]/10
+  (1..@plan_list[:cha3_days]).each do |i| %>
+    <div class="plan_list" <% if (i > (current_page -1) * 10) and (i < current_page * 10 + 1) %>style="display: block;"
+         <% else %>style="display: none;"<% end %>>
+         <% class_name = current_practice > i ? "pl_m_bg" : (current_practice == i ? "pl_l_bg" : "pl_d_bg") %>
+      <h1 class="pl_fk <%= class_name %>" id="<%= i + @plan_list[:cha1_days] + @plan_list[:cha2_days] %>" <%if current_practice == i%> onclick="start_practice('<%= params[:category] %>')"<% end %>>
+        <span class="pl_img">
+          <% if current_practice > i %>
+            <img src="/assets/dui.png"/>
+          <% elsif current_practice == i %>
+            <img src="/assets/kai.png" />
+          <% else %>
+            <img src="/assets/suo.png"/>
+          <% end %>
+        </span>任务<%= i + @plan_list[:cha1_days] + @plan_list[:cha2_days] %>
+      </h1>
+      <div class="pl_text">
+        <% if @user_plan.category_id == Category::TYPE[:GRADUATE] %>
+          <span>真题(<%= @plan_list[:similarity] %>)<br/>&nbsp;</span>
+        <% else %>
+          <span>写作(<%= @plan_list[:write] %>)&nbsp;&nbsp;&nbsp;真题(<%= @plan_list[:similarity] %>)<br/>&nbsp;</span>
+        <% end %>
+        <p>估计耗时：<%= total_time %>分钟</p>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="clear"></div>
+<div class="pn_btn">
+  <button onclick="javascript:pre_page(<%= @user_plan.id %>, 3);">上一页</button>
+  <button onclick="javascript:next_page(<%= @user_plan.id %>, 3);"
+          <% if current_page == total_page %>style="display: none;"<% end %>>下一页</button>
+</div>

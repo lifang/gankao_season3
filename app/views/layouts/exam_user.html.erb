@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>来赶考网，四级必过、六级刷分、考研高分！</title>
+    <meta name="keywords" content="英语四级,英语六级,考研英语" />
+    <%= stylesheet_link_tag    "/assets/public.css" %>
+    <%= stylesheet_link_tag    "/assets/subject.css" %>
+    
+    <%= javascript_include_tag "/assets/application.js" %>
+    <%= javascript_include_tag "subject.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.core.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.widget.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.mouse.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.draggable.min.js" %>
+    <%= javascript_include_tag "/assets/jquery.ui.droppable.min.js" %>
+
+    <%= csrf_meta_tags %>
+    <!--[if IE 6]>
+	<script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>
+	/* EXAMPLE */
+	DD_belatedPNG.fix('*');
+	/* string argument can be any CSS selector */
+	/* .png_bg example is unnecessary */
+	/* change it to what suits you! */
+	</script>
+    <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-26018499-1']);
+      _gaq.push(['_setDomainName', 'gankao.co']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body class="subject_bg">
+      <%= render :partial => "/common/flash_div"  %>
+      <div class="clear"></div>
+      <div class="main">
+        <%= yield %>
+         <div class="clear"></div>
+      </div>
+      <div class="foot"></div>
+  </body>
+</html>

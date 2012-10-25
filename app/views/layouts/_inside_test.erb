@@ -1,0 +1,12 @@
+<div class="tab" id="inside_test_frame" style="display: none;width: 800px; height: 628px; padding: 1px;">
+  <% url = case params[:category].to_i
+  when Category::TYPE[:CET4]
+    Constant::GANKAO_CET4_PATH
+  when Category::TYPE[:CET6]
+    Constant::GANKAO_CET6_PATH
+  when Category::TYPE[:GRADUATE]
+    Constant::GANKAO_GRADUATE_PATH
+  end %>
+  <span class="close">关闭</span>
+  <iframe scrolling="no" name="inside_test" id="inside_test" frameborder="0" allowtransparency="true" src="<%= url %>" width="800" height="628"></iframe>
+</div>

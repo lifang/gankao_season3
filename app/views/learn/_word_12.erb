@@ -1,0 +1,83 @@
+<div class="pt_title">
+  <h1>单词学习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number"></span>
+  <span onclick="close_pop()" class="close">关闭</span>
+</div>
+<div class="mc_box">
+  <%= render :partial => "learn/tip" %>
+  <div class="words_func">
+    <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
+    <% if @result[:step] == 1 %>
+      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+      <h1><%= @result[:word].name.strip.gsub(/[0-9]/,"") %></h1>
+      <span class="fyin">[ <%= @result[:word].phonetic %> ]</span>
+      <input id="SID" type="hidden" value="<%= @result[:word].ch_mean %>" />
+    <% else %>
+      <h1><%= @result[:word].ch_mean %></h1>
+      <input id="SID" type="hidden" value="<%= @result[:word].name.strip.gsub(/[0-9]/,"") %>" />
+    <% end %>
+  </div>
+  <div class="words_con">
+    <ul class="words_ul">
+      <% if @result[:step] == 1 %>
+        <li id="A"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][0].types] %><span id="IA"><%= @result[:options][0].ch_mean %></span></a></li>
+        <li id="B"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][1].types] %><span id="IB"><%= @result[:options][1].ch_mean %></span></a></li>
+        <li id="C"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][2].types] %><span id="IC"><%= @result[:options][2].ch_mean %></span></a></li>
+        <li id="D"><a href="javascript:void(0);"><%= Word::TYPES[@result[:options][3].types] %><span id="ID"><%= @result[:options][3].ch_mean %></span></a></li>
+      <% else %>
+        <li id="A"><a href="javascript:void(0);"><span id="IA"><%= @result[:options][0].name.strip.gsub(/[0-9]/,"") %></span></a></li>
+        <li id="B"><a href="javascript:void(0);"><span id="IB"><%= @result[:options][1].name.strip.gsub(/[0-9]/,"") %></span></a></li>
+        <li id="C"><a href="javascript:void(0);"><span id="IC"><%= @result[:options][2].name.strip.gsub(/[0-9]/,"") %></span></a></li>
+        <li id="D"><a href="javascript:void(0);"><span id="ID"><%= @result[:options][3].name.strip.gsub(/[0-9]/,"") %></span></a></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="words_func">
+    <a onclick="remember('word')"  title="我已熟记，不要再出现" class="sign tooltip">我已熟记，不要再出现</a>
+    <a onclick="next_word()" title="下一题" id="next_word_a" class="next tooltip">Next</a>
+  </div>
+</div>
+<div class="tip_mask" style="display: none;"></div>
+<script type="text/javascript">
+<% if @result[:step] == 1 %>
+    $(function(){
+      $f("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+        clip: {
+          url: '<%= Constant::BACK_SERVER_PATH %><%= @result[:word].enunciate_url %>',
+          autoPlay: false
+        }
+      });
+      if (getCookie("first_study") != "1") {
+        flowplayer('player').play();
+      }
+      $("#playAudio").click(function(){
+        flowplayer('player').play();
+      });
+    });
+<% end %>
+  $(document).ready(function(){
+    $(".words_ul li").click(function(){
+      if($("#SID").attr("value").replace(/</g, "&lt;").replace(/>/g, "&gt;") == $("#I"+this.id).html()){
+        //clearInterval(myTime.timeId);
+        window.clearInterval(local_timer);
+        jude("/learn/jude_word","true","false");
+      }else{
+        //clearInterval(myTime.timeId);
+        window.clearInterval(local_timer);
+        jude("/learn/jude_word","false","false");
+      }
+    });
+  });
+
+  function callback(){
+    show_tip("#timeup");
+    jude("/learn/jude_word","false","false");
+  }
+  function next_word() {
+    $("#next_word_a").attr('onclick', 'javascipt:void(0)');
+    window.clearInterval(local_timer);
+    jude('/learn/jude_word','false','true');
+  }
+</script>

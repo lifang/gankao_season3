@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+    <plan>
+        <current>61</current>
+        <info>
+            <chapter1 days='26' linsten='8' sentence='8' word='12'/>
+            <chapter2 days='12' dictation='30' read='6' translate='10'/>
+            <chapter3 days='7' similarity='39' write='10'/>
+        </info>
+        
+        
+        
+        <_14 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_14>
+        <_15 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_15>
+        <_16 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_16>
+        <_17 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_17>
+        <_18 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_18>
+        <_19 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_19>
+        <_20 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_20>
+        <_21 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_21>
+        <_22 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_22>
+        <_23 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_23>
+        <_24 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_24>
+        <_25 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_25>
+        <_26 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_26>
+        <_27 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_27>
+        <_28 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_28>
+        <_29 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_29>
+        <_30 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_30>
+        <_31 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_31>
+        <_32 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_32>
+        <_33 status='0'>
+            <part num='10' type='6'/>
+            <part num='39' type='6'/>
+        </_33>
+    </plan>
+    <review>
+   <_61 status='0'><part num='10' repeat_time='0' status='0' type='6'/><part num='39' repeat_time='0' status='0' type='6'/></_61></review>
+    <tiku>
+        <part item='' lv='2' type='0'/>
+        <part item='' lv='2' type='1'/>
+        <part item='' lv='2' type='2'/>
+        <part item='' lv='5' type='3'/>
+        <part item='101,103,104,107,111,114,115,118,123,124,128,129,131,133,136,137,139,140,141,144,146,148,149,150,153,156,158,159,161,164,166,167,170,171,172,174,175,176,179,180,182,185,186,187,188,190,191,194,196,199' lv='2' type='4'/>
+        <part item='' lv='5' type='5'/>
+    </tiku>
+</root>

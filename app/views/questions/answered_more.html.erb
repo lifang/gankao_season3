@@ -1,0 +1,55 @@
+<%=render '/layouts/nav'%>
+<div class="m_content">
+  <div class="mc_box">
+    <%=render 'menu'%>
+    <div class="mc_menu_box">
+      <div class="b_bottom">
+        <div class="problem_list">
+          <div class="problem_box">
+            <span class="an_icon01"></span>
+            <p><span class="orange"></span><%= @user_question.description %></p>
+            <span class="problem_time"><%= @user_question.created_at.strftime("%Y-%m-%d") %>   <%= @user_question.created_at.strftime("%H:%M") %></span>
+          </div>
+          <div class="userProblem_box">
+            <div class="us_pic">
+              <img src="<%= (@user_question.user.nil? or @user_question.user.img_url.nil?) ? User::DEFAULT_COVER : @user_question.user.img_url %>"/>
+            </div>
+            <h3><%= @user_question.user.name if @user_question.user %></h3>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <% @question_answers.each_with_index do | answer, i | %>
+          <div class="problem_list">
+            <div class="userProblem_box">
+              <% if answer.is_right %><span class="flag tooltip" title="最佳答案">最佳答案</span><% end %>
+              <div class="us_pic"><img src="<%= answer.img_url.nil? ? User::DEFAULT_COVER : answer.img_url %>"/></div>
+              <h3><%= answer.user_name %></h3>
+            </div>
+            <div class="answer_box an_bgTrue">
+              <span class="an_icon03"></span>
+              <p><%= answer.answer %></p>
+              <span class="problem_time"><%= answer.created_at.strftime("%Y-%m-%d") %>   <%= answer.created_at.strftime("%H:%M") %></span>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <%if @question_answers.length > 1 and i == 0 %>
+            <div class="problem_list"><h2 class="other_h">其他回答</h2></div>
+          <%end
+        end %>
+        <% if @current_page == "unanswered" %>
+          <%= form_for "question_answer", :html => {:onsubmit => "javascript:check_answer(#{@user_question.id})"},
+            :url =>"/questions/save_answer?category=#{@user_question.category_id}"  do |f| %>
+            <div class="problem_list">
+              <%= f.hidden_field :user_question_id, :value => @user_question.id %>
+              <%= f.text_area  :answer, :id => "answer_text_#{@user_question.id}", :class => "pro_textarea" %>
+              <%= f.submit "我要回答", :class => "pro_btn"%>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      <%=will_paginate @question_answers,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+</div>

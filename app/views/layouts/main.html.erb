@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>来赶考网，四级必过、六级刷分、考研高分！</title>
+    <meta name="keywords" content="英语四级,英语六级,考研英语" />
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag    "style" %>
+    <%= stylesheet_link_tag    "public" %>
+    <%= javascript_include_tag "cookie" %>
+    <!--[if lt IE 9]>
+    <script src="/assets/html5.js"></script>
+    <![endif]-->
+
+    <!--[if IE 6]>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-26018499-1']);
+      _gaq.push(['_setDomainName', 'gankao.co']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <% if cookies[:shortcut].nil? && cookies[:sc_time] != "3" %>
+      <div class="shortcut">
+        <span class="x" onclick="javascript:close_shortcut()">关闭</span>
+        <ul>
+          <!--<li><a href="javascript:void(0);" class="kuaijie_a">下载快捷方式</a></li>-->
+          <li><a href="javascript:void(0);" onclick="javascript:addfavorite();" class="favorite_a">添加到收藏夹</a></li>
+        </ul>
+      </div>
+    <% end %>
+    <div class="wraper">
+      <div class="header">
+        <h1 class="logo">
+          <a href="/" title="赶考网">
+            <% if params[:category].to_i == Category::TYPE[:CET4] %>
+              <img src="/assets/logo_cet4.png"/>
+            <% elsif params[:category].to_i == Category::TYPE[:CET6] %>
+              <img src="/assets/logo_cet6.png"/>
+            <% else %>
+              <img src="/assets/logo_graduate.png"/>
+            <% end %>
+          </a>
+        </h1>
+        <% user_infos = user_info %>
+        <%=render :partial=>'users/info', :object=>user_infos %>
+        <div class="clear"></div>
+        <nav class="border_radius">
+          <div class="scrollAD">
+            <% if params[:category].to_i == Category::TYPE[:GRADUATE] %>
+              <% if cookies[:user_id].nil? %>
+                <span>亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
+                  <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
+                </span>
+              <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
+                <span>立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
+                  <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
+              <% end %>
+              <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
+            <% else %>
+              <span>2012年10月31日前升级高级用户，即有机会得到新ipad一台，1000个名额，抢光为止哦！
+                <a href="/pay?category=<%= params[:category] %>">我要升级</a>
+                <a href="http://page.renren.com/600942099/note/874714982" target="_blank">详情</a>
+              </span>
+            <% end %>
+            <% if cookies[:user_id] and is_vip?(params[:category]) and user_agreement(params[:category]) %>
+              <span>您与赶考网签署的保过协议可以在这里下载
+                <a href="<%= user_agreement(params[:category]).agreement_url %>" target="_blank">下载</a>
+              </span>
+            <% end %>
+          </div>
+        </nav>
+      </div>
+      <div class="main">
+        <div class="left">
+          <div class="checkIn_box">
+            <div class="checkIn_date"><%= Time.now.strftime("%Y年%m月%d日") %></div>
+            <h1 class="checkIn_week"><%= Time.now.strftime("%A") %></h1>
+            <div class="checkIn_img" onclick="checkIn(<%= params[:category] %>)" >签到</div>
+            <div class="checkIn_sun"><span class="addOne"><img src="/assets/1.png" /></span></div>
+            <div class="checkIn_text" style="display: none;">*你已经连续签到&nbsp;<span id="checkIn_days"></span>&nbsp;天</div>
+          </div>
+          <div class="clear"></div>
+
+          <div class="key">
+            <div class="key_box">
+              <input name="invit_code" type="text" id="invit_code" value="请输入激活码"
+                     onfocus="javascript:if ($.trim(this.value) == '请输入激活码') this.value=''; end"
+                     onblur="javascript:if($.trim(this.value) == '') this.value='请输入激活码'; end" />
+              <button onclick="accredit('<%= params[:category] %>')">确认</button>
+            </div>
+          </div>
+          <div class="path_box">
+            <%= render :partial => '/layouts/score_line' %>
+          </div>
+        </div>
+        <div class="middle">
+          <% if cookies[:user_id] and !is_has_plan? %>
+            <div class="recommend">你还没有复习方案，赶快为你制定一个属于自己的
+              <a href="javascript:void(0)" onclick="javascript:show_kaoyan_frame();">复习计划</a>吧！
+            </div>
+          <% end %>
+          <%= yield %>
+        </div>
+        <div class="right">
+          <div class="countDown">
+            <p>距<%= from_kaoyan(params[:category])[0] %>还有：</p>
+            <h1><%= from_kaoyan(params[:category])[1] %><span>天</span></h1>
+          </div>
+          <div class="progress_list">
+            <%= render :partial => '/common/right_ad' %>
+          </div> 
+          <div class="right_fx_box">
+            <div class="right_fx">
+              <a class="fx_qq tooltip" href="javascript:void(0);" onclick ="window.open('/users/share?web=qq&category=<%= params[:category] %>', '_blank', 'height=480,width=510,left=300,top=150');" title="分享到腾讯微博">腾讯微博</a>
+              <a href="javascript:void(0);" onclick="window.open('/users/share?web=renren&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=100');" class="fx_rr tooltip" title="分享到人人网">人人网</a>
+              <a href="javascript:void(0);" onclick="window.open('/users/share?web=sina&category=<%= params[:category] %>', '_blank', 'height=500,width=600,left=300,top=150');" class="fx_sina tooltip" title="分享到新浪微博">新浪微博</a>
+            </div>
+            <p class="right_fx_p">推荐好友获取小太阳</p>
+          </div>          
+
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11074394号-1</p>
+    </div>
+    <%= render :partial => 'users/details', :object => user_infos if cookies[:user_id] and user_infos %>
+    <div class="mask" style="display: none;"></div>
+    <div class="guideMask" style="display: none;"></div>
+    <% if cookies[:user_id] and is_nomal?(params[:category]) %>
+      <%= render :partial => '/users/charge_vip' %>
+      <%= render :partial => '/users/charge_sun' %>
+    <% end %>
+    <%= render :partial => '/layouts/inside_test' unless @plan_list %>
+    <%= render :partial=>'users/focus' if show_focus(user_infos) %>
+    <% if flash[:share_notice] %>
+      <script type="text/javascript">
+        tishi_alert('<%= flash[:share_notice] %>')
+      </script>
+    <% end %>
+    <%= render :partial => '/common/qq_online' %>
+  </body>
+</html>

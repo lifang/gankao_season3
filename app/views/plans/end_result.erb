@@ -1,0 +1,56 @@
+<%= javascript_include_tag "video_skill" %>
+<%= render :partial => "/layouts/nav" %>
+<input type="hidden" value="<%= UserScoreInfo::MAX_SCORE[:"#{Category::FLAG[@category]}"] %>" id="max_score" />
+<input type="hidden" value="<%= UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[@category]}"] %>" id="pass_score" />
+<input type="hidden" value="<%= @score.join(",") %>" id="level_score" />
+<div class="m_content">
+  <div class="mc_box">
+    <div class="plan_box">
+      <div class="plan_top">
+        <div class="user_pic_fs">
+          <img src="<%= (@user.nil? or @user.img_url.nil?) ? "/assets/user_pic.jpg" : @user.img_url %>" width="65" height="65" />
+        </div>
+        <h1 class="fenshu_h1">当前估分：<span><%=@score[-1] %></span></h1>
+        <h1 class="fenshu_h1">当前估分：<span id="current_score"><%=@score[-1] %></span></h1>
+
+      </div>
+      <div class="plan_bottom">
+        <h2 class="plan_h2">请选择设定目标分数的方式，我们将根据当前估分和目标分数为你生成个性化复习方案。</h2>
+        <ul class="fs_ul">
+          <li class="" onclick="toggle_show_score(this)" index="0">
+            <h2>过关万岁：</h2>
+            <span class="fs_span" id="span_score"><%= UserScoreInfo::PASS_SCORE[:"#{Category::FLAG[@category]}"] %></span>
+          </li>
+          <li class="marginLeft fs_hover" onclick="toggle_show_score(this)" index="1">
+            <h2>我要高分：</h2>
+            <span class="fs_span" id="true_score" style="display: none;" onclick="$('#vitual_score').css('display','');$(this).css('display','none')"></span>
+            <input name="" type="text" class="fs_input" value="目标分数" id="vitual_score" onfocus="$(this).val('');$(this).attr('onfocus','')"
+                   onchange="$('#true_score').html($(this).val());" onblur="$('#true_score').val($(this).val());$(this).css('display','none');$('#true_score').css('display','')" />
+          </li>
+        </ul>
+        <button class="fs_btn" onclick="create_plan(<%= @category %>)">生成复习方案</button>
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+</div>
+
+<div class="tab login_tab" style="display:none">
+  <div class="tab_loginArea">
+    <h1>不用担心，您前测结果不会丢失</h1>
+    <%= render :partial=>"/layouts/login_nav" %>
+  </div>
+</div>
+<div class="tab end_tab" style="display: none">
+  <p>结束测试将取消本次的成绩</p>
+  <div class="btn_center_double "><button class="b_btn" id="confirm">确定</button>
+    <button class="b_btn" onclick="window.location.href='/plans/retest?category=<%= @category %>';">重新测试</button></div>
+</div>
+<script type="text/javascript">
+<% unless cookies[:user_id] %>
+    $(function(){
+      show_charge('.login_tab','.close_tab');
+    })
+<% end %>
+</script>

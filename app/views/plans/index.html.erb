@@ -1,0 +1,76 @@
+<%= javascript_include_tag "plan" %>
+<%= javascript_include_tag "cookie" %>
+<%= render :partial => "/layouts/nav" %>
+<div class="m_content">
+  <% if @plan_list %>
+    <% if @plan_list[:current] <= @plan_list[:cha1_days] %>
+      <%= render :partial => "base_practice" %>
+    <% elsif @plan_list[:current] <= @plan_list[:cha1_days] + @plan_list[:cha2_days] %>
+      <%= render :partial => "colligation_practice" %>
+    <% else %>
+      <%= render :partial => "sprint_practice" %>
+    <% end %>
+  <% else %>
+    <h1 class="mc_title"></h1>
+    <div class="mc_box">
+      <% (0..9).each do |i| %>
+        <div class="plan_list" style="cursor: pointer;" onclick="javascript:generate_flash_div('#start_tab_ts');">
+          <h1 class="pl_fk pl_d_bg"><span class="pl_img"><img src="/assets/suo.png"/></span>任务<%= i+1 %></h1>
+          <div class="pl_text">
+            <span>单词(0)&nbsp;&nbsp;&nbsp;词组(0)&nbsp;&nbsp;&nbsp;短语(0)</span>
+            <p>估计耗时：0分钟</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <%# if cookies[:user_id] and cookies[:first_login] == "1" %>
+  <%#= render :partial=>'/common/gide_tab' %>
+  <%# end
+  cookies.delete(:first_login)
+  %>
+  <% end %>
+</div>
+<div class="plan_tab"></div>
+<%= render :partial=>'/plans/start_tab' %>
+<%= render :partial=>'/plans/start_tab_ts' %>
+<% if params[:testcet4] == "1" and cookies[:user_id].nil? %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      show_mask('.mask');
+      generate_flash_div("#inside_test_frame");
+      $('.close').bind('click',function(){
+        $('.mask').hide();
+        $('#inside_test_frame').hide();
+        window.location.href="/plans?category=<%= params[:category] %>";
+        return false;
+      })
+    });
+  </script>
+<% end %>
+<% if params[:pay] == "1" %>
+  <% if cookies[:user_id].nil? %>
+    <div class="tab login_tab" id="sim_login_tab">
+      <div class="tab_loginArea">
+        <h1>请先登录</h1>
+        <%= render :partial=>"/layouts/login_nav" %>
+      </div>
+    </div>
+    <%= render :partial => '/users/charge_vip' %>
+    <script type="text/javascript">
+      generate_flash_div('#sim_login_tab');
+    </script>
+  <% end %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      if ($("#payment_vip").length > 0) {
+        show_mask('.mask');
+        generate_flash_div('#payment_vip');
+        $('.pay_close').bind('click',function(){
+          $('#payment_vip').css('display','none');
+          $('.mask').css('display','none');
+          //window.location.href="/plans?category=<%#= params[:category] %>";
+        })
+      }
+    })
+  </script>
+<% end %>

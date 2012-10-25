@@ -1,0 +1,146 @@
+<div class="pt_title">
+  <h1>短语学习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number"></span>
+  <span onclick="close_pop()" class="close">关闭</span>
+</div>
+<% if @result[:step].to_i == 1 %>
+  <div id="read" class="mc_box">
+    <div class="words_func">
+      <h2>请仔细看句子（本句将在后续题目中使用）。</h2>
+    </div>
+    <div class="words_con">
+      <div class="w_question"><%= @result[:sentence].en_mean %></div>
+      <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+    </div>
+    <div class="words_func">
+      <div class="center_btn">
+        <button id="next_btn_ok" onclick="javascript:next_step();" class="confirm">我看好了</button>
+      </div>
+    </div>
+  </div>
+  <div id="combin" class="mc_box" style="display:none">
+    <%= render :partial => "learn/tip" %>
+    <div class="words_func">
+      <h2>请点击单词组成完整句子。</h2>
+      <input type="hidden" id="SID" value="<%= @result[:sentence].en_mean.split(" ").join(" ") %>" />
+      <a href="javascript:void(0)" title="退一格" onclick="javascript:back_one();" class="back">退一格</a>
+      <a onclick="redo()" title="点击撤销" class="reset tooltip">撤销</a>
+    </div>
+    <div class="words_con">
+      <div class="w_question">
+        <div id="current" class="wq_drag"></div>
+        <ul id="select" class="drag_ul">
+          <% @result[:words].each_with_index do |it, index| %>
+            <li id="_w_<%= index %>" onclick="click_word(<%= index %>)"><%= it %></li>
+          <% end %>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <div class="trueFalse"></div>
+    </div>
+    <div class="words_func">
+      <a onclick="hedui()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a onclick="next_sentence_a()" id="next_sentence_a" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% elsif @result[:step].to_i == 2 %>
+  <div id="combin2" class="mc_box">
+    <%= render :partial => "learn/tip" %>
+    <div class="words_func">
+      <h2>请点击单词组成完整句子。</h2>
+      <input type="hidden" id="SID" value="<%= @result[:sentence].en_mean.split(" ").join(" ") %>" />
+      <a href="javascript:void(0)" title="退一格" onclick="javascript:back_one();" class="back">退一格</a>
+      <a onclick="redo()" title="点击撤销" class="reset tooltip">撤销</a>
+    </div>
+    <div class="words_con">
+      <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+      <div class="w_question">
+        <div id="current" class="wq_drag"></div>
+        <ul id="select" class="drag_ul">
+          <% @result[:words].each_with_index do |it, index| %>
+            <li id="_w_<%= index %>" onclick="click_word(<%= index %>)"><%= it %></li>
+          <% end %>
+        </ul>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="words_func">
+      <a onclick="hedui()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+      <a onclick="next_sentence_a()" id="next_sentence_a" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% end %>
+<div class="tip_mask" style="display: none;"></div>
+<script type="text/javascript">
+  var _words = [];
+  $(document).ready(function(){
+    $("#read .words_con").fadeTo(<%= @result[:time]*1000 %>, 0.3);
+  })
+
+  function click_word(id){
+    _words.push(id);
+    document.getElementById("current").innerHTML += ""+$("#_w_"+id).html()+" ";
+    $("#_w_"+id).attr("class", "hover");
+    $("#_w_"+id).attr("onclick", "javascript:void(0)");
+  }
+
+  function redo(){
+    $("#current").html("");
+    var lis = $("#select li");
+    for (var i=0; i<lis.length; i++) {
+      $(lis[i]).attr("class", "");
+      $(lis[i]).attr("onclick", "javascript:click_word("+i+")");
+    }
+  }
+
+  function hedui(){
+    $("#hedui_a").attr("onclick", "javascipt:void(0)");
+    var right = $("#SID").attr("value").replace(/"/g," ");
+    if($.trim(right) == $.trim($("#current").html())){
+      window.clearInterval(local_timer);
+      jude('/learn/jude_sentence','true','false');
+    }else{
+      window.clearInterval(local_timer);
+      jude('/learn/jude_sentence','false','false');
+    }
+  }
+
+  function next_step(){
+    $("#next_btn_ok").attr("onclick", "");
+    window.clearInterval(local_timer);
+    $("#read").hide();
+    $("#combin").fadeIn(1000);
+    local_start_time = <%= @result[:combin_time] %>;
+    local_save_start();
+  }
+
+  function callback(){
+    if($("#read").css("display") == "block"){
+      next_step();
+    }else{
+      show_tip("#timeup");
+      jude('/learn/jude_sentence','false','false');
+    }
+  }
+
+  function next_sentence_a() {
+    $("#next_sentence_a").attr('onclick', 'javascipt:void(0)');
+    jude('/learn/jude_sentence','false','true');
+  }
+
+  function back_one() {
+    if(_words.length==0)return;
+    var w = _words.pop();
+    $("#_w_"+w).attr("class", "");
+    $("#_w_"+w).attr("onclick", "javascript:click_word("+w+")");
+    var current = $("#current").html().split(" ");
+    current.pop();
+    current.pop();
+    if(current.length==0){
+      $("#current").html("");
+    }else{
+      $("#current").html(""+current.join(" ")+" ");
+    }
+  }
+</script>

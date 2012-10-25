@@ -1,0 +1,9 @@
+<%= render :partial => "/questions/answers", :object => unanswers %>
+<%= form_for "question_answer", :html => {:onsubmit => "javascript:return check_answer(#{unanswers[0].id})"},
+  :url =>"/questions/save_answer?category=#{unanswers[0].category_id}"  do |f| %>
+  <div class="problem_list">
+    <%= f.hidden_field :user_question_id, :value => unanswers[0].id %>
+    <%= f.text_area  :answer, :id => "answer_text_#{unanswers[0].id}", :class => "pro_textarea" %>
+    <%= f.submit "我要回答", :class => "pro_btn"%>
+  </div>
+<% end %>

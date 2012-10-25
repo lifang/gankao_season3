@@ -1,0 +1,18 @@
+<div id="start_tab" class="tishi_box" style="display: none">
+  <div class="ts_text">亲，马上开始本次训练，准备好了吗？</div>
+  <div class="btn_center">
+    <button onclick="javascript:start_study();" class="b_btn">开始</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+  //关闭开始练习框
+  function start_study() {
+    $("#start_tab").hide();
+    window.clearInterval(local_timer);
+    local_save_start();
+    if ($("#player").length > 0) {
+      flowplayer('player').play();
+    }
+  }
+</script>

@@ -1,0 +1,156 @@
+<div id="pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center"><button class="b_btn" onclick="next()">继续下一步</button></div>
+</div>
+<div id="all_pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text">恭喜今天的任务全部掌握！</div>
+  <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
+</div>
+<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] %>
+  <%=javascript_include_tag "/assets/flowplayer/flowplayer-3.2.6.min.js"%>
+  <div class="pt_title">
+    <h1>单词学习</h1>
+    <span onclick="close_pop()" class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="words_func">
+      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+      <h1><%= @result[:word].name.strip.gsub(/[0-9]/,"") %><span class="fyin">[ <%= @result[:word].phonetic %> ]</span></h1>
+      <p><span><%= Word::TYPES[@result[:word].types] %></span><%= @result[:word].ch_mean %></p>
+    </div>
+    <div class="words_con">
+      <% @result[:sentences].each do |sentence|  %>
+        <div class="example_list">
+          <p><%= sentence.description %></p>
+          <p><%= sentence.ch_mean %></p>
+        </div>
+      <% end  %>
+    </div>
+    <div class="words_func">
+      <a onclick="remember('word')"  title="我已熟记，不要再出现" class="sign tooltip">我已熟记，不要再出现</a>
+      <a onclick="next()" id="next_a" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:SENTENCE] %>
+  <div class="pt_title">
+    <h1>短语学习</h1>
+    <span onclick="close_pop()" class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+    <div class="words_con">
+      <div class="example_list">
+        <p><%= @result[:sentence].en_mean %></p>
+      </div>
+    </div>
+    <div class="words_func">
+      <a onclick="remember('sentence')"  title="我已熟记，不要再出现" class="sign tooltip">我已熟记，不要再出现</a>
+      <a onclick="next()" id="next_a" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] %>
+  <div class="pt_title">
+    <h1>听力学习</h1>
+    <span onclick="close_pop()" class="close">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="words_func">
+      <a id="playAudio" href="javascript:void(0)" title="播放音频" class="play_audio tooltip">播放音频</a>
+      <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+    </div>
+    <div class="words_con">
+      <div class="example_list">
+        <p>听力原文：&nbsp;&nbsp;<%= @result[:sentence].en_mean %></p>
+        <p>正确答案：&nbsp;&nbsp;<%= @result[:sentence].right_mean %></p>
+      </div>
+    </div>
+    <div class="words_func">
+      <a onclick="remember('linsten')"  title="我已熟记，不要再出现" class="sign tooltip">我已熟记，不要再出现</a>
+      <a onclick="next()" id="next_a" title="下一题" class="next tooltip">Next</a>
+    </div>
+  </div>
+<% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:TRANSLATE] %>
+  <% if cookies[:learn_step].to_i==1 %>
+    <div class="pt_title">
+      <h1>翻译练习</h1>
+      <span class="close" onclick="close_pop()">关闭</span>
+    </div>
+    <div class="mc_box">
+      <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+      <div class="words_con">
+        <div class="example_list">
+          <p><%= @result[:sentence].en_mean %></p>
+        </div>
+      </div>
+      <div class="words_func">
+        <a onclick="remember('translate_one')"  title="我已熟记，不要再出现" class="sign tooltip">我已熟记，不要再出现</a>
+        <a href="#" title="下一步" class="next tooltip" onclick="next ()">Next</a>
+      </div>
+    </div>
+  <% else %>
+    <div class="pt_title">
+      <h1>翻译练习</h1>
+      <span class="close" onclick="close_pop()" >关闭</span>
+    </div>
+    <div class="mc_box">
+      <div class="words_con">
+        <% sentences=@result[:sentence]%>
+        <dl class="drag_dl">
+          <% sentences.each do |sentence| %>
+            <dt><%= sentence.ch_mean%></dt>
+            <dd><%= sentence.en_mean %></dd>
+          <% end %>
+        </dl>
+      </div>
+      <div class="words_func">
+        <a href="#" title="下一步" class="next tooltip" onclick="next ()">Next</a>
+      </div>
+    </div>
+  <% end %>
+<% elsif cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
+  <div class="pt_title">
+    <h1>听力练习</h1>
+    <span class="close" onclick="close_pop()">关闭</span>
+  </div>
+  <div class="mc_box">
+    <div class="words_func">
+      <a id="playAudio" href="#" title="播放音频"  class="play_audio tooltip">播放音频</a>
+        <div id="player" class="jp-jplayer" style="width: 0px; height: 0px; "></div>
+    </div>
+    <div class="words_con">
+      <div class="example_list">
+        <p>听力原文：&nbsp;&nbsp;<%= @result[:sentence].en_mean %></p>
+      </div>
+    </div>
+    <div class="words_func">
+      <a onclick="remember('write')"  title="我已熟记，不要再出现" class="sign tooltip">我已熟记，不要再出现</a>
+      <a href="#" title="下一步" class="next tooltip" onclick="next ()">Next</a>
+    </div>
+  </div>
+<% end %>
+<div class="tip_mask" style="display: none;"></div>
+<script type="text/javascript">
+<% if cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] or cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:LINSTEN] or cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:DICTATION] %>
+  <% url = cookies[:type].to_i == UserPlan::CHAPTER_TYPE_NUM[:WORD] ?
+    @result[:word].enunciate_url : @result[:sentence].enunciate_url %>
+  $(function(){
+    flowplayer("player", "/assets/flowplayer/flowplayer-3.2.7.swf", {
+      clip: {
+        url: '<%= Constant::BACK_SERVER_PATH %><%= url %>'
+      }
+    });
+    $("#playAudio").click(function(){
+      flowplayer('player').play();
+    });
+  });
+<% end %>
+function next (){
+  $("#next_a").attr('onclick', 'javascipt:void(0)');
+  dispatch('<%= cookies[:category] %>');
+}
+</script>

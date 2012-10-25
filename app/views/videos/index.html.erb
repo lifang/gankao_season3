@@ -1,0 +1,25 @@
+<%= javascript_include_tag "video_skill"  %>
+<%= javascript_include_tag "/assets/jwplayer/jwplayer"  %>
+<%= render :partial=>"/layouts/nav" %>
+<div class="m_content">
+  <div class="mc_box">
+    <div class="mc_menu">
+      <ul>
+        <% @schedules.each do |schedule| %>
+          <li onclick="video_show(<%=  schedule.id %>,this)"><%= schedule.name %></li>
+        <%end%>
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="mc_menu_box">
+      <div class="video_area">
+        <div class="xz_video" >↑<br/>选择讲师<br/>开始学习</div>
+        <div style="background:#E4E3CE;" id="video_pan"></div>
+      </div>
+      <div class="other_video"> </div>
+    </div>
+    <script type="text/javascript">
+      $( $(".mc_menu li")[0]).trigger("onclick");
+    </script>
+  </div>
+</div>

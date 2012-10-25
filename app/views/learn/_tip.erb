@@ -1,0 +1,44 @@
+<div id="right" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/s_face.png" /></div>
+  <div class="ts_text">答对了！</div>
+  <div class="btn_center_double">
+    <button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button>
+    <button onclick="next(this)" class="b_btn">直接下题</button>
+  </div>
+</div>
+<div id="wrong" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_face.png" /></div>
+  <div class="ts_text">答错了！</div>
+  <div class="btn_center_double">
+    <button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button>
+    <button onclick="next(this)" class="b_btn">直接下题</button>
+  </div>
+</div>
+<div id="timeup" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_face.png" /></div>
+  <div class="ts_text">没时间了！</div>
+  <div class="btn_center_double">
+    <button onclick="send_message('/learn/study_it')" class="b_btn">学习一下</button>
+    <button onclick="next(this)" class="b_btn">直接下题</button>
+  </div>
+</div>
+<div id="pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text" id="text1">已经全部掌握了，开始检验下一步吧！</div>
+  <hr/>
+  <div class="ts_text" id="text2"></div>
+  <div class="btn_center"><button class="b_btn" onclick="next(this)">继续下一步</button></div>
+</div>
+<div id="all_pass" class="tishi_box" style="display: none">
+  <div class="ts_img"><img src="assets/c_good.png" /></div>
+  <div class="ts_text">恭喜今天的任务全部掌握！</div>
+  <div class="btn_center"><button class="b_btn" onclick="window.location.reload();">确定</button></div>
+</div>
+<script type="text/javascript">
+
+  function next (item){
+  <%#*$(item).attr('onclick', 'javascipt:void(0)');%>
+    window.clearInterval(local_timer);
+    dispatch('<%= cookies[:category] %>');
+  }
+</script>

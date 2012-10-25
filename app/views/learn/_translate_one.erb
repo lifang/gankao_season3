@@ -1,0 +1,56 @@
+<div class="pt_title">
+  <h1>翻译练习</h1>
+  <div class="pt_time">00:00:00</div>
+  <span class="t_number">2/20</span>
+  <span class="close" onclick="close_pop()">关闭</span>
+</div>
+<div class="mc_box">
+  <div class="words_func">
+    <h2>把正确的英语翻译填入下方。</h2>
+  </div>
+  <div class="w_question"><%= @result[:sentence].ch_mean %></div>
+  <div class="words_con">
+    <textarea name="" cols="" rows="" class="answer_textarea" id="answer_textarea"></textarea>
+  </div>
+
+  <div class="words_func">
+    <a onclick="check()" id="hedui_a" title="点击核对正确答案" class="hedui tooltip">核对</a>
+    <a onclick="next_one(this)" id="next_sentence_a" title="下一题" class="next tooltip">Next</a>
+  </div>
+  <input type="hidden" value="<%=@result[:sentence].en_mean %>" id="true_value" />
+</div>
+<%= render :partial=>"/learn/tip" %>
+<script type="text/javascript">
+
+  function callback(){
+    show_tip("#timeup");
+    jude('/learn/jude_translate_one','false','false');
+  }
+
+  function next_one(item){
+    window.clearInterval(local_timer);
+    $(item).attr('onclick', 'javascipt:void(0)');
+    jude('/learn/jude_translate_one','false','true');
+  }
+
+  function modify_str(str){
+    return str.replace(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/g,"").toLowerCase();
+  }
+  function check(){
+    var answer=$("#answer_textarea").val();
+    if (answer==""||answer.length==0){
+      tishi_alert("请填入原句翻译");
+      return false;
+    }
+    $("#check_btn").attr("onclick", "javascipt:void(0)");
+    var en_mean=modify_str($("#true_value").val());
+    var user_mean=modify_str(answer);
+    var flag="true";
+    for(var i=0;i<en_mean.length;i++){
+      if (en_mean[i]!=user_mean[i]){
+        flag="false"
+      }
+    }
+    jude('/learn/jude_translate_one',flag,'false');
+  }
+</script>

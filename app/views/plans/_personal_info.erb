@@ -1,0 +1,47 @@
+<%= javascript_include_tag "video_skill" %>
+<input id="info" type="hidden" value= '<%= personal_info[0] %>' />
+<input id="score_info" type="hidden" value= '<%= personal_info[1] %>' />
+<div class="plan_box">
+  <div class="plan_top">
+    <div class="clock_bg"><img src="/assets/clock_bg.png" /></div>
+    <h1 class="plan_h1">复习计划正在生成中…</h1>
+  </div>
+  <div class="plan_bottom">
+    <h2 class="plan_h2">利用这些时间请完善一下个人资料吧！</h2>
+    <%= form_for :personal_info,:url=>"/plans/update_user",:html=>{:id=>"p_infos"} do %>
+      <input type="hidden" id="category_id" name="category_id" value="<%= params[:category_id] %>" />
+      <div class="user_data">
+        <label><span class="red">*</span>&nbsp;邮箱:</label><input name="p_email" id="p_email" type="text" value="<%= personal_info[2].email %>" />
+      </div>
+      <div class="user_data">
+        <label>QQ:</label><input name="p_qq" id="p_qq" type="text" />
+      </div>
+    <% end %>
+    <p class="red center">*请把资料填写完整。</p>
+    <button class="fs_btn" id="save_info" onclick="javascript:void(0)">4</button>
+  </div>
+</div>
+<script type="text/javascript">
+  var last_time=3
+  last_timer=setInterval(function(){
+    if (last_time<=0){
+      $("#save_info").html("保存");
+      $("#save_info").attr("onclick","update_info()");
+      window.clearInterval(last_timer);
+    }else{
+      $("#save_info").html(last_time);
+    }
+    last_time -=1;
+  },1000)
+  $.ajax({
+    async : true,
+    type : "POST",
+    url : "/plans/init_plan.json",
+    dataType:  "json",
+    data : {
+      plan_infos : $("#info").val(),
+      category_id : $("#category_id").val(),
+      score_info :$("#score_info").val()
+    }
+  })
+</script>

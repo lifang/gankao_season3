@@ -1,0 +1,38 @@
+<%=render '/layouts/nav'%>
+<div class="m_content">
+  <div class="mc_box">
+    <%=render 'menu'%>
+    <div class="mc_menu_box">
+      <%if @query_questions.any? %>
+        <%@query_questions.each_with_index do |aq,index|%>
+          <!--单个问题-->
+          <div class="b_bottom">
+            <div class="problem_list">
+              <div class="problem_box" id="problem_<%= aq.id %>">
+                <span class="an_icon01"></span>
+                <p><span class="orange"></span><%= aq.description %></p>
+              </div>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="<%= aq.img_url.nil? ? User::DEFAULT_COVER : aq.img_url %>"/></div>
+                <h3><%= aq.user_name %></h3>
+                <p><%= aq.created_at.strftime("%Y-%m-%d") %></p>
+                <p><%= aq.created_at.strftime("%H:%M") %></p>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div id="answer_<%= aq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
+              <% if index == 0 %>
+                <%= render :partial => "/questions/answers", :object => [aq, @question_answers] %>
+              <% end %>
+            </div>
+          </div>
+        <%end%>
+        <!--分页插件-->
+        <%=will_paginate @query_questions,:previous_label => '上一页', :next_label => '下一页',:class=>'pageTurn'%>
+      <%else %>
+        <span style="font-size:30px;color:red;text-align: center;">没有找到相关问题!</span>
+      <%end%>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>

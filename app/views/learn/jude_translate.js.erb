@@ -1,0 +1,23 @@
+window.items = "<%= @items_str %>";
+window.ids = "<%= @ids_str %>";
+<% if @redirct == "true" && !@items_str.empty? %>
+  $.ajax({
+  async:true,
+  dataType:'script',
+  url:"/learn/task_dispatch?category=<%= cookies[:category] %>",
+  type:'post',
+  data:{
+  items : window.items,
+  ids : window.ids
+  }
+  })
+<% elsif @items_str.empty? && @status == false %>
+  setCookie("learn_step",1);
+  window.clearInterval(local_timer);
+  $("#pass #text1").html("恭喜");
+  $("#pass #text2").html("您已完成翻译选择");
+  $("#pass .b_btn").html("进入汉译英");
+  window.items = "";
+  window.ids = "";
+  show_tip("#pass");
+<% end %>

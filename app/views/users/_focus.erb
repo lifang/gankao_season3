@@ -1,0 +1,29 @@
+<div class="gz_tab" style="display:none">
+  <span class="close">关闭</span>
+  <div class="gz_bottom">
+    <div class="gz_logo"><img src="/assets/gz_logo.jpg" /></div>
+    <input type="hidden" id="share_category" value="<%=params[:category].to_i  %>" />
+    <div class="gz_why">
+      <h1>亲，您已经是第三次来到赶考，能告诉我们您选择在赶考网复习<%= Category::TYPE_INFO[params[:category].to_i] %>的理由吗？</h1>
+      <ul class="gz_mh">
+        <li><span><input name="" type="checkbox" value="" /></span><p>内容丰富</p></li>
+        <li><span><input name="" type="checkbox" value="" /></span><p>可以定制复习计划</p></li>
+        <li><span><input name="" type="checkbox" value="" /></span><p>方便学习</p></li>
+        <li><span><input name="" type="checkbox" value="" /></span><p>其他</p></li>
+      </ul>
+      <div class="gz_sun"></div>
+    </div>
+    <div class="gz_bottom_btn"><button class="b_btn" onclick="share_reason()">确定</button></div>
+  </div>
+</div>
+<script type="text/javascript">
+  setTimeout(function(){
+    $(".gz_tab").css("display","");
+    generate_flash_div('.gz_tab');
+    show_mask(".mask");
+    $("span.close").click(function(){
+      $(".mask").hide();
+      $(this).parent().hide();
+    });
+  },1000)
+</script>

@@ -1,0 +1,32 @@
+<% if cookies[:user_id] and info %>
+  <div  class="login_info bb_radius">
+    <div class="info_left">
+      <div class="user_pic"><img src="<%= info[:img_url].nil? ? User::DEFAULT_COVER : info[:img_url] %>" /></div>
+      <p id="name" <% if params[:category] and is_vip?(params[:category]) %>class="user_name"<% end %>><%= info[:name] %></p>
+      <p id="schoolName"><%= info[:school] %></p>
+      <% if params[:category] and cookies[:user_id] and is_nomal?(params[:category]) %>
+        <p><span class="s_sun"><%= info[:num] %></span>
+          <a href="javascript:void(0);" onclick="show_charge('#payment_sun','#close_sun')">获得小太阳</a>
+        </p>
+      <% end %>
+    </div>
+    <ul class="user_fun">
+      <li><a href="javascript:void(0);" class="u_set">设置</a></li>
+      <li><a href="javascript:void(0);" class="u_subject">科目</a></li>
+      <li><a href="javascript:void(0);" class="u_bbs">论坛</a></li>
+      <li><a href="/logins/logout" class="u_exit">退出</a></li>
+    </ul>
+    <% if cookies[:first] == "1" %>
+      <% if params[:category] and is_nomal?(params[:category]) %>
+        <div class="s_sun_mess">
+          <p>昨天获得<%= info[:yestoday_suns] %>个太阳</p>
+          <p>今天请再接再厉</p>
+        </div>
+      <% end %>
+    <% end
+    cookies.delete(:first)
+  %>
+  </div>
+<% else %>
+  <%= render :partial=>'layouts/login_tab' %>
+<% end %>

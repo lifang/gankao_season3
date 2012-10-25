@@ -1,0 +1,43 @@
+<%  if flash[:warn] %>
+  <div id='flash_notice' class="tishi_tab border_radius">
+    <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+    <p>
+      <%= flash[:warn].html_safe %><script type='text/javascript'>show_flash_div();</script><% flash[:warn] = nil %>
+    </p>
+  </div>
+<% elsif flash[:error] %>
+  <div id='flash_notice' class="tishi_tab border_radius">
+    <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+    <p>
+      <%= flash[:error].html_safe %><script type='text/javascript'>show_flash_div();</script><% flash[:error] = nil %>
+    </p>
+  </div>
+<% elsif flash[:notice] %>
+  <div id='flash_notice' class="tishi_tab border_radius">
+    <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+    <p>
+      <%= flash[:notice].html_safe %><script type='text/javascript'>show_flash_div();</script><% flash[:notice] = nil %>
+    </p>
+  </div>
+<% elsif flash[:success] %>
+  <div id='flash_notice' class="tishi_tab border_radius">
+    <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+    <p>
+      <%= flash[:success].html_safe %><script type='text/javascript'>show_flash_div();</script><% flash[:success] = nil %>
+    </p>
+  </div>
+<% elsif flash[:pic_warn] %>
+  <div id='flash_notice' class="tishi_tab border_radius">
+    <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+    <p>
+      <%= flash[:pic_warn].html_safe %><script type='text/javascript'>show_flash_div();</script><% flash[:pic_warn] = nil %>
+    </p>
+  </div>
+<% elsif flash[:failure] %>
+  <div id='flash_notice' class="tishi_tab border_radius">
+    <span class='xx_x' onclick='javascript:close_tishi_tab();'><img src='/assets/xx.png' /></span>
+    <p>
+      <%= flash[:failure].html_safe %><script type='text/javascript'>show_flash_div();</script><% flash[:failure] = nil %>
+    </p>
+  </div>
+<% end %>

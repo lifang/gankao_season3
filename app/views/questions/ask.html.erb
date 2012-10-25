@@ -1,0 +1,37 @@
+<%=render '/layouts/nav'%>
+<input type="hidden" id="current_page" value="ask" />
+<div class="m_content">
+  <div class="mc_box">
+    <%=render :partial => '/questions/menu' %>
+    <%=render :partial => '/questions/ask_question' %>
+    <div class="mc_menu_box">
+      <%if @myasks.any?%>
+        <% @myasks.each_with_index do |aq, index| %>
+          <div class="b_bottom">
+            <div class="problem_list">
+              <div class="problem_box" id="problem_<%= aq.id %>">
+                <span class="an_icon01"></span>
+                <p><span class="orange"></span><%= aq.description %></p>
+                <span class="problem_time"><%= aq.created_at.strftime("%Y-%m-%d") %>   <%= aq.created_at.strftime("%H:%M") %></span>
+              </div>
+              <div class="userProblem_box">
+                <div class="us_pic"><img src="<%= aq.img_url.nil? ? User::DEFAULT_COVER : aq.img_url %>"/></div>
+                <h3><%= aq.user_name %></h3>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div id="answer_<%= aq.id %>" <% if index == 0 %>class="load"<% else %>class="none"<% end %>>
+              <% if index == 0 %>
+                <%= render :partial => "/questions/answers", :object => [aq, @question_answers, "ask"] %>
+              <% end %>
+            </div>
+          </div>
+        <%end%>
+        <%=will_paginate @myasks,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+      <% else %>
+      <h1 class="noAnswer">您还没提问过哦。</h1>
+      <%end %>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,24 @@
+<%=javascript_include_tag 'search'%>
+<div class="mc_menu">
+  <ul class="subnav">
+    <li<% if controller.action_name=="answered" or @current_page == "answered" %> class="hover"<%end%>>
+      <%=link_to "常见问题","/questions/answered?category=#{params[:category]}"  %>
+    </li>
+    <li<% if controller.action_name=="unanswered" or @current_page == "unanswered" %> class="hover"<%end%>>
+      <%=link_to "等待回答","/questions/unanswered?category=#{params[:category]}"  %>
+    </li>
+    <li<% if controller.action_name=="ask" or @current_page == "ask" %> class="hover"<%end%>>
+      <%=link_to "我的提问","/questions/ask?category=#{params[:category]}"  %>
+    </li>
+    <li<% if controller.action_name=="answers" or @current_page == "answers" %> class="hover"<%end%>>
+      <%=link_to "我的回答","/questions/answers?category=#{params[:category]}" %>
+    </li>
+  </ul>
+  <div class="search">
+    <div class="search_box">
+      <input id="keywords" name="" value="<%=@keyword unless @keyword.nil?%>" type="text"/>
+      <button id="btnSearch">search</button>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>

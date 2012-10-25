@@ -1,0 +1,20 @@
+<div class="mc_menu00">
+  <ul>
+    <% all_types = params[:category].to_i == Category::TYPE[:GRADUATE] ?
+      Skill::GRADUATE_SKILL_NAME : Skill::CET_SKILL_NAME
+    all_types.each do |k, v| %>
+      <li onclick="show_blog(<%= k %>)" <% if nav_types == k %>class="hover"<% end %>><%= v %></li>
+    <% end %>
+  </ul>
+
+  <div class="search">
+    <div class="search_box">
+      <%= form_for :search,:url=>"/skills/search_blog",:html=>{:id=>"search_blog"} do %>
+        <input  type="text" name="search_con" value="<%=session[:pras]%>" id="search_con" />
+        <input  type="hidden" name="category" value="<%=params[:category]  %>" id="search_con" />
+      <% end %>
+      <button onclick="search_blog()">search</button></div>
+  </div>
+
+  <div class="clear"></div>
+</div>

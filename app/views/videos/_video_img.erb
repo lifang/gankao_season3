@@ -1,0 +1,73 @@
+<h1 id="schedule_title_<%= video_img[1].id %>" class="h1_title"><%= video_img[1].name %>课程包含以下视频</h1>
+<div class="video_more" id="video_<%= video_img[1].id %>">
+  <div class="video_prev" style="visibility: hidden;">上翻</div>
+  <div class="video_box">
+    <ul class="video_ul">
+      <%video_img[0].each do |video|%>
+        <li onclick="load_video('<%=video.id %>')"><img src="<%= video.img_url %>" /><%= video.title %></img></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="video_next"
+       <% if video_img[0].size<=5 %> style="visibility: hidden;" <% end %> >下翻</div>
+</div>
+<script type="text/javascript">
+  var div_id="#video_<%= video_img[1].id%>"
+  setTimeout(function(){
+    var li_len=$(div_id+" li").length > 5 ? 5 : $(div_id+" li").length
+    for (var k=0;k<li_len;k++){
+      var src=$($(div_id+" li")[k]).find("img").attr("_src");
+      $($(div_id+" li")[k]).find("img").attr("src",src);
+    }
+  },1000)
+
+  //video图标左右点击移动
+  var i = 5;
+  var page=1;
+  $(div_id+' .video_next').click(function(){
+    var $parent = $(this).parents(div_id);
+    var $video_show = $parent.find('.video_ul');
+    var $videoImg = $parent.find('.video_box');
+    var video_width = $videoImg.width();
+    var len = $video_show.find('li').length;
+    var page_count = Math.ceil(len/i);
+    if(!$video_show.is(':animated')){
+      $parent.find('div.video_prev').css('visibility','visible');
+      var this_len=len>(page+1)*5 ? (page+1)*5 : len;
+      for (var k=i*page;k<this_len;k++){
+        var src=$($(div_id+" li")[k]).find("img").attr("_src");
+        $($(div_id+" li")[k]).find("img").attr("src",src);
+      }
+      $video_show.animate({
+        marginLeft:'-='+video_width
+      },'slow');
+      page++;
+      if(page == page_count){
+        $(this).css('visibility','hidden');
+      }
+    }
+  })
+
+  $(div_id+' .video_prev').click(function(){
+    var $parent = $(this).parents(div_id);
+    var $video_show = $parent.find('.video_ul')
+    var $videoImg = $parent.find('.video_box');
+    var video_width = $videoImg.width();
+    var len = $video_show.find('li').length;
+    if(!$video_show.is(':animated')){
+      $parent.find('div.video_next').css('visibility','visible');
+      if(page == 1){
+        $(this).css('visibility','hidden');
+      }else{
+        $video_show.animate({
+          marginLeft:'+='+video_width
+        },'slow');
+        page--;
+        if(page == 1){
+          $(this).css('visibility','hidden');
+        }
+      }
+    }
+  })
+
+</script>

@@ -1,0 +1,36 @@
+window.items = "<%= @items_str %>";
+window.ids = "<%= @ids_str %>";
+<% if @redirct == "true" && !@items_str.empty? %>
+  $.ajax({
+  async:true,
+  dataType:'script',
+  url:"/learn/task_dispatch?category=<%= cookies[:category] %>",
+  type:'post',
+  data:{
+  items : window.items,
+  ids : window.ids
+  }
+  })
+<% elsif @items_str.empty? && @status == false %>
+  window.clearInterval(local_timer);
+  $("#pass #text1").html("part2 has been done");
+  $("#pass #text2").html("let's reading and writing");
+  $("#pass .b_btn").html("enter");
+  window.items = "";
+  window.ids = "";
+  delCookie("learn_step");
+  alert(getCookie("learn_step"));
+  show_tip("#pass");
+<% elsif @items_str.empty? && @status == true %>
+  window.clearInterval(local_timer);
+  <% if cookies[:is_new] == "review" %>
+    $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + (new Number($(".pl_l_bg").attr("id")) -1).toString() + "的复习任务，赶紧开始今天的学习计划吧，继续努力哦。");
+  <% else %>
+    $("#all_pass .ts_text").html("太棒了，你已经完成了任务" + $(".pl_l_bg").attr("id") + "，离成功又近了一步，下一个任务包已经为您解锁了，继续努力哦。");
+  <% end %>
+  show_tip("#all_pass");
+<% elsif @flag == "true" %>
+  show_tip("#right");
+<% elsif @flag == "false" %>
+  show_tip("#wrong");
+<% end %>
