@@ -114,6 +114,10 @@ module ApplicationHelper
           current_percent = current_percent < 5 ? 5 : current_percent
           end_score = user_score_info.target_score < pass_score ? pass_score : user_score_info.target_score
           score_arr = ["#{current_percent}", "#{user_score_info.start_score}", "#{end_score}", "#{current_score}"]
+          rank_score=current_score.to_i-user_score_info.start_score.to_i
+         if user_score_info.rank_score.nil? or (Time.now.to_date-user_score_info.login_time.to_date)>=1
+           user_score_info.update_attributes(:login_time=>Time.now.strftime("%Y-%m-%d"),:rank_score=>rank_score)
+         end
         end
       end
     end
@@ -130,7 +134,7 @@ module ApplicationHelper
       return hash[Category::FLAG[category_id.to_i]].to_i
     else
       return 0
-    end    
+    end
   end
 
   def show_focus(user_infos)
@@ -198,6 +202,12 @@ module ApplicationHelper
   def user_agreement(category_id)
     return Agreement.find(:first, :select => "agreement_url",
       :conditions => ["category_id = ? and user_id = ?", category_id.to_i, cookies[:user_id].to_i])
+  end
+
+  #用户进步排名
+  def rank_lists(category_id)
+         return UserRank.find_by_sql("select r.rank_score,u.img_url,u.name,r.start_score  from user_score_infos  r inner join users u on
+ r.user_id=u.id   where  r.category_id=#{category_id} order by r.rank_score desc limit 10")
   end
   
 end
