@@ -206,8 +206,9 @@ module ApplicationHelper
 
   #用户进步排名
   def rank_lists(category_id)
-         return UserRank.find_by_sql("select r.rank_score,u.img_url,u.name,r.start_score  from user_score_infos  r inner join users u on
+         return UserScoreInfo.find_by_sql("select r.rank_score,u.img_url,u.name,r.start_score  from user_score_infos  r inner join users u on
  r.user_id=u.id   where  r.category_id=#{category_id} order by r.rank_score desc limit 10")
   end
-  
+
+
 end

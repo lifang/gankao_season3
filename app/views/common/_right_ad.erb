@@ -6,11 +6,11 @@
     <td>前测</td>
     <td>当前</td>
   </tr>
-  <%rank_lists(category_id).each do |rank|%>
+  <%rank_lists(category_id).each_with_index do |rank,index|%>
   <tr class="find_tr">
-    <td class="frist_td"><img src="<%=rank.img_url  %>" width="25" height="25" title="<%= rank.name %>" /></td>
-    <td class="red"><%= rank.start_score %></td>
-    <td class="red"><%= rank.rank_score.to_i+rank.start_score.to_i %></td>
+    <td class="frist_td"><img src="<%=rank.img_url  %>" width="40" height="40" title="<%= rank.name %>" /></td>
+    <td <%if index==0 %>class="red"<%elsif index==1%>class="orange"<%elsif index==2 %>class="yellow"<%end%>><%= rank.start_score %></td>
+    <td <%if index==0 %>class="red"<%elsif index==1%>class="orange"<%elsif index==2 %>class="yellow"<%end%>><%= rank.rank_score.to_i+rank.start_score.to_i %></td>
   </tr>
   <% end %>
 </table>

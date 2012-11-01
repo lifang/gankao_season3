@@ -1,0 +1,47 @@
+
+<script type="text/javascript">
+  var load_time = setTimeout(function(){
+    $("#load_message").html("SORRY,此份试题好像存在问题，管理员会尽快解决此问题，给您带来的不便敬请谅解。");
+  },15000);
+</script>
+
+<% category_id = params[:category].nil? ? '2' : params[:category] %>
+
+<!-- 初始化播放器  -->
+<%= render :partial=>"/common/flowplayer" %>
+<div id="log"></div>
+<div class="subject_head">
+  <h1><%= @paper.title %></h1>
+  <div class="icon_func">
+    <div class="float_right">
+      <% unless @plan.nil? %>
+        <span class="icon_course"><a href="#" class="tooltip" onclick="check_similar(<%= category_id %>)" title="完成复习方案中关于真题的任务" >完成任务</a></span>
+      <% end %>
+      <span class="icon_prev"><a href="javascript:void(0);" class="tooltip" title="上一题"  name="上一题" onclick="javascript:click_prev_problem();">上一题</a></span>
+      <span class="icon_figure"><font id="global_problem_index"></font> / <font id="global_problem_sum"></font></span>
+      <span class="icon_next"><a href="javascript:void(0);" class="tooltip" title="下一题"  name="下一题" onclick="javascript:click_next_problem();" >下一题</a></span>
+      <span class="icon_big"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',1);" title="放大"  name="放大">放大</a></span>
+      <span class="icon_small"><a href="javascript:void(0);" class="tooltip" onclick="javascript:ts('body',-1);" title="缩小" name="缩小">缩小</a></span>
+      <span class="icon_return"><a href="/<%= (params["type"].nil?||(params["type"]!="similarities"&&params["type"]!="specials")) ? "similarities" : params["type"]  %>?category=<%= category_id %>" class="tooltip" title="返回" name="返回">返回</a></span>
+    </div>
+    <span class="icon_again"><a href="javascript:void(0);" class="tooltip" title="重做" name="重做" <% if params[:preview] %> onclick="javascript:window.location.reload();" <% else %>onclick="javascript:confirm_redo('<%= params["type"] %>');" <% end %>>重做</a></span>
+  </div>
+</div>
+
+<!-- 试题生成入口 generate.js -->
+<div id="generate"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
+
+<%= javascript_include_tag "#{@answer_js_url}" %>
+<%= javascript_include_tag "#{@paper_js_url}" %>
+
+<script type="text/javascript" >
+  //初始化参数
+  var sheet = null;
+  var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
+  var category = '<%= category_id %>';
+  var init_exam_user_id ='<%= params[:id] %>';
+  var init_paper_id = "<%= @paper_id %>";
+  var init_problem = 0;
+  var web = "<%= @web %>";
+</script>
+<%= javascript_include_tag "/assets/exam_user/uninit.js" %>

@@ -1385,10 +1385,10 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 .progress_list { width: 125px; background: #E4E3CE; padding-bottom: 10px; margin-bottom: 10px;}
 .progress_list h1 { font-size: 16px; line-height: 40px; text-align: center; background: #387580; color: #E4E3CE;}
 .progress_list table {}
-.progress_list table tr { height: 30px; border-bottom: 1px #dbdac4 solid; display: block; padding: 2px 0;}
-.progress_list table td { text-align: center; width: 38px;}
+.progress_list table tr {border-bottom: 1px #dbdac4 solid; display: block; padding: 2px 0;}
+.progress_list table td { text-align: center; width: 40px; font-size: 13px; font-family: MingLiU; font-style:italic;}
 .progress_list table tr.frist_tr { height: 20px;}
-.progress_list table td.frist_td { padding-right: 15px;}
+.progress_list table td.frist_td { padding-right: 15px; font-size: 0;}
 
 .b_btn_g {
     padding: 5px 15px;
