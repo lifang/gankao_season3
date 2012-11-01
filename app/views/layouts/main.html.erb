@@ -103,6 +103,11 @@
               <button onclick="accredit('<%= params[:category] %>')">确认</button>
             </div>
           </div>
+          <div class="ipod_ad">
+            <a href="javascript:void(0)" onclick="javascript:show_mask('.mask');generate_flash_div('.ipod_ad_tab');">
+              <img src="/assets/ipod_ad.jpg"/>
+            </a>
+          </div>
           <div class="path_box">
             <%= render :partial => '/layouts/score_line' %>
           </div>
@@ -154,5 +159,14 @@
       </script>
     <% end %>
     <%= render :partial => '/common/qq_online' %>
+    <%= render :partial => '/layouts/ipad_tab' %>
+    <% if params[:ipad] == "1" %>
+      <script type="text/javascript">
+        $(document).ready(function(){
+          show_mask('.mask');
+          generate_flash_div('.ipod_ad_tab');
+        })        
+      </script>
+    <% end %>
   </body>
 </html>
