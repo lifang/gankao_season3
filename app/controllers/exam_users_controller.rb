@@ -1,9 +1,9 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
-  before_filter :sign? ,:except=>["preview","ajax_load_about_words","ajax_load_sheets"]
+  before_filter :sign? ,:except=>["preview","ajax_load_about_words","ajax_load_sheets","unshow"]
   def show
-    #读取试题
+    #读取试题，
     begin
       eu = ExamUser.find(params[:id])
       @paper_id = eu.paper_id

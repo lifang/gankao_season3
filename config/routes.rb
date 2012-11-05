@@ -74,11 +74,11 @@ GankaoSeason3::Application.routes.draw do
   resources :exam_users do
     collection do
       post :ajax_load_about_words,:ajax_report_error,:ajax_add_collect,:ajax_add_word,:ajax_load_sheets
-      get :preview,:unlogin_show
+      get :preview
     end
     member do
       post :ajax_save_question_answer,:ajax_change_status
-      get :show_js,:redo_paper
+      get :show_js,:redo_paper,:unshow
     end
   end
 

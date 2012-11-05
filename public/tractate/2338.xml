@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<title>Everything except the weather</title>
+	<description>
+		<p>
+      My old friend, Harrison, had lived in the Mediterranean for many years before he returned to England.[] He had often dreamed of retiring in England and had planned to settle down in the country.[] He had no sooner returned than he bought a house and went to live there.[] Almost immediately he began to complain about the weather, for even though it was still summer, it rained continually and it was often bitterly cold.[] After so many years of sunshine, Harrison got a shock.[] He acted as if he had never lived in England before.[] In the end, it was more than he could bear.[] He had hardly had time to settle down when he sold the house and left the country.[] The dream he had had for so many years ended there.[] Harrison had thought of everything except the weather
+    </p>
+	</description>
+	<ch_mean>
+    唯独没有考虑到天气
+    我的老朋友哈里森在回到英国以前曾多年居住在地中海地区。过去他常幻想退休后到英国，并计划在乡间安顿下来。他刚一回到英国便买下了一幢房子住了进去。但紧接着他就开始抱怨那里的天气了。因为即使那时仍为夏季，但雨总是下个不停，而且常常冷得厉害。在阳光下生活了那么多年的哈里森对此感到惊奇。他的举动就好像他从未在英国生活过一样。最后，他再也忍受不住，还没等安顿下来就卖掉了房子，离开了这个国家。他多年来的幻想从此破灭。哈里森把每件事情都考虑到了，唯独没想到天气。
+  </ch_mean>
+	<questions>
+		<question id='1'>
+         <title>What was Harrison looking forward to doing? </title>
+         <options>Complaining about the weather.[]Spending his old age in England. []Buying a house somewhere. [] Living in the Mediterranean. </options>
+         <answer>Spending his old age in England. </answer>
+     </question>
+     <question id='2'>
+         <title>Harrison probably couldn't stand the English climate because _______.</title>
+         <options> it never stopped raining[]it was always cold []he had spent so long in the Mediterranean, he had forgotten what it was like []he had never lived in England before</options>
+         <answer>he had spent so long in the Mediterranean, he had forgotten what it was like </answer>
+      </question>
+	</questions>
+</root>

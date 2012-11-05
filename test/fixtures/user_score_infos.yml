@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  category_id: 1
+  user_id: 1
+  start_score: 1
+  target_score: 1
+  all_start_level: MyString
+
+two:
+  category_id: 1
+  user_id: 1
+  start_score: 1
+  target_score: 1
+  all_start_level: MyString
