@@ -21,6 +21,9 @@ module Constant
   PAY_GRADUATE_PATH = "http://payky.gankao.co/"
   PAY_CET4_PATH = "http://paycet4.gankao.co/"
   PAY_CET6_PATH = "http://paycet6.gankao.co/"
+  IPAD_GRADUATE_PATH = "http://ipad_ky.gankao.co/"
+  IPAD_CET4_PATH = "http://ipad_cet4.gankao.co/"
+  IPAD_CET6_PATH = "http://ipad_cet6.gankao.co/"
   
   DEAD_LINE = {
     :CET4 => '2012-12-01',

@@ -1408,7 +1408,7 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 /*shortcut快捷方式*/
 .shortcut { background: #fefdf2; border-bottom: 1px #999 solid; padding: 5px; overflow: hidden; position: relative;}
 .shortcut ul { width: 800px; height: 30px; display: block; margin: 0 auto;}
-.shortcut li { float: left; height: 30px;}
+.shortcut li { float: right; height: 30px;}
 .shortcut li a { width: 130px; height: 30px; display: block; text-indent: -999px; overflow: hidden; margin: 0 50px;}
 .kuaijie_a { background: url(/assets/shortcut_btn.png) no-repeat 0 0;}
 .favorite_a { background: url(/assets/shortcut_btn.png) no-repeat -147px 0;}
@@ -1444,16 +1444,20 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
     border-radius: 0 0.6em 0.6em 0;
 }
 
-.pt_tishi {
+/*ipod_ad*/
+.ipod_ad { width: 230px; margin-top: 10px;}
+.ipod_ad_tab { width: 500px; height: 420px; 
+               overflow: hidden; background: url(/assets/b_ipod_ad.jpg) no-repeat; position: absolute; z-index: 299;}
+.ipod_a { width: 250px; margin: 377px auto 0 auto; overflow: hidden;}
+.ipod_a a {
+    width: 105px;
+    height: 34px;
+    line-height: 34px;
     text-align: center;
-    width: 530px;
-    font-size: 20px;
-    color: #387580;
-    line-height: 50px;
-    text-shadow: 1px 1px 1px #f7f6f0;
-    font-weight: bolder;
-    background: #e4e3ce;
-    border-radius: 0.6em;
-    position: absolute;
-    z-index:299;
+    float: left;
+    margin: 0 10px;
+    text-indent: -999px;
+    overflow: hidden;
 }
+.ipod_rw { background: url(/assets/ipod_a.png) no-repeat 0 0;}
+.ipod_sj { background: url(/assets/ipod_a.png) no-repeat -141px 0;}
