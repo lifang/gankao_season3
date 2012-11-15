@@ -2,7 +2,6 @@
 class SimulationsController < ApplicationController
   layout "application", :except => ['show', 'show_result']
   before_filter :sign?, :except => "index"
-#  before_filter :get_role, :only => ["index"]
   
   def index
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]

@@ -6,6 +6,7 @@ class ExamUser < ActiveRecord::Base
   has_many :rater_user_relations,:dependent=>:destroy
   IS_SUBMITED = {:YES => 1, :NO => 0} #用户是否提交 1 提交 2 未提交
   IS_USER_AFFIREMED = {:YES => 1, :NO => 0} #用户是否确认  1 已确认 0 未确认
+  P_TYPES = {:MOKAO => 1, :ZHENTI => 0} #记录exam_user是模考模式还是真题模式
   default_scope :order => "exam_users.total_score desc"
   require 'rexml/document'
   include REXML

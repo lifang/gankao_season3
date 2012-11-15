@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120926040109) do
+ActiveRecord::Schema.define(:version => 20121115063051) do
 
   create_table "action_logs", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
     t.boolean  "is_free",           :default => false
     t.integer  "correct_percent"
     t.string   "rank"
+    t.boolean  "p_types",           :default => false
   end
 
   add_index "exam_users", ["examination_id"], :name => "index_exam_users_on_examination_id"
@@ -679,6 +680,8 @@ ActiveRecord::Schema.define(:version => 20120926040109) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "modulus"
+    t.integer  "rank_score"
+    t.datetime "login_time"
   end
 
   add_index "user_score_infos", ["category_id"], :name => "index_user_score_infos_on_category_id"
