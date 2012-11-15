@@ -34,6 +34,8 @@ class SimulationsController < ApplicationController
     end
   end
 
+
+  
   def do_exam
     @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
     @exam_user = ExamUser.create(:user_id => cookies[:user_id].to_i,:examination_id => params[:id].to_i,
