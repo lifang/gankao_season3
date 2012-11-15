@@ -10,6 +10,7 @@ class LearnController < ApplicationController
 
   def task_dispatch
     plan = UserPlan.find_by_category_id_and_user_id(params[:category].to_i, cookies[:user_id].to_i)
+    p plan.plan_url
     xml = plan.plan_list_xml
     cookies[:can_open] = Sun.open_package(cookies[:user_id].to_i, params[:category].to_i, xml)
     if is_vip?(params[:category]) or cookies[:can_open]

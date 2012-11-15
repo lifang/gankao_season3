@@ -19,6 +19,9 @@ function generate_flash_div(style) {
     jQuery(style).css('display','block');
 }
 
+
+
+
 function generate_tip_div(style) {
     jQuery(style).css('top',($(".plan_tab").height() - $(style).height())/2);
     jQuery(style).css('left',($(".plan_tab").width() - $(style).width())/2);

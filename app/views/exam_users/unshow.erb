@@ -26,8 +26,16 @@
     </div>
     <span class="icon_again"><a href="javascript:void(0);" class="tooltip" title="重做" name="重做" <% if params[:preview] %> onclick="javascript:window.location.reload();" <% else %>onclick="javascript:confirm_redo('<%= params["type"] %>');" <% end %>>重做</a></span>
   </div>
+  <div class="head_shoucang"><a href="javascript:void(0);" onclick="javascript:addfavorite();" class="tooltip" title="收藏网站" >收藏网站</a></div>
 </div>
-
+<script type="text/javascript">
+  var w_head = $(".subject_head").width();
+  var s_head = $(".subject_head").height();
+  var hsc_width = $(".head_shoucang").width();
+  var hsc_height = $(".head_shoucang").height();
+  $(".head_shoucang").css("left",(w_head-hsc_width)/2);
+  $(".head_shoucang").css("top",(s_head-hsc_height)/2);
+</script>
 <!-- 试题生成入口 generate.js -->
 <div id="generate"><center id="load_message" style="margin-top: 100px;font-size: large;">正在载入,请稍候....</center></div>
 
@@ -39,7 +47,8 @@
   var sheet = null;
   var back_server_path = '<%= Constant::BACK_SERVER_PATH %>';
   var category = '<%= category_id %>';
-  var init_paper_id = "<%= @paper.id %>";
+<%#*var init_paper_id = "<%= params[:id]%>
+  var init_exam_id = "<%= params[:id]%>";
   var init_problem = 0;
   var web = "<%= @web %>";
 </script>

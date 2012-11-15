@@ -1,0 +1,20 @@
+CACHE MANIFEST
+# version: 2011-06-08 13:00
+
+/assets/jquery.js
+/assets/jplayer/jquery.jplayer.min.js
+/assets/DD_belatedPNG_0.0.8a-min.js
+/assets/application.js
+/assets/jquery_ujs.js
+/assets/cookie.js
+
+/assets/mokao.css
+/assets/jplayer/jplayer.blue.monday.css
+/assets/public.css
+
+
+NETWORK:
+http://manage.gankao.co/
+http://www.gankao.co/
+http://localhost:3000/
+http://localhost:3001/

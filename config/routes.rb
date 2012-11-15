@@ -1,5 +1,15 @@
 GankaoSeason3::Application.routes.draw do
 
+   resources :simulations do
+    member do
+      get 'do_exam', 'show_result', 'reset_exam', 'end_exam'
+      post 'get_exam_time', 'five_min_save', 'save_result', 'cancel_exam'
+    end
+    collection do
+      get 'goto_exam'
+    end
+  end
+
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:add_user,:alipay_exercise

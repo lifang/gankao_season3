@@ -210,5 +210,9 @@ module ApplicationHelper
  r.user_id=u.id   where  r.category_id=#{category_id} order by r.rank_score desc limit 10")
   end
 
-
+#  def get_role
+#    unless cookies[:user_id].nil? or params[:category].nil?
+#      user_order(params[:category].to_i, cookies[:user_id].to_i)
+#    end
+#  end
 end

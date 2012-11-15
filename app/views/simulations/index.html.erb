@@ -1,0 +1,166 @@
+<% unless @simulations.blank? %>
+  <div class="mokao_bg">
+    <ul class="mk_ul">
+      <% @simulations[0, 3].each do |simulation| %>
+        <li <% if simulation.start_at_time <= Time.now and simulation.start_end_time >= Time.now %>class="mk_li_bg"<% end %>>
+          <div class="mk_ul_h <% if simulation.start_at_time <= Time.now and simulation.start_end_time >= Time.now %>mk_title_bg<% end %>">
+            <%= simulation.title %>
+          </div>
+          <div class="mk_ul_ny">
+            <div class="mk_ul_p"><%= simulation.start_at_time.strftime("%Y-%m-%d") if simulation.start_at_time %>
+              到 <%= simulation.start_end_time.strftime("%m-%d") if simulation.start_end_time %>
+            </div>
+            <% if cookies[:user_id] %>
+              <% if @exam_user_hash[simulation.id].nil? or @exam_user_hash[simulation.id][0].nil? or @exam_user_hash[simulation.id][0].is_submited == false %>
+                <% is_submited = (@exam_user_hash[simulation.id].nil? or @exam_user_hash[simulation.id][0].nil?) ? '' : 'false' %>
+                <% if simulation.start_at_time and simulation.start_at_time > Time.now %>
+                  <div class="mk_ul_text">尚未开放</div>
+                <% elsif simulation.start_end_time and simulation.start_end_time < Time.now %>
+                  <div class="mk_ul_text">考试已结束</div>
+                <% else %>
+                  <% if is_vip?(params[:category]) %>
+                    <% if is_submited == 'false' %>
+                      <% if @exam_user_hash[simulation.id][0].ended_at and @exam_user_hash[simulation.id][0].ended_at > Time.now %>
+                        <div class="mk_ul_text"></div>
+                        <div class="btn_box">
+                          <button onclick="javascript:window.open('/simulations/<%= simulation.id %>/do_exam');"
+                                  class="t_btn mk_btn_blue">继续考试</button>
+                        </div>
+                      <% else %>
+                        <div class="mk_ul_text">上次考试异常退出</div>
+                        <div class="mk_ul_p">
+                          <button class="t_btn mk_btn_blue"
+                                  onclick="javascript:show_exam_choose(<%= simulation.id %>, 'new_tab');">重新答题</button>&nbsp;&nbsp;
+                          <button class="t_btn mk_btn_blue"
+                                  onclick="javascript:show_exam_choose(<%= simulation.id %>, 'sub_tab');" >提交考卷</button>
+                        </div>
+                      <% end %>
+                    <% else %>
+                      <div class="mk_ul_text"></div>
+                      <div class="btn_box">
+                        <button type="button" class="t_btn mk_btn_blue"
+                                onclick="javascript:show_exam_tishi(<%= simulation.id %>);" >
+                          开始考试
+                        </button>
+                      </div>
+                    <% end %>
+                  <% else %>
+                    <div class="mk_ul_text"></div>
+                    <div class="btn_box">
+                      <button type="button" class="t_btn mk_btn_blue tooltip_vip" title="仅供正式用户使用"
+                              onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>
+                        开始考试
+                      </button>
+                    </div>
+                  <% end %>
+                <% end %>
+              <% elsif @exam_user_hash[simulation.id][0].total_score.nil?  %>
+                <div class="mk_ul_text">阅卷中</div>
+              <% else %>
+                <% if is_vip?(params[:category]) %>
+                  <div class="mk_ul_text">
+                    <span class="mk_fenshu"><%= @exam_user_hash[simulation.id][0].total_score %></span>
+                    <a href="javascript:void(0);" class="fenshu_xx" onclick="javascript:show_part_score('<%= @exam_user_hash[simulation.id][0].total_score %>',
+                                '<%= @exam_user_hash[simulation.id][0].rank %>', '<%= @exam_user_hash[simulation.id][1] %>',
+                                '<%= @exam_user_hash[simulation.id][2] %>', '<%= @exam_user_hash[simulation.id][3] %>',
+                                '<%= @exam_user_hash[simulation.id][4] %>');">详细</a>
+                  </div>
+                  <div class="btn_box">
+                    <button class="t_btn mk_btn_blue"
+                            onclick="javascript:window.open('/simulations/<%= @exam_user_hash[simulation.id][0].id %>/show_result');">查看试卷</button>
+                  </div>
+                <% else %>
+                  <div class="mk_ul_text">
+                    <span class="mk_fenshu"><%= @exam_user_hash[simulation.id][0].total_score %></span>
+                    <a href="javascript:void(0);" class="fenshu_xx tooltip_vip" title="仅供正式用户使用"
+                       onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>详细</a>
+                  </div>
+                  <div class="btn_box">
+                    <button class="t_btn mk_btn_blue tooltip_vip" title="仅供正式用户使用"
+                            onclick='javascript:tishi_alert("本试卷仅供正式用户使用。[<a class=\"link_c\" href=\"/users/charge_vip?category=<%= params[:category] %>\">升级为正式用户</a>]");'>查看试卷</button>
+                  </div>
+                <% end %>
+              <% end %>
+            <% else %>
+              <% if simulation.start_at_time and  simulation.start_at_time > Time.now %>
+                <div class="mk_ul_text">尚未开放</div>
+              <% elsif simulation.start_end_time and simulation.start_end_time < Time.now %>
+                <div class="mk_ul_text">考试已结束</div>
+              <% else %>
+                <div class="mk_ul_text"></div>
+                <div class="btn_box">
+                  <button onclick="window.location.href='/simulations/goto_exam?category=<%= params[:category] %>';"
+                          class="t_btn mk_btn_blue">开始考试</button>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <div class="mokao_img"><img src="/assets/mokao_img.jpg"/></div>
+  </div>
+<% else %>
+  <img src="/assets/mk_img.png" />
+<% end %>
+
+<div class="zhezhao" style="display: none; "></div>
+<div id="score_tab" class="tab_box border_radius" style="display: none; ">
+  <span class="xx_x"><img src="/assets/x.gif"/></span>
+  <div class="mk_chengj">
+    <h1>总分：<span class="red" id="total_score"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      排名：<span class="red" id="rank"></span>
+    </h1>
+    <table width="100%" border="0" cellpadding="0" cellspacing="1">
+      <tbody><tr>
+          <td>听力(20%)</td>
+          <td>阅读(40%)</td>
+          <td>综合(25%)</td>
+          <td>作文&amp;翻译(15%)</td>
+        </tr>
+        <tr>
+          <td id="listen">&nbsp;</td>
+          <td id="read">&nbsp;</td>
+          <td id="colligate">&nbsp;</td>
+          <td id="write">&nbsp;</td>
+        </tr>
+      </tbody></table>
+  </div>
+</div>
+
+<input type="hidden" name="sim_id" id="sim_id" value=""/>
+<div class="tab_box border_radius" id="mokao_tishi_tab" style="display: none;">
+  <span class="xx_x"><img src="/assets/x.gif" /></span>
+  <div class="tab_con">
+    <div class="mk_time"><img src="/assets/mk_jjuan.png" /></div>
+    <div class="mk_wenti">
+      <p>如何保存作答的内容？</p>
+      <ul>
+        <li><input name="choose" type="radio" value="" onclick="javascript:can_exam();"  />A.点击考试页面的“交卷”按钮</li>
+        <li><input name="choose" type="radio" value="" onclick="javascript:error_exam();" />B.关闭浏览器</li>
+      </ul>
+      <p class="red" id="error_p"
+         style="display: none;">"回答错误，未点击“交卷”按钮而直接退出考试，除非马上返回继续，会导致作答内容全部丢失。"</p>
+      <div class="btn_box"><button id="goto_m_b" class="t_btn" disabled="true" onclick="javascript:goto_exam();">确定</button></div>
+    </div>
+  </div>
+</div>
+<div class="tab_box border_radius" id="new_tab" style="display:none;">
+  <span class="xx_x"><img src="/assets/x.gif" /></span>
+  <div class="tab_con">
+    <div>选择“重新答题”，则之前的作答将全部被清空，确定要“重新答题”吗？</div>
+  </div>
+  <div class="tab_btn">
+    <button class="t_btn" onclick="javascript:reset_exam();">确定</button>&nbsp;&nbsp;
+    <button class="t_btn" id="cencel_m_b">取消</button></div>
+</div>
+<div class="tab_box border_radius" id="sub_tab" style="display:none;">
+  <span class="xx_x"><img src="/assets/x.gif" /></span>
+  <div class="tab_con">
+    <div>选择“提交考卷”，则系统会将前一次的作答作为最终答案保存，确定要“提交考卷”吗？</div>
+  </div>
+  <div class="tab_btn">
+    <button class="t_btn" onclick="javascript:end_exam(<%= params[:category] %>);">确定</button>&nbsp;&nbsp;
+    <button class="t_btn" id="cencel_m_b">取消</button></div>
+</div>
+    <%= render :partial => '/common/qq_online' %>

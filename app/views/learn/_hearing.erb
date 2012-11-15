@@ -53,6 +53,9 @@
 
   function hedui(){
     $("#hedui_a").attr("onclick", "javascipt:void(0)");
+    alert($(".words_con .hover_on a").html());
+    alert($("#SID").attr("value"));
+    alert($(".words_con .hover_on a").html() == $("#SID").attr("value"));
     if($(".words_con .hover_on a").html() == $("#SID").attr("value")){
       //clearInterval(myTime.timeId);
       window.clearInterval(local_timer);

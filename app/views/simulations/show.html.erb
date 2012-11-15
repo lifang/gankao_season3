@@ -1,0 +1,64 @@
+<%= javascript_include_tag "#{@paper_url}" %>
+<%= javascript_include_tag "http://#{request.host_with_port}/assets/simulations.js" %>
+<%= form_for :paper , :url => "/simulations/#{@examination.id}/save_result",
+  :html => {:name => "paper_form", :id => "paper_form",
+  :onsubmit => "return generate_result_paper('#{@exam_user.paper_id}')"} do |f| %>
+  <div id="show_flash"></div>
+  <div class="testPaper_top" id="paper_show_info">
+    <div class="tp_top_box" id="float_test">
+      <input type="hidden" name="paper_id" id="paper_id" value="<%= @exam_user.paper_id %>"/>
+      <input type="hidden" name="all_quesiton_ids" id="all_question_ids" value=""/>
+      <input type="hidden" name="problem_ids" id="problem_ids" value=""/>
+      <input type="hidden" name="category_id" id="category_id" value="<%= @examination.category_id %>"/>
+      <input type="hidden" name="examination_id" id="examination_id" value="<%= @examination.id %>"/>
+      <input type="hidden" name="user_id" id="user_id" value="<%= cookies[:user_id].to_i %>"/>
+      <div class="paper_name">
+        <span class="test_logo"><img src="/assets/test_logo.png" /></span>
+        <span id="paper_title"></span>
+      </div>
+      <div class="timer" id="exam_time"></div><div id="true_exam_time" style="display: none;"></div>
+      <div class="paper_info">
+        <button class="test_over_btn" type="submit"></button>
+        <strong><span id="leaving_num"></span></strong>题未完成&nbsp;&nbsp;|&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div id="blocks">
+      <input type="hidden" name="block_ids" id="block_ids"/>
+    </div>
+
+    <div class="tp_right">
+      <div class="tp_right_box" id="paper_navigation">
+      </div>
+    </div>
+  </div>
+<% end %>
+<input type="hidden" name="answer_url" id="answer_url"
+       value="http://<%= request.host_with_port %><%= @exam_user.answer_sheet_url %>"/>
+<input type="hidden" name="back_server_url" id="back_server_url" value="<%= Constant::BACK_SERVER_PATH %>" />
+<script type="text/javascript" src="/assets/local_save/answer.js" charset="utf-8"></script>
+<script type="text/javascript">
+  //考试时间定时器所需变量
+  var timer = null;
+  var start = null;
+  //模块定时和考试定时
+  var is_fix_time = false;
+  var block_start_hash = null;
+  var block_end_hash = null;
+
+  //本地存储所需变量
+  var local_timer = null;
+  var local_start_time = 300;
+
+  //根据用户的字符长度更改文本域宽度
+  var change_length = null;
+
+  //用户保存本地存储的答案
+  var answer_hash = null;
+
+  //页面load成功之后加载试卷
+  $(document).ready(function(){load_paper()});
+  answer_hash = null;
+</script>

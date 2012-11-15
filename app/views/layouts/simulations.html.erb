@@ -1,14 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" manifest="/assets/local_save/answer.manifest">
   <head>
-    <%#= render :partial => "/common/seo"  %>
-
+    <title><%= @title.nil? ? "大学英语四级模拟考试" : @title %></title>
     <%= stylesheet_link_tag    "mokao" %>
     <%= stylesheet_link_tag    "public" %>
+    <%= stylesheet_link_tag    "jplayer.blue.monday" %>
     <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag "main.js" %>
-    <%= javascript_include_tag "cookie.js" %>
-    <%= csrf_meta_tags %>
+    <%= javascript_include_tag "mokao" %>
+    <%= javascript_include_tag 'cookie' %>
+    <%= javascript_include_tag 'jshashtable-2.1' %>
+    <%= javascript_include_tag "/assets/jplayer/jquery.jplayer.min.js" %>
+    <%= javascript_include_tag 'jquery.ui.core.min.js' %>
+    <%= javascript_include_tag 'jquery.ui.widget.min.js' %>
+    <%= javascript_include_tag 'jquery.ui.mouse.min.js' %>
+    <%= javascript_include_tag 'jquery.ui.droppable.min.js' %>
+    <%= javascript_include_tag 'jquery.ui.draggable.min.js' %>
+    <script language="javascript" type="text/javascript">
+      var papers = new Object();
+    </script>
     <!--[if IE 6]>
     <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
     <script>
@@ -34,31 +43,11 @@
 
     </script>
   </head>
+
   <body>
+    <%= render :partial => "/common/flash_div"  %>
     <div class="wrap">
-      <%#= render :partial => "/common/flash_div"  %>
-      <%#= render :partial => "/common/head_div"  %>
-      <div class="clear"></div>
-      <div class="main_Div">
-        <div class="m_box">
-          <%= yield %>
-        </div>
-      </div>
-      <div class="foot"></div>
-    </div>
-    <%# if !cookies[:first].nil? and cookies[:first] == "1" %>
-      <%#= render :partial => "/common/complete_info" %>
-      <%#*<script type="text/javascript">%>
-        <%#*generate_flash_div("#complete_info");%>
-        <%#*$('#first_zhez').css('display','block');%>
-        <%#*$('#complete_info').css('display','block');%>
-        <%#*$('.xx_x').bind('click',function(){%>
-          <%#*$('#complete_info').hide();%>
-          <%#*$('#first_zhez').hide();%>
-          <%#*delCookie("first");%>
-          <%#*return false;%>
-        <%#*})%>
-      <%#*</script>%>
-    <%# end %>
+      <%= yield %>
+    </div>    
   </body>
 </html>
