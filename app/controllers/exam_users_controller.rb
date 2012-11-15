@@ -1,9 +1,9 @@
 # encoding: utf-8
 class ExamUsersController < ApplicationController
   layout "exam_user"
-  before_filter :sign? ,:except=>["preview","ajax_load_about_words","ajax_load_sheets"]
+  before_filter :sign? ,:except=>["preview","ajax_load_about_words","ajax_load_sheets","unshow"]
   def show
-    #读取试题
+    #读取试题，
     begin
       eu = ExamUser.find(params[:id])
       @paper_id = eu.paper_id
@@ -252,5 +252,10 @@ class ExamUsersController < ApplicationController
     file.close
   end
   
-
+  def unshow
+     @paper = Paper.find(ExaminationPaperRelation.find_by_sql("select paper_id from examination_paper_relations
+                    where examination_id=#{params[:id].to_i} order by  rand() limit 1 ")[0].paper_id)
+    @paper_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}"
+    @answer_js_url = "#{Constant::BACK_SERVER_PATH}#{@paper.paper_js_url}".gsub("paperjs/","answerjs/")
+  end
 end
