@@ -60,7 +60,6 @@
         <div class="clear"></div>
         <nav class="border_radius">
           <div class="scrollAD">
-            <% if params[:category].to_i == Category::TYPE[:GRADUATE] %>
               <% if cookies[:user_id].nil? %>
                 <span>亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
                   <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
@@ -70,12 +69,6 @@
                   <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
               <% end %>
               <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
-            <% else %>
-              <span>2012年10月31日前升级高级用户，即有机会得到新ipad一台，1000个名额，抢光为止哦！
-                <a href="/pay?category=<%= params[:category] %>">我要升级</a>
-                <a href="http://page.renren.com/600942099/note/874714982" target="_blank">详情</a>
-              </span>
-            <% end %>
             <% if cookies[:user_id] and is_vip?(params[:category]) and user_agreement(params[:category]) %>
               <span>您与赶考网签署的保过协议可以在这里下载
                 <a href="<%= user_agreement(params[:category]).agreement_url %>" target="_blank">下载</a>
@@ -102,11 +95,6 @@
                      onblur="javascript:if($.trim(this.value) == '') this.value='请输入激活码'; end" />
               <button onclick="accredit('<%= params[:category] %>')">确认</button>
             </div>
-          </div>
-          <div class="ipod_ad">
-            <a href="javascript:void(0)" onclick="javascript:show_mask('.mask');generate_flash_div('.ipod_ad_tab');">
-              <img src="/assets/ipod_ad.jpg"/>
-            </a>
           </div>
           <div class="path_box">
             <%= render :partial => '/layouts/score_line' %>
@@ -159,14 +147,5 @@
       </script>
     <% end %>
     <%= render :partial => '/common/qq_online' %>
-    <%= render :partial => '/layouts/ipad_tab' %>
-    <% if params[:ipad] == "1" %>
-      <script type="text/javascript">
-        $(document).ready(function(){
-          show_mask('.mask');
-          generate_flash_div('.ipod_ad_tab');
-        })        
-      </script>
-    <% end %>
   </body>
 </html>

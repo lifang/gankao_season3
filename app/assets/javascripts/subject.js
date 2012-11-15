@@ -68,7 +68,9 @@ function check_similar(category){
             category:category
         },
         success :function (data){
-           tishi_alert(data.message);
+            tishi_alert(data.message);
         }
     });
 }
+
+

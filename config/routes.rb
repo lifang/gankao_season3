@@ -1,5 +1,15 @@
 GankaoSeason3::Application.routes.draw do
 
+   resources :simulations do
+    member do
+      get 'do_exam', 'show_result', 'reset_exam', 'end_exam'
+      post 'get_exam_time', 'five_min_save', 'save_result', 'cancel_exam'
+    end
+    collection do
+      get 'goto_exam'
+    end
+  end
+
   resources :logins do
     collection do
       get :friend_add_request,:renren_like,:add_user,:alipay_exercise
@@ -78,7 +88,7 @@ GankaoSeason3::Application.routes.draw do
     end
     member do
       post :ajax_save_question_answer,:ajax_change_status
-      get :show_js,:redo_paper
+      get :show_js,:redo_paper,:unshow
     end
   end
 

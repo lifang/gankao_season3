@@ -1385,10 +1385,10 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 .progress_list { width: 125px; background: #E4E3CE; padding-bottom: 10px; margin-bottom: 10px;}
 .progress_list h1 { font-size: 16px; line-height: 40px; text-align: center; background: #387580; color: #E4E3CE;}
 .progress_list table {}
-.progress_list table tr { height: 30px; border-bottom: 1px #dbdac4 solid; display: block; padding: 2px 0;}
-.progress_list table td { text-align: center; width: 38px;}
+.progress_list table tr {border-bottom: 1px #dbdac4 solid; display: block; padding: 2px 0;}
+.progress_list table td { text-align: center; width: 40px; font-size: 13px; font-family: MingLiU; font-style:italic;}
 .progress_list table tr.frist_tr { height: 20px;}
-.progress_list table td.frist_td { padding-right: 15px;}
+.progress_list table td.frist_td { padding-right: 15px; font-size: 0;}
 
 .b_btn_g {
     padding: 5px 15px;
@@ -1408,7 +1408,7 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 /*shortcut快捷方式*/
 .shortcut { background: #fefdf2; border-bottom: 1px #999 solid; padding: 5px; overflow: hidden; position: relative;}
 .shortcut ul { width: 800px; height: 30px; display: block; margin: 0 auto;}
-.shortcut li { float: right; height: 30px;}
+.shortcut li { float: left; height: 30px;}
 .shortcut li a { width: 130px; height: 30px; display: block; text-indent: -999px; overflow: hidden; margin: 0 50px;}
 .kuaijie_a { background: url(/assets/shortcut_btn.png) no-repeat 0 0;}
 .favorite_a { background: url(/assets/shortcut_btn.png) no-repeat -147px 0;}
@@ -1417,47 +1417,30 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 .key { width: 230px; padding: 10px 0; background: #387580; margin-top: 10px;}
 .key_box {
     width: 194px;
-    height: 32px;
-    padding: 3px;
-    margin: 0 auto;
-    background: #1da4bd;
-    border-radius: 0.6em;
-    overflow: hidden;
+	height: 32px;
+	padding: 3px;
+	margin: 0 auto;
+	background: #1da4bd;
+	border-radius: 0.6em;
+	overflow: hidden;
 }
 .key_box input {
     border-radius: 0.6em 0 0 0.6em;
-    border: none;
-    width: 143px;
-    height: 32px;
-    line-height: 32px;
-    padding: 0 5px;
-    background: #29616b;
-    color: #31c5e1;
-    float: left;
+	border: none;
+	width: 143px;
+	height: 32px;
+	line-height: 32px;
+	padding: 0 5px;
+	background: #29616b;
+	color: #31c5e1;
+	float: left;
 }
 .key_box button {
     background: #fff6d5;
-    color: #387580;
-    width: 41px;
-    height: 32px;
-    line-height: 32px;
-    border-radius: 0 0.6em 0.6em 0;
+	color: #387580;
+	width: 41px;
+	height: 32px;
+	line-height: 32px;
+	border-radius: 0 0.6em 0.6em 0;
 }
 
-/*ipod_ad*/
-.ipod_ad { width: 230px; margin-top: 10px;}
-.ipod_ad_tab { width: 500px; height: 420px; 
-               overflow: hidden; background: url(/assets/b_ipod_ad.jpg) no-repeat; position: absolute; z-index: 299;}
-.ipod_a { width: 250px; margin: 377px auto 0 auto; overflow: hidden;}
-.ipod_a a {
-    width: 105px;
-    height: 34px;
-    line-height: 34px;
-    text-align: center;
-    float: left;
-    margin: 0 10px;
-    text-indent: -999px;
-    overflow: hidden;
-}
-.ipod_rw { background: url(/assets/ipod_a.png) no-repeat 0 0;}
-.ipod_sj { background: url(/assets/ipod_a.png) no-repeat -141px 0;}

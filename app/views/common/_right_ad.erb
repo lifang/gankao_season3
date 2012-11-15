@@ -1,3 +1,4 @@
+<% category_id=params[:category].nil? ? 2 : params[:category].to_i %>
 <h1>进步风云榜</h1>
 <table width="100%">
   <tr class="frist_tr">
@@ -5,55 +6,12 @@
     <td>前测</td>
     <td>当前</td>
   </tr>
+  <%rank_lists(category_id).each_with_index do |rank,index|%>
   <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/10000.jpg" width="25" height="25" title="范德萨" /></td>
-    <td class="red">235</td>
-    <td class="red"></td>
+    <td class="frist_td"><img src="<%=rank.img_url  %>" width="40" height="40" title="<%= rank.name %>" /></td>
+    <td <%if index==0 %>class="red"<%elsif index==1%>class="orange"<%elsif index==2 %>class="yellow"<%end%>><%= rank.start_score %></td>
+    <td <%if index==0 %>class="red"<%elsif index==1%>class="orange"<%elsif index==2 %>class="yellow"<%end%>><%= rank.rank_score.to_i+rank.start_score.to_i %></td>
   </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/1001.jpg" width="25" height="25" title="白月光" /></td>
-    <td class="orange">197</td>
-    <td class="orange"></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/1002.jpg" width="25" height="25" title="西西" /></td>
-    <td class="yellow">324</td>
-    <td class="yellow"></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/111.jpg" width="25" height="25" title="哥是个传说" /></td>
-    <td>289</td>
-    <td></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/1111.jpg" width="25" height="25" title="李华" /></td>
-    <td>377</td>
-    <td></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/777.jpg" width="25" height="25" title="守望者" /></td>
-    <td>312</td>
-    <td></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/333.jpg" width="25" height="25" title="sunshine" /></td>
-    <td>263</td>
-    <td></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/444.jpg" width="25" height="25" title="豆芽" /></td>
-    <td>303</td>
-    <td></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/555.jpg" width="25" height="25" title="leo" /></td>
-    <td>202</td>
-    <td></td>
-  </tr>
-  <tr class="find_tr">
-    <td class="frist_td"><img src="/assets/pre_list/666.jpg" width="25" height="25" title="Miranda" /></td>
-    <td>398</td>
-    <td></td>
-  </tr>
+  <% end %>
 </table>
 

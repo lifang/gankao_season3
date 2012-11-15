@@ -1,0 +1,71 @@
+<%= javascript_include_tag "#{@paper_url}" %>
+<%= javascript_include_tag "#{@answer_url}" %>
+<%= javascript_include_tag "result" %>
+
+<div id="show_flash"></div>
+<div class="testPaper_top" id="paper_show_info">
+  <div class="tp_top_box" id="float_test">
+    <input type="hidden" name="exam_user_id" id="exam_user_id" value="<%= @exam_user.id %>"/>
+    <input type="hidden" name="paper_id" id="paper_id" value="<%= @exam_user.paper_id %>"/>
+    <input type="hidden" name="problem_ids" id="problem_ids" value=""/>
+    <input type="hidden" name="category_id" id="category_id" value="<%= @examination.category_id %>"/>
+    <input type="hidden" name="examination_id" id="examination_id" value="<%= @examination.id %>"/>
+    <input type="hidden" name="user_id" id="user_id" value="<%= cookies[:user_id].to_i %>"/>
+    <div class="paper_name">
+      <span class="test_logo"><img src="/assets/test_logo.png" /></span>
+      <span id="paper_title"></span>
+    </div>
+    <div class="fraction" id="exam_time">总分：<%= @exam_user.total_score %>分</div>
+    <div class="paper_info">
+      <button class="chak_over_btn" type="button" onclick="javascript:window.close();" ></button>
+      共<strong><span id="leaving_num"></span></strong>题&nbsp;&nbsp;|&nbsp;&nbsp;
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div id="blocks">
+    <input type="hidden" name="block_ids" id="block_ids"/>
+  </div>
+
+  <div class="tp_right">
+    <div class="tp_right_box" id="paper_navigation">
+    </div>
+  </div>
+</div>
+
+<input type="hidden" name="answer_url" id="answer_url"
+       value="http://<%= request.host_with_port %><%= @exam_user.answer_sheet_url %>"/>
+<input type="hidden" name="back_server_url" id="back_server_url" value="<%= Constant::BACK_SERVER_PATH %>" />
+<div class="upErrorTo_tab border_radius" style="display: none;z-index: 9999; ">
+  <span class="xx_x" onclick="javascript:$('.upErrorTo_tab').css('display', 'none');"><img src="/assets/x.gif"/></span>
+  <ul>
+    <li><input name="report_error_radio" class="report_error_radio"
+               type="radio" value="<%= ReportError::TYPE[:TOPOIC] %>" checked />题目错误</li>
+    <li><input name="report_error_radio" class="report_error_radio"
+               type="radio" value="<%= ReportError::TYPE[:ANSWER] %>"/>答案错误</li>
+    <li><input name="report_error_radio" class="report_error_radio"
+               type="radio" value="<%= ReportError::TYPE[:ANALISIS] %>"/>解析错误</li>
+    <li><input name="report_error_radio" class="report_error_radio"
+               type="radio" value="<%= ReportError::TYPE[:WORD] %>"/>词汇错误</li>
+  </ul>
+  <textarea id="report_error_description" cols="" rows=""></textarea>
+  <input type="hidden" id="report_error_question_id" value="" />
+  <input type="hidden" id="report_error_paper_id" value="<%= @exam_user.paper_id %>" />
+  <input type="hidden" id="report_error_user_id" value="<%= cookies[:user_id].to_i %>" />
+  <input type="hidden" id="report_error_user_name" value="<%= cookies[:user_name] %>" />
+  <div><button class="t_btn" type="button" onclick="ajax_report_error();">提交</button></div>
+</div>
+<script type="text/javascript">
+  //用户保存本地存储的答案
+  var answer_hash = null;
+  var true_answers = null;
+  var user_collection = null;
+<% if @collection_info and @collection_info.question_ids %>
+    user_collection = "<%= @collection_info.question_ids %>".split(",");
+<% end %>
+  //页面load成功之后加载试卷
+  $(document).ready(function(){load_paper()});
+  answer_hash = null;
+  true_answers = null;
+</script>
