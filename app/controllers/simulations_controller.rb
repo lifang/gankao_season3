@@ -2,36 +2,6 @@
 class SimulationsController < ApplicationController
   layout "application", :except => ['show', 'show_result']
   before_filter :sign?, :except => "index"
-  
-#  def index
-#    category_id = "#{params[:category]}"=="" ? 2 : params[:category]
-#    @category = Category.find_by_id(category_id.to_i)
-#    @title = "#{@category.name}模拟考试"
-#    @meta_keywords = "2012年6月#{@category.name}押题猜题"
-#    @meta_description = "精心编选，针对2012年6月#{@category.name}的3场模拟考试，帮助全面掌握备考状况，熟悉考试流程。"
-#    sql = "select e.* from examinations e
-#          where e.is_published = #{Examination::IS_PUBLISHED[:ALREADY]}
-#          and e.status != #{Examination::STATUS[:CLOSED]}
-#          and e.category_id = ? and e.types = #{Examination::TYPES[:SIMULATION]} #"
-#    @simulations = Examination.find_by_sql([sql, params[:category].to_i])
-#    examination_ids = []
-#    @exam_user_hash = {}
-#    if cookies[:user_id]
-#      @simulations.each { |sim| examination_ids << sim.id }
-#      exam_users = ExamUser.find_by_sql(
-#        ["select eu.id, eu.examination_id, eu.is_submited, eu.total_score, eu.rank, eu.paper_id, eu.answer_sheet_url, eu.ended_at
-#          from exam_users eu where eu.user_id = ?
-#          and eu.examination_id in (?)#", cookies[:user_id].to_i, examination_ids])
-#      exam_users.each do |eu|
-#        @exam_user_hash[eu.examination_id] = [eu]
-#        begin
-#          @exam_user_hash[eu.examination_id] += eu.part_score unless (eu.total_score.nil? and eu.paper_id.nil?)
-#        rescue
-#          @exam_user_hash[eu.examination_id] += [0, 0, 0, 0]
-#        end
-#      end
-#    end
-#  end
 
 
   def do_exam
@@ -92,7 +62,8 @@ class SimulationsController < ApplicationController
   def return_exam_time(examnation_id, user_id)
     text = ""
     @examination = Examination.find(examnation_id)
-    @exam_user = ExamUser.find_by_examination_id_and_user_id(@examination.id, user_id)
+    @exam_user = ExamUser.find_by_examination_id_and_p_types_and_user_id(@examination.id,
+      ExamUser::P_TYPES[:MOKAO], user_id)
     if @exam_user
       end_time = (@exam_user.ended_at - Time.now) unless @exam_user.ended_at.nil? or @exam_user.ended_at == ""
     end
@@ -108,7 +79,8 @@ class SimulationsController < ApplicationController
 
   def five_min_save
     unless params[:arr].nil? or params[:arr] == ""
-      @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
+      @exam_user = ExamUser.find_by_examination_id_and_p_types_and_user_id(params[:id].to_i,
+        ExamUser::P_TYPES[:MOKAO], cookies[:user_id].to_i)
       questions = params[:arr].split(",")
       question_hash = {}
       0.step(questions.length-1, 3) do |i|
@@ -121,7 +93,8 @@ class SimulationsController < ApplicationController
   end
 
   def save_result
-    @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
+    @exam_user = ExamUser.find_by_examination_id_and_p_types_and_user_id(params[:id].to_i,
+      ExamUser::P_TYPES[:MOKAO], cookies[:user_id].to_i)
     if @exam_user and (@exam_user.is_submited.nil? or @exam_user.is_submited == false)
       question_hash = {}
       question_ids = params[:all_quesiton_ids].split(",") if params[:all_quesiton_ids]

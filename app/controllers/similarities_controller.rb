@@ -4,7 +4,6 @@ class SimilaritiesController < ApplicationController
   before_filter :sign?, :except => "index"
   
   def index
-    cookies[:user_id]=2
     category_id = "#{params[:category]}"=="" ? 2 : params[:category]
     @category = Category.find_by_id(category_id.to_i)
     
