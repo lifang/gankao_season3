@@ -1,0 +1,17 @@
+<div class="main_Div">
+  <div class="m_box">
+    <h1><%= @examination.title %></h1>
+    <h3>阅卷概况</h3>
+    <div class="yjuan_con">
+      <div class="yjuan_div">全部试卷：<span class="orange"><%= @exam_paper_total.size%></span></div>
+      <div class="yjuan_div">未阅卷：<span class="orange"><%= @exam_score_total %></span></div> 
+      <div class="yjuan_div yjuan_btn">
+        <% if (@exam_score_total+@marked_now)>0  %>
+          <button class="t_btn"  onclick="window.location.href='/exam_raters/check_paper?examination_id=<%= @examination.id %>&rater_id=<%= @rater_id %>'">开始阅卷</button>
+        <% else %>
+          <button class="t_btn" >试卷已批完</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

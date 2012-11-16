@@ -48,18 +48,20 @@ img { border: none;}
 }
 
 .b_btn {
-    padding: 5px 15px;
+    padding: 0px 15px;
+    height: 34px;
+    line-height: 34px;
     border-radius: 0.6em;
     box-shadow: 1px 1px 4px rgba(102,102,102,0.6);
     text-align: center;
     font-size: 14px;
-    display: block;
+    display: inline-block;
     margin: 0 auto;
-    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f7f7f7));
-    background: -moz-linear-gradient(top, #ffffff, #f7f7f7);
-    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ffffff,endcolorstr=#f7f7f7,gradientType=0);
+    background: url(/assets/btn_bg.png) no-repeat center center;
     color: #387580;
     font-family: "微软雅黑";
+    border: 1px #eeeeee solid;
+
 }
 .btn_center { width: 100px; margin: 0 auto; text-align: center; padding: 10px;}
 .btn_center button { width: 100px;}
@@ -471,6 +473,8 @@ nav li { float: left; margin: 0 20px;}
     background: -webkit-gradient(linear, left top, left bottom, from(#e4e3ce), to(#dddcc3));
     background: -moz-linear-gradient(top, #e4e3ce, #dddcc3);
     filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#e4e3ce,endcolorstr=#dddcc3,gradientType=0);
+    background: #e4e3ce\9;
+    *background: #e4e3ce;
     _background: #e4e3ce;
     border-top-right-radius: 0.6em;
     border-top-left-radius: 0.6em;
@@ -756,10 +760,11 @@ nav li { float: left; margin: 0 20px;}
 /*真题-----------------*/
 .year { display: inline-block;  margin-top: 14px; text-align: center;}
 .month { display: inline-block; font-size: 24px;}
-.model { display: block; color: #525161; height: 24px; line-height: 24px; padding: 0 20px; font-size: 14px;}
+.model { display: block; color: #525161; height: 24px; line-height: 24px; padding-left: 20px; font-size: 14px;}
 .model:hover { text-decoration: underline;}
 .finish { background: url(/assets/icon03.png) no-repeat 90px 1px;}
 .underWay { background: url(/assets/icon03.png) no-repeat 90px -19px;}
+.m_fraction { color: #F00; padding-left: 5px;}
 
 /*tab切换----*/
 .mc_menu { padding: 5px 10px; overflow: hidden;}
@@ -1417,30 +1422,55 @@ hr { width: 80%; text-align: center; margin: 0 auto; height:1px; border:none; bo
 .key { width: 230px; padding: 10px 0; background: #387580; margin-top: 10px;}
 .key_box {
     width: 194px;
-	height: 32px;
-	padding: 3px;
-	margin: 0 auto;
-	background: #1da4bd;
-	border-radius: 0.6em;
-	overflow: hidden;
+    height: 32px;
+    padding: 3px;
+    margin: 0 auto;
+    background: #1da4bd;
+    border-radius: 0.6em;
+    overflow: hidden;
 }
 .key_box input {
     border-radius: 0.6em 0 0 0.6em;
-	border: none;
-	width: 143px;
-	height: 32px;
-	line-height: 32px;
-	padding: 0 5px;
-	background: #29616b;
-	color: #31c5e1;
-	float: left;
+    border: none;
+    width: 143px;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 5px;
+    background: #29616b;
+    color: #31c5e1;
+    float: left;
 }
 .key_box button {
     background: #fff6d5;
-	color: #387580;
-	width: 41px;
-	height: 32px;
-	line-height: 32px;
-	border-radius: 0 0.6em 0.6em 0;
+    color: #387580;
+    width: 41px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 0 0.6em 0.6em 0;
 }
 
+/*阅卷---------------*/
+.marking_box { width: 400px; padding: 5px 0; margin: 10px auto; border-top: 1px #CCC solid;}
+.marking_box div { line-height: 24px; margin: 5px 0;}
+.marking_box div input { width: 50px; color: #F00;}
+.marking_box div textarea { width: 80%; font-size: 12px; line-height: 24px;}
+.marking_box div label { display: inline-block; width: 50px; float: left;}
+.marking_box div button { margin-left: 50px;}
+
+.marking_btn { width: 170px; margin: 10px auto;}
+
+/*阅卷概况*/
+.yjuan_con { width:625px; margin: 30px auto;  overflow: hidden;}
+.yjuan_div { height: 32px; line-height: 32px; text-align: center; font-size: 14px; margin: 5px 0;}
+.yjuan_div span { font-size: 16px;}
+.yjuan_btn { margin-top: 20px;}
+
+
+.question_explain { padding: 5px 10px; font-size: 11px;}
+.question_explain h2 { font-size: 14px; color: #999; font-weight: bold; height: 32px; line-height: 32px;}
+.question_explain p {line-height: 20px; text-indent: 24px; text-align: justify; color: #B9B9B9;}
+
+.tk_zuoda { padding-top: 50px; text-align: center; color: #F00;}
+.border_rb { border-left: 1px #efefef solid; border-top: 1px #efefef solid; border-right: 1px #ccc solid; border-bottom: 2px #ccc solid;}
+input.borde_blue, span.borde_blue, select.borde_blue { border-bottom: 2px #0033ff solid;}
+.link_c {color: red;}

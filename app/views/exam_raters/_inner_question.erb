@@ -1,0 +1,37 @@
+<% title_arr = (inner_question.elements["title"].nil? or inner_question.elements["title"].text.nil?)  ? [] : inner_question.elements["title"].text.split("((sign))"); 
+new_title=[] 
+new_attrs = ""
+questions=inner_question.get_elements("questions//question")
+(0..title_arr.length).each_with_index do |que_index| 
+  new_title << title_arr[que_index]
+  question=questions[que_index]
+  unless question.nil?
+    answer=question.attributes["user_answer"].nil? ? "": question.attributes["user_answer"]
+    element_str="<span class='span_tk' id='inner_span_tk_#{question.attributes["id"]}'>"
+    if question.attributes["correct_type"]=="0"
+      element_str += "<select class='select_tk' id='input_inner_answer_#{question.attributes["id"]}'>"
+      element_str += "<option value=''></option>"
+      question.elements["questionattrs"].text.split(";-;").each do |attr|
+        element_str += "<option value='#{attr}'"
+        if attr==answer
+          element_str += "selected"
+        end
+        element_str += ">#{attr}</option>"
+      end
+      element_str += "</select>"
+    elsif question.attributes["correct_type"]=="1"
+      element_str += "<div class='dragDrop_box' id='dragDrop_box_#{question.attributes["id"]}'></div>"
+      attrs =question.elements["questionattrs"].text.split(";-;")
+      attrs.each do |attr|
+        new_attrs += "<li name='"+attr+"' class='drag_li_'>"+attr+"</li>"
+      end
+    elsif question.attributes["correct_type"]=="3"
+      element_str += "<input class='input_tk' type='text' disabled value='#{answer}' id='input_inner_answer_#{question.attributes["id"]}' />"
+    end
+    element_str += "</span>"
+    new_title << element_str
+  end
+end
+%>
+<%= new_title.join(" ").html_safe %>
+<input type="hidden" value="<%= new_attrs %>" id="drag_li_<%= inner_question.attributes["id"] %>"/>

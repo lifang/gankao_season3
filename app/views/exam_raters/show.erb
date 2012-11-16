@@ -1,0 +1,9 @@
+<p><div id="in1" style="display:none">姓&nbsp;&nbsp;&nbsp;&nbsp;名:<input type="text" value="<%= @exam_rater.name %>" ondblclick="javascript:give_me_value('in',<%= @exam_rater.id %>)"  id="in" />
+</div>
+<label onclick="javascript:$('in1').style.display='block';$('out').style.display='none';" id="out" style="display:block"  >姓&nbsp;&nbsp;&nbsp;&nbsp;名：<%= @exam_rater.name %></label>
+
+
+ 
+</p>
+手机号：
+<%= @exam_rater.mobilephone %>

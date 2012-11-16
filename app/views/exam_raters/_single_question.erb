@@ -1,0 +1,27 @@
+
+<div class="in">
+  <div class="title"><%= single_question.elements["title"].text.to_s.html_safe %></div>
+  <% problem_ids="-1" %>
+  <% single_question.elements["questions"].each_element do |question| %>
+    <%#= render :partial => "/common/show_single_question", :object => question %>
+    <div class="title">
+      <div>考生答案：<%= question.attributes["user_answer"] %></div>
+    </div>
+    <div class="title">
+      <input type="hidden" value="<%= question.attributes["score"] %>" id="fact_value_<%=  question.attributes['id'] %>" name="fact_value_<%=question.attributes['id'] %>"/>
+      <input value="<%= @exam_user.id %>" id="answer_id" name="answer_id" type="hidden" />
+      <input  type="hidden" value="0" id="if_submited_<%= question.attributes['id'] %>" name="if_submited_<%= question.attributes['id'] %>"/>
+      <font color="red">*</font>请给出得分：<input type="text" size="5" name="single_value_<%=question.attributes['id'] %>"
+                                             id="single_value_<%=question.attributes['id'] %>" value="" />分
+    </div>
+    <div class="title">
+      <font color="red">*</font>请填写评分理由：<br/>
+      <textarea name="reason_for_<%=question.attributes['id'] %>" cols="40" id="reason_for_<%=question.attributes['id'] %>"></textarea>
+    </div>
+    <% problem_ids = problem_ids+("_"+question.attributes["id"]) %>
+    <div id="flash_part_<%= question.attributes["id"].to_i %>"></div>
+  <% end %>
+  <input type="hidden" value="<%=problem_ids.to_s  %>"/>
+  <h2><input type="button" value="确定" onclick="javascript:compare_value('<%= problem_ids.to_s %>')" /></h2>
+  <div id="flash_part_<%= single_question.attributes["id"].to_i %>"></div>
+</div>
