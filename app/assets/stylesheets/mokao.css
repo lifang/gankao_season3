@@ -1,7 +1,7 @@
 @charset "utf-8";
 * { padding: 0; margin: 0;}
 html {_BACKGROUND-ATTACHMENT: fixed; _BACKGROUND-IMAGE: url(about:blank);}/*IE6fixed无闪烁*/
-body { background: url(/assets/_bg.jpg) repeat; font-family: Arial,"宋体", "微软雅黑"; font-size: 12px; position: relative;}
+body { background: #B0D4D4; font-family: Arial,"宋体", "微软雅黑"; font-size: 12px; position: relative;}
 ul { list-style: none;}
 img { border: none;}
 button { cursor: pointer;}
@@ -33,16 +33,23 @@ span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E
 
 .testPaper_top {
     width: 100%;
-	height: 38px;
-	background: #000;
-	z-index: 100;
+	height: 45px;
+	background: url(/assets/subject_head_bg.png) repeat-x 0 bottom;
+	z-index: 1000;
 	position: fixed;
 	/*IE6fixed无闪烁*/
 	_position: absolute;
     _top: expression(eval(documentElement.scrollTop));
 }
 .test_logo { float: left; margin-right: 2px;}
-.tp_top_box { width: 960px; height: 38px; line-height: 38px; margin: 0 auto; font-size: 14px; color: #FFF; font-family: "微软雅黑";}
+.tp_top_box { width: 960px;
+	height: 38px;
+	line-height: 38px;
+	padding-top: 3px;
+	margin: 0 auto;
+	font-size: 14px;
+	color: #397580;
+	font-family: "微软雅黑";}
 .tp_top_box div { float: left; width: 320px;}
 .paper_name { display: inline;}
 .timer { text-align: center; font-size: 16px; background: url(/assets/timerIcon.png) no-repeat 70px center;}

@@ -142,9 +142,14 @@ function create_block(bocks_div, block) {
         block_str += " (<span id='b_timer_"+ block.id +"'>"+ block.time +"</span> minutes)";
     }
     part_message.innerHTML = "<h1 id='b_title_"+ block.id +"'>" + block_str + "</h1>";
-    if (block.base_info.description != null && block.base_info.description != "") {
-        part_message.innerHTML += "<p>" + is_has_audio(block.id, block.base_info.description) + "</p>";
+    //此处的增加和注释掉是为了真题的模考模式解决音频听力问题
+    if (new Number(block.id) == 2)  {
+        mp3_url = "/media/paper/model/" + "1.mp3";//$("#examination_id").val();
+        part_message.innerHTML += "<p>" + generate_jplayer_div(block.id) + "</p>";
     }
+    /*if (block.base_info.description != null && block.base_info.description != "") {
+        part_message.innerHTML += "<p>" + is_has_audio(block.id, block.base_info.description) + "</p>";
+    }*/
     block_div.appendChild(part_message);
     //试卷导航展开部分
     var navigation_div = $("#paper_navigation");
@@ -425,7 +430,8 @@ function create_problem(part_message, block_id, block_div, problem, block_nav_di
                 }
             }
             if (complete_title.split("((mp3))").length > 1) {
-                part_message.innerHTML += is_has_audio(block_id, "((mp3))"+complete_title.split("((mp3))")[1]+"((mp3))");
+                //为了解决真题的模考模式每道听力都有音频的
+                //part_message.innerHTML += is_has_audio(block_id, "((mp3))"+complete_title.split("((mp3))")[1]+"((mp3))");
                 complete_title = complete_title.split("((mp3))")[2];
             }
             if (complete_title != "") {

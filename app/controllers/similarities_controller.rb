@@ -44,8 +44,9 @@ class SimilaritiesController < ApplicationController
     end
     if papers_arr.length>0
       @paper = papers_arr.sample
-      @exam_user = ExamUser.find_by_sql("select * from exam_users where paper_id = #{@paper.id}
-          and examination_id = #{params[:id]} and user_id = #{cookies[:user_id]}")[0]
+      @exam_user = ExamUser.find(:first,
+        :conditions => ["paper_id = ? and p_types = ? and examination_id = ? and user_id = ?",
+          @paper.id, ExamUser::P_TYPES[:ZHENTI], params[:id], cookies[:user_id]])
       @exam_user = ExamUser.create(:user_id => cookies[:user_id], :examination_id => params[:id],
         :paper_id => @paper.id) if @exam_user.nil?
       redirect_to "/exam_users/#{@exam_user.id}?category=#{category_id}&type=similarities"

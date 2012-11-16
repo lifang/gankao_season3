@@ -13,8 +13,8 @@ module Constant
   WRITE = {:PRE => 900}
 
   TOTAL_PATH = "http://gankao.co/"
-  SERVER_PATH = "http://localhost:3001"
-  BACK_SERVER_PATH = "http://localhost:3000"
+  SERVER_PATH = "http://localhost:3000"
+  BACK_SERVER_PATH = "http://manage.gankao.co"
   GANKAO_GRADUATE_PATH = "http://pass.gankao.co/graduate"
   GANKAO_CET4_PATH = "http://pass.gankao.co/cet_four"
   GANKAO_CET6_PATH = "http://pass.gankao.co/cet_six"
