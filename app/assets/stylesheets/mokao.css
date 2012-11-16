@@ -50,7 +50,7 @@ span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E
 	font-size: 14px;
 	color: #397580;
 	font-family: "微软雅黑";}
-.tp_top_box div { float: left; width: 320px;}
+.tp_top_box div { float: left; width: 320px;height: 38px;}
 .paper_name { display: inline;}
 .timer { text-align: center; font-size: 16px; background: url(/assets/timerIcon.png) no-repeat 70px center;}
 .fraction { text-align: center; font-size: 16px;}

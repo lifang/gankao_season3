@@ -17,18 +17,12 @@
                  <% end %>
                  class="model <% if simi&&simi[false]&&simi[false][1] %>underWay
                  <% elsif simi&&simi[false] %>finish<% end %>">练习模式</a>
-               <% if simi&&simi[true]&&simi[true][1] %>
-              <span class="model">模考模式
-                <% if simi[true][3] %>
-                <a  href="/simulations/<%= simi[true][0]%>/show_result?category=<%= @category.id %>"
-                                          target="_blank" class="m_fraction" title="查看分数" ><%= simi[true][3] %> </a>
-              <% else %>
-                 <a  href=href="javascript:void(0);" target="_blank" class="m_fraction" title="查看分数" >阅卷中</a>
-                <% end %>
-              </span>
-                <% else %>
-               <a  href="/simulations/<%= similarity.id %>/do_exam?category=<%= @category.id %>"  class="model" target="_blank" >模考模式</a>
-               <% end %>
+              <a   target="_blank" <% if simi&&simi[true]&&simi[true][1] %>
+                       href="/simulations/<%= simi[true][0]%>/show_result?category=<%= @category.id %>" title="已完成，可查看考卷"
+                     <% else %>
+                       href="/simulations/<%= similarity.id %>/do_exam?category=<%= @category.id %>"
+                     <% end %> class="model <% if simi&&simi[true]&&simi[true][1] %>underWay
+                   <% elsif simi&&simi[true] %>finish<% end %>">模考模式</a>
             </div>
           </div>
         <% else %>
