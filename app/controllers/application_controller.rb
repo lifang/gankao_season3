@@ -22,4 +22,11 @@ class ApplicationController < ActionController::Base
       redirect_to Constant::SERVER_PATH + "/pay?category=#{Category::TYPE[:CET6]}"
     end
   end
+
+    def open_file(url)
+    file=File.open(url)
+    doc=Document.new(file).root
+    file.close
+    return doc
+  end
 end

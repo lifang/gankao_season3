@@ -23,7 +23,6 @@ class SimilaritiesController < ApplicationController
       @exam_users = ExamUser.find_by_sql(["select eu.id, eu.examination_id, eu.is_submited,eu.p_types,
       eu.answer_sheet_url from exam_users eu where eu.user_id = ?
       and eu.examination_id in (?)", cookies[:user_id].to_i, examination_ids])
-      Hash
       @exam_users.each { |eu| 
         if @exam_user_hash[eu.examination_id].nil?
           @exam_user_hash[eu.examination_id] ={eu.p_types=>[eu.id,eu.is_submited,eu.answer_sheet_url] }

@@ -167,15 +167,20 @@ form{clear:both;}
 .con_box,.pro_qu_div { overflow: hidden;}
 .textarea_xz { width: 90%; height: 200px; display: block;}
 .t_btn {
-    height: 32px;
-    padding: 5px 20px;
-    margin: 5px 10px;
-    background: #FFF;
+    padding: 0px 15px;
+    height: 34px;
+    line-height: 34px;
     border-radius: 0.6em;
     box-shadow: 1px 1px 4px rgba(102,102,102,0.6);
-    text-align: center;
+    text-align: center; 
+    font-size: 14px;
+    display: inline-block;
+    margin: 0 auto;
+    background: url(/assets/btn_bg.png) no-repeat center center;
     color: #387580;
-    font-size: 12px;
+    font-family: "微软雅黑";
+    border: 1px #eeeeee solid;
+
 }
 
 .upErrorTo_btn {color: #397580; position: absolute; top: 2px; right: 2px;}

@@ -2,7 +2,7 @@
 module Constant
   #项目文件目录
   PUBLIC_PATH = "#{Rails.root}/public"
-  BACK_PUBLIC_PATH = "#{Rails.root}/public"
+  BACK_PUBLIC_PATH = "e:/exam_season2/public"
 
   WORD_TIME = {1 => 15, 2 => 15, 3 => 15}
   SENTENCE_TIME = {:READ => 1, :COMBIN => 2}

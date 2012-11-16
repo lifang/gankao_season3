@@ -1,5 +1,18 @@
 GankaoSeason3::Application.routes.draw do
 
+    resources :exam_raters do
+    collection do
+      get :session,:check_paper,:log_out
+      post :over_answer
+    end
+    member do
+      post "edit_value"
+      get "rater_session","get_score"
+      post "rater_login"
+      get "reader_papers","answer_paper"
+    end
+  end
+
    resources :simulations do
     member do
       get 'do_exam', 'show_result', 'reset_exam', 'end_exam'

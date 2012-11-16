@@ -13,16 +13,16 @@
               <% simi=@exam_user_hash[similarity.id] %>
               <a href="/similarities/<%= similarity.id %>/join?category=<%= @category.id %>" target="_blank"
               <% if simi&&simi[false]&&simi[false][1] %>
-                   onclick="return already_submit('<%= similarity.id %>','<%= simi[0] %>','<%= simi[2] %>')"
+                   onclick="return already_submit('<%= similarity.id %>','<%= simi[false][0] %>','<%= simi[false][2] %>')"
                  <% end %>
                  class="model <% if simi&&simi[false]&&simi[false][1] %>underWay
                  <% elsif simi&&simi[false] %>finish<% end %>">练习模式</a>
-              <a  <% if simi&&simi[true]&&simi[true][1] %>
-                  href="javascript:void(0);" onclick="javascript:tishi_alert('测试已完成可查看分数！')"
-                <% else %>
-                  href="/simulations/<%= similarity.id %>/do_exam?category=<%= @category.id %>" target="_blank"
-                <% end %> class="model <% if simi&&simi[true]&&simi[true][1] %>underWay
-                <% elsif simi&&simi[true] %>finish<% end %>">模考模式</a>
+              <a   target="_blank" <% if simi&&simi[true]&&simi[true][1] %>
+                       href="/simulations/<%= simi[true][0]%>/show_result?category=<%= @category.id %>" title="已完成，可查看考卷"
+                     <% else %>
+                       href="/simulations/<%= similarity.id %>/do_exam?category=<%= @category.id %>"
+                     <% end %> class="model <% if simi&&simi[true]&&simi[true][1] %>underWay
+                   <% elsif simi&&simi[true] %>finish<% end %>">模考模式</a>
             </div>
           </div>
         <% else %>
