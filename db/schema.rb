@@ -243,10 +243,10 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
   add_index "invite_codes", ["vicegerent_id"], :name => "index_invite_codes_on_vicegerent_id"
 
   create_table "ip_tables", :force => true do |t|
-    t.string "start_at"
-    t.string "end_at"
-    t.string "province_name"
-    t.string "city_name"
+    t.integer "start_at",      :limit => 8
+    t.integer "end_at",        :limit => 8
+    t.string  "province_name"
+    t.string  "city_name"
   end
 
   add_index "ip_tables", ["city_name"], :name => "index_ip_tables_on_city_name"
@@ -430,11 +430,6 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.boolean  "is_right",         :default => false
   end
 
-  add_index "question_answers", ["created_at"], :name => "index_question_answers_on_created_at"
-  add_index "question_answers", ["is_right"], :name => "index_question_answers_on_is_right"
-  add_index "question_answers", ["user_id"], :name => "index_question_answers_on_user_id"
-  add_index "question_answers", ["user_question_id"], :name => "index_question_answers_on_user_question_id"
-
   create_table "question_tag_relations", :force => true do |t|
     t.integer "tag_id",      :null => false
     t.integer "question_id", :null => false
@@ -510,8 +505,6 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.datetime "updated_at"
   end
 
-  add_index "schedules", ["category_id"], :name => "index_schedules_on_category_id"
-
   create_table "score_levels", :force => true do |t|
     t.integer "examination_id", :null => false
     t.string  "key"
@@ -528,15 +521,14 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "readed_num",   :default => 0
-    t.integer  "like_num",     :default => 0
+    t.integer  "readed_num",                  :default => 0,     :null => false
     t.integer  "user_id"
-    t.string   "simplify_con"
-    t.boolean  "status",       :default => false
+    t.string   "simplify_con", :limit => 150
+    t.integer  "like_num",                    :default => 0
+    t.boolean  "status",                      :default => false
   end
 
   add_index "skills", ["category_id"], :name => "index_skills_on_category_id"
-  add_index "skills", ["readed_num"], :name => "index_skills_on_readed_num"
 
   create_table "statistics", :force => true do |t|
     t.datetime "created_at"
@@ -581,10 +573,6 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "tractates", ["category_id"], :name => "index_tractates_on_category_id"
-  add_index "tractates", ["level"], :name => "index_tractates_on_level"
-  add_index "tractates", ["types"], :name => "index_tractates_on_types"
 
   create_table "user_action_logs", :force => true do |t|
     t.integer  "user_id"
@@ -645,9 +633,6 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.integer  "days"
   end
 
-  add_index "user_plans", ["category_id"], :name => "index_user_plans_on_category_id"
-  add_index "user_plans", ["user_id"], :name => "index_user_plans_on_user_id"
-
   create_table "user_questions", :force => true do |t|
     t.integer  "user_id"
     t.string   "title"
@@ -657,11 +642,6 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.datetime "updated_at"
     t.boolean  "is_answer",   :default => false
   end
-
-  add_index "user_questions", ["category_id"], :name => "index_user_questions_on_category_id"
-  add_index "user_questions", ["created_at"], :name => "index_user_questions_on_created_at"
-  add_index "user_questions", ["is_answer"], :name => "index_user_questions_on_is_answer"
-  add_index "user_questions", ["user_id"], :name => "index_user_questions_on_user_id"
 
   create_table "user_role_relations", :force => true do |t|
     t.integer "role_id", :null => false
@@ -679,13 +659,10 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.string   "all_start_level"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "modulus"
+    t.float    "modulus",         :default => 1.0
     t.integer  "rank_score"
     t.datetime "login_time"
   end
-
-  add_index "user_score_infos", ["category_id"], :name => "index_user_score_infos_on_category_id"
-  add_index "user_score_infos", ["user_id"], :name => "index_user_score_infos_on_user_id"
 
   create_table "user_word_relations", :force => true do |t|
     t.datetime "created_at"
@@ -704,6 +681,7 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
   add_index "user_word_relations", ["category_id"], :name => "index_user_word_relations_on_category_id"
   add_index "user_word_relations", ["login_time"], :name => "index_user_word_relations_on_login_time"
   add_index "user_word_relations", ["practice_url"], :name => "index_user_word_relations_on_practice_url"
+  add_index "user_word_relations", ["study_role"], :name => "index_user_word_relations_on_study_role"
   add_index "user_word_relations", ["user_id"], :name => "index_user_word_relations_on_user_id"
 
   create_table "users", :force => true do |t|
@@ -728,14 +706,11 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.datetime "end_time"
     t.integer  "from"
     t.string   "remarks"
-    t.string   "cover_url"
-    t.integer  "login_times",        :default => 0
-    t.string   "signin_days",        :default => "CET4=>0,CET6=>0,GRADUATE=>0"
     t.string   "img_url"
+    t.integer  "signin_days",        :default => 0
+    t.integer  "login_times",        :default => 0
   end
 
-  add_index "users", ["code_id"], :name => "index_users_on_code_id"
-  add_index "users", ["code_type"], :name => "index_users_on_code_type"
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["from"], :name => "index_users_on_from"
   add_index "users", ["name"], :name => "index_users_on_name"
@@ -803,6 +778,7 @@ ActiveRecord::Schema.define(:version => 20121115063051) do
     t.string   "phonetic"
     t.string   "enunciate_url"
     t.integer  "level"
+    t.integer  "info_tmp"
   end
 
   add_index "words", ["category_id"], :name => "index_words_on_category_id"
