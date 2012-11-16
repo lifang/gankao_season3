@@ -6,38 +6,17 @@ class ExamUser < ActiveRecord::Base
   has_many :rater_user_relations,:dependent=>:destroy
   IS_SUBMITED = {:YES => 1, :NO => 0} #用户是否提交 1 提交 2 未提交
   IS_USER_AFFIREMED = {:YES => 1, :NO => 0} #用户是否确认  1 已确认 0 未确认
-  P_TYPES = {:MOKAO => 1, :ZHENTI => 0} #记录exam_user是模考模式还是真题模式
+  P_TYPES = {:MOKAO => 1, :ZHENTI => 0} #
   default_scope :order => "exam_users.total_score desc"
   require 'rexml/document'
   include REXML
-  require 'spreadsheet'
-  #检验当前当前考生是否能考本场考试
-  def self.can_answer(user_id, examination_id)
-    str = ""
-    examination = Examination.return_examinations(user_id, examination_id)
-    if examination.any?
-      if !examination[0].is_submited.nil? and (examination[0].is_submited == true or examination[0].is_submited == 1)
-        str = "您已经交卷。"
-      else
-        if examination[0].paper_id.nil? and examination[0].start_at_time > Time.now
-          str = "本场考试开始时间为#{examination[0].start_at_time.strftime("%Y-%m-%d %H:%M:%S")},请您做好准备。"
-        elsif (!examination[0].start_end_time.nil? and examination[0].start_end_time < Time.now) or
-            examination[0].status == Examination::STATUS[:CLOSED]
-          str = "本场考试已经结束。"
-        end if examination[0].start_at_time
-      end
-    else
-      str = "本场考试已经取消，或者您没有资格参加本场考试。"
-    end
-    return [str, examination]
-  end
-
 
   #考生更新考试时长信息
   def update_info_for_join_exam
     self.toggle!(:is_user_affiremed)
     self.started_at = Time.now
-    self.ended_at = Time.now + self.paper.time.minutes if self.paper.time
+    #self.ended_at = Time.now + self.paper.time.minutes if self.paper.time
+    self.ended_at = Time.now + 125.minutes   #此出为了真题的模考模式而固定
     self.answer_sheet_url = self.generate_answer_sheet_url(self.create_answer_xml, "result")
     self.save
   end

@@ -14,7 +14,7 @@ development:
   reconnect: false
   database: exam_app
   pool: 3
-  username: root
+  username: gankao_season3
   password: comdo2012
   host: 192.168.0.250
 

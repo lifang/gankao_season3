@@ -35,16 +35,12 @@ class SimulationsController < ApplicationController
 
 
   def do_exam
-    @exam_user = ExamUser.find_by_examination_id_and_user_id(params[:id].to_i, cookies[:user_id].to_i)
+    @exam_user = ExamUser.find_by_examination_id_and_p_types_and_user_id(params[:id].to_i,
+      ExamUser::P_TYPES[:MOKAO], cookies[:user_id].to_i)
     @exam_user = ExamUser.create(:user_id => cookies[:user_id].to_i,:examination_id => params[:id].to_i,
-      :password => User::DEFAULT_PASSWORD, :is_user_affiremed => ExamUser::IS_USER_AFFIREMED[:YES]) if @exam_user.nil?
-    arr = ExamUser.can_answer(cookies[:user_id].to_i, params[:id].to_i)
-    if arr[0] == "" and arr[1].any?
-      redirect_to "/simulations/#{@exam_user.id}"
-    else
-      flash[:warn] = arr[0]
-      redirect_to request.referer
-    end
+      :password => User::DEFAULT_PASSWORD, :p_types => ExamUser::P_TYPES[:MOKAO],
+      :is_user_affiremed => ExamUser::IS_USER_AFFIREMED[:YES]) if @exam_user.nil?
+    redirect_to "/simulations/#{@exam_user.id}"
   end
 
   def show
