@@ -16,7 +16,7 @@ development:
   pool: 3
   username: gankao_season3
   password: comdo2012
-  host: 192.168.0.250
+  host: localhost
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

@@ -10,13 +10,19 @@
           <div class="plan_list">
             <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
             <div class="pl_text">
+              <% simi=@exam_user_hash[similarity.id] %>
               <a href="/similarities/<%= similarity.id %>/join?category=<%= @category.id %>" target="_blank"
-              <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>
-                   onclick="return already_submit('<%= similarity.id %>','<%= @exam_user_hash[similarity.id][0] %>','<%= @exam_user_hash[similarity.id][2] %>')"
-              <% end %>
-                 class="model <% if @exam_user_hash[similarity.id]&&@exam_user_hash[similarity.id][1] %>underWay
-                 <% elsif @exam_user_hash[similarity.id] %>finish<% end %>">练习模式</a>
-              <a href="javascript:void(0);" onclick="javascript:tishi_alert('即将上线，敬请期待...');" class="model">模考模式</a>
+              <% if simi&&simi[false]&&simi[false][1] %>
+                   onclick="return already_submit('<%= similarity.id %>','<%= simi[0] %>','<%= simi[2] %>')"
+                 <% end %>
+                 class="model <% if simi&&simi[false]&&simi[false][1] %>underWay
+                 <% elsif simi&&simi[false] %>finish<% end %>">练习模式</a>
+              <a  <% if simi&&simi[true]&&simi[true][1] %>
+                  href="javascript:void(0);" onclick="javascript:tishi_alert('测试已完成可查看分数！')"
+                <% else %>
+                  href="/simulations/<%= similarity.id %>/do_exam?category=<%= @category.id %>" target="_blank"
+                <% end %> class="model <% if simi&&simi[true]&&simi[true][1] %>underWay
+                <% elsif simi&&simi[true] %>finish<% end %>">模考模式</a>
             </div>
           </div>
         <% else %>
@@ -25,7 +31,7 @@
             <div class="pl_text">
               <a href="javascript:void(0);" onclick="javascript:show_charge('#sim_login_tab','.close_tab');"
                  class="model">练习模式</a>
-              <a href="javascript:void(0);" onclick="javascript:tishi_alert('即将上线，敬请期待...');" class="model">模考模式</a>
+              <a href="javascript:void(0);" onclick="javascript:show_charge('#sim_login_tab','.close_tab');" class="model">模考模式</a>
             </div>
           </div>
         <% end %>
