@@ -105,10 +105,8 @@ class SimulationsController < ApplicationController
         @exam_user.update_answer_url(@exam_user.open_xml, question_hash, params[:block_ids]), "result")
       @exam_user.submited!
 #      ActionLog.exam_log(params[:category_id], cookies[:user_id])
-      flash[:notice] = "您的试卷已经成功提交。"
       render :layout => "simulations"
     else
-      flash[:warn] = "您已经交卷。"
       render "error_page", :layout => "simulations"
     end
   end
