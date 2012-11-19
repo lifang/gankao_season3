@@ -550,7 +550,7 @@ function create_analysis(question_id, correct_type) {
     ? "解析：" + true_answers.get(question_id)[1] : "";
     var answer_text = correct_type == "5" ? "参考" : "正确";
     analysis_div.innerHTML = "<span class='xx_x' onclick=\"javascript:$('#analysis_"
-    + question_id +"').css('display', 'none');\"><img src='/assets/xx.png'></span>";
+    + question_id +"').css('display', 'none');\"><img src='/assets/x.png'></span>";
     if (answer != "") {
         analysis_div.innerHTML += "<div>"+ answer_text +"答案：<span class='red'>"+ answer +"</span></div>";
     }
