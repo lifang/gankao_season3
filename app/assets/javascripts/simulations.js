@@ -143,7 +143,7 @@ function create_block(bocks_div, block) {
     }
     part_message.innerHTML = "<h1 id='b_title_"+ block.id +"'>" + block_str + "</h1>";
     //此处的增加和注释掉是为了真题的模考模式解决音频听力问题
-    if (new Number(block.id) == 2)  {
+    if (block_str.match("Listening") != null)  {
         mp3_url = "/media/paper/model/" + "1.mp3";//$("#examination_id").val();
         part_message.innerHTML += "<p>" + generate_jplayer_div(block.id) + "</p>";
     }

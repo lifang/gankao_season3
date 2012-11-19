@@ -86,7 +86,7 @@ function create_block(bocks_div, block, index) {
     }
     part_message.innerHTML = "<h1 id='b_title_"+ block.id +"'>" + block_str + "</h1>";
     //此处的增加和注释掉是为了真题的模考模式解决音频听力问题
-    if (new Number(block.id) == 2)  {
+    if (block_str.match("Listening") != null)  {
         mp3_url = "/media/paper/model/" + "1.mp3";//$("#examination_id").val();
         part_message.innerHTML += "<p>" + generate_jplayer_div(block.id) + "</p>";
     }
@@ -204,8 +204,10 @@ function close_block_nav(block_id) {
 function create_question_navigation(block_nav_div, question, problem_id) {
     var class_name = "pink";
     var is_right = "X";
-    if (answer_hash != null && answer_hash.get(question.id) != null
-        && parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score)) {
+    if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id)[0] != null
+        && answer_hash.get(question.id)[0] != ""
+        && $.trim(answer_hash.get(question.id)[0]) == $.trim(true_answers.get(question.id)[0])) {
+        // parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score) 分数判断在此不再适用
         class_name = "lvse";
         is_right = "√";
     }
@@ -373,9 +375,11 @@ function create_problem_json(problem, block_id) {
 function create_drag_question(problem, question_id_input, question, drag_li_arr) {
     question_id_input.value += "" + question.id + ",";
     var question_str = "";
-    var bk_color = "correctWrong_bg";    
-    if (answer_hash != null && answer_hash.get(question.id) != null
-        && parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score)) {
+    var bk_color = "correctWrong_bg";
+    if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id)[0] != null
+        && answer_hash.get(question.id)[0] != ""
+        && $.trim(answer_hash.get(question.id)[0]) == $.trim(true_answers.get(question.id)[0])) {
+        // parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score) 用分数在此判断不再适用
         bk_color = "correctRight_bg";
     }
     var answer = "";
@@ -631,8 +635,10 @@ function create_words_div(drop_div, problem_id, drag_li_arr) {
 //创建不同题型
 function create_single_question(que_div, question, drag_li_arr) {
     var bk_color = "correctWrong_bg";
-    if (answer_hash != null && answer_hash.get(question.id) != null
-        && parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score)) {
+    if (answer_hash != null && answer_hash.get(question.id) != null && answer_hash.get(question.id)[0] != null
+        && answer_hash.get(question.id)[0] != ""
+        && $.trim(answer_hash.get(question.id)[0]) == $.trim(true_answers.get(question.id)[0])) {
+        // parseFloat(answer_hash.get(question.id)[1]) == parseFloat(question.score) 此处用分数比较已不适用
         bk_color = "correctRight_bg";
     }
     if (question.questionattrs != undefined && question.questionattrs != null) {
