@@ -71,9 +71,6 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def error
-
-  end
 
 
 

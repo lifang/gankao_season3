@@ -31,6 +31,7 @@ class SimulationsController < ApplicationController
       flash[:warn] = "试卷加载错误，请您重新尝试。"
       redirect_to "/simulations?category=#{@examination.category_id}"
     end
+    p @paper_url
   end
 
   def show_result
@@ -104,7 +105,7 @@ class SimulationsController < ApplicationController
       @exam_user.generate_answer_sheet_url(
         @exam_user.update_answer_url(@exam_user.open_xml, question_hash, params[:block_ids]), "result")
       @exam_user.submited!
-#      ActionLog.exam_log(params[:category_id], cookies[:user_id])
+      #      ActionLog.exam_log(params[:category_id], cookies[:user_id])
       render :layout => "simulations"
     else
       render "error_page", :layout => "simulations"
