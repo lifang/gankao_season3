@@ -125,9 +125,9 @@ function get_block_id(blocks) {
 }
 
 //添加试卷块
-var question_num = 0;   //根据提点显示导航
+var question_num = 1;   //根据提点显示导航
 var block_block_flag = 0;   //记录打开的模块
-var mp3_url = "";
+var mp3_url = [];
 function create_block(bocks_div, block) {
     if (is_fix_time) {
         return_block_exam_time(block.id, block.start_time, block.time);
@@ -144,12 +144,8 @@ function create_block(bocks_div, block) {
     part_message.innerHTML = "<h1 id='b_title_"+ block.id +"'>" + block_str + "</h1>";
     //此处的增加和注释掉是为了真题的模考模式解决音频听力问题
     if (block_str.match("Listening") != null)  {
-        mp3_url = "/media/paper/model/" + "1.mp3";//$("#examination_id").val();
-        part_message.innerHTML += "<p>" + generate_jplayer_div(block.id) + "</p>";
+        part_message.innerHTML += "<p>"+ generate_jplayer_div(block.id)+"</p>";
     }
-    /*if (block.base_info.description != null && block.base_info.description != "") {
-        part_message.innerHTML += "<p>" + is_has_audio(block.id, block.base_info.description) + "</p>";
-    }*/
     block_div.appendChild(part_message);
     //试卷导航展开部分
     var navigation_div = $("#paper_navigation");
@@ -421,6 +417,7 @@ function create_problem(part_message, block_id, block_div, problem, block_nav_di
         if (problem.title != null && problem.title != "") {
             var titles = problem.title.split("<time>");
             var complete_title = "";
+            var back_server_path = $("#back_server_url").val();
             if (titles[0] != "" || titles[2] != "") {
                 if (titles[0] != null && titles[0] != "") {
                     complete_title += replace_title_span(titles[0], problem.id);
@@ -431,6 +428,9 @@ function create_problem(part_message, block_id, block_div, problem, block_nav_di
             }
             if (complete_title.split("((mp3))").length > 1) {
                 //为了解决真题的模考模式每道听力都有音频的
+                mp3_url.push({
+                    mp3 : ""+back_server_path+complete_title.split("((mp3))")[1]
+                });
                 //part_message.innerHTML += is_has_audio(block_id, "((mp3))"+complete_title.split("((mp3))")[1]+"((mp3))");
                 complete_title = complete_title.split("((mp3))")[2];
             }
@@ -1350,36 +1350,48 @@ function is_has_audio(block_id, description) {
 }
 
 function generate_jplayer_div(block_id) {
-    var final_title = "<div id='jquery_jplayer_" + block_id + "' class='jp-jplayer'></div>"
-    + "<div id='jp_container_1' class='jp-audio'><div class='jp-type-single'><div class='jp-gui jp-interface'>"
-    + "<ul class='jp-controls'><li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>"
-    + "<li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>"
-    + "<li><a href='javascript:;' class='jp-stop' tabindex='1'>stop</a></li>"
-    + "<li><a href='javascript:;' class='jp-mute' tabindex='1' title='mute'>mute</a></li>"
-    + "<li><a href='javascript:;' class='jp-unmute' tabindex='1' title='unmute'>unmute</a></li>"
-    + "<li><a href='javascript:;' class='jp-volume-max' tabindex='1' title='max volume'>max volume</a></li></ul>"
-    + "<div class='jp-progress'><div class='jp-seek-bar'><div class='jp-play-bar'></div></div></div>"
-    + "<div class='jp-volume-bar'><div class='jp-volume-bar-value'></div></div>"
-    + "<div class='jp-time-holder'><div class='jp-current-time'></div><div class='jp-duration'></div></div></div></div></div>";
+    var final_title = "<div id='jquery_jplayer_" + block_id + "' class='jp-jplayer'></div><div id='jp_container_1'"
+    + 'class="jp-audio"><div class="jp-type-playlist"><div class="jp-gui jp-interface">'
+    + '<ul class="jp-controls"><li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>'
+    + '<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>'
+    + '<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>'
+    + '<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>'
+    + '<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>'
+    + '</ul> <div class="jp-progress"><div class="jp-seek-bar"><div class="jp-play-bar"></div> </div></div>'
+    + '<div class="jp-volume-bar"><div class="jp-volume-bar-value"></div> </div>'
+    + '<div class="jp-time-holder"><div class="jp-current-time"></div><div class="jp-duration"></div></div>'
+    + '</div><div class="jp-playlist" style="display:none;"><ul><li></li></ul></div><div class="jp-no-solution">'
+    + '<span>Update Required</span>To play the media you will need to either update your browser to a recent' 
+    + 'version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.</div> </div></div>';
     return final_title;
 }
 
 function generate_jplayer(mp3_url, block_id) {
     (function(){
-        var back_server_path = $("#back_server_url").val();
-        jQuery("#jquery_jplayer_"+block_id).jPlayer({
-            ready: function() {
-                jQuery(this).jPlayer("setMedia", {
-                    mp3:""+back_server_path + mp3_url
-                });
-            },
-            ended: function(){
-                add_audio_cookies(block_id);
-            },
-            swfPath: "/assets/jplayer",
-            supplied: "mp3",
+        new jPlayerPlaylist({
+            jPlayer: "#jquery_jplayer_"+block_id,
+            cssSelectorAncestor: "#jp_container_1"
+        },
+        mp3_url
+        , {
+            swfPath: "js",
+            supplied: "oga, mp3",
             wmode: "window"
         });
+    //        var back_server_path = $("#back_server_url").val();
+    //        jQuery("#jquery_jplayer_"+block_id).jPlayer({
+    //            ready: function() {
+    //                jQuery(this).jPlayer("setMedia", {
+    //                    mp3:""+back_server_path + mp3_url
+    //                });
+    //            },
+    //            ended: function(){
+    //                add_audio_cookies(block_id);
+    //            },
+    //            swfPath: "/assets/jplayer",
+    //            supplied: "mp3",
+    //            wmode: "window"
+    //        });
     })(jQuery)    
 }
 
@@ -1428,7 +1440,7 @@ function store_title_span(problem_id, question_id) {
 function start_block_audio(block_id) {
     if ($("#jquery_jplayer_" + block_id).attr("id") != undefined) {
         if (getCookie("exam_audio_" + block_id) == null || new Number(getCookie("exam_audio_" + block_id)) == 0) {
-            tishi_alert("您当前打开的模块为听力模块，听力正在播放或者即将播放，请做好答题准备。");
+            tishi_alert("您当前打开的模块为听力模块，请做好答题准备播放听力。");
             setTimeout(function(){
                 control_media(block_id);
             }, 5000);
@@ -1448,11 +1460,11 @@ function control_media(audio_id) {
                 setCookie("exam_audio_" + audio_id, 0);
             }
             if(new Number(getCookie("exam_audio_" + audio_id)) < 1){
-                if (getCookie("audio_time_" + audio_id) != null) {
-                    audio.jPlayer("play", parseFloat(getCookie("audio_time_" + audio_id)));
-                } else {
-                    audio.jPlayer("play", 0);
-                }
+                //                if (getCookie("audio_time_" + audio_id) != null) {
+                //                    audio.jPlayer("play", parseFloat(getCookie("audio_time_" + audio_id)));
+                //                } else {
+                //                    audio.jPlayer("play", 0);
+                //                }
                 audio.bind(jQuery.jPlayer.event.timeupdate, function(event) {
                     if (event.jPlayer.status.currentTime != null) {
                         setCookie("audio_time_" + audio_id, event.jPlayer.status.currentTime);

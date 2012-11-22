@@ -73,8 +73,8 @@ function get_block_id(blocks) {
 }
 
 //添加试卷块
-var question_num = 0;   //根据提点显示导航
-var mp3_url = "";
+var question_num = 1;   //根据提点显示导航
+var mp3_url = [];
 function create_block(bocks_div, block, index) {
     var block_title = block.base_info.title;
     var block_div = create_element("div", null, "block_" + block.id, "tp_left", null, "innerHTML");
@@ -87,7 +87,6 @@ function create_block(bocks_div, block, index) {
     part_message.innerHTML = "<h1 id='b_title_"+ block.id +"'>" + block_str + "</h1>";
     //此处的增加和注释掉是为了真题的模考模式解决音频听力问题
     if (block_str.match("Listening") != null)  {
-        mp3_url = "/media/paper/model/" + "1.mp3";//$("#examination_id").val();
         part_message.innerHTML += "<p>" + generate_jplayer_div(block.id) + "</p>";
     }
     /*if (block.base_info.description != null && block.base_info.description != "") {
@@ -280,9 +279,12 @@ function create_problem(part_message, block_id, block_div, problem, block_nav_di
 
         if (problem.title != null && problem.title != "") {
             var complete_title = problem.title;
+            var back_server_path = $("#back_server_url").val();
             if (complete_title.split("((mp3))").length > 1) {
                 //为了解决真题的模考模式每道听力都有音频的
-                //part_message.innerHTML += is_has_audio(block_id, "((mp3))"+complete_title.split("((mp3))")[1]+"((mp3))");
+                mp3_url.push({
+                    mp3 : ""+back_server_path+complete_title.split("((mp3))")[1]
+                });
                 complete_title = complete_title.split("((mp3))")[2];
             }
             if (complete_title != "") {
@@ -859,33 +861,33 @@ function is_has_audio(block_id, description) {
 }
 
 function generate_jplayer_div(block_id) {
-    var final_title = "<div id='jquery_jplayer_" + block_id + "' class='jp-jplayer'></div>"
-    + "<div id='jp_container_1' class='jp-audio'><div class='jp-type-single'><div class='jp-gui jp-interface'>"
-    + "<ul class='jp-controls'><li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>"
-    + "<li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>"
-    + "<li><a href='javascript:;' class='jp-stop' tabindex='1'>stop</a></li>"
-    + "<li><a href='javascript:;' class='jp-mute' tabindex='1' title='mute'>mute</a></li>"
-    + "<li><a href='javascript:;' class='jp-unmute' tabindex='1' title='unmute'>unmute</a></li>"
-    + "<li><a href='javascript:;' class='jp-volume-max' tabindex='1' title='max volume'>max volume</a></li></ul>"
-    + "<div class='jp-progress'><div class='jp-seek-bar'><div class='jp-play-bar'></div></div></div>"
-    + "<div class='jp-volume-bar'><div class='jp-volume-bar-value'></div></div>"
-    + "<div class='jp-time-holder'><div class='jp-current-time'></div><div class='jp-duration'></div></div></div></div></div>";
+    var final_title = "<div id='jquery_jplayer_" + block_id + "' class='jp-jplayer'></div><div id='jp_container_1'"
+    + 'class="jp-audio"><div class="jp-type-playlist"><div class="jp-gui jp-interface">'
+    + '<ul class="jp-controls"><li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>'
+    + '<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>'
+    + '<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>'
+    + '<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>'
+    + '<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>'
+    + '</ul> <div class="jp-progress"><div class="jp-seek-bar"><div class="jp-play-bar"></div> </div></div>'
+    + '<div class="jp-volume-bar"><div class="jp-volume-bar-value"></div> </div>'
+    + '<div class="jp-time-holder"><div class="jp-current-time"></div><div class="jp-duration"></div></div>'
+    + '</div><div class="jp-playlist" style="display:none;"><ul><li></li></ul></div><div class="jp-no-solution">'
+    + '<span>Update Required</span>To play the media you will need to either update your browser to a recent'
+    + 'version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.</div> </div></div>';
     return final_title;
 }
 
 function generate_jplayer(mp3_url, block_id) {
     (function(){
-        var back_server_path = $("#back_server_url").val();
-        jQuery("#jquery_jplayer_"+block_id).jPlayer({
-            ready: function() {
-                jQuery(this).jPlayer("setMedia", {
-                    mp3:""+back_server_path + mp3_url
-                });
-            },
-            swfPath: "/assets/jplayer",
-            supplied: "mp3",
-            wmode: "window",
-            preload: "none"
+        new jPlayerPlaylist({
+            jPlayer: "#jquery_jplayer_"+block_id,
+            cssSelectorAncestor: "#jp_container_1"
+        },
+        mp3_url
+        , {
+            swfPath: "js",
+            supplied: "oga, mp3",
+            wmode: "window"
         });
     })(jQuery)
 }
