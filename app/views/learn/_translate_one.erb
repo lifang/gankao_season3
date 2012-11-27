@@ -34,7 +34,7 @@
   }
 
   function modify_str(str){
-    return str.replace(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\'\|\/\\])/g,"").toLowerCase();
+    return str.replace(/([\(\)\[\]\{\}\^\$\+\-\*\?\,\.\"\&\%\#\@\!\'\|\/\\])/g,"").toLowerCase().replace(/[ ]/g,"");
   }
   function check(){
     var answer=$("#answer_textarea").val();
@@ -43,13 +43,9 @@
       return false;
     }
     $("#check_btn").attr("onclick", "javascipt:void(0)");
-    var en_mean=modify_str($("#true_value").val());
-    var user_mean=modify_str(answer);
     var flag="true";
-    for(var i=0;i<en_mean.length;i++){
-      if (en_mean[i]!=user_mean[i]){
-        flag="false"
-      }
+    if (modify_str(answer)!=modify_str($("#true_value").val())){
+      flag="false"
     }
     jude('/learn/jude_translate_one',flag,'false');
   }

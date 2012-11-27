@@ -122,7 +122,7 @@
     start();
     $(".words_con .question_list a").click(function(){
       window.clearInterval(local_timer);
-      if($(this).html() == $("#SID_"+current_q).attr("value")){
+      if($.trim($(this).html()) == $.trim($("#SID_"+current_q).attr("value"))){
         isright = true;
       }else{
         flag = false;
