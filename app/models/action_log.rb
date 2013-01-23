@@ -1,6 +1,7 @@
 # encoding: utf-8
 class ActionLog < ActiveRecord::Base
   belongs_to :user
+  
   belongs_to :category
 
   TYPES = {:LOGIN => 0, :PRACTICE => 1, :EXAM => 2, :RECITE => 3, :STUDY_PLAY => 4}
