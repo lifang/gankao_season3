@@ -122,34 +122,6 @@
               $("#already_submit_div").hide();
               window.location.href="/exam_users/"+ex_id+"/redo_paper?category=<%= @category.id %>&sheet_url="+sheet_url+"&type=similarities";
             }
-
-<%#*function drive_exercise(sim,category_id,types){%>
-<%#*$.ajax({%>
-<%#*async:true,%>
-<%#*type: "POST",%>
-<%#*dataType: "json",%>
-<%#*url: "/welcomes/check_exercise.json",%>
-<%#*data:{%>
-<%#*sim  : sim,%>
-<%#*category : category_id,%>
-<%#*types : types%>
-<%#*},%>
-<%#*success : function(data) {%>
-<%#*if (data.yes){%>
-<%#*if (data.types == <%= ExamUser::P_TYPES[:MOKAO] 
-<%#*$("#simu_href"+data.sim).removeAttr("onclick").attr("target", "_blank").attr("href","/simulations/"+ data.sim+"/do_exam?category="+data.category);%>
-<%#*$("#simu_href"+data.sim).trigger("click");%>
-<%#*}%>
-<%#*if (data.types == <%= ExamUser::P_TYPES[:ZHENTI] 
-<%#*$("#sima_href"+data.sim).removeAttr("onclick").attr("target", "_blank").attr("href","/similarities/"+ data.sim+"/join?category="+data.category);%>
-<%#*$("#sima_href"+data.sim).trigger("click");%>
-<%#*}%>
-<%#*}else{%>
-<%#*alert(data.yes);%>
-<%#*}%>
-<%#*}%>
-<%#*})%>
-<%#*}%>
           </script>
 
           <div class="tab login_tab" id="sim_login_tab" style="display:none">
