@@ -41,6 +41,7 @@ GankaoSeason3::Application.routes.draw do
   resource :welcomes do
     collection do
       post :fast_icon
+      get :handdrives,:check_exercise
     end
   end
 

@@ -97,6 +97,16 @@ function check_vip(category){
     $("#pay_charge_vip").attr("href", "/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html());
 }
 
+function check_drive(category){
+   $("#pay_charge_vip").attr("target", "_blank");
+    $('.pay_close').trigger('click');
+    show_charge('#drive_tishi','.tishi_close');
+    $(".tishi_close").bind('click',function(){
+        over_pay();
+    })
+    $("#pay_charge_vip").attr("href", "/logins/alipay_exercise?category="+category+"&total_fee="+$("#pay_fee").html());
+}
+
 //带遮罩层的弹出层
 function show_charge(outer_div,close_btn){
     show_mask('.mask');
@@ -127,7 +137,9 @@ function accredit(category){
             $("#invit_code").val("");
             if (data.message=="升级成功"){
                 tishi_alert("恭喜您成为高级会员。");
-                window.setTimeout(function(){window.location.reload();}, 2000);
+                window.setTimeout(function(){
+                    window.location.reload();
+                }, 2000);
             } else {
                 tishi_alert(data.message);
             }
@@ -229,10 +241,12 @@ $(function(){
     $(".index_btn #span1").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
     $(".index_btn #span2").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
     $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+    $(".index_btn #span4").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
     setInterval(function(){
         $(".index_btn #span1").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
         $(".index_btn #span2").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
         $(".index_btn #span3").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
+        $(".index_btn #span4").html("在线"+ (Math.floor(Math.random()*1000)+1000) + "人");
     }, 3600000);
 })
 

@@ -348,6 +348,9 @@ nav li { float: left; margin: 0 20px;}
     margin: 5px 15px;
     _margin: 5px 10px;
 }
+.plan_list.pl_margin {
+    margin: 5px 32px;
+}
 .pl_fk {
     width: 80px;
     height: 80px;
@@ -1352,12 +1355,12 @@ nav li { float: left; margin: 0 20px;}
 
 }
 .index_text { margin-left: 65px; float: left;}
-.index_btn { position: absolute; right: 5px; bottom: 127px; overflow: hidden; _width: 500px; _right: 12px;}
+.index_btn { position: absolute; bottom: 127px; overflow: hidden; width: 345px; right: 80px;}
 .index_btn h1 { font-size: 16px; line-height: 36px; padding-left: 5px;}
 .index_btn a {
     color: #e7debe;
     background: url(/assets/index_btn.png) no-repeat 0 -68px;
-    margin: 0 2px;
+    margin: 4px 2px;
     text-align: center;
     padding: 5px;
     font-size: 22px;

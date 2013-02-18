@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>     
+    <meta charset="utf-8" />
+    <title>来赶考网，四级必过、六级刷分、考研高分！</title>
+    <meta name="keywords" content="英语四级,英语六级,考研英语" />
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag    "style" %>
+    <%= stylesheet_link_tag    "public" %>
+    <%= javascript_include_tag "cookie" %>
+    <!--[if lt IE 9]>
+    <script src="/assets/html5.js"></script>
+    <![endif]-->
+
+    <!--[if IE 6]>
+    <script src="/assets/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+      DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-26018499-1']);
+      _gaq.push(['_setDomainName', 'gankao.co']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <div class="wraper">
+      <div class="header">
+        <h1 class="logo"><a href="/welcomes/handdrives?category=<%= params[:category] %>" title="赶考网"><img src="/assets/logo_jiakao.png" /></a></h1>
+        <% user_infos = user_info %>
+        <%=render :partial=>'users/info', :object=>user_infos %>
+        <div class="clear"></div>
+      </div>
+      <div class="main">
+        <div>
+          <div class="m_nav">
+            <ul>
+              <li><a href="javascript:void(0)" class="hover">模拟题</a></li>
+            </ul>
+          </div>
+          <div class="m_content">
+            <div class="mc_box">
+              <% if @similarities.blank? %>
+                <div class="mc_menu_box"><h1 class="noAnswer">暂无<%= @category.name %>真题</h1></div>
+              <% else %>
+                <% @similarities.each do |similarity| %>
+                  <% if cookies[:user_id] %>
+                    <div class="plan_list">
+                      <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
+                      <div class="pl_text">
+                        <% simi=@exam_user_hash[similarity.id] %>
+                        <a  id="sima_href<%= similarity.id %>" href="/welcomes/check_exercise?sim=<%= similarity.id %>&category=<%=@category.id %>&types=<%= ExamUser::P_TYPES[:ZHENTI] %>"  target="_blank"
+                        <% if simi&&simi[false]&&simi[false][1] %>
+                              onclick="return already_submit('<%= similarity.id %>','<%= simi[false][0] %>','<%= simi[false][2] %>')"
+                            <% end %>
+                            class="model <% if simi&&simi[false]&&simi[false][1] %>underWay
+                            <% elsif simi&&simi[false] %>finish<% end %>">练习模式</a>
+                        <a id="simu_href<%= similarity.id %>"  target="_blank" <% if simi&&simi[true]&&simi[true][1] %>
+                             href="/simulations/<%= simi[true][0]%>/show_result?category=<%= @category.id %>" title="已完成，可查看考卷"
+                           <% else %>
+                             href="/welcomes/check_exercise?sim=<%= similarity.id %>&category=<%=@category.id %>&types=<%= ExamUser::P_TYPES[:MOKAO] %>"
+                           <% end %> class="model <% if simi&&simi[true]&&simi[true][1] %>underWay
+                           <% elsif simi&&simi[true] %>finish<% end %>">模考模式</a>
+                      </div>
+                    </div>
+                  <% else %>
+                    <div class="plan_list">
+                      <h1 class="pl_fk"><span class="year"><%= similarity.title %></span></h1>
+                      <div class="pl_text">
+                        <a href="javascript:void(0);" onclick="javascript:show_charge('#sim_login_tab','.close_tab');"
+                           class="model">练习模式</a>
+                        <a href="javascript:void(0);" onclick="javascript:show_charge('#sim_login_tab','.close_tab');" class="model">模考模式</a>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="clear"></div>
+            <%=will_paginate @similarities,:previous_label => '< Prev', :next_label => 'Next >',:class=>'pageTurn'%>
+          </div>
+          <div id="already_submit_div" class="tab border_radius" style="display:none;">
+            <span class="close" onclick="javascript:$('#already_submit_div').hide();">关闭</span>
+            <input type="hidden" id="already_submit_ex_id" value=""></input>
+            <input type="hidden" id="already_submit_eu_id" value=""></input>
+            <input type="hidden" id="already_submit_sheet_url" value=""></input>
+            <div class="exam_tab_text">你已经做完了该份试卷，你是否要重做题目？</div>
+            <div class="btn_center_double">
+              <button class="b_btn" onclick="javascript:view_paper();">不,只想浏览</button>
+              <button class="b_btn" onclick="javascript:redo_paper();">好,我要重做</button>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            function already_submit(eu_id,ex_id,sheet_url){
+              generate_flash_div("#already_submit_div");
+              $("#already_submit_eu_id").val(eu_id);
+              $("#already_submit_ex_id").val(ex_id);
+              $("#already_submit_sheet_url").val(sheet_url);
+              return false;
+            }
+
+            function view_paper(){
+              var eu_id = $("#already_submit_eu_id").val();
+              $("#already_submit_div").hide();
+              window.location.href="/similarities/"+eu_id+"/join?category=<%= @category.id %>";
+            }
+
+            function redo_paper(){
+              var ex_id = $("#already_submit_ex_id").val();
+              var sheet_url = $("#already_submit_sheet_url").val();
+              sheet_url = "<%= Constant::PUBLIC_PATH %>"+sheet_url;
+              $("#already_submit_div").hide();
+              window.location.href="/exam_users/"+ex_id+"/redo_paper?category=<%= @category.id %>&sheet_url="+sheet_url+"&type=similarities";
+            }
+
+<%#*function drive_exercise(sim,category_id,types){%>
+<%#*$.ajax({%>
+<%#*async:true,%>
+<%#*type: "POST",%>
+<%#*dataType: "json",%>
+<%#*url: "/welcomes/check_exercise.json",%>
+<%#*data:{%>
+<%#*sim  : sim,%>
+<%#*category : category_id,%>
+<%#*types : types%>
+<%#*},%>
+<%#*success : function(data) {%>
+<%#*if (data.yes){%>
+<%#*if (data.types == <%= ExamUser::P_TYPES[:MOKAO] 
+<%#*$("#simu_href"+data.sim).removeAttr("onclick").attr("target", "_blank").attr("href","/simulations/"+ data.sim+"/do_exam?category="+data.category);%>
+<%#*$("#simu_href"+data.sim).trigger("click");%>
+<%#*}%>
+<%#*if (data.types == <%= ExamUser::P_TYPES[:ZHENTI] 
+<%#*$("#sima_href"+data.sim).removeAttr("onclick").attr("target", "_blank").attr("href","/similarities/"+ data.sim+"/join?category="+data.category);%>
+<%#*$("#sima_href"+data.sim).trigger("click");%>
+<%#*}%>
+<%#*}else{%>
+<%#*alert(data.yes);%>
+<%#*}%>
+<%#*}%>
+<%#*})%>
+<%#*}%>
+          </script>
+
+          <div class="tab login_tab" id="sim_login_tab" style="display:none">
+            <div class="tab_loginArea">
+              <h1>请先登录</h1>
+              <%= render :partial=>"/layouts/login_nav" %>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Copyright © 2011-2012   赶考网www.gankao.co  版权所有  苏ICP备11024201</p>
+    </div>
+    <%= render :partial => 'users/details', :object => user_infos if cookies[:user_id] and user_infos %>
+    <div class="mask" style="display: none;"></div>
+    <div class="guideMask" style="display: none;"></div>
+    <% if cookies[:user_id] && cookies[:is_ckecked]=="1" %>
+      <%= render :partial => '/welcomes/drive_vip' %>
+      <script type="text/javascript">
+        show_charge('#payment_vip','.pay_close');
+      </script>
+    <% end %>
+    <%= render :partial => '/common/qq_online' %>
+  </body>
+</html>

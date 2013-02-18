@@ -1,0 +1,22 @@
+<div class="payment" id="payment_vip" style="display: none">
+  <span class="close pay_close" >关闭</span>
+  <div class="pay_box">
+    <h1 class="pay_way_h">开通高级会员享受驾考全部真题服务：</h1>
+    <div class="pay_con_one">
+      <div class="pay_price"><h1 id="pay_fee"><%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %></h1>元</div>
+      <a href="javascript:void(0);" class="pay_a_btn"
+         id="pay_charge_vip" onclick="javascript:check_drive(<%= params[:category].to_i %>);" >&nbsp;</a>
+    </div>
+    <span class="orange">温馨提示：1.支付宝充值免手续费<br/>
+      2.驾考真题第二套起为收费真题</span>
+  </div>
+</div>
+<div class="tab tishi_tab" style="display:none" id="drive_tishi">
+  <p>赶考网会员充值,完成付款后请根据你的情况点击下面的按钮：</p>
+  <div class="btn_center_double">
+    <a class="b_btn" target="_blank" href="/logins/alipay_exercise?category=<%= params[:category] %>&total_fee=<%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %>">重新支付</a>
+    <button class="b_btn" onclick="over_pay()">完成充值</button>
+  </div>
+  <p><a id="agreement_link" href="javascript:tishi_alert('您尚未签署赶考网在线备考保过协议。');"><em>下载赶考网在线备考保过协议</em></a></p>
+</div>
+<%cookies[:is_ckecked]=nil%>
