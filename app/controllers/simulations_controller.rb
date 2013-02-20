@@ -21,7 +21,7 @@ class SimulationsController < ApplicationController
       @title = "#{@examination.title}模拟考试"
       if @exam_user.paper_id
         @paper_url = "#{Constant::BACK_SERVER_PATH}#{@exam_user.paper.paper_js_url}"
-        @exam_user.update_info_for_join_exam if @exam_user.started_at.nil? or @exam_user.started_at == ""        
+        @exam_user.update_info_for_join_exam(@examination.category_id) if @exam_user.started_at.nil? or @exam_user.started_at == ""
         render :layout => "simulations"
       else
         flash[:warn] = "试卷加载错误，请您重新尝试。"

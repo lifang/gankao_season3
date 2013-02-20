@@ -69,7 +69,7 @@ img { border: none;}
 
 .btn_center_double { width: 240px; margin: 0 auto; text-align: center; padding: 10px; overflow: hidden;}
 .btn_center_double button { width: 100px; float: left; margin: 0 10px;}
-.btn_center_double a { width: 70px; float: left; margin: 0 10px;}
+.btn_center_double a { width: 70px; float: left; margin: 0 9px;}
 
 .close, .x {
     width: 20px;

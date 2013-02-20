@@ -12,11 +12,15 @@ class ExamUser < ActiveRecord::Base
   include REXML
 
   #考生更新考试时长信息
-  def update_info_for_join_exam
+  def update_info_for_join_exam(category_id)
     self.toggle!(:is_user_affiremed)
     self.started_at = Time.now
     #self.ended_at = Time.now + self.paper.time.minutes if self.paper.time
-    self.ended_at = Time.now + 125.minutes   #此出为了真题的模考模式而固定
+    if (category_id == Category::TYPE[:HANDDRIVE])
+      self.ended_at = Time.now + 45.minutes
+    else
+      self.ended_at = Time.now + 125.minutes   #此出为了真题的模考模式而固定
+    end
     self.answer_sheet_url = self.generate_answer_sheet_url(self.create_answer_xml, "result")
     self.save
   end

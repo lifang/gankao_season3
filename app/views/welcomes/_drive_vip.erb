@@ -17,6 +17,5 @@
     <a class="b_btn" target="_blank" href="/logins/alipay_exercise?category=<%= params[:category] %>&total_fee=<%= Order::PAY_FEE[:"#{Category::FLAG[params[:category].to_i]}"] %>">重新支付</a>
     <button class="b_btn" onclick="over_pay()">完成充值</button>
   </div>
-  <p><a id="agreement_link" href="javascript:tishi_alert('您尚未签署赶考网在线备考保过协议。');"><em>下载赶考网在线备考保过协议</em></a></p>
 </div>
 <%cookies[:is_ckecked]=nil%>
