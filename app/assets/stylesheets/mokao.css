@@ -70,7 +70,7 @@ span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E
 
 /*tp_left-------------*/
 .tp_left { float: left; width: 690px; display: inline;}
-.part_box { font-size: 13px; padding: 5px;}
+.part_box { font-size: 13px; padding: 10px 5px;}
 
 /*大部分*/
 .part_head {padding: 10px; border: 1px #666666 solid; margin: 10px 5px; background: #f4f4f4;}
@@ -83,10 +83,10 @@ span.correctWrong_bg, div.correctWrong_bg, .correctWrong_bg { background: #FFE8E
 .question_explain p {line-height: 22px; text-indent: 24px; text-align: justify; color: #999;}
 
 /*题目内容*/
-.question_text {padding: 10px; border: 1px #b9b9b9 solid; margin: 10px 0; line-height: 24px; text-align: justify;}
+.question_text {padding: 10px; border: 1px #b9b9b9 solid; margin: 5px 0; line-height: 24px; text-align: justify;}
 
 /*答题区域*/
-.question_area { padding: 10px; border: 1px #b9b9b9 solid; overflow: hidden; margin: 5px 0;}
+.question_area { padding: 10px; border: 1px #b9b9b9 solid; overflow: hidden; margin: 5px 0 5px 20px;}
 .area_left { width: 5%; float: left; padding-top: 5px; text-align: center;}
 .area_right { width: 95%; float: right;}
 

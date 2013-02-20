@@ -37,7 +37,22 @@
       <div class="header">
         <h1 class="logo"><a href="/" title="赶考网"><img src="/assets/logo_jiakao.png" /></a></h1>
         <% user_infos = user_info %>
-        <%=render :partial=>'users/info', :object=>user_infos %>
+        <% if cookies[:user_id] and user_infos %>
+          <div  class="login_info bb_radius">
+            <div class="info_left">
+              <div class="user_pic"><img src="<%= user_infos[:img_url].nil? ? User::DEFAULT_COVER : user_infos[:img_url] %>" /></div>
+              <p id="name" <% if params[:category] and is_vip?(params[:category]) %>class="user_name"<% end %>><%= user_infos[:name] %></p>
+              <p id="schoolName"><%= user_infos[:school] %></p>
+            </div>
+            <ul class="user_fun">
+              <li><a href="javascript:void(0);" class="u_set">设置</a></li>
+              <li><a href="javascript:void(0);" class="u_subject">科目</a></li>
+              <li><a href="/logins/logout" class="u_exit">退出</a></li>
+            </ul>
+          </div>
+        <% else %>
+          <%= render :partial=>'layouts/login_tab' %>
+        <% end %>
         <div class="clear"></div>
       </div>
       <div class="main">
