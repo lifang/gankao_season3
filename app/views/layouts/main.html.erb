@@ -64,16 +64,16 @@
                 <span>亲，为了达到更好的复习效果，建议您首先为自己定制复习计划。
                   <a href="javascript:void(0);" onclick="javascript:show_kaoyan_frame();">定制复习计划</a>
                 </span>
-              <% elsif cookies[:user_id] and is_nomal?(params[:category]) %>
-                <span>立刻升级为高级用户，即刻享有 <strong><%= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
-                  <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>
+              <%# elsif cookies[:user_id] and is_nomal?(params[:category]) %>
+                <!--<span>立刻升级为高级用户，即刻享有 <strong><%#= Constant::SCOLL_WORD[params[:category].to_i] %></strong> 复习效果保障服务。
+                  <a href="javascript:void(0);" onclick="show_charge('#payment_vip','.pay_close')">了解更多</a></span>-->
               <% end %>
               <span>赶考网包括真题、精解、技巧、视频、问答在内的功能完全开放免费，没有任何使用限制</span>
-            <% if cookies[:user_id] and is_vip?(params[:category]) and user_agreement(params[:category]) %>
-              <span>您与赶考网签署的保过协议可以在这里下载
-                <a href="<%= user_agreement(params[:category]).agreement_url %>" target="_blank">下载</a>
-              </span>
-            <% end %>
+            <%# if cookies[:user_id] and is_vip?(params[:category]) and user_agreement(params[:category]) %>
+              <!--<span>您与赶考网签署的保过协议可以在这里下载
+                <a href="<%#= user_agreement(params[:category]).agreement_url %>" target="_blank">下载</a>
+              </span>-->
+            <%# end %>
           </div>
         </nav>
       </div>

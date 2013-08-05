@@ -39,21 +39,21 @@ class WelcomesController < ApplicationController
   end
 
   def check_exercise
-    yes=false
-    exam_users=ExamUser.find_by_sql("select * from exam_users eu inner join examinations e on eu.examination_id=e.id
-      where e.category_id=#{Category::TYPE[:HANDDRIVE]} and eu.user_id=#{cookies[:user_id]}")
-    yes=true if  exam_users.blank?  || exam_users.inject(Array.new) { |arr, a| arr.push(a.examination_id) }.include?(params[:sim].to_i)
-    yes=true     if Order.find_by_user_id_and_category_id(cookies[:user_id],Category::TYPE[:HANDDRIVE])
-    if yes
+    #yes=false
+    #exam_users=ExamUser.find_by_sql("select * from exam_users eu inner join examinations e on eu.examination_id=e.id
+    #  where e.category_id=#{Category::TYPE[:HANDDRIVE]} and eu.user_id=#{cookies[:user_id]}")
+    #yes=true if  exam_users.blank?  || exam_users.inject(Array.new) { |arr, a| arr.push(a.examination_id) }.include?(params[:sim].to_i)
+    #yes=true     if Order.find_by_user_id_and_category_id(cookies[:user_id],Category::TYPE[:HANDDRIVE])
+    #if yes
       if (params[:types].to_i == ExamUser::P_TYPES[:MOKAO])
         redirect_to "/simulations/#{params[:sim]}/do_exam?category=#{params[:category]}"
       elsif (params[:types].to_i == ExamUser::P_TYPES[:ZHENTI] )
         redirect_to  "/similarities/#{params[:sim]}/join?category=#{params[:category]}"
       end
-    else
-      cookies[:is_ckecked]=1
-      redirect_to "/welcomes/handdrives?category=#{params[:category]}"
-    end
+    #else
+      #cookies[:is_ckecked]=1
+      #redirect_to "/welcomes/handdrives?category=#{params[:category]}"
+    #end
   end
 
 end
