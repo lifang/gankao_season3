@@ -276,10 +276,10 @@ module Oauth2Helper
     user=User.find(id)
     user_sun=user.suns.where("category_id=#{category} and types=#{type}").find(:all)[0]
     if user_sun  #有分享记录，则不再赠送小太阳
-      data="已经奖励您2个小太阳了哦"
+      data="您已经分享过了哦，感谢您的支持"
     else
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>type,:num=>Sun::TYPE_NUM[:SHARE])
-      data="分享信息成功,恭喜您获得2个小太阳"
+      data="分享信息成功,恭喜您获得#{Sun::TYPE_NUM[:SHARE]}个小太阳"
     end
     return data
   end
@@ -288,10 +288,10 @@ module Oauth2Helper
   def focus_and_share_sun(id,category)
     user_sun=Sun.find_by_sql("select * from suns where user_id=#{id} and category_id=#{category} and types=#{Sun::TYPES[:LOGIN_MORE]}")[0]
     if user_sun
-      return "已经奖励您5个小太阳了哦"
+      return "已经奖励您#{Sun::TYPES[:LOGIN_MORE]}个小太阳了哦"
     else
       Sun.create(:user_id=>id,:category_id=>category.to_i,:types=>Sun::TYPES[:LOGIN_MORE],:num=>Sun::TYPE_NUM[:LOGIN_MORE])
-      return "分享信息成功，恭喜您获得5个小太阳"
+      return "分享信息成功，恭喜您获得#{Sun::TYPES[:LOGIN_MORE]}个小太阳"
     end
   end
 end

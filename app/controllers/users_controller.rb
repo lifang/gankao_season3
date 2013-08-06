@@ -35,7 +35,7 @@ class UsersController < ApplicationController
       hash=user.signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
     else
       Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:SIGNIN],:num=>Sun::TYPE_NUM[:SIGNIN])
-      data="签到成功，获得1个小太阳。"
+      data="签到成功，获得#{Sun::TYPE_NUM[:SIGNIN]}个小太阳。"
       #连续签到 +1 没有连续变为1
       hash=Hash.new()
       hash=user.signin_days.split(',').map{|h| h1,h2 = h.split('=>'); {h1 => h2}}.reduce(:merge)
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       end
       user.signin_days=hash.map{|k,v| "#{k}"+"=>"+"#{v}"}.join(',')
       user.save
-      data = data+"连续签到5天，奖励1个小太阳，并有机会得到额外奖励的1~2个小太阳!"
+      data = data+"连续签到5天，奖励#{Sun::TYPE_NUM[:SIGNIN]}个小太阳，并有机会得到额外奖励的1~#{Sun::TYPE_NUM[:RANDOM_AWARD]}个小太阳!"
       if check_keep_on_login(user.id,category)
         #连续登录5天奖励一个小太阳
         Sun.create(:user_id=>user.id,:category_id=>category,:types=>Sun::TYPES[:KEEP_ON_LOGIN],:num=>Sun::TYPE_NUM[:KEEP_ON_LOGIN])       
